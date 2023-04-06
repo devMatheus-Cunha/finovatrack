@@ -1,11 +1,52 @@
+import { useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import { useUploadFiles } from '@/hooks/useUploadFiles'
 
-const inter = Inter({ subsets: ['latin'] })
+
+
+type HandleFileChangeType = (event: React.ChangeEvent<HTMLInputElement>) => void;
 
 export default function Home() {
+  const {
+    onSubmit,
+    returnDataUpload,
+    errosUpload,
+    isLoadingUpload
+  } = useUploadFiles();
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFileChange: HandleFileChangeType = (e) => {
+    const filesToAdd = Array.from(e.target.files as FileList);
+    const newFiles = filesToAdd.filter((file) => !selectedFiles.some((f) => f.name === file.name));
+    setSelectedFiles([...selectedFiles, ...newFiles]);
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const promises = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const promise = new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64 = reader.result;
+          resolve(base64);
+        };
+      });
+      promises.push(promise);
+    }
+    Promise.all(promises).then((base64Array) => {
+      // onSubmit(base64Array);
+      console.log(base64Array)
+      setSelectedFiles([]);
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
+
   return (
     <>
       <Head>
@@ -15,108 +56,39 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+        <form onSubmit={handleSubmit}>
+          <div className='flex flex-col	gap-10 bg-blue'>
+            <div className='flex flex-col	gap-3 justify-center items-center'>
+              <div className='flex lex-row justify-center items-center'>
+                <label htmlFor="file-upload" className="flex lex-row justify-center items-center cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 inline-block align-text-top mr-2">
+                    <path fill-rule="evenodd" d="M10.294 2.706a.5.5 0 0 1 .5 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L15.793 9.5H3.5a.5.5 0 0 1 0-1h12.293l-5.147-5.146a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                  <span className="text-lg font-medium text-gray-200">Select the files</span>
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  multiple
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
+              {isLoadingUpload ? <h2 className='text-xl font-medium text-gray-200'>Sending...</h2> : <h2 className='text-xl font-medium text-gray-200'>{selectedFiles.length} items selected</h2>
+              }
+            </div>
+
+            <div className='flex gap-10'>
+              <button type="button" onClick={() => setSelectedFiles([])} className="flex-1 cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
+                Clear
+              </button>
+              <button type="submit" className="cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
+                Send Files
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
       </main>
     </>
   )
