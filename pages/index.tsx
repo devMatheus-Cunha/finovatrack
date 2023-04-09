@@ -1,51 +1,77 @@
-import { useState } from 'react'
 import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import { useUploadFiles } from '@/hooks/useUploadFiles'
+import { useState } from 'react'
 
-
-
-type HandleFileChangeType = (event: React.ChangeEvent<HTMLInputElement>) => void;
+type ITypeModal = "edit" | "delete" | "addEntry" | "addExpense" | ""
 
 export default function Home() {
-  const {
-    onSubmit,
-    returnDataUpload,
-    errosUpload,
-    isLoadingUpload
-  } = useUploadFiles();
+  const [openModal, setOpenModal] = useState<{
+    open: boolean
+    type: ITypeModal
+  }>({
+    open: false,
+    type: ""
+  })
 
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
-  const handleFileChange: HandleFileChangeType = (e) => {
-    const filesToAdd = Array.from(e.target.files as FileList);
-    const newFiles = filesToAdd.filter((file) => !selectedFiles.some((f) => f.name === file.name));
-    setSelectedFiles([...selectedFiles, ...newFiles]);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const promises = [];
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      const promise = new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const base64 = reader.result;
-          resolve(base64);
-        };
-      });
-      promises.push(promise);
+  const validateTextToModal: any = {
+    addEntry: {
+      title: "Add Entry",
+      description: "Add a new entry"
+    },
+    addExpense: {
+      title: "Add Expense",
+      description: "Add a new Expense"
+    },
+    edit: {
+      title: "edit data",
+      description: "edit data"
+    },
+    delete: {
+      title: "delete data",
+      description: "delete data"
     }
-    Promise.all(promises).then((base64Array) => {
-      // onSubmit(base64Array);
-      console.log(base64Array)
-      setSelectedFiles([]);
-    }).catch((error) => {
-      console.error(error);
-    });
-  };
+  }
+
+
+  const handleOpenModal = (type?: ITypeModal) => {
+    setOpenModal({
+      open: !openModal.open,
+      type: type || ""
+    })
+  }
+
+  const [data, setdata] = useState({
+    data: [
+      {
+        description: 'Descrição',
+        real_value: "100",
+        euro_value: "100",
+      },
+      {
+        description: 'Descrição',
+        real_value: "100",
+        euro_value: "100",
+      }
+    ]
+  })
+
+  const columsHeadProps = [
+    {
+      header: "Descrição",
+      field: "description",
+    },
+    {
+      header: "Valor Real",
+      field: "real_value",
+    },
+    {
+      header: "Valor Euro",
+      field: "euro_value",
+    },
+    {
+      header: "Ação",
+      field: "actions",
+    }
+  ]
 
   return (
     <>
@@ -55,41 +81,109 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <form onSubmit={handleSubmit}>
-          <div className='flex flex-col	gap-10 bg-blue'>
-            <div className='flex flex-col	gap-3 justify-center items-center'>
-              <div className='flex lex-row justify-center items-center'>
-                <label htmlFor="file-upload" className="flex lex-row justify-center items-center cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 inline-block align-text-top mr-2">
-                    <path fill-rule="evenodd" d="M10.294 2.706a.5.5 0 0 1 .5 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L15.793 9.5H3.5a.5.5 0 0 1 0-1h12.293l-5.147-5.146a.5.5 0 0 1 0-.708z" />
-                  </svg>
-                  <span className="text-lg font-medium text-gray-200">Select the files</span>
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </div>
-              {isLoadingUpload ? <h2 className='text-xl font-medium text-gray-200'>Sending...</h2> : <h2 className='text-xl font-medium text-gray-200'>{selectedFiles.length} items selected</h2>
-              }
-            </div>
+      <main>
+        <div className='flex gap-10 flex-col items-center justify-center h-[100vh]'>
+          <div className='text-center'>
+            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl ">Controle Financeiro</h1>
+            <p className="mb-6 text-lg font-normal lg:text-xl sm:px-16 xl:px-48">Controle o valor que ira usar de base e mostrar quanto dinheiro restara apos retirar suas despesas mensais</p>
+          </div>
 
-            <div className='flex gap-10'>
-              <button type="button" onClick={() => setSelectedFiles([])} className="flex-1 cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
-                Clear
+          <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleOpenModal("addEntry")}
+                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                Default
               </button>
-              <button type="submit" className="cursor-pointer bg-gray-500 hover:bg-gray-400 rounded-md py-2 px-4">
-                Send Files
+              <button
+                type="button"
+                onClick={() => handleOpenModal("addExpense")}
+                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              >
+                Default
               </button>
+            </div>
+            <div className="relative overflow-x-auto">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    {
+                      columsHeadProps.map((item) => (
+                        <>
+                          <th scope="col" className="px-6 py-3" key={item.field}>
+                            {item.header}
+                          </th>
+                        </>
+                      ))
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    data.data.map((item,) => (
+                      <>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {item.description}
+                          </th>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {item.euro_value}
+                          </th>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {item.real_value}
+                          </th>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <div className="inline-flex rounded-md shadow-sm" role="group">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenModal("edit")}
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                              >
+                                Editar
+                              </button>
+                              <button type="button" onClick={() => handleOpenModal("delete")} className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Deletar
+                              </button>
+                            </div>
+                          </th >
+                        </tr >
+                      </>
+                    ))
+                  }
+                </tbody>
+              </table >
             </div>
           </div>
-        </form>
-
-      </main>
+          {/* <div
+          // show={openModal.open}
+          // onClose={handleOpenModal}
+          >
+            <div>
+              {validateTextToModal[openModal?.type || ""]?.title}
+            </div>
+            <div>
+              <div className="space-y-6">
+                {validateTextToModal[openModal?.type || ""]?.description}
+              </div>
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={() => handleOpenModal()}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Default
+              </button>
+              <button
+                type="button"
+                onClick={() => handleOpenModal()}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Default
+              </button>
+            </div>
+          </div> */}
+        </div >
+      </main >
     </>
   )
 }
