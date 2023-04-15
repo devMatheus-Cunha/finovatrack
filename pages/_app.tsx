@@ -8,7 +8,18 @@ import 'flowbite/dist/flowbite.css';
 import { ThemeProvider } from 'next-themes';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        cacheTime: 1000 * 60 * 10, // cache data for 10 minutes
+        staleTime: 1000 * 60 * 5, // consider data stale after 5 minutes
+        // refetchInterval: 1000 * 60 * 15, // refetch data every 15 minutes
+        refetchOnMount: true, // refetch data when component first mounts
+        retry: false // Disable automatic refetch attempt
+      },
+    },
+  });
 
 
   return (
