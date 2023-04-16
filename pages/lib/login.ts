@@ -1,7 +1,52 @@
-import { onAuthStateChanged } from "@firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "@firebase/auth";
 import { auth } from "./firebase";
 
-const checkAuthState = async () => {
+export const createUserWithEmail = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loginWithEmail = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: any;
+}) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkAuthState = async () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -13,7 +58,6 @@ const checkAuthState = async () => {
   });
 };
 
-<<<<<<< Updated upstream
 export const logout = async () => {
   return signOut(auth);
 };
@@ -23,6 +67,3 @@ const FixErroBuild = () => {
 };
 
 export default FixErroBuild;
-=======
-export default checkAuthState;
->>>>>>> Stashed changes

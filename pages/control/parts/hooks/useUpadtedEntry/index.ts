@@ -20,7 +20,7 @@ const useUpadtedEntry = () => {
     try {
       await updateDoc(docRef, data);
     } catch (error) {
-      console.log();
+      throw new Error("mensagem de erro");
     }
   };
 

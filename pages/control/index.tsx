@@ -32,7 +32,7 @@ import { ITypeModal, Item, IFormData } from './types';
 import ContentTotalEntrys from './parts/modals/totalEntrysModal';
 import router from 'next/router';
 import { useQuery } from 'react-query';
-import checkAuthState from '../lib/login';
+import { checkAuthState } from '../lib/login';
 
 type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 

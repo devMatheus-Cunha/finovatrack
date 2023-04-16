@@ -1,6 +1,5 @@
 import { db } from "@/pages/lib/firebase";
 import { getDocs, collection, deleteDoc } from "@firebase/firestore";
-import React from "react";
 import { useFetchExpensesData } from "../useFetchExpensesData";
 import { useMutation } from "react-query";
 

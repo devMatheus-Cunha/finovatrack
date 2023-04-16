@@ -1,4 +1,3 @@
-import React from "react";
 import { collection, addDoc } from "firebase/firestore";
 
 import { useMutation } from "react-query";
@@ -17,7 +16,7 @@ const useAddEntrys = () => {
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {
-      console.log(error);
+      throw new Error("mensagem de erro");
     }
   };
 

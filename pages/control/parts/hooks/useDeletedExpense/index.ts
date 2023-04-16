@@ -12,7 +12,7 @@ const useDeletedExpense = () => {
     try {
       await deleteDoc(docRef);
     } catch (error) {
-      console.log();
+      throw new Error("mensagem de erro");
     }
   };
 
