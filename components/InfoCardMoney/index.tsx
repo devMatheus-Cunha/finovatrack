@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface InfoCardProps {
- infoData: number
+ infoData: string
  title: string
+ contentAction?: ReactNode
 }
 
-const InfoCardMoney = ({ infoData, title }: InfoCardProps) => {
+const InfoCardMoney = ({ infoData, title, contentAction }: InfoCardProps) => {
  return (
-  <div className="w-[20%] h-[10vh]  bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center  px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+  <div className="w-[25%] h-[10vh] focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center  px-4 py-2.5 dark:bg-gray-700  dark:focus:ring-gray-700">
    <div className="text-left">
     <div className="mb-1 text-xs">{title}</div>
-    <div className="-mt-1 font-sans text-2xl font-semibold">{`R$ ${infoData}`}</div>
+    <div className="-mt-1 font-sans text-2xl font-semibold">{infoData}</div>
+    <div>
+     {
+      contentAction && contentAction
+     }
+    </div>
    </div>
   </div>
  );
