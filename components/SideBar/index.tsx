@@ -1,7 +1,7 @@
-import { logout } from "@/pages/lib/login";
 import router from "next/router";
 import { useMutation } from "react-query";
 import Button from "../Button";
+import logout from "@/pages/lib/logout";
 
 const sidebarItems = [
  {

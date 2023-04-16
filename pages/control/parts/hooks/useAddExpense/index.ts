@@ -3,7 +3,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 import { useMutation } from "react-query";
 import { db } from "@/pages/lib/firebase";
-import { useFetchExpensesData } from "..";
+import { useFetchExpensesData } from "../useFetchExpensesData";
 
 interface IData {
   description: string;

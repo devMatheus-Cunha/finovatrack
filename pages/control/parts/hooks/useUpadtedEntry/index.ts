@@ -1,7 +1,7 @@
 import { db } from "@/pages/lib/firebase";
 import { doc, updateDoc } from "@firebase/firestore";
 import { useMutation } from "react-query";
-import { useFetchEntrysData } from "..";
+import { useFetchEntrysData } from "../useFetchEntrysData";
 interface IData {
   value: number;
   id?: string;

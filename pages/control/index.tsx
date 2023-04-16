@@ -10,18 +10,8 @@ import { RiSubtractFill } from 'react-icons/ri';
 import { FiRefreshCcw } from 'react-icons/fi';
 
 import { columsHeadProps, formatCurrency, initialDataSelectedData, optionsFilter, useCalculationSumValues, useGetTotalsFree } from './parts/utils';
-import {
-  useAddExpense,
-  useFetchExpensesData,
-  useDeletedExpense,
-  useAddEntrys,
-  useFetchEntrysData,
-  useFetchQuatationEur,
-  useClearExpenses,
-  useUpadtedExpense,
-  useDeletedEntry
-} from './parts/hooks';
-import { convertEurosToReais } from './parts/hooks/useFetchQuatationEur';
+
+import useFetchQuatationEur, { convertEurosToReais } from './parts/hooks/useFetchQuatationEur';
 
 import Loading from '@/components/Loading';
 
@@ -29,12 +19,20 @@ import DeleteModalContent from './parts/modals/deleteModal';
 import ContentActionsTableModal from './parts/modals/actionsTableModal';
 import ContentAddEntryModal from './parts/modals/addEntryModal';
 
+import useAddEntrys from './parts/hooks/useAddEntrys';
+import useAddExpense from './parts/hooks/useAddExpense';
+import useClearExpenses from './parts/hooks/useClearExpenses';
+import useDeletedEntry from './parts/hooks/useDeletedEntry';
+import useDeletedExpense from './parts/hooks/useDeletedExpense';
+import useFetchEntrysData from './parts/hooks/useFetchEntrysData';
+import useFetchExpensesData from './parts/hooks/useFetchExpensesData';
+import useUpadtedExpense from './parts/hooks/useUpadtedExpense';
 
 import { ITypeModal, Item, IFormData } from './types';
 import ContentTotalEntrys from './parts/modals/totalEntrysModal';
-import { checkAuthState } from '../lib/login';
 import router from 'next/router';
 import { useQuery } from 'react-query';
+import checkAuthState from '../lib/login';
 
 type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 

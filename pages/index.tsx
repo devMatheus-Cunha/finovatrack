@@ -6,7 +6,8 @@ import { useMutation, useQuery } from 'react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { BsDoorOpen } from 'react-icons/bs';
-import { loginWithEmail, checkAuthState } from './lib/login';
+import checkAuthState from './lib/login';
+import loginWithEmail from './lib/loginWithEmail';
 
 type FormData = {
   email: string;
