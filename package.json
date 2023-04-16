@@ -11,6 +11,14 @@
   "dependencies": {
     "@firebase/auth": "^0.22.0",
     "@firebase/firestore": "^3.10.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-icons": "^4.8.0",
+    "react-query": "^3.39.3",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
     "@types/node": "18.15.11",
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.11",
@@ -23,14 +31,7 @@
     "next-themes": "^0.2.1",
     "postcss": "^8.4.21",
     "postcss-preset-env": "^8.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-hook-form": "^7.43.9",
-    "react-icons": "^4.8.0",
     "react-loading": "^2.0.3",
-    "react-query": "^3.39.3",
-    "tailwindcss": "^3.3.1",
-    "typescript": "5.0.3",
-    "zod": "^3.21.4"
+    "typescript": "5.0.3"
   }
 }
