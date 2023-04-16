@@ -112,8 +112,3 @@ const FixErroBuild = () => {
 };
 
 export default FixErroBuild;
-const FixErroBuild = () => {
-  return null;
-};
-
-export default FixErroBuild;
