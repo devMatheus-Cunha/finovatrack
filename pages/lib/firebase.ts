@@ -17,3 +17,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 export { auth, db };
+
+const FixErroBuild = () => {
+  return null;
+};
+
+export default FixErroBuild;

@@ -21,3 +21,9 @@ export type IFormData = {
   type: string;
   typeMoney: string;
 };
+
+const FixErroBuild = () => {
+  return null;
+};
+
+export default FixErroBuild;

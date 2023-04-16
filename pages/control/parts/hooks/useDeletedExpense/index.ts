@@ -1,8 +1,8 @@
 import { db } from "@/pages/lib/firebase";
 import { deleteDoc, doc } from "@firebase/firestore";
 import { useMutation } from "react-query";
-import { Item } from "@/pages/control";
 import useFetchExpensesData from "../useFetchExpensesData";
+import { Item } from "@/pages/control/types";
 
 const useDeletedExpense = () => {
   const { refetchExpensesData } = useFetchExpensesData();

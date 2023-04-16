@@ -106,3 +106,9 @@ export const optionsFilter = [
   { label: "Não essencial", value: "Não essencial" },
   { label: "Gasto Livre", value: "Gasto Livre" },
 ];
+
+const FixErroBuild = () => {
+  return null;
+};
+
+export default FixErroBuild;

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatCurrency } from '../../utils';
 import { ButtonGroup } from '@/components';
-import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from 'react-icons/ai';
 
 interface IData {
   value: number

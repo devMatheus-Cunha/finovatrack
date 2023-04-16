@@ -8,3 +8,9 @@ export { default as useFetchQuatationEur } from "./useFetchQuatationEur";
 export { default as useDeletedEntry } from "./useDeletedEntry";
 export { default as useUpadtedEntry } from "./useUpadtedEntry";
 export { default as useClearExpenses } from "./useClearExpenses";
+
+const FixErroBuild = () => {
+  return null;
+};
+
+export default FixErroBuild;

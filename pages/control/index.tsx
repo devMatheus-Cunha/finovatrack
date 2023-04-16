@@ -89,8 +89,6 @@ export default function Control() {
       euro_value: data.typeMoney === "Euro" ? Number(data.value) : 0,
     }
 
-    if (formattedValues.value in formattedValues) delete formattedValues?.value
-
     if (configModal.type === "edit") {
       upadtedExpense({ id: configModal.selectedData?.id, data: formattedValues })
       setConfigModal({

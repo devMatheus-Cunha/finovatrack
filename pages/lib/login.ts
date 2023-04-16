@@ -61,3 +61,9 @@ export const checkAuthState = async () => {
 export const logout = async () => {
   return signOut(auth);
 };
+
+const FixErroBuild = () => {
+  return null;
+};
+
+export default FixErroBuild;

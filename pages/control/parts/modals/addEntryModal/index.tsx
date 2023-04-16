@@ -1,9 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
-import { Input, Select } from '@/components/Forms';
-import { ITypeModal, Item } from '@/pages/control';
-import { validateTextToModal } from '../../utils';
+import { Input } from '@/components/Forms';
 
 type FormData = {
  value: number;
