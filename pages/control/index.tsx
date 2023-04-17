@@ -62,10 +62,9 @@ export default function Control() {
 
   const { calculationSumValues } = useCalculationSumValues(expensesData)
   const { getTotalsFree } = useGetTotalsFree(calculationSumValues)
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotalsFree?.euro_value))
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotalsFree?.euro_value ?? "0"))
 
   const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotalsFree?.euro_value))
-
   const totalEntrys = useMemo(() => {
     return entrysData.reduce((acc, item) => {
       return acc + Number(item.value);
