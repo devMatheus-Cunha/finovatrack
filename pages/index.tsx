@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
-import { BsDoorOpen } from 'react-icons/bs';
 import { loginWithEmail, checkAuthState } from './lib/login';
+import { SignIn } from '@phosphor-icons/react';
 
 type FormData = {
   email: string;
@@ -95,7 +95,7 @@ export default function Login() {
               className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 "
             >
               <div className='flex gap-2 justify-center items-center'>
-                <BsDoorOpen size={20} />
+                <SignIn size={24} color="#eee2e2" />
                 {isLoading || token ? "Entrando..." : "Entrar"}
               </div>
 

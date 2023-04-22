@@ -4,10 +4,6 @@ import { Fragment, useMemo, useState } from 'react';
 import { SubmitHandler } from "react-hook-form";
 import { Button, ButtonGroup, InfoCardMoney, SideBar } from '@/components';
 
-import { AiOutlineEdit, AiOutlineDelete, AiOutlineClear } from 'react-icons/ai';
-import { GiMoneyStack } from 'react-icons/gi';
-import { RiSubtractFill } from 'react-icons/ri';
-import { FiRefreshCcw } from 'react-icons/fi';
 
 import { columsHeadProps, formatCurrency, initialDataSelectedData, optionsFilter, useCalculationSumValues, useGetTotalsFree } from './parts/utils';
 
@@ -33,6 +29,7 @@ import ContentTotalEntrys from './parts/modals/totalEntrysModal';
 import router from 'next/router';
 import { useQuery } from 'react-query';
 import { checkAuthState } from '../lib/login';
+import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash } from '@phosphor-icons/react';
 
 type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 
@@ -180,7 +177,7 @@ export default function Control() {
                         type="button"
                         onClick={() => handleOpenModal("addExpense")}>
                         <div className='flex gap-2 justify-center items-center'>
-                          <RiSubtractFill size={20} />
+                          <Coins size={20} color="#eee2e2" />
                           Add Gastos
                         </div>
 
@@ -189,15 +186,16 @@ export default function Control() {
                         type="button"
                         onClick={() => handleOpenModal("addEntry")}>
                         <div className='flex gap-2 justify-center items-center'>
-                          <GiMoneyStack size={20} />
+                          <HandCoins size={20} color="#eee2e2" />
                           Add Entrada
                         </div>
                       </Button>
                       <Button
                         type="button"
-                        onClick={() => clearExpensesData()}>
+                        onClick={() => handleOpenModal("deleteAllExpenses")}
+                      >
                         <div className='flex gap-2 justify-center items-center'>
-                          <AiOutlineClear size={20} />
+                          <Broom size={20} color="#eee2e2" />
                           Limpar Dados
                         </div>
                       </Button>
@@ -228,7 +226,7 @@ export default function Control() {
                         onClick={() => refetchQuationData()}
                         className='dark:hover:text-gray-400'
                       >
-                        <FiRefreshCcw size={20} />
+                        <ArrowsCounterClockwise size={20} color="#eee2e2" />
                       </button>
                     </div>
                   </div>
@@ -277,13 +275,13 @@ export default function Control() {
                                               onClick: () => {
                                                 handleOpenModal("edit", item)
                                               },
-                                              content: <AiOutlineEdit />
+                                              content: <PencilSimpleLine color="#eee2e2" />
                                             },
                                             {
                                               onClick: () => {
                                                 handleOpenModal("delete", item)
                                               },
-                                              content: <AiOutlineDelete />
+                                              content: <Trash color="#eee2e2" />
                                             }
                                           ]} />
                                         </th >
@@ -321,10 +319,11 @@ export default function Control() {
                     )
                   }
                   {
-                    configModal.open && configModal.type === "delete" && (
+                    configModal.open && (configModal.type === "delete" || configModal.type === "deleteAllExpenses") && (
                       <DeleteModalContent
                         onCancel={handleOpenModal}
-                        onSubmit={onDelete} />
+                        onSubmit={configModal.type === "deleteAllExpenses" ? clearExpensesData : onDelete}
+                      />
                     )
                   }
                   {

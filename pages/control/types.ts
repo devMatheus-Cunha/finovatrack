@@ -4,6 +4,7 @@ export type ITypeModal =
   | "addEntry"
   | "addExpense"
   | "totalsEntrys"
+  | "deleteAllExpenses"
   | "";
 
 export type Item = {

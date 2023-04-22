@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatCurrency } from '../../utils';
 import { ButtonGroup } from '@/components';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { Trash } from '@phosphor-icons/react';
 
 interface IData {
   value: number
@@ -73,7 +73,7 @@ const ContentTotalEntrys = ({
                                 onClick: () => {
                                   onDelete({ data: item })
                                 },
-                                content: <AiOutlineDelete />
+                                content: <Trash color="#eee2e2" />
                               }
                             ]} />
                           </th >
