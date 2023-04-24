@@ -1,6 +1,6 @@
 import { collection, addDoc } from "firebase/firestore";
 
-import { useMutation } from "react-query";
+import { useMutation } from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 import { useFetchEntrysData } from "../useFetchEntrysData";
 

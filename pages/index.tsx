@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { loginWithEmail, checkAuthState } from './lib/login';
@@ -45,7 +45,7 @@ export default function Login() {
     },
   });
 
-  const { data: token } = useQuery("auth_state", checkAuthState, {
+  const { data: token } = useQuery(["auth_state"], checkAuthState, {
     onSuccess: (res) => {
       if (res) router.push('/control');
     }

@@ -1,7 +1,7 @@
 import { db } from "@/pages/lib/firebase";
 import { getDocs, collection, deleteDoc } from "@firebase/firestore";
 import { useFetchExpensesData } from "../useFetchExpensesData";
-import { useMutation } from "react-query";
+import { useMutation }from '@tanstack/react-query';
 
 const useClearExpenses = () => {
   const { refetchExpensesData } = useFetchExpensesData();

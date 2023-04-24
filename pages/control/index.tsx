@@ -27,7 +27,7 @@ import useUpadtedExpense from './parts/hooks/useUpadtedExpense';
 import { ITypeModal, Item, IFormData } from './types';
 import ContentTotalEntrys from './parts/modals/totalEntrysModal';
 import router from 'next/router';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { checkAuthState } from '../lib/login';
 import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash } from '@phosphor-icons/react';
 
@@ -126,7 +126,7 @@ export default function Control() {
     setFilter(event.target.value as Filter)
   }
 
-  const { data: token } = useQuery("auth_state", checkAuthState, {
+  const { data: token } = useQuery(["auth_state"], checkAuthState, {
     onSuccess: (res) => {
       if (!res) router.push('/');
     }

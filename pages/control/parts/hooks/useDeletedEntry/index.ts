@@ -1,6 +1,6 @@
 import { db } from "@/pages/lib/firebase";
 import { deleteDoc, doc } from "@firebase/firestore";
-import { useMutation } from "react-query";
+import { useMutation }from '@tanstack/react-query';
 import useFetchEntrysData from "../useFetchEntrysData";
 
 interface IData {

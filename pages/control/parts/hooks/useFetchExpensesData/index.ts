@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-import { useQuery } from "react-query";
+import { useQuery }from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 
 export interface IData {

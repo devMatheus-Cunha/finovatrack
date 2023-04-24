@@ -1,6 +1,6 @@
 import { db } from "@/pages/lib/firebase";
 import { doc, getDoc, updateDoc } from "@firebase/firestore";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery }from '@tanstack/react-query';
 
 type CurrentQuotation = {
   current_quotation: number;
@@ -66,14 +66,14 @@ const useFetchQuatationEur = (amount: string) => {
   };
 
   const { data: lastQuatationData, refetch: refetchLastQuotationData } =
-    useQuery("last_quotation_data", async () => await fetchLastQuotationData());
+    useQuery(["last_quotation_data"], async () => await fetchLastQuotationData());
 
   const { mutate: addlastQuotation } = useMutation(upadtedQuotation, {
     onSuccess: async () => await refetchLastQuotationData(),
   });
 
   const { refetch: refetchQuationData } = useQuery({
-    queryKey: "quatation_data",
+    queryKey: ["quatation_data"],
     queryFn: fetchQuatationRateFromAPI,
     enabled: false,
     cacheTime: 0,
