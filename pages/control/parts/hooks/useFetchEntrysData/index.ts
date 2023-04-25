@@ -22,7 +22,7 @@ export const useFetchEntrysData = () => {
     isLoading: isLoadingEntrysData,
     status: statusEntrysData,
     refetch: refetchEntrysData,
-  } = useQuery("entrys_data", async () => await fetchEntrysData());
+  } = useQuery(["entrys_data"], async () => await fetchEntrysData());
 
   return {
     entrysData,
