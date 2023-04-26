@@ -2,6 +2,7 @@ import { db } from "@/pages/lib/firebase";
 import { doc, updateDoc } from "@firebase/firestore";
 import { useMutation }from '@tanstack/react-query';
 import { useFetchExpensesData } from "../useFetchExpensesData";
+import { toast } from "react-toastify";
 
 interface IData {
   description: string;
@@ -31,8 +32,17 @@ const useUpadtedExpense = () => {
   const { mutate: upadtedExpense } = useMutation(fetchUpadtedExpense, {
     onSuccess: () => {
       refetchExpensesData();
+        toast.success("Sucesso ao Editar Gasto", {
+        position: toast.POSITION.TOP_RIGHT
+      });
     },
-  });
+    onError: () => {
+        toast.error("Erro ao Editar Gasto", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      }
+    }
+  );
 
   return {
     upadtedExpense,

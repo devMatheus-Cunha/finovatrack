@@ -2,6 +2,7 @@ import { db } from "@/pages/lib/firebase";
 import { deleteDoc, doc } from "@firebase/firestore";
 import { useMutation }from '@tanstack/react-query';
 import useFetchEntrysData from "../useFetchEntrysData";
+import { toast } from "react-toastify";
 
 interface IData {
   value: number;
@@ -25,7 +26,15 @@ const useDeletedEntry = () => {
     {
       onSuccess: () => {
         refetchEntrysData();
-      },
+        toast.success("Sucesso ao Deletar Entrada", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    },
+    onError: () => {
+        toast.error("Erro ao Deletar Entrada", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      }
     }
   );
 

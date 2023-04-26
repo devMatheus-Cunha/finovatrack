@@ -7,6 +7,7 @@ import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { loginWithEmail, checkAuthState } from './lib/login';
 import { SignIn } from '@phosphor-icons/react';
+import { toast } from 'react-toastify';
 
 type FormData = {
   email: string;
@@ -43,6 +44,24 @@ export default function Login() {
     onSuccess: async () => {
       router.push('/control');
     },
+    onError: ({ message }: { message: string }) => {
+      console.log(message)
+      if (message === "Firebase: Error (auth/user-not-found).") {
+        toast.error("Conta não encontrada.", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return
+      }
+      if (message === "Firebase: Error (auth/wrong-password).") {
+        toast.error("Senha incorreta", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return
+      }
+      toast.error("Erro no Servidor. Tente mais tarde!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
   });
 
   const { data: token } = useQuery(["auth_state"], checkAuthState, {

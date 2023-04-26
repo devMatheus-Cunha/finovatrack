@@ -3,6 +3,7 @@ import { deleteDoc, doc } from "@firebase/firestore";
 import { useMutation }from '@tanstack/react-query';
 import useFetchExpensesData from "../useFetchExpensesData";
 import { Item } from "@/pages/control/types";
+import { toast } from "react-toastify";
 
 const useDeletedExpense = () => {
   const { refetchExpensesData } = useFetchExpensesData();
@@ -21,7 +22,15 @@ const useDeletedExpense = () => {
     {
       onSuccess: () => {
         refetchExpensesData();
+        toast.success("Sucesso ao Deletar Gasto", {
+        position: toast.POSITION.TOP_RIGHT
+      });
       },
+      onError: () => {
+         toast.error("Erro ao Deletar Gasto", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      }
     }
   );
 

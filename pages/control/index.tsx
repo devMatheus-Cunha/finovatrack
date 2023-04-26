@@ -47,7 +47,7 @@ export default function Control() {
   })
 
   const { addExpense, isLoadingAddExpense } = useAddExpense()
-  const { expensesData = [] } = useFetchExpensesData(filter)
+  const { expensesData = [], refetchExpensesData } = useFetchExpensesData(filter)
   const { deletedExpense } = useDeletedExpense()
   const { upadtedExpense } = useUpadtedExpense()
 
@@ -165,7 +165,7 @@ export default function Control() {
                 <InfoCardMoney
                   infoData={formatCurrency((totalEntrys - (getTotalsFree?.real_value || 0) - (calculationTotalExpensesEurToReal || 0)), "BRL")
                   }
-                  title='Total Real Livre'
+                  title='Total Para Investimentos'
                 />
               </div>
 

@@ -13,14 +13,14 @@ export interface IData {
 }
 
 export const useFetchExpensesData = (filter = "") => {
-  const fetchExpensesData = async () => {
+  const fetchExpensesData = async (value: string) => {
     const docsArray: IData[] = [];
     let querySnapshot;
 
-    if (filter) {
+    if (value) {
       querySnapshot = query(
         collection(db, "expenses"),
-        where("type", "==", filter)
+        where("type", "==", value)
       );
     } else {
       querySnapshot = collection(db, "expenses");
@@ -40,7 +40,10 @@ export const useFetchExpensesData = (filter = "") => {
     isLoading: isLoadingExpensesData,
     status: statusExpensesData,
     refetch: refetchExpensesData,
-  } = useQuery(["expenses_data", filter], fetchExpensesData);
+  } = useQuery({
+    queryKey: ["expenses_data", filter],
+    queryFn: ({queryKey}) => fetchExpensesData(queryKey[1])
+  });
 
   return {
     expensesData,
