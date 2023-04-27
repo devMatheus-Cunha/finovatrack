@@ -1,32 +1,37 @@
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { useMutation } from '@tanstack/react-query';
 import { logout } from "@/pages/lib/login";
-import { Archive, ChartPie, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
+import { Archive, ChartPie, ClipboardText, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
 import useIsVisibilityDatas from "../../hooks/useIsVisibilityDatas"
 
 export default function SideBar({ children }: any) {
  const { isVisibilityData, handleToggleVisibilityData } = useIsVisibilityDatas()
-
- console.log(isVisibilityData)
+ const routeName = useRouter().pathname.replace('/', '')
 
  const sidebarItems = [
   {
    id: "eye",
    label: "Visualizar",
    icon: isVisibilityData ? <Eye size={24} color="#eee2e2" /> : <EyeSlash size={24} color="#eee2e2" />,
-   action: () => handleToggleVisibilityData()
+   action: () => handleToggleVisibilityData(),
   },
   {
    id: "control",
    label: "Controle",
-   icon: <ChartPie size={24} color="#eee2e2" />,
-   action: () => router.push("/control")
+   icon: <ClipboardText size={24} color={routeName === "control" ? "#06b6d4" : "#eee2e2"} />,
+   action: () => router.push("/control"),
   },
   {
-   id: "report",
+   id: "statistics",
    label: "Relatrios",
-   icon: <Archive size={24} color="#eee2e2" />,
-   action: () => router.push("/report")
+   icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
+   action: () => router.push("/statistics"),
+  },
+  {
+   id: "reports",
+   label: "Relatrios",
+   icon: <Archive size={24} color={routeName === "reports" ? "#06b6d4" : "#eee2e2"} />,
+   action: () => router.push("/reports"),
   },
  ];
 
