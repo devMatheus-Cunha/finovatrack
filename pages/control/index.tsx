@@ -30,6 +30,7 @@ import router from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { checkAuthState } from '../lib/login';
 import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash } from '@phosphor-icons/react';
+import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 
 type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 
@@ -46,8 +47,9 @@ export default function Control() {
     selectedData: initialDataSelectedData,
   })
 
+  const { isVisibilityData } = useIsVisibilityDatas()
   const { addExpense, isLoadingAddExpense } = useAddExpense()
-  const { expensesData = [], refetchExpensesData } = useFetchExpensesData(filter)
+  const { expensesData = [] } = useFetchExpensesData(filter)
   const { deletedExpense } = useDeletedExpense()
   const { upadtedExpense } = useUpadtedExpense()
 
@@ -201,7 +203,7 @@ export default function Control() {
                       </Button>
                       <select
                         id="type"
-                        className="hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                        className="cursor-pointer hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                         onChange={(e) => onFilter(e)}
                       >
                         <option value="" disabled selected>
@@ -256,10 +258,10 @@ export default function Control() {
                                       {item.description}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.euro_value !== 0 ? formatCurrency(item.euro_value, "EUR") : "-"}
+                                      {item.euro_value !== 0 && isVisibilityData ? formatCurrency(item.euro_value, "EUR") : "-"}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.real_value !== 0 ? formatCurrency(item.real_value, "BRL") : "-"}
+                                      {item.real_value !== 0 && isVisibilityData ? formatCurrency(item.real_value, "BRL") : "-"}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                       {item.type}

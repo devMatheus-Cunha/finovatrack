@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { formatCurrency } from '../../utils';
 import { ButtonGroup } from '@/components';
 import { Trash } from '@phosphor-icons/react';
+import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 
 interface IData {
   value: number
@@ -31,6 +32,7 @@ const ContentTotalEntrys = ({
   data,
   onDelete,
 }: IContentModal) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/2">
@@ -63,7 +65,7 @@ const ContentTotalEntrys = ({
                   <Fragment key={index}>
                     <tr className="bg-white border-b dark:bg-gray-700 dark:border-gray-600">
                       <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {item?.value !== 0 ? formatCurrency(item?.value, "BRL") : "-"}
+                        {item?.value !== 0 && isVisibilityData ? formatCurrency(item?.value, "BRL") : "-"}
                       </th>
                       {
                         item.description !== "Totais" ? (
