@@ -2,6 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 import { useQuery }from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
+import { useState } from "react";
 
 export interface IData {
   description: string;
@@ -12,7 +13,11 @@ export interface IData {
   id?: string;
 }
 
-export const useFetchExpensesData = (filter = "") => {
+export type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
+
+export const useFetchExpensesData = () => {
+  const [filter, setFilter] = useState<Filter>("")
+
   const fetchExpensesData = async (value: string) => {
     const docsArray: IData[] = [];
     let querySnapshot;
@@ -42,7 +47,8 @@ export const useFetchExpensesData = (filter = "") => {
     refetch: refetchExpensesData,
   } = useQuery({
     queryKey: ["expenses_data", filter],
-    queryFn: ({queryKey}) => fetchExpensesData(queryKey[1])
+    queryFn: () => fetchExpensesData(filter),
+    keepPreviousData: true
   });
 
   return {
@@ -50,6 +56,8 @@ export const useFetchExpensesData = (filter = "") => {
     isLoadingExpensesData,
     statusExpensesData,
     refetchExpensesData,
+    setFilter,
+    filter,
   };
 };
 

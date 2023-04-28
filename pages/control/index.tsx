@@ -21,7 +21,7 @@ import useClearExpenses from './parts/hooks/useClearExpenses';
 import useDeletedEntry from './parts/hooks/useDeletedEntry';
 import useDeletedExpense from './parts/hooks/useDeletedExpense';
 import useFetchEntrysData from './parts/hooks/useFetchEntrysData';
-import useFetchExpensesData from './parts/hooks/useFetchExpensesData';
+import useFetchExpensesData, { Filter } from './parts/hooks/useFetchExpensesData';
 import useUpadtedExpense from './parts/hooks/useUpadtedExpense';
 
 import { ITypeModal, Item, IFormData } from './types';
@@ -32,10 +32,8 @@ import { checkAuthState } from '../lib/login';
 import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash } from '@phosphor-icons/react';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 
-type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 
 export default function Control() {
-  const [filter, setFilter] = useState<Filter>("")
 
   const [configModal, setConfigModal] = useState<{
     open: boolean
@@ -49,7 +47,12 @@ export default function Control() {
 
   const { isVisibilityData } = useIsVisibilityDatas()
   const { addExpense, isLoadingAddExpense } = useAddExpense()
-  const { expensesData = [] } = useFetchExpensesData(filter)
+  const {
+    expensesData = [],
+    setFilter,
+    filter,
+  } = useFetchExpensesData()
+
   const { deletedExpense } = useDeletedExpense()
   const { upadtedExpense } = useUpadtedExpense()
 
@@ -205,6 +208,7 @@ export default function Control() {
                         id="type"
                         className="cursor-pointer hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                         onChange={(e) => onFilter(e)}
+                        value={filter}
                       >
                         <option value="" disabled selected>
                           Filtre o Tipo
