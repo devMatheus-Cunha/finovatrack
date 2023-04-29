@@ -1,53 +1,138 @@
+import React, { useMemo } from 'react';
+import useFetchExpensesData, { ExpenseData } from '../control/parts/hooks/useFetchExpensesData';
 import { SideBar } from '@/components';
-import React from 'react';
-import { ResponsiveContainer, PieChart, Pie } from 'recharts';
-import useFetchExpensesData from '../control/parts/hooks/useFetchExpensesData';
+import { ResponsivePie } from '@nivo/pie';
+import { useQuery } from '@tanstack/react-query';
 
+interface SeparatedExpense {
+ value: number;
+ label: string;
+}
 
 const Statistics = () => {
- const { expensesData = [] } = useFetchExpensesData()
+ // const { expensesData = [] } = useFetchExpensesData()
 
+ // const separateByType = useMemo((): SeparatedExpense[] => {
+ //  const types = ["Essencial", "Não essencial", "Gasto livre"];
+ //  const separatedArray = types.map((type) => {
+ //   return {
+ //    type: type,
+ //    objects: expensesData.filter((obj) => obj.type === type),
+ //   };
+ //  });
 
- function separarPorTipo(arr: any) {
-  const tipos = ["Essencial", "Não essencial", "Gasto Livre"];
-  const resultado: any = {};
+ //  return separatedArray.map((typeObj) => {
+ //   const totalValue = typeObj.objects.reduce((accumulator, obj) => {
+ //    const value = parseFloat(obj.value || "0");
+ //    return accumulator + value;
+ //   }, 0);
+ //   return {
+ //    value: totalValue,
+ //    label: typeObj.type,
+ //    id: typeObj.type,
+ //    color: "hsl(20, 70%, 50%)"
+ //   };
+ //  })
+ // }, [])
 
-  tipos.forEach((tipo) => {
-   resultado[tipo] = arr.filter((obj: any) => obj.type === tipo);
-  });
-  return resultado
- }
+ // const {
+ //  data,
+ // } = useQuery({
+ //  queryKey: ["separate_by_type"],
+ //  initialData: separateByType,
+ //  keepPreviousData: true
+ // });
 
- console.log(separarPorTipo(expensesData))
-
-
- const data01 = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
- ];
- const data02 = [
-  { name: 'A1', value: 100 },
-  { name: 'A2', value: 300 },
-  { name: 'B1', value: 100 },
-  { name: 'B2', value: 80 },
-  { name: 'B3', value: 40 },
-  { name: 'B4', value: 30 },
-  { name: 'B5', value: 50 },
-  { name: 'C1', value: 100 },
-  { name: 'C2', value: 200 },
-  { name: 'D1', value: 150 },
-  { name: 'D2', value: 50 },
- ];
  return (
   <SideBar>
    <div className='flex flex-col items-center h-[100vh] w-[100%]'>
-    <ResponsiveContainer width="100%" height="100%">
-     <PieChart width={400} height={400}>
-      <Pie data={data02} dataKey="value" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label />
-     </PieChart>
-    </ResponsiveContainer>
+    {/* <ResponsivePie
+     data={separateByType}
+     margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+     innerRadius={0.5}
+     padAngle={0.7}
+     cornerRadius={3}
+     activeOuterRadiusOffset={8}
+     borderWidth={1}
+     borderColor={{
+      from: 'color',
+      modifiers: [
+       [
+        'darker',
+        0.2
+       ]
+      ]
+     }}
+     arcLinkLabelsSkipAngle={10}
+     arcLinkLabelsTextColor="#ffffff"
+     arcLinkLabelsThickness={2}
+     arcLinkLabelsColor={{ from: 'color' }}
+     arcLabelsSkipAngle={10}
+     arcLabelsTextColor={{
+      from: 'color',
+      modifiers: [
+       [
+        'darker',
+        2
+       ]
+      ]
+     }}
+     defs={[
+      {
+       id: 'dots',
+       type: 'patternDots',
+       background: 'inherit',
+       color: 'rgba(255, 255, 255, 0.3)',
+       size: 4,
+       padding: 1,
+       stagger: true
+      },
+      {
+       id: 'lines',
+       type: 'patternLines',
+       background: 'inherit',
+       color: 'rgba(255, 255, 255, 0.3)',
+       rotation: -45,
+       lineWidth: 6,
+       spacing: 10
+      }
+     ]}
+     fill={[
+      { match: { id: 'ruby' }, id: 'dots' },
+      { match: { id: 'c' }, id: 'dots' },
+      { match: { id: 'go' }, id: 'dots' },
+      { match: { id: 'python' }, id: 'dots' },
+      { match: { id: 'scala' }, id: 'lines' },
+      { match: { id: 'lisp' }, id: 'lines' },
+      { match: { id: 'elixir' }, id: 'lines' },
+      { match: { id: 'javascript' }, id: 'lines' }
+     ]}
+     legends={[
+      {
+       anchor: 'bottom',
+       direction: 'row',
+       justify: false,
+       translateX: 0,
+       translateY: 56,
+       itemsSpacing: 0,
+       itemWidth: 100,
+       itemHeight: 18,
+       itemTextColor: '#999',
+       itemDirection: 'left-to-right',
+       itemOpacity: 1,
+       symbolSize: 18,
+       symbolShape: 'circle',
+       effects: [
+        {
+         on: 'hover',
+         style: {
+          itemTextColor: '#000'
+         }
+        }
+       ]
+      }
+     ]}
+    /> */}
    </div>
   </SideBar>
  );
