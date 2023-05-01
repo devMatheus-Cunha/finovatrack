@@ -45,7 +45,6 @@ export default function Login() {
       router.push('/control');
     },
     onError: ({ message }: { message: string }) => {
-      console.log(message)
       if (message === "Firebase: Error (auth/user-not-found).") {
         toast.error("Conta não encontrada.", {
           position: toast.POSITION.TOP_RIGHT
