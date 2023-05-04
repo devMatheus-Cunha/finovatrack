@@ -12,10 +12,10 @@ const ConfirmSaveReportModal = ({ onSubmit, onCancel, initialData }: IConfirmSav
  return (
   <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/4">
    <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-    <div className="p-6 gap-3 text-center flex flex-col justify-center items-center">
+    <div className="p-5 gap-3 text-center flex flex-col justify-center items-center">
      <FolderPlus size={52} color="#eee2e2" />
      <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      Você ira salvar todos os dados abaixo como um fechamento do mês atual. Desejar isso mesmo?
+      Essa ação irá salvar todos os dados abaixo como fechamento do mês atual. Caso já exista um relatório salvo para este mês, ele será substituído por este.
      </h3>
      <div className='flex gap-3'>
       <button

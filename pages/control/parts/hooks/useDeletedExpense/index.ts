@@ -4,12 +4,14 @@ import { useMutation }from '@tanstack/react-query';
 import useFetchExpensesData from "../useFetchExpensesData";
 import { Item } from "@/pages/control/types";
 import { toast } from "react-toastify";
+import { useUser } from "@/hooks/useUserData";
 
 const useDeletedExpense = () => {
   const { refetchExpensesData } = useFetchExpensesData();
+  const { data: authData } = useUser();
 
   const fetchDeletedExpense = async ({ data }: { data: Item }) => {
-    const docRef = doc(db, "expenses", data.id || "");
+    const docRef = doc(db, "users", authData?.id || "" , "expenses", data.id || "");
     try {
       await deleteDoc(docRef);
     } catch (error) {
@@ -22,12 +24,12 @@ const useDeletedExpense = () => {
     {
       onSuccess: () => {
         refetchExpensesData();
-        toast.success("Sucesso ao Deletar Gasto", {
+        toast.success("Sucesso ao deletar gasto", {
         position: toast.POSITION.TOP_RIGHT
       });
       },
       onError: () => {
-         toast.error("Erro ao Deletar Gasto", {
+         toast.error("Erro ao deletar gasto", {
         position: toast.POSITION.TOP_RIGHT
       });
       }

@@ -3,13 +3,15 @@ import { doc, updateDoc } from "@firebase/firestore";
 import { useMutation }from '@tanstack/react-query';
 import { useFetchEntrysData } from "../useFetchEntrysData";
 import { toast } from "react-toastify";
+import { useUser } from "@/hooks/useUserData";
 interface IData {
   value: number;
   id?: string;
 }
 const useUpadtedEntry = () => {
   const { refetchEntrysData } = useFetchEntrysData();
-
+  const { data: authData } = useUser();
+  
   const fetchUpadtedExpense = async ({
     id,
     data,
@@ -17,7 +19,7 @@ const useUpadtedEntry = () => {
     id?: string;
     data: Record<string, any>;
   }) => {
-    const docRef = doc(db, "entrys", id || "");
+    const docRef = doc(db, "users", authData?.id || "" , "entrys", id || "");
     try {
       await updateDoc(docRef, data);
     } catch (error) {
@@ -28,12 +30,12 @@ const useUpadtedEntry = () => {
   const { mutate: upadtedEntry } = useMutation(fetchUpadtedExpense, {
     onSuccess: () => {
       refetchEntrysData();
-        toast.success("Sucesso ao Editar Entrada", {
+        toast.success("Sucesso ao editar entrada", {
         position: toast.POSITION.TOP_RIGHT
       });
     },
     onError: () => {
-       toast.error("Erro ao Editar Entrada", {
+       toast.error("Erro ao editar entrada", {
         position: toast.POSITION.TOP_RIGHT
       });
     }

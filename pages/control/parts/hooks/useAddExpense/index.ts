@@ -4,6 +4,7 @@ import { useMutation }from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 import { useFetchExpensesData } from "../useFetchExpensesData";
 import { toast } from "react-toastify";
+import { useUser } from "@/hooks/useUserData";
 
 interface IData {
   description: string;
@@ -15,10 +16,11 @@ interface IData {
 
 const useAddExpense = () => {
   const { refetchExpensesData } = useFetchExpensesData();
-
+  const { data: authData } = useUser();
+  
   const addDocument = async (data: IData) => {
     try {
-      const myCollection = collection(db, "expenses");
+      const myCollection = collection(db, "users", authData?.id || "" , "expenses");
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {
@@ -33,12 +35,12 @@ const useAddExpense = () => {
   } = useMutation(addDocument, {
     onSuccess: () => {
       refetchExpensesData();
-      toast.success("Sucesso ao Adicionar Gasto", {
+      toast.success("Sucesso ao adicionar gasto", {
         position: toast.POSITION.TOP_RIGHT
       });
     },
     onError: () => {
-       toast.error("Erro ao Adicionar Gasto", {
+       toast.error("Erro ao adicionar gasto", {
         position: toast.POSITION.TOP_RIGHT
       });
     }

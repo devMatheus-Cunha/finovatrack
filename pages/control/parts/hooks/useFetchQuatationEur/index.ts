@@ -1,5 +1,6 @@
+import { useUser } from "@/hooks/useUserData";
 import { db } from "@/pages/lib/firebase";
-import { doc, getDoc, updateDoc } from "@firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
 import { useMutation, useQuery }from '@tanstack/react-query';
 import React from "react";
 import { toast } from "react-toastify";
@@ -20,17 +21,28 @@ export const convertEurosToReais = (quatationEur = 0, valueEur = 0) => {
 
 const useFetchQuatationEur = (amount: string) => {
   const toastId: any = React.useRef(null);
+  const { data: authData } = useUser();
 
-  const upadtedQuotation = async (data: Record<string, any>) => {
-    try {
-      const myCollection = doc(db, "quotation", "last_quotation_data");
-      const docRef = await updateDoc(myCollection, data);
-      return docRef;
-    } catch (error) {
-      throw error
+const updateQuotationData = async (data: Record<string, any>) => {
+  try {
+    if (!authData?.id) {
+      throw new Error("User not logged in");
     }
-  };
 
+    const docRef = doc(db, "users", authData.id, "quotation", "last_quotation_data");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await updateDoc(docRef, data);
+      return "Document updated successfully";
+    } else {
+      await setDoc(docRef, data);
+      return "Document created successfully";
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 const fetchQuatationRateFromAPI = async (value: string) => {
   const myHeaders = new Headers();
   myHeaders.append("apikey", process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || "");
@@ -63,7 +75,7 @@ const fetchQuatationRateFromAPI = async (value: string) => {
 };
 
   const fetchLastQuotationData = async () => {
-    const docRef = doc(db, "quotation", "last_quotation_data");
+    const docRef = doc(db, "users", authData?.id || "" , "quotation", "last_quotation_data");
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -75,13 +87,13 @@ const fetchQuatationRateFromAPI = async (value: string) => {
   };
 
   const { data: lastQuatationData, refetch: refetchLastQuotationData } =
-    useQuery(["last_quotation_data"], async () => await fetchLastQuotationData());
+    useQuery(["last_quotation_data"], async () => await fetchLastQuotationData(),  { enabled: !!authData?.id,});
 
-  const { mutate: addLastQuotation } = useMutation(upadtedQuotation, {
+  const { mutate: addLastQuotation } = useMutation(updateQuotationData, {
     onSuccess: async () => await refetchLastQuotationData(),
   });
 
-  const { refetch: refetchQuationData, fetchStatus } = useQuery({
+  const { refetch: refetchQuationData } = useQuery({
     queryKey: ["quatation_data"],
     queryFn: () => fetchQuatationRateFromAPI(amount),
     enabled: false,
@@ -90,7 +102,7 @@ const fetchQuatationRateFromAPI = async (value: string) => {
       addLastQuotation(res);
        toast.update(toastId.current, {
         type: 'success',
-        render: 'Sucesso ao Atualizar Cotação',
+        render: 'Sucesso ao atualizar cotação',
         className: 'rotateY animated',
         autoClose: 5000,
        })
@@ -99,7 +111,7 @@ const fetchQuatationRateFromAPI = async (value: string) => {
     onError: () => {
       toast.update(toastId.current, {
         type: 'error',
-        render: 'Erro ao Atualizar Cotação',
+        render: 'Erro ao atualizar cotação',
         autoClose: 5000,
       });
       toastId.current = null;

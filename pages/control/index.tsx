@@ -28,11 +28,11 @@ import { ITypeModal, Item, IFormData } from './types';
 import ContentTotalEntrys from './parts/modals/totalEntrysModal';
 import router from 'next/router';
 import { useQuery } from '@tanstack/react-query';
-import { checkAuthState } from '../lib/login';
 import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash, FolderOpen } from '@phosphor-icons/react';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 import useSaveReport from '../reports/hooks/useSaveReport';
 import ConfirmSaveReportModal from './parts/modals/confirmSaveReportModal';
+import { useUser } from '@/hooks/useUserData';
 
 
 export default function Control() {
@@ -55,6 +55,8 @@ export default function Control() {
   })
 
   const { isVisibilityData } = useIsVisibilityDatas()
+  const { data: authData } = useUser();
+
   const { addExpense, isLoadingAddExpense } = useAddExpense()
   const {
     expensesData = [],
@@ -75,9 +77,10 @@ export default function Control() {
 
   const { calculationSumValues } = useCalculationSumValues(expensesData)
   const { getTotalsFree } = useGetTotalsFree(calculationSumValues)
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotalsFree?.euro_value ?? "0"))
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotalsFree?.euro_value ?? "1"))
 
-  const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotalsFree?.euro_value))
+  const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotalsFree?.euro_value)) + getTotalsFree?.real_value
+
   const totalEntrys = useMemo(() => {
     return entrysData.reduce((acc, item) => {
       return acc + Number(item.value);
@@ -148,12 +151,6 @@ export default function Control() {
     setFilter(event.target.value as Filter)
   }
 
-  const { data: token } = useQuery(["auth_state"], checkAuthState, {
-    onSuccess: (res) => {
-      if (!res) router.push('/');
-    }
-  });
-
   return (
     <>
       <Head>
@@ -164,7 +161,7 @@ export default function Control() {
       </Head>
 
       <SideBar>
-        <Loading loading={!token}>
+        <Loading loading={!authData?.token && !authData?.id}>
           <main>
             <div className='flex flex-col items-center h-[100vh] w-[100%]'>
               <div className="flex w-[100%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
@@ -183,11 +180,11 @@ export default function Control() {
                 />
                 <InfoCardMoney
                   infoData={formatCurrency(calculationTotalExpensesEurToReal || 0, "BRL")}
-                  title='Total Gastos Euro' />
+                  title='Total Gastos' />
                 <InfoCardMoney
                   infoData={formatCurrency((totalEntrys - (getTotalsFree?.real_value || 0) - (calculationTotalExpensesEurToReal || 0)), "BRL")
                   }
-                  title='Total Para Investimentos'
+                  title='Total Investimentos'
                 />
               </div>
 
@@ -218,7 +215,7 @@ export default function Control() {
                       >
                         <div className='flex gap-2 justify-center items-center'>
                           <Broom size={20} color="#eee2e2" />
-                          Limpar Dados
+                          Limpar Gastos
                         </div>
                       </Button>
                       <Button
@@ -227,7 +224,7 @@ export default function Control() {
                       >
                         <div className='flex gap-2 justify-center items-center'>
                           <FolderOpen size={20} color="#eee2e2" />
-                          Salvar Relatorio
+                          Salvar Relatório
                         </div>
                       </Button>
                       <select
@@ -288,10 +285,10 @@ export default function Control() {
                                       {item.description}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.euro_value !== 0 && isVisibilityData ? formatCurrency(item.euro_value, "EUR") : "-"}
+                                      {item.euro_value !== 0 && isVisibilityData ? formatCurrency(item.euro_value, "EUR" || 0) : "-"}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.real_value !== 0 && isVisibilityData ? formatCurrency(item.real_value, "BRL") : "-"}
+                                      {item.real_value !== 0 && isVisibilityData ? formatCurrency(item.real_value, "BRL" || 0) : "-"}
                                     </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                       {item.type}
@@ -329,7 +326,7 @@ export default function Control() {
                         </table >
                       ) : (
                         <div className='flex justify-center items-center h-full'>
-                          <h1 className='text-2xl'>Não a nenhum dado na tabela ainda</h1>
+                          <h1 className='text-2xl'>Não a nenhum dado na tabela!</h1>
                         </div>
                       )
                     }

@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useQuery }from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 import { useState } from "react";
+import { useUser } from "@/hooks/useUserData";
 
 export interface ExpenseData {
  id: string;
@@ -18,6 +19,7 @@ export type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 
 export const useFetchExpensesData = () => {
   const [filter, setFilter] = useState<Filter>("")
+  const { data: authData } = useUser();
 
   const fetchExpensesData = async (value: string) => {
     const docsArray: ExpenseData[] = [];
@@ -25,11 +27,11 @@ export const useFetchExpensesData = () => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, "expenses"),
+        collection(db, "users", authData?.id || "" , "expenses"),
         where("type", "==", value)
       );
     } else {
-      querySnapshot = collection(db, "expenses");
+      querySnapshot = collection(db, "users", authData?.id || "" , "expenses");
     }
 
     const get = await getDocs(querySnapshot);
@@ -49,7 +51,8 @@ export const useFetchExpensesData = () => {
   } = useQuery({
     queryKey: ["expenses_data", filter],
     queryFn: () => fetchExpensesData(filter),
-    keepPreviousData: true
+    keepPreviousData: true,
+    enabled: !!authData?.id,
   });
 
   return {
