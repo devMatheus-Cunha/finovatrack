@@ -59,7 +59,7 @@ const Reports = () => {
    <div className='h-[100vh] pt-8 w-[100%]'>
     <div className='flex items-center flex-col w-[100%] gap-10'>
      <div className=' p-7 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[34%]'>
-      <h2>Escolha um período para solicitar um relatorio:</h2>
+      <h2>Escolha um período para solicitar um relatório:</h2>
       <div className='flex gap-4 bg-gray-800 rounded-lg  justify-center'>
        <div>
         <DatePicker
@@ -78,16 +78,16 @@ const Reports = () => {
        >
         <div className='flex gap-2 justify-center items-center'>
          <FolderOpen size={20} color="#eee2e2" />
-         Solicitar Relatorio
+         Solicitar Relatório
         </div>
        </Button>
       </div>
      </div>
-     <div className='w-[80%]'>
+     <div className='w-[95%]'>
       {
        data ? (
         <div className='flex flex-col gap-4'>
-         <h1 className='text-xl'>Relatorio referente ao período <span className='italic'>{data?.period}</span></h1>
+         <h1 className='text-xl'>Relatório referente ao período <span className='italic'>{data?.period}</span></h1>
          <div className='flex gap-4'>
           <h1 className='dark:text-gray-300'>Total Entradas: <span className='italic dark:text-white'>{data.totalEntrys}</span></h1>
           <h1 className='dark:text-gray-300'>Total Saídas: <span className='italic dark:text-white'>{data.totalExpenses}</span></h1>
@@ -139,7 +139,7 @@ const Reports = () => {
             </table >
            ) : (
             <div className='flex justify-center items-center h-full'>
-             <h1 className='text-2xl'>Não a nenhum dado na tabela ainda</h1>
+             <h1 className='text-2xl'>Não a nenhum dado na tabela!</h1>
             </div>
            )
           }
@@ -148,7 +148,7 @@ const Reports = () => {
         </div>
        ) : (
         <div className='flex justify-center items-center h-full'>
-         <h1 className='text-2xl'>Nenhum relatorio gerado para este período</h1>
+         <h1 className='text-2xl'>Nenhum relatório gerado para este período</h1>
         </div>
        )
       }

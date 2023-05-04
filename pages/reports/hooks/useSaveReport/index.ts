@@ -4,6 +4,7 @@ import { useMutation }from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 import { toast } from "react-toastify";
 import { ExpenseData } from "../useFecthReportsData";
+import { useUser } from "@/hooks/useUserData";
 
 
 export interface IReportData {
@@ -17,14 +18,15 @@ export interface IReportData {
 
 
 const useSaveReport = () => {
-const saveReportData = async ({data, ...rest}: IReportData) => {
+ const { data: authData } = useUser();
+ const saveReportData = async ({data, ...rest}: IReportData) => {
    try {
       const today = new Date();
       const month = String(today.getMonth() + 1).padStart(2, '0');
       const year = String(today.getFullYear());
       const format = `${month}/${year}`;
 
-      const myCollection = collection(db, "reports");
+      const myCollection = collection(db, "users", authData?.id || "" , "reports");
       const querySnapshot = await getDocs(query(myCollection, where("period", "==", format)));
 
       if (!querySnapshot.empty) {
@@ -48,12 +50,12 @@ const saveReportData = async ({data, ...rest}: IReportData) => {
     await saveReportData({data, ...rest})
   }, {
     onSuccess: () => {
-      toast.success("Sucesso ao Salvar Relatorio", {
+      toast.success("Sucesso ao salvar relatório", {
         position: toast.POSITION.TOP_RIGHT
       });
     },
     onError: () => {
-       toast.error("Erro ao Salvar Relatorio", {
+       toast.error("Erro ao salvar relatório", {
         position: toast.POSITION.TOP_RIGHT
       });
     }
