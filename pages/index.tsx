@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
-import { loginWithEmail, checkAuthState } from './lib/login';
-import { SignIn } from '@phosphor-icons/react';
+import { loginWithEmail } from './lib/login';
 import { toast } from 'react-toastify';
+import { useUser } from '@/hooks/useUserData';
 
 type FormData = {
   email: string;
@@ -19,8 +19,11 @@ const schema = z.object({
   password: z.string().min(6),
 });
 
+
 export default function Login() {
+  const queryClient = useQueryClient()
   const router = useRouter();
+  const { data: authData } = useUser();
 
   const {
     register,
@@ -41,7 +44,15 @@ export default function Login() {
   });
 
   const { mutate, isLoading } = useMutation(loginWithEmail, {
-    onSuccess: async () => {
+    onSuccess: async (user) => {
+      queryClient.setQueryData(["auth_state"], {
+        id: user.uid,
+        expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
+        token: (await user.getIdTokenResult()).token,
+        email: user.email,
+        name: user.displayName,
+        typeAccount: user.photoURL,
+      });
       router.push('/control');
     },
     onError: ({ message }: { message: string }) => {
@@ -49,23 +60,15 @@ export default function Login() {
         toast.error("Conta não encontrada.", {
           position: toast.POSITION.TOP_RIGHT
         });
-        return
-      }
-      if (message === "Firebase: Error (auth/wrong-password).") {
+      } else if (message === "Firebase: Error (auth/wrong-password).") {
         toast.error("Senha incorreta", {
           position: toast.POSITION.TOP_RIGHT
         });
-        return
+      } else {
+        toast.error("Erro no Servidor. Tente mais tarde!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
-      toast.error("Erro no Servidor. Tente mais tarde!", {
-        position: toast.POSITION.TOP_RIGHT
-      });
-    }
-  });
-
-  const { data: token } = useQuery(["auth_state"], checkAuthState, {
-    onSuccess: (res) => {
-      if (res) router.push('/control');
     }
   });
 
@@ -108,16 +111,26 @@ export default function Login() {
                 </>
               }
             />
-            <button
-              type="submit"
-              className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 "
-            >
-              <div className='flex gap-2 justify-center items-center'>
-                <SignIn size={24} color="#eee2e2" />
-                {isLoading || token ? "Entrando..." : "Entrar"}
-              </div>
 
-            </button>
+            <div className='flex flex-col gap-10 justify-center items-center'>
+              <button
+                type="submit"
+                className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-700 p-2 w-[100px]"
+              >
+                <div className='flex gap-2 justify-center items-center'>
+                  {isLoading || authData?.token ? "Entrando..." : "Entrar"}
+                </div>
+              </button>
+              <button
+                type="button"
+                className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline"
+                onClick={() => router.push('/createAccount')}
+              >
+                <div className='flex gap-2 justify-center items-center'>
+                  Criar Conta
+                </div>
+              </button>
+            </div>
           </div>
         </form>
       </div>

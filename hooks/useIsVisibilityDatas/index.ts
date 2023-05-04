@@ -5,7 +5,7 @@ interface IData {
 }
 
 const useIsVisibilityDatas = () => {
- const queryClient = useQueryClient()
+const queryClient = useQueryClient()
  let initialData: boolean = true
 
  if (typeof localStorage !== 'undefined') {
