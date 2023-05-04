@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { db } from "@/pages/lib/firebase";
 import { useState } from "react";
 import { IReportData } from "../useSaveReport";
+import { useUser } from "@/hooks/useUserData";
 
 export interface ExpenseData {
  id: string;
@@ -18,6 +19,8 @@ export interface ExpenseData {
 
 
 export const useFecthReportsData = () => {
+const { data: authData } = useUser();
+
  const [selectedPeriod, setSelectedPeriod] = useState(new Date())
  const [period, setPeriod] = useState('')
 
@@ -27,7 +30,7 @@ export const useFecthReportsData = () => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, "reports"),
+        collection(db, "users", authData?.id || "" , "reports"),
         where("period", "==", value)
       );
      const get = await getDocs(querySnapshot);
