@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
-import { createAccountUser } from '../lib/login';
-import { SignIn } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
-import { useUser } from '@/hooks/useUserData';
+import useCreateAccount from '../../hooks/useAuth/useCreateAccount';
+import { TypeAccount } from '@/hooks/useAuth/types';
 
 type FormData = {
  email: string;
@@ -26,8 +25,8 @@ const schema = z.object({
 
 export default function CreateUser() {
  const router = useRouter();
- const queryClient = useQueryClient()
- const { data: authData } = useUser();
+ const { createAccountUser, createDocumentForUser } = useCreateAccount()
+
  const {
   register,
   handleSubmit,
@@ -48,15 +47,15 @@ export default function CreateUser() {
 
  const { mutate, isLoading } = useMutation(createAccountUser, {
   onSuccess: async (user) => {
-   queryClient.setQueryData(["auth_state"], {
+   await createDocumentForUser({
     id: user.uid,
     expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
     token: (await user.getIdTokenResult()).token,
-    email: user.email,
-    name: user.displayName,
-    typeAccount: user.photoURL,
-   });
-   router.push('/control');
+    email: user.email || "",
+    name: user.displayName || "",
+    typeAccount: user.photoURL as TypeAccount,
+   })
+   router.push(`/control/${user.uid}`);
   },
   onError: ({ message }: { message: string }) => {
    if (message === "Firebase: Error (auth/email-already-in-use).") {
@@ -152,13 +151,14 @@ export default function CreateUser() {
       </div>
 
 
-      <div className='flex flex-col gap-10 justify-center items-center'>
+      <div className='flex flex-col gap-10 justify-center items-center
+      '>
        <button
         type="submit"
         className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-700 p-2 w-[100px]"
        >
         <div className='flex gap-2 justify-center items-center'>
-         {isLoading || authData?.token ? "Criando..." : "Criar"}
+         {isLoading ? "Criando..." : "Criar"}
         </div>
        </button>
        <button

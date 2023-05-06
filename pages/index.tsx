@@ -2,12 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
-import { loginWithEmail } from './lib/login';
+import useLogin from '../hooks/useAuth/useLogin';
 import { toast } from 'react-toastify';
-import { useUser } from '@/hooks/useUserData';
 
 type FormData = {
   email: string;
@@ -21,10 +20,8 @@ const schema = z.object({
 
 
 export default function Login() {
-  const queryClient = useQueryClient()
   const router = useRouter();
-  const { data: authData } = useUser();
-
+  const { loginWithEmail, upadtedDocumentForUser } = useLogin()
   const {
     register,
     handleSubmit,
@@ -45,15 +42,12 @@ export default function Login() {
 
   const { mutate, isLoading } = useMutation(loginWithEmail, {
     onSuccess: async (user) => {
-      queryClient.setQueryData(["auth_state"], {
+      upadtedDocumentForUser({
         id: user.uid,
         expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
         token: (await user.getIdTokenResult()).token,
-        email: user.email,
-        name: user.displayName,
-        typeAccount: user.photoURL,
       });
-      router.push('/control');
+      router.push(`/control/${user.uid}`);
     },
     onError: ({ message }: { message: string }) => {
       if (message === "Firebase: Error (auth/user-not-found).") {
@@ -118,7 +112,7 @@ export default function Login() {
                 className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-700 p-2 w-[100px]"
               >
                 <div className='flex gap-2 justify-center items-center'>
-                  {isLoading || authData?.token ? "Entrando..." : "Entrar"}
+                  {isLoading ? "Entrando..." : "Entrar"}
                 </div>
               </button>
               <button

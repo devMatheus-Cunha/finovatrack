@@ -1,21 +1,22 @@
-import router, { useRouter } from "next/router";
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logout } from "@/pages/lib/login";
-import { Archive, ChartPie, ClipboardText, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
+import { useRouter } from "next/router";
+import { useMutation } from '@tanstack/react-query';
+import { Archive, ClipboardText, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
 import useIsVisibilityDatas from "../../hooks/useIsVisibilityDatas"
+import useLogout from '../../hooks/useAuth/useLogout';
+
 import React from "react";
 
 export default function SideBar({ children }: any) {
  const { isVisibilityData, handleToggleVisibilityData } = useIsVisibilityDatas()
- const routeName = useRouter().pathname.replace('/', '')
- const queryClient = useQueryClient()
+ const router = useRouter()
+ const routeName = useRouter().pathname.split('/')[1]
+ const { id } = router.query;
+ const { logout } = useLogout()
+
+
+
  const { mutate: onLogout } = useMutation(logout, {
   onSuccess: () => {
-   queryClient.setQueryData(["auth_state"], {
-    id: undefined,
-    expirationTimeToken: undefined,
-    token: undefined,
-   });
    router.push('/');
   },
  });
@@ -31,20 +32,20 @@ export default function SideBar({ children }: any) {
    id: "control",
    label: "Controle",
    icon: <ClipboardText size={24} color={routeName === "control" ? "#06b6d4" : "#eee2e2"} />,
-   action: () => router.push("/control"),
+   action: () => router.push(`/control/${id}`),
   },
   {
    id: "reports",
    label: "Relatrios",
    icon: <Archive size={24} color={routeName === "reports" ? "#06b6d4" : "#eee2e2"} />,
-   action: () => router.push("/reports"),
+   action: () => router.push(`/reports/${id}`),
   },
-  {
-   id: "statistics",
-   label: "Relatrios",
-   icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
-   action: () => router.push("/statistics"),
-  },
+  // {
+  //  id: "statistics",
+  //  label: "Relatrios",
+  //  icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
+  //  action: () => router.push("/statistics"),
+  // },
   {
    id: "logout",
    label: "Sair",
