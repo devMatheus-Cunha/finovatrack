@@ -297,12 +297,21 @@ export default function Control() {
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                       {item.description}
                                     </th>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, "euro") : "-"}
-                                    </th>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, userData.typeAccount) : "-"}
-                                    </th>
+                                    {
+                                      userData.typeAccount !== "euro" && (
+                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                          {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, "euro") : "-"}
+                                        </th>
+                                      )
+                                    }
+
+                                    {
+                                      userData.typeAccount !== "euro" && (
+                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                          {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, "real") : "-"}
+                                        </th>
+                                      )
+                                    }
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                       {item.type}
                                     </th>
@@ -357,7 +366,7 @@ export default function Control() {
                         handleOpenModal={handleOpenModal}
                         onSubmit={onSubmit}
                         isLoadingAddExpense={isLoadingAddExpense}
-                        userData={userData}
+                        typeAccount={userData.typeAccount}
                       />
                     )
                   }
@@ -392,6 +401,7 @@ export default function Control() {
                       <ContentAddEntryModal
                         handleOpenModal={handleOpenModal}
                         onSubmit={onAddEntrys}
+                        typeAccount={userData.typeAccount}
                       />
                     )
                   }

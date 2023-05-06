@@ -4,10 +4,10 @@ import { ZodError, z } from 'zod';
 import { Input, Select } from '@/components/Forms';
 import { validateTextToModal } from '../../utils';
 
-import { UserData } from '@/hooks/useAuth/types';
 import { Item, ITypeModal } from '../../../types';
 import { validaTextForTypeAccount } from '../../../utils';
 import { ExpenseData } from '../../hooks/useFetchExpensesData';
+import { TypeAccount } from '@/hooks/useAuth/types';
 
 type FormData = {
   description: string;
@@ -23,7 +23,7 @@ interface IContentModal {
   initialData: ExpenseData | undefined
   type: ITypeModal
   id?: string
-  userData?: UserData
+  typeAccount: TypeAccount
 }
 
 const ContentActionsTableModal = ({
@@ -32,11 +32,11 @@ const ContentActionsTableModal = ({
   isLoadingAddExpense,
   initialData,
   type,
-  userData,
+  typeAccount,
 }: IContentModal) => {
   const schema = z.object({
     description: z.string().nonempty(),
-    typeMoney: z.string().nonempty(),
+    typeMoney: typeAccount === "hybrid" ? z.string().nonempty() : z.string(),
     value: z.string().regex(/^\d+(\.\d{1,2})?$/),
   });
   const {
@@ -112,7 +112,7 @@ const ContentActionsTableModal = ({
                 }
               />
               {
-                userData?.typeAccount === "hybrid" && (
+                typeAccount === "hybrid" && (
                   <Select
                     label="Selecione Moeda"
                     name="typeMoney"
@@ -136,19 +136,19 @@ const ContentActionsTableModal = ({
               }
               <Input
                 label={
-                  userData?.typeAccount === "hybrid"
+                  typeAccount === "hybrid"
                     ? watch().typeMoney === "Real"
                       ? "Valor (R$):"
                       : "Valor (€):"
-                    : validaTextForTypeAccount[userData?.typeAccount || "real"]?.labelValueAddExpense
+                    : validaTextForTypeAccount[typeAccount || "real"]?.labelValueMoney
                 }
                 name="value"
                 placeholder={
-                  userData?.typeAccount === "hybrid"
+                  typeAccount === "hybrid"
                     ? watch().typeMoney === "Real"
                       ? "Ex: R$ 10"
                       : "Ex: € 10"
-                    : validaTextForTypeAccount[userData?.typeAccount || "real"]?.placeholderValueAddExpense
+                    : validaTextForTypeAccount[typeAccount || "real"]?.placeholderValueAddExpense
                 }
                 type="number"
                 register={register}

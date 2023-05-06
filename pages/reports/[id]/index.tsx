@@ -132,10 +132,10 @@ const Reports = () => {
                    {item.description}
                   </th>
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                   {item.euro_value !== 0 ? formatCurrencyMoney(item.euro_value, userData) : "-"}
+                   {item.euro_value !== 0 ? formatCurrencyMoney(item.euro_value, "euro") : "-"}
                   </th>
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                   {item.real_value !== 0 ? formatCurrencyMoney(item.real_value, userData) : "-"}
+                   {item.real_value !== 0 ? formatCurrencyMoney(item.real_value, "real") : "-"}
                   </th>
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                    {item.type}

@@ -2,6 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
+import { TypeAccount } from '@/hooks/useAuth/types';
+import { validaTextForTypeAccount } from '../../../utils';
 
 type FormData = {
  value: number;
@@ -11,6 +13,7 @@ interface IContentModal {
  onSubmit?: any
  handleOpenModal?: any
  isLoadingAddExpense?: boolean
+ typeAccount: TypeAccount
 }
 
 const schema = z.object({
@@ -21,6 +24,7 @@ const ContentAddEntryModal = ({
  onSubmit,
  handleOpenModal,
  isLoadingAddExpense,
+ typeAccount,
 }: IContentModal) => {
  const {
   register,
@@ -52,7 +56,7 @@ const ContentAddEntryModal = ({
       </div>
       <div className=" gap-6 mb-6  p-4">
        <Input
-        label="Valor (R$):"
+        label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
         name="value"
         placeholder='Ex: R$ 10'
         type="number"

@@ -2,7 +2,7 @@ type InfoCard = {
   titleEntrys: string;
   titleExpenses: string;
   totalFree: string;
-  labelValueAddExpense: string;
+  labelValueMoney: string;
   placeholderValueAddExpense: string;
 }
 
@@ -29,23 +29,23 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     titleEntrys: "Total Entradas",
     titleExpenses: "Total Gastos",
     totalFree: "Total Investimento",
-    labelValueAddExpense: "",
-     placeholderValueAddExpense: ''
-     
+    labelValueMoney: 'Ex: R$ 10',
+    placeholderValueAddExpense: ''
+
   },
   real: {
     titleEntrys: "Total Entradas",
     titleExpenses: "Total Gastos",
-   totalFree: "Total Livre ",
-   labelValueAddExpense: "Valor (R$):",
-     placeholderValueAddExpense: 'Ex: R$ 10'
-    
+    totalFree: "Total Livre ",
+    labelValueMoney: "Valor (R$):",
+    placeholderValueAddExpense: 'Ex: R$ 10'
+
   },
   euro: {
-     titleEntrys: "Total Entradas",
-     titleExpenses: "Total Gastos",
-     totalFree: "Total Livre",
-    labelValueAddExpense: "Valor (€):",
-     placeholderValueAddExpense: "Ex: € 10"
-  }, 
+    titleEntrys: "Total Entradas",
+    titleExpenses: "Total Gastos",
+    totalFree: "Total Livre",
+    labelValueMoney: "Valor (€):",
+    placeholderValueAddExpense: "Ex: € 10"
+  },
 }
