@@ -10,7 +10,7 @@ interface IData {
   value: number;
 }
 
-const useAddEntrys = (id?: string) => {
+export default function useAddEntrys(id?: string) {
   const { refetchEntrysData } = useFetchEntrysData(id);
   const addDocument = async (data: IData) => {
     try {
@@ -38,5 +38,3 @@ const useAddEntrys = (id?: string) => {
 
   return { addEntrys, isLoadingAddEntrys, statusAddEntrys };
 };
-
-export default useAddEntrys;

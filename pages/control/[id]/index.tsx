@@ -26,7 +26,9 @@ import useUpadtedExpense from './hooks/useUpadtedExpense';
 
 import { ITypeModal, IFormData } from './types';
 
-import { HeaderDataTableToControl, InfoCardsToControl, TableToControl } from './parts';
+import HeaderDataTableToControl from './parts/HeaderDataTableToControl';
+import InfoCardsToControl from './parts/InfoCardsToControl';
+import TableToControl from './parts/TableToControl';
 import ContentActionsTableModal from './modals/actionsTableModal';
 import ContentAddEntryModal from './modals/addEntryModal';
 import DeleteModalContent from './modals/deleteModal';
