@@ -192,6 +192,7 @@ export default function Control() {
                     typeAccount={userData.typeAccount}
                     handleOpenModal={handleOpenModal}
                     isVisibilityData={isVisibilityData}
+                    filter={filter}
                   />
                   {
                     configModal.open &&

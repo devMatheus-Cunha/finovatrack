@@ -1,10 +1,10 @@
 import { TypeAccount } from '@/hooks/useAuth/types';
-import { ExpenseData } from '../../hooks/useFetchExpensesData';
+import { ExpenseData, Filter } from '../../hooks/useFetchExpensesData';
 import { ITypeModal } from '../../types';
 import { columsHeadProps } from '../../utils';
 import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
 import { Fragment } from 'react';
-import { ButtonGroup } from '@/components';
+import { ButtonGroup, Empty } from '@/components';
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react';
 
 interface ITableToControl {
@@ -12,6 +12,7 @@ interface ITableToControl {
  calculationSumValues: ExpenseData[]
  isVisibilityData: boolean
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
+ filter: Filter
 }
 
 const TableToControl = ({
@@ -19,6 +20,7 @@ const TableToControl = ({
  typeAccount,
  handleOpenModal,
  isVisibilityData,
+ filter,
 }: ITableToControl) => {
  return (
   <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
@@ -96,9 +98,7 @@ const TableToControl = ({
       </tbody>
      </table >
     ) : (
-     <div className='flex justify-center items-center h-full'>
-      <h1 className='text-2xl'>Não a nenhum dado na tabela!</h1>
-     </div>
+     <Empty<Filter> filter={filter} />
     )
    }
 
