@@ -10,6 +10,8 @@ import { ITypeModal } from '../../types';
 interface IInfoCardsToControl {
  typeAccount: TypeAccount
  totalEntrys: number
+ totalExpenseEur: number
+ totalExpenseReal: number
  entrysData: IData[]
  totalExpensesEurToReal: number
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
@@ -18,10 +20,18 @@ interface IInfoCardsToControl {
 const InfoCardsToControl = ({
  typeAccount,
  totalEntrys,
+ handleOpenModal,
  entrysData,
  totalExpensesEurToReal,
- handleOpenModal,
+ totalExpenseEur,
+ totalExpenseReal,
 }: IInfoCardsToControl) => {
+ const validateExpenseData = {
+  real: totalExpenseReal,
+  euro: totalExpenseEur,
+  hybrid: totalExpensesEurToReal
+ }
+
  return (
   <div className="flex w-[100%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
    <InfoCardMoney
@@ -39,7 +49,7 @@ const InfoCardsToControl = ({
     }
    />
    <InfoCardMoney
-    infoData={formatCurrencyMoney(totalExpensesEurToReal, typeAccount)}
+    infoData={formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount)}
     title={validaTextForTypeAccount[typeAccount]?.titleExpenses}
    />
    <InfoCardMoney

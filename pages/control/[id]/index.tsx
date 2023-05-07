@@ -107,8 +107,10 @@ export default function Control() {
   const onSubmit: SubmitHandler<IFormData> = async (data) => {
     const formattedValues = {
       ...data,
-      real_value: data.typeMoney === "Real" ? Number(data.value) : 0,
-      euro_value: data.typeMoney === "Euro" ? Number(data.value) : 0,
+      real_value: data.typeMoney === "Real" || userData.typeAccount === "real"
+        ? Number(data.value) : 0,
+      euro_value: data.typeMoney === "Euro" || userData.typeAccount === "euro"
+        ? Number(data.value) : 0,
     }
 
     if (configModal.type === "edit") {
@@ -174,6 +176,8 @@ export default function Control() {
                 entrysData={entrysData}
                 totalExpensesEurToReal={calculationTotalExpensesEurToReal}
                 handleOpenModal={handleOpenModal}
+                totalExpenseEur={getTotals?.euro_value}
+                totalExpenseReal={getTotals?.real_value}
               />
 
               <div className="flex w-[100%] flex-1 justify-center items-center">

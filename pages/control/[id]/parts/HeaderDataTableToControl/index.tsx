@@ -71,14 +71,11 @@ const HeaderDataTableToControl = ({
      onChange={(e) => onFilter(e)}
      value={filter}
     >
-     <option value="" disabled selected>
+     <option defaultValue="clear" value="clear" disabled>
       Filtre o Tipo
      </option>
      {optionsFilter.map((option) => (
-      <option
-       key={option.value}
-       value={option.value}
-      >
+      <option key={option.value} value={option.value}>
        {option.label}
       </option>
      ))}

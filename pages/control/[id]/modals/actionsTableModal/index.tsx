@@ -35,9 +35,11 @@ const ContentActionsTableModal = ({
 }: IContentModal) => {
   const schema = z.object({
     description: z.string().nonempty(),
-    typeMoney: typeAccount === "hybrid" ? z.string().nonempty() : z.string(),
+    typeMoney: typeAccount === "hybrid" ? z.string().nonempty() : z.string().optional(),
     value: z.string().regex(/^\d+(\.\d{1,2})?$/),
+    type: z.string().nonempty(),
   });
+
   const {
     register,
     handleSubmit,
@@ -47,8 +49,8 @@ const ContentActionsTableModal = ({
     defaultValues: type !== 'addExpense' ? {
       ...initialData,
       value:
-        initialData?.typeMoney === "Real"
-          ? initialData.real_value : initialData?.euro_value
+        initialData?.typeMoney === "Real" || typeAccount === "real"
+          ? initialData?.real_value : initialData?.euro_value
     } : undefined,
     resolver: async (data) => {
       try {

@@ -1,7 +1,7 @@
 import { TypeAccount } from '@/hooks/useAuth/types';
 import { ExpenseData, Filter } from '../../hooks/useFetchExpensesData';
 import { ITypeModal } from '../../types';
-import { columsHeadProps } from '../../utils';
+import { validateColumsHeadProps } from '../../utils';
 import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
 import { Fragment } from 'react';
 import { ButtonGroup, Empty } from '@/components';
@@ -30,12 +30,10 @@ const TableToControl = ({
       <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
        <tr>
         {
-         columsHeadProps.map((item) => (
-          <>
-           <th scope="col" className="px-6 py-3" key={item.field}>
-            {item.header}
-           </th>
-          </>
+         validateColumsHeadProps[typeAccount].map((item: { field: string, header: string }) => (
+          <th scope="col" className="px-6 py-3" key={item.field}>
+           {item.header}
+          </th>
          ))
         }
        </tr>
@@ -49,7 +47,7 @@ const TableToControl = ({
             {item.description}
            </th>
            {
-            typeAccount !== "euro" && (
+            (typeAccount === "euro" || typeAccount === "hybrid") && (
              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, "euro") : "-"}
              </th>
@@ -57,7 +55,7 @@ const TableToControl = ({
            }
 
            {
-            typeAccount !== "euro" && (
+            (typeAccount === "real" || typeAccount === "hybrid") && (
              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, "real") : "-"}
              </th>
@@ -66,9 +64,13 @@ const TableToControl = ({
            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {item.type}
            </th>
-           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {item.typeMoney}
-           </th>
+           {
+            typeAccount === "hybrid" && (
+             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {item.typeMoney}
+             </th>
+            )
+           }
            {
             item.description !== "Totais" ? (
              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

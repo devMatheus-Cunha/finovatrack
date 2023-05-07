@@ -95,6 +95,48 @@ export const columsHeadProps = [
     field: "actions",
   },
 ];
+export const columsHeadPropsEuro = [
+  {
+    header: "Descrição",
+    field: "description",
+  },
+  {
+    header: "Valor Euro",
+    field: "euro_value",
+  },
+  {
+    header: "Tipo",
+    field: "type",
+  },
+  {
+    header: "Ação",
+    field: "actions",
+  },
+];
+export const columsHeadPropsReal = [
+  {
+    header: "Descrição",
+    field: "description",
+  },
+  {
+    header: "Valor Real",
+    field: "real_value",
+  },
+  {
+    header: "Tipo",
+    field: "type",
+  },
+  {
+    header: "Ação",
+    field: "actions",
+  },
+];
+
+export const validateColumsHeadProps: any = {
+  euro: columsHeadPropsEuro,
+  real: columsHeadPropsReal,
+  hybrid: columsHeadProps
+}
 
 export const initialDataSelectedData: ExpenseData = {
   id: "",
