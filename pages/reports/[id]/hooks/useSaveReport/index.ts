@@ -9,15 +9,15 @@ import { toast } from 'react-toastify';
 import { ExpenseData } from '@/pages/control/[id]/hooks/useFetchExpensesData';
 
 export interface IReportData {
-  data: ExpenseData[]
-  totalInvested: string,
-  totalEntrys: string,
-  totalExpenses: string
-  period?: string
-  quatation: string
+  data: ExpenseData[];
+  totalInvested: string;
+  totalEntrys: string;
+  totalExpenses: string;
+  period?: string;
+  quatation: string;
 }
 
-const useSaveReport = (id?: string) => {
+export default function useSaveReport(id?: string) {
   const saveReportData = async ({ data, ...rest }: IReportData) => {
     try {
       const today = new Date();
@@ -56,7 +56,9 @@ const useSaveReport = (id?: string) => {
     },
   });
 
-  return { saveReport, isLoadingSaveReport, statusSaveReport };
-};
-
-export default useSaveReport;
+  return {
+    saveReport,
+    isLoadingSaveReport,
+    statusSaveReport,
+  };
+}

@@ -8,7 +8,7 @@ import { db } from '@/service/firebase';
 import { useState } from 'react';
 import { IReportData } from '../useSaveReport';
 
-export const useFecthReportsData = (id?:string) => {
+export const useFecthReportsData = (id?: string) => {
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
   const [period, setPeriod] = useState('');
 
@@ -35,7 +35,7 @@ export const useFecthReportsData = (id?:string) => {
     isLoading: isLoadingReportData,
     status: statusReportData,
     refetch: refetchReportData,
-  } = useQuery({
+  } = useQuery<IReportData[]>({
     queryKey: ['report_data', period],
     queryFn: () => fetchExpensesData(period),
     keepPreviousData: true,

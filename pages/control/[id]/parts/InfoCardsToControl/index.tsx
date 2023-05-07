@@ -43,8 +43,8 @@ function InfoCardsToControl({
         contentAction={(
           <button
             onClick={() => handleOpenModal('totalsEntrys')}
-            className={`text-xs italic  ${entrysData.length <= 0 ? 'cursor-not-allowed dark:text-gray-400' : 'dark:hover:text-gray-400 dark:text-gray-300'}`}
-            disabled={entrysData.length <= 0}
+            className={`text-xs italic  ${entrysData?.length <= 0 ? 'cursor-not-allowed dark:text-gray-400' : 'dark:hover:text-gray-400 dark:text-gray-300'}`}
+            disabled={entrysData?.length <= 0}
           >
             Visualizar
           </button>

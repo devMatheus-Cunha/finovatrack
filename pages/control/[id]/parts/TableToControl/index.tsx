@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { TypeAccount } from '@/hooks/useAuth/types';
-import  formatCurrencyMoney  from '@/utils/formatCurrencyMoney';
+import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { Fragment } from 'react';
 import { ButtonGroup, Empty } from '@/components';
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react';
