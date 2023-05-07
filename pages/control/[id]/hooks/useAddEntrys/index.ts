@@ -3,7 +3,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { useMutation } from '@tanstack/react-query';
 import { useFetchEntrysData } from "../useFetchEntrysData";
 import { toast } from "react-toastify";
-import { UserData } from "@/hooks/useAuth/types";
 import { db } from "@/service/firebase";
 import { useRouter } from "next/router";
 
@@ -33,7 +32,7 @@ const useAddEntrys = (id?: string) => {
       toast.success("Sucesso ao adicionar entrada",);
     },
     onError: () => {
-       toast.error("Erro ao adicionar entrada",);
+      toast.error("Erro ao adicionar entrada",);
     }
   });
 

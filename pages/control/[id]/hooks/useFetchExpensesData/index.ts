@@ -1,23 +1,22 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-import { useQuery }from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { db } from "@/service/firebase";;
 import { useState } from "react";
-import { UserData } from "@/hooks/useAuth/types";
 
 export interface ExpenseData {
- id: string;
- type: "Essencial" | "Não essencial" | "Gasto Livre"  | ""
- description: string;
- value: string;
- euro_value: number;
- real_value: number;
- typeMoney?: "Real" | "Euro" | ""
+  id: string;
+  type: "Essencial" | "Não essencial" | "Gasto Livre" | ""
+  description: string;
+  value: string;
+  euro_value: number;
+  real_value: number;
+  typeMoney?: "Real" | "Euro" | ""
 }
 
 export type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
 
-export const useFetchExpensesData = (id?:string) => {
+export const useFetchExpensesData = (id?: string) => {
   const [filter, setFilter] = useState<Filter>("")
 
   const fetchExpensesData = async (value: string) => {
@@ -26,11 +25,11 @@ export const useFetchExpensesData = (id?:string) => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, "users", String(id) , "expenses"),
+        collection(db, "users", String(id), "expenses"),
         where("type", "==", value)
       );
     } else {
-      querySnapshot = collection(db, "users", String(id) , "expenses")
+      querySnapshot = collection(db, "users", String(id), "expenses")
     }
 
     const get = await getDocs(querySnapshot);
@@ -51,7 +50,7 @@ export const useFetchExpensesData = (id?:string) => {
     queryKey: ["expenses_data", filter],
     queryFn: () => fetchExpensesData(filter),
     keepPreviousData: true,
-    enabled:!!id,
+    enabled: !!id,
   });
 
   return {

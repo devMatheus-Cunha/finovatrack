@@ -1,4 +1,3 @@
-import { UserData } from "@/hooks/useAuth/types";
 import { db } from "@/service/firebase";;
 import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation, useQuery } from '@tanstack/react-query';

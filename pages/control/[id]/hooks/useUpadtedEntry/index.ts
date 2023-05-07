@@ -3,7 +3,6 @@ import { doc, updateDoc } from "@firebase/firestore";
 import { useMutation } from '@tanstack/react-query';
 import { useFetchEntrysData } from "../useFetchEntrysData";
 import { toast } from "react-toastify";
-import { UserData } from "@/hooks/useAuth/types";
 
 const useUpadtedEntry = (id?: string) => {
   const { refetchEntrysData } = useFetchEntrysData();

@@ -1,36 +1,37 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 
 import { SubmitHandler } from "react-hook-form";
+
 import { SideBar } from '@/components';
-
-import useFetchQuatationEur, { convertEurosToReais } from './hooks/useFetchQuatationEur';
-
 import Loading from '@/components/Loading';
 
-import DeleteModalContent from './modals/deleteModal';
-import ContentActionsTableModal from './modals/actionsTableModal';
-import ContentAddEntryModal from './modals/addEntryModal';
+import useUser from '@/hooks/useUserData';
+import useSaveReport from '../../reports/[id]/hooks/useSaveReport';
+import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 
+import { initialDataSelectedData, useCalculationSumValues, useGetTotalsFree } from './utils';
+import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
+
+import useFetchQuatationEur, { convertEurosToReais } from './hooks/useFetchQuatationEur';
+import useFetchEntrysData from './hooks/useFetchEntrysData';
 import useAddEntrys from './hooks/useAddEntrys';
 import useAddExpense from './hooks/useAddExpense';
 import useClearExpenses from './hooks/useClearExpenses';
 import useDeletedEntry from './hooks/useDeletedEntry';
 import useDeletedExpense from './hooks/useDeletedExpense';
-import useFetchEntrysData from './hooks/useFetchEntrysData';
 import useFetchExpensesData, { ExpenseData, Filter } from './hooks/useFetchExpensesData';
 import useUpadtedExpense from './hooks/useUpadtedExpense';
 
 import { ITypeModal, IFormData } from './types';
-import ContentTotalEntrys from './modals/totalEntrysModal';
-import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
-import useSaveReport from '../../reports/[id]/hooks/useSaveReport';
-import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
-import { initialDataSelectedData, useCalculationSumValues, useGetTotalsFree } from './utils';
-import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
-import { useRouter } from 'next/router';
-import useUser from '@/hooks/useUserData';
+
 import { HeaderDataTableToControl, InfoCardsToControl, TableToControl } from './parts';
+import ContentActionsTableModal from './modals/actionsTableModal';
+import ContentAddEntryModal from './modals/addEntryModal';
+import DeleteModalContent from './modals/deleteModal';
+import ContentTotalEntrys from './modals/totalEntrysModal';
+import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
 
 interface Query {
   id: string;
