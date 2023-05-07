@@ -85,7 +85,7 @@ const HeaderDataTableToControl = ({
     </select>
    </div>
    {
-    "hybrid" === "hybrid" && (
+    typeAccount === "hybrid" && (
      <div className='flex gap-3 justify-center items-center'>
       <h3 className='italic'>
        {`Cotação: ${formatCurrencyMoney(currentQuotation, typeAccount)} `}
