@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { TypeAccount } from '@/hooks/useAuth/types';
-import { validaTextForTypeAccount } from '../../../utils';
+import { validaTextForTypeAccount } from '../../utils';
 
 type FormData = {
  value: number;

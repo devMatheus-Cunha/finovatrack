@@ -2,10 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 import { Input, Select } from '@/components/Forms';
-import { validateTextToModal } from '../../utils';
 
-import { Item, ITypeModal } from '../../../types';
-import { validaTextForTypeAccount } from '../../../utils';
+import { ITypeModal } from '../../types';
+import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
 import { ExpenseData } from '../../hooks/useFetchExpensesData';
 import { TypeAccount } from '@/hooks/useAuth/types';
 

@@ -1,21 +1,21 @@
 import { collection, getDocs } from "firebase/firestore";
 
-import { useQuery, useQueryClient }from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db } from "@/service/firebase";;
 
-interface IData {
+export interface IData {
   value: number;
   id?: string;
 }
 
 export const useFetchEntrysData = (id?: string) => {
   const fetchEntrysData = async () => {
-      const querySnapshot = await getDocs(collection(db, "users", String(id), "entrys"));
-      const docsArray: IData[] = [];
-      querySnapshot.forEach((doc) => {
-        docsArray.push({ id: doc.id, ...doc.data() } as any);
-      });
-      return docsArray;
+    const querySnapshot = await getDocs(collection(db, "users", String(id), "entrys"));
+    const docsArray: IData[] = [];
+    querySnapshot.forEach((doc) => {
+      docsArray.push({ id: doc.id, ...doc.data() } as any);
+    });
+    return docsArray;
   };
   const {
     data: entrysData,
@@ -23,7 +23,7 @@ export const useFetchEntrysData = (id?: string) => {
     status: statusEntrysData,
     refetch: refetchEntrysData,
   } = useQuery(["entrys_data"], async () => await fetchEntrysData(), {
-     enabled:!!id,
+    enabled: !!id,
   });
 
   return {

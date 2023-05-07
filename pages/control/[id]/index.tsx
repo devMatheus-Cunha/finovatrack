@@ -1,39 +1,36 @@
 import Head from 'next/head';
-import { Fragment, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { SubmitHandler } from "react-hook-form";
-import { Button, ButtonGroup, InfoCardMoney, SideBar } from '@/components';
+import { SideBar } from '@/components';
 
-
-import { useCalculationSumValues, columsHeadProps, optionsFilter, useGetTotalsFree, initialDataSelectedData } from './parts/utils';
-
-import useFetchQuatationEur, { convertEurosToReais } from './parts/hooks/useFetchQuatationEur';
+import useFetchQuatationEur, { convertEurosToReais } from './hooks/useFetchQuatationEur';
 
 import Loading from '@/components/Loading';
 
-import DeleteModalContent from './parts/modals/deleteModal';
-import ContentActionsTableModal from './parts/modals/actionsTableModal';
-import ContentAddEntryModal from './parts/modals/addEntryModal';
+import DeleteModalContent from './modals/deleteModal';
+import ContentActionsTableModal from './modals/actionsTableModal';
+import ContentAddEntryModal from './modals/addEntryModal';
 
-import useAddEntrys from './parts/hooks/useAddEntrys';
-import useAddExpense from './parts/hooks/useAddExpense';
-import useClearExpenses from './parts/hooks/useClearExpenses';
-import useDeletedEntry from './parts/hooks/useDeletedEntry';
-import useDeletedExpense from './parts/hooks/useDeletedExpense';
-import useFetchEntrysData from './parts/hooks/useFetchEntrysData';
-import useFetchExpensesData, { ExpenseData, Filter } from './parts/hooks/useFetchExpensesData';
-import useUpadtedExpense from './parts/hooks/useUpadtedExpense';
+import useAddEntrys from './hooks/useAddEntrys';
+import useAddExpense from './hooks/useAddExpense';
+import useClearExpenses from './hooks/useClearExpenses';
+import useDeletedEntry from './hooks/useDeletedEntry';
+import useDeletedExpense from './hooks/useDeletedExpense';
+import useFetchEntrysData from './hooks/useFetchEntrysData';
+import useFetchExpensesData, { ExpenseData, Filter } from './hooks/useFetchExpensesData';
+import useUpadtedExpense from './hooks/useUpadtedExpense';
 
-import { ITypeModal, Item, IFormData } from './types';
-import ContentTotalEntrys from './parts/modals/totalEntrysModal';
-import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash, FolderOpen } from '@phosphor-icons/react';
+import { ITypeModal, IFormData } from './types';
+import ContentTotalEntrys from './modals/totalEntrysModal';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 import useSaveReport from '../../reports/[id]/hooks/useSaveReport';
-import ConfirmSaveReportModal from './parts/modals/confirmSaveReportModal';
-import { validaTextForTypeAccount } from './utils';
+import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
+import { initialDataSelectedData, useCalculationSumValues, useGetTotalsFree } from './utils';
 import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
 import { useRouter } from 'next/router';
 import useUser from '@/hooks/useUserData';
+import { HeaderDataTableToControl, InfoCardsToControl, TableToControl } from './parts';
 
 interface Query {
   id: string;
@@ -171,189 +168,31 @@ export default function Control() {
         >
           <main>
             <div className='flex flex-col items-center h-[100vh] w-[100%]'>
-              <div className="flex w-[100%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                <InfoCardMoney
-                  infoData={formatCurrencyMoney(totalEntrys, userData.typeAccount)}
-                  title={validaTextForTypeAccount[userData?.typeAccount]?.titleEntrys}
-
-                  contentAction={
-                    <button
-                      onClick={() => handleOpenModal("totalsEntrys")}
-                      className={`text-xs italic  ${entrysData.length <= 0 ? "cursor-not-allowed dark:text-gray-400" : 'dark:hover:text-gray-400 dark:text-gray-300'}`}
-                      disabled={entrysData.length <= 0}
-                    >
-                      Visualizar
-                    </button>
-                  }
-                />
-                <InfoCardMoney
-                  infoData={formatCurrencyMoney(calculationTotalExpensesEurToReal, userData.typeAccount)}
-                  title={validaTextForTypeAccount[userData?.typeAccount]?.titleExpenses}
-                />
-                <InfoCardMoney
-                  infoData={formatCurrencyMoney(totalEntrys - calculationTotalExpensesEurToReal, userData.typeAccount)
-                  }
-                  title={validaTextForTypeAccount[userData?.typeAccount]?.totalFree}
-                />
-              </div>
+              <InfoCardsToControl
+                totalEntrys={totalEntrys}
+                typeAccount={userData.typeAccount}
+                entrysData={entrysData}
+                totalExpensesEurToReal={calculationTotalExpensesEurToReal}
+                handleOpenModal={handleOpenModal}
+              />
 
               <div className="flex w-[100%] flex-1 justify-center items-center">
                 <div className='flex flex-col gap-4 w-[100%] p-6 justify-center'>
-                  <div className="flex  justify-between	items-center">
-                    <div className='flex flex-wrap justify-between	items-center'>
-                      <Button
-                        type="button"
-                        onClick={() => handleOpenModal("addExpense")}>
-                        <div className='flex gap-2 justify-center items-center'>
-                          <Coins size={20} color="#eee2e2" />
-                          Add Gastos
-                        </div>
-
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => handleOpenModal("addEntry")}>
-                        <div className='flex gap-2 justify-center items-center'>
-                          <HandCoins size={20} color="#eee2e2" />
-                          Add Entrada
-                        </div>
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => handleOpenModal("deleteAllExpenses")}
-                      >
-                        <div className='flex gap-2 justify-center items-center'>
-                          <Broom size={20} color="#eee2e2" />
-                          Limpar Gastos
-                        </div>
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => handleOpenModalSaveReport()}
-                      >
-                        <div className='flex gap-2 justify-center items-center'>
-                          <FolderOpen size={20} color="#eee2e2" />
-                          Salvar Relatório
-                        </div>
-                      </Button>
-                      <select
-                        id="type"
-                        className="cursor-pointer hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                        onChange={(e) => onFilter(e)}
-                        value={filter}
-                      >
-                        <option value="" disabled selected>
-                          Filtre o Tipo
-                        </option>
-                        {optionsFilter.map((option) => (
-                          <option
-                            key={option.value}
-                            value={option.value}
-                          >
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {
-                      "hybrid" === "hybrid" && (
-                        <div className='flex gap-3 justify-center items-center'>
-                          <h3 className='italic'>
-                            {`Cotação: ${formatCurrencyMoney(lastQuatationData?.current_quotation, userData.typeAccount)} `}
-                          </h3>
-                          <button
-                            type="button"
-                            onClick={() => refetchQuationData()}
-                            className='dark:hover:text-gray-400'
-                          >
-                            <ArrowsCounterClockwise size={20} color="#eee2e2" />
-                          </button>
-                        </div>
-                      )
-                    }
-                  </div>
-                  <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
-                    {
-                      calculationSumValues?.length > 0 ? (
-                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                          <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                              {
-                                columsHeadProps.map((item) => (
-                                  <>
-                                    <th scope="col" className="px-6 py-3" key={item.field}>
-                                      {item.header}
-                                    </th>
-                                  </>
-                                ))
-                              }
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              calculationSumValues.map((item, index) => (
-                                <Fragment key={index}>
-                                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.description}
-                                    </th>
-                                    {
-                                      userData.typeAccount !== "euro" && (
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                          {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, "euro") : "-"}
-                                        </th>
-                                      )
-                                    }
-
-                                    {
-                                      userData.typeAccount !== "euro" && (
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                          {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, "real") : "-"}
-                                        </th>
-                                      )
-                                    }
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.type}
-                                    </th>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      {item.typeMoney}
-                                    </th>
-                                    {
-                                      item.description !== "Totais" ? (
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                          <ButtonGroup buttonOptions={[
-                                            {
-                                              onClick: () => {
-                                                handleOpenModal("edit", item)
-                                              },
-                                              content: <PencilSimpleLine color="#eee2e2" />
-                                            },
-                                            {
-                                              onClick: () => {
-                                                handleOpenModal("delete", item)
-                                              },
-                                              content: <Trash color="#eee2e2" />
-                                            }
-                                          ]} />
-                                        </th >
-                                      ) : (
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" />
-                                      )
-                                    }
-                                  </tr >
-                                </Fragment>
-                              ))
-                            }
-                          </tbody>
-                        </table >
-                      ) : (
-                        <div className='flex justify-center items-center h-full'>
-                          <h1 className='text-2xl'>Não a nenhum dado na tabela!</h1>
-                        </div>
-                      )
-                    }
-
-                  </div>
+                  <HeaderDataTableToControl
+                    typeAccount={userData.typeAccount}
+                    currentQuotation={lastQuatationData?.current_quotation}
+                    handleOpenModal={handleOpenModal}
+                    filter={filter}
+                    onFilter={onFilter}
+                    handleOpenModalSaveReport={handleOpenModalSaveReport}
+                    refetchQuationData={refetchQuationData}
+                  />
+                  <TableToControl
+                    calculationSumValues={calculationSumValues}
+                    typeAccount={userData.typeAccount}
+                    handleOpenModal={handleOpenModal}
+                    isVisibilityData={isVisibilityData}
+                  />
                   {
                     configModal.open &&
                     (

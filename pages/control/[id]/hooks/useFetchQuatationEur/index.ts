@@ -1,7 +1,7 @@
 import { UserData } from "@/hooks/useAuth/types";
 import { db } from "@/service/firebase";;
 import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation, useQuery } from '@tanstack/react-query';
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -11,6 +11,13 @@ type CurrentQuotation = {
   result_calculation: number;
   status: boolean;
 };
+
+export type RefetchQuationDataType = <TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<{
+  result_calculation: number;
+  current_quotation: any;
+  date: any;
+  status: any;
+}, unknown>>
 
 export const convertEurosToReais = (quatationEur?: number, valueEur?: number) => {
   if (!quatationEur || !valueEur) return 0
