@@ -68,7 +68,7 @@ const ContentTotalEntrys = ({
                   <Fragment key={index}>
                     <tr className="bg-white border-b dark:bg-gray-700 dark:border-gray-600">
                       <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {item?.value !== 0 && isVisibilityData ? formatCurrencyMoney(item?.value, userData) : "-"}
+                        {item?.value !== 0 && isVisibilityData ? formatCurrencyMoney(item?.value, userData.typeAccount) : "-"}
                       </th>
                       {
                         item.description !== "Totais" ? (
