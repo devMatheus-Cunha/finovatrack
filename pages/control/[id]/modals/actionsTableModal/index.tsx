@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-no-useless-fragment */
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 import { Input, Select } from '@/components/Forms';
 
+import { TypeAccount } from '@/hooks/useAuth/types';
 import { ITypeModal } from '../../types';
 import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
 import { ExpenseData } from '../../hooks/useFetchExpensesData';
-import { TypeAccount } from '@/hooks/useAuth/types';
 
 type FormData = {
   description: string;
@@ -21,21 +25,20 @@ interface IContentModal {
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   type: ITypeModal
-  id?: string
   typeAccount: TypeAccount
 }
 
-const ContentActionsTableModal = ({
+function ContentActionsTableModal({
   onSubmit,
   handleOpenModal,
   isLoadingAddExpense,
   initialData,
   type,
   typeAccount,
-}: IContentModal) => {
+}: IContentModal) {
   const schema = z.object({
     description: z.string().nonempty(),
-    typeMoney: typeAccount === "hybrid" ? z.string().nonempty() : z.string().optional(),
+    typeMoney: typeAccount === 'hybrid' ? z.string().nonempty() : z.string().optional(),
     value: z.string().regex(/^\d+(\.\d{1,2})?$/),
     type: z.string().nonempty(),
   });
@@ -49,8 +52,8 @@ const ContentActionsTableModal = ({
     defaultValues: type !== 'addExpense' ? {
       ...initialData,
       value:
-        initialData?.typeMoney === "Real" || typeAccount === "real"
-          ? initialData?.real_value : initialData?.euro_value
+        initialData?.typeMoney === 'Real' || typeAccount === 'real'
+          ? initialData?.real_value : initialData?.euro_value,
     } : undefined,
     resolver: async (data) => {
       try {
@@ -72,24 +75,24 @@ const ContentActionsTableModal = ({
           <div className="bg-white rounded-lg shadow dark:bg-gray-700">
             <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                {validateTextToModal[type || ""]?.title}
+                {validateTextToModal[type || '']?.title}
               </h3>
             </div>
             <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
               <Input
                 label="Descrição"
                 name="description"
-                placeholder='Ex: Compra carro'
+                placeholder="Ex: Compra carro"
                 type="text"
                 register={register}
                 rules={{ required: true }}
-                errors={
+                errors={(
                   <>
                     {errors.description && (
                       <span className="text-red-500 text-sm">Este campo é obrigatório</span>
                     )}
                   </>
-                }
+                )}
               />
 
               <Select
@@ -102,7 +105,7 @@ const ContentActionsTableModal = ({
                   { label: 'Gasto Livre', value: 'Gasto Livre' },
                 ]}
                 register={register}
-                errors={
+                errors={(
                   <>
                     {errors.type && (
                       <span className="text-red-500 text-sm">
@@ -110,10 +113,10 @@ const ContentActionsTableModal = ({
                       </span>
                     )}
                   </>
-                }
+                )}
               />
               {
-                typeAccount === "hybrid" && (
+                typeAccount === 'hybrid' && (
                   <Select
                     label="Selecione Moeda"
                     name="typeMoney"
@@ -123,7 +126,7 @@ const ContentActionsTableModal = ({
                     ]}
                     register={register}
                     rules={{ required: true }}
-                    errors={
+                    errors={(
                       <>
                         {errors.typeMoney && (
                           <span className="text-red-500 text-sm">
@@ -131,30 +134,30 @@ const ContentActionsTableModal = ({
                           </span>
                         )}
                       </>
-                    }
+                    )}
                   />
                 )
               }
               <Input
                 label={
-                  typeAccount === "hybrid"
-                    ? watch().typeMoney === "Real"
-                      ? "Valor (R$):"
-                      : "Valor (€):"
-                    : validaTextForTypeAccount[typeAccount || "real"]?.labelValueMoney
+                  typeAccount === 'hybrid'
+                    ? watch().typeMoney === 'Real'
+                      ? 'Valor (R$):'
+                      : 'Valor (€):'
+                    : validaTextForTypeAccount[typeAccount || 'real']?.labelValueMoney
                 }
                 name="value"
                 placeholder={
-                  typeAccount === "hybrid"
-                    ? watch().typeMoney === "Real"
-                      ? "Ex: R$ 10"
-                      : "Ex: € 10"
-                    : validaTextForTypeAccount[typeAccount || "real"]?.placeholderValueAddExpense
+                  typeAccount === 'hybrid'
+                    ? watch().typeMoney === 'Real'
+                      ? 'Ex: R$ 10'
+                      : 'Ex: € 10'
+                    : validaTextForTypeAccount[typeAccount || 'real']?.placeholderValueAddExpense
                 }
                 type="number"
                 register={register}
                 rules={{ required: true }}
-                errors={
+                errors={(
                   <>
                     {errors.value && (
                       <span className="text-red-500 text-sm ">
@@ -162,7 +165,7 @@ const ContentActionsTableModal = ({
                       </span>
                     )}
                   </>
-                }
+                )}
               />
 
             </div>
@@ -172,7 +175,7 @@ const ContentActionsTableModal = ({
                 type="submit"
                 className="text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
               >
-                {!isLoadingAddExpense ? "Salvar" : "Salvando..."}
+                {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
               </button>
               <button
                 onClick={handleOpenModal}
@@ -185,7 +188,7 @@ const ContentActionsTableModal = ({
           </div>
         </div>
       </form>
-    </div >
+    </div>
   );
 }
 

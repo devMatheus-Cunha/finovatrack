@@ -1,18 +1,18 @@
-import { db } from "@/service/firebase";;
-import { deleteDoc, doc } from "@firebase/firestore";
+import { db } from '@/service/firebase';
+import { deleteDoc, doc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
-import useFetchExpensesData, { ExpenseData } from "../useFetchExpensesData";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import useFetchExpensesData, { ExpenseData } from '../useFetchExpensesData';
 
 const useDeletedExpense = (id?: string) => {
   const { refetchExpensesData } = useFetchExpensesData(id);
 
   const fetchDeletedExpense = async (data: ExpenseData) => {
-    const docRef = doc(db, "users", String(id), "expenses", data?.id || "")
+    const docRef = doc(db, 'users', String(id), 'expenses', data?.id || '');
     try {
       await deleteDoc(docRef);
     } catch (error) {
-      throw new Error("mensagem de erro")
+      throw new Error('mensagem de erro');
     }
   };
 
@@ -21,12 +21,12 @@ const useDeletedExpense = (id?: string) => {
     {
       onSuccess: () => {
         refetchExpensesData();
-        toast.success("Sucesso ao deletar gasto",);
+        toast.success('Sucesso ao deletar gasto');
       },
       onError: () => {
-        toast.error("Erro ao deletar gasto",);
-      }
-    }
+        toast.error('Erro ao deletar gasto');
+      },
+    },
   );
 
   return {

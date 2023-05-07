@@ -1,18 +1,20 @@
+/* eslint-disable max-len */
+/* eslint-disable no-unsafe-optional-chaining */
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 
-import { SubmitHandler } from "react-hook-form";
+import { SubmitHandler } from 'react-hook-form';
 
 import { SideBar } from '@/components';
 import Loading from '@/components/Loading';
 
 import useUser from '@/hooks/useUserData';
-import useSaveReport from '../../reports/[id]/hooks/useSaveReport';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
+import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import useSaveReport from '../../reports/[id]/hooks/useSaveReport';
 
 import { initialDataSelectedData, useCalculationSumValues, useGetTotalsFree } from './utils';
-import { formatCurrencyMoney } from '@/utils/formatCurrencyMoney';
 
 import useFetchQuatationEur, { convertEurosToReais } from './hooks/useFetchQuatationEur';
 import useFetchEntrysData from './hooks/useFetchEntrysData';
@@ -40,34 +42,33 @@ interface Query {
 }
 
 export default function Control() {
-  const { isVisibilityData } = useIsVisibilityDatas()
+  const { isVisibilityData } = useIsVisibilityDatas();
   const router = useRouter();
   const { id } = router.query as unknown as Query;
-  const { userData } = useUser()
-  const { addExpense, isLoadingAddExpense } = useAddExpense(id)
+  const { userData } = useUser();
+  const { addExpense, isLoadingAddExpense } = useAddExpense(id);
   const {
     expensesData = [],
     setFilter,
     filter,
-  } = useFetchExpensesData(id)
+  } = useFetchExpensesData(id);
 
-  const { deletedExpense } = useDeletedExpense(id)
-  const { upadtedExpense } = useUpadtedExpense(id)
+  const { deletedExpense } = useDeletedExpense(id);
+  const { upadtedExpense } = useUpadtedExpense(id);
 
-  const { entrysData = [] } = useFetchEntrysData(id)
-  const { addEntrys } = useAddEntrys(id)
-  const { deletedEntry } = useDeletedEntry(id)
+  const { entrysData = [] } = useFetchEntrysData(id);
+  const { addEntrys } = useAddEntrys(id);
+  const { deletedEntry } = useDeletedEntry(id);
 
-  const { clearExpensesData } = useClearExpenses(id)
+  const { clearExpensesData } = useClearExpenses(id);
 
-  const { saveReport } = useSaveReport(id)
+  const { saveReport } = useSaveReport(id);
 
-  const { calculationSumValues } = useCalculationSumValues(expensesData)
-  const { getTotals } = useGetTotalsFree(calculationSumValues)
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotals?.euro_value ?? "1"), id)
+  const { calculationSumValues } = useCalculationSumValues(expensesData);
+  const { getTotals } = useGetTotalsFree(calculationSumValues);
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotals?.euro_value ?? '1'), id);
 
-  const calculationTotalExpensesEurToReal =
-    convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value
+  const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
 
   const [configModal, setConfigModal] = useState<{
     open: boolean
@@ -75,88 +76,83 @@ export default function Control() {
     selectedData: ExpenseData
   }>({
     open: false,
-    type: "",
+    type: '',
     selectedData: initialDataSelectedData,
-  })
+  });
   const [openModalReport, setOpenModalReport] = useState<{
     open: boolean
     data: ExpenseData[]
   }>({
     open: false,
     data: [],
-  })
+  });
 
-
-  const totalEntrys = useMemo(() => {
-    return entrysData.reduce((acc, item) => {
-      return acc + Number(item.value);
-    }, 0);
-  }, [entrysData]);
+  const totalEntrys = useMemo(() => entrysData.reduce((acc, item) => acc + Number(item.value), 0), [entrysData]);
 
   const handleOpenModal = (type?: ITypeModal, data?: ExpenseData) => {
     setConfigModal({
       open: !configModal.open,
-      type: type || "",
-      selectedData: data || initialDataSelectedData
-    })
-  }
+      type: type || '',
+      selectedData: data || initialDataSelectedData,
+    });
+  };
   const handleOpenModalSaveReport = (data: ExpenseData[] = []) => {
     setOpenModalReport({
       open: !openModalReport.open,
-      data: data
-    })
-  }
+      data,
+    });
+  };
 
   const onSubmit: SubmitHandler<IFormData> = async (data) => {
     const formattedValues = {
       ...data,
-      real_value: data.typeMoney === "Real" || userData.typeAccount === "real"
+      real_value: data.typeMoney === 'Real' || userData.typeAccount === 'real'
         ? Number(data.value) : 0,
-      euro_value: data.typeMoney === "Euro" || userData.typeAccount === "euro"
+      euro_value: data.typeMoney === 'Euro' || userData.typeAccount === 'euro'
         ? Number(data.value) : 0,
-    }
+    };
 
-    if (configModal.type === "edit") {
-      upadtedExpense({ id: configModal.selectedData?.id, data: formattedValues })
+    if (configModal.type === 'edit') {
+      upadtedExpense({ id: configModal.selectedData?.id, data: formattedValues });
       setConfigModal({
         open: !configModal.open,
-        type: "",
-        selectedData: initialDataSelectedData
-      })
-      return
+        type: '',
+        selectedData: initialDataSelectedData,
+      });
+      return;
     }
-    addExpense(formattedValues)
-    setFilter("")
+    addExpense(formattedValues);
+    setFilter('');
     setConfigModal({
       open: !configModal.open,
-      type: "",
-      selectedData: initialDataSelectedData
-    })
-  }
+      type: '',
+      selectedData: initialDataSelectedData,
+    });
+  };
 
   const onAddEntrys: SubmitHandler<{ value: number }> = async (data) => {
-    addEntrys(data)
+    addEntrys(data);
     setConfigModal({
       open: !configModal.open,
-      type: "",
-      selectedData: initialDataSelectedData
-    })
-  }
+      type: '',
+      selectedData: initialDataSelectedData,
+    });
+  };
 
   const onDelete = async () => {
-    deletedExpense(configModal.selectedData)
-    setFilter("")
+    deletedExpense(configModal.selectedData);
+    setFilter('');
     setConfigModal({
       open: !configModal.open,
-      type: "",
-      selectedData: initialDataSelectedData
-    })
-  }
+      type: '',
+      selectedData: initialDataSelectedData,
+    });
+  };
 
   const onFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
-    setFilter(event.target.value as Filter)
-  }
+    setFilter(event.target.value as Filter);
+  };
 
   return (
     <>
@@ -172,7 +168,7 @@ export default function Control() {
           loading={!id}
         >
           <main>
-            <div className='flex flex-col items-center h-[100vh] w-[100%]'>
+            <div className="flex flex-col items-center h-[100vh] w-[100%]">
               <InfoCardsToControl
                 totalEntrys={totalEntrys}
                 typeAccount={userData.typeAccount}
@@ -184,7 +180,7 @@ export default function Control() {
               />
 
               <div className="flex w-[100%] flex-1 justify-center items-center">
-                <div className='flex flex-col gap-4 w-[100%] p-6 justify-center'>
+                <div className="flex flex-col gap-4 w-[100%] p-6 justify-center">
                   <HeaderDataTableToControl
                     typeAccount={userData.typeAccount}
                     currentQuotation={lastQuatationData?.current_quotation}
@@ -202,10 +198,10 @@ export default function Control() {
                     filter={filter}
                   />
                   {
-                    configModal.open &&
-                    (
-                      configModal.type === "edit"
-                      || configModal.type === "addExpense"
+                    configModal.open
+                    && (
+                      configModal.type === 'edit'
+                      || configModal.type === 'addExpense'
                     ) && (
                       <ContentActionsTableModal
                         type={configModal?.type}
@@ -218,10 +214,10 @@ export default function Control() {
                     )
                   }
                   {
-                    configModal.open && (configModal.type === "delete" || configModal.type === "deleteAllExpenses") && (
+                    configModal.open && (configModal.type === 'delete' || configModal.type === 'deleteAllExpenses') && (
                       <DeleteModalContent
                         onCancel={handleOpenModal}
-                        onSubmit={configModal.type === "deleteAllExpenses" ? clearExpensesData : onDelete}
+                        onSubmit={configModal.type === 'deleteAllExpenses' ? clearExpensesData : onDelete}
                       />
                     )
                   }
@@ -232,19 +228,31 @@ export default function Control() {
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({
                             data: values,
-                            totalInvested: formatCurrencyMoney((totalEntrys - (getTotals?.real_value) - (calculationTotalExpensesEurToReal)), userData.typeAccount),
+                            totalInvested:
+                              formatCurrencyMoney(
+                                (totalEntrys
+                                  - getTotals?.real_value
+                                  - calculationTotalExpensesEurToReal),
+                                userData.typeAccount,
+                              ),
                             totalEntrys: formatCurrencyMoney(totalEntrys, userData.typeAccount),
-                            totalExpenses: formatCurrencyMoney(calculationTotalExpensesEurToReal, userData.typeAccount),
-                            quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, userData.typeAccount),
-                          })
-                          handleOpenModalSaveReport()
+                            totalExpenses: formatCurrencyMoney(
+                              calculationTotalExpensesEurToReal,
+                              userData.typeAccount,
+                            ),
+                            quatation: formatCurrencyMoney(
+                              lastQuatationData?.current_quotation,
+                              userData.typeAccount,
+                            ),
+                          });
+                          handleOpenModalSaveReport();
                         }}
                         initialData={openModalReport.data}
                       />
                     )
                   }
                   {
-                    configModal.open && configModal.type === "addEntry" && (
+                    configModal.open && configModal.type === 'addEntry' && (
                       <ContentAddEntryModal
                         handleOpenModal={handleOpenModal}
                         onSubmit={onAddEntrys}
@@ -253,7 +261,7 @@ export default function Control() {
                     )
                   }
                   {
-                    configModal.open && configModal.type === "totalsEntrys" && (
+                    configModal.open && configModal.type === 'totalsEntrys' && (
                       <ContentTotalEntrys
                         handleOpenModal={handleOpenModal}
                         data={entrysData}
@@ -265,9 +273,9 @@ export default function Control() {
                 </div>
               </div>
             </div>
-          </main >
+          </main>
         </Loading>
-      </SideBar >
+      </SideBar>
     </>
-  )
+  );
 }

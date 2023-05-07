@@ -1,14 +1,16 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  collection, getDocs, query, where,
+} from 'firebase/firestore';
 
 import { useQuery } from '@tanstack/react-query';
-import { db } from "@/service/firebase";;
-import { useState } from "react";
-import { IReportData } from "../useSaveReport";
+import { db } from '@/service/firebase';
+import { useState } from 'react';
+import { IReportData } from '../useSaveReport';
 
 export const useFecthReportsData = (id?:string) => {
-
- const [selectedPeriod, setSelectedPeriod] = useState(new Date())
- const [period, setPeriod] = useState('')
+  const [selectedPeriod, setSelectedPeriod] = useState(new Date());
+  const [period, setPeriod] = useState('');
 
   const fetchExpensesData = async (value: string) => {
     const docsArray: IReportData[] = [];
@@ -16,16 +18,16 @@ export const useFecthReportsData = (id?:string) => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, "users", String(id) , "reports"),
-        where("period", "==", value)
+        collection(db, 'users', String(id), 'reports'),
+        where('period', '==', value),
       );
-     const get = await getDocs(querySnapshot);
-     get.forEach((doc) => {
-       docsArray.push({ id: doc.id, ...doc.data() } as any);
-     });
-     return docsArray;
-    } 
-     return []
+      const get = await getDocs(querySnapshot);
+      get.forEach((doc) => {
+        docsArray.push({ id: doc.id, ...doc.data() } as any);
+      });
+      return docsArray;
+    }
+    return [];
   };
 
   const {
@@ -34,7 +36,7 @@ export const useFecthReportsData = (id?:string) => {
     status: statusReportData,
     refetch: refetchReportData,
   } = useQuery({
-    queryKey: ["report_data", period],
+    queryKey: ['report_data', period],
     queryFn: () => fetchExpensesData(period),
     keepPreviousData: true,
     enabled: !!period,
@@ -46,7 +48,7 @@ export const useFecthReportsData = (id?:string) => {
     statusReportData,
     refetchReportData,
     selectedPeriod,
-   setSelectedPeriod,
+    setSelectedPeriod,
     setPeriod,
   };
 };

@@ -1,10 +1,9 @@
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc } from 'firebase/firestore';
 
 import { useMutation } from '@tanstack/react-query';
-import { useFetchEntrysData } from "../useFetchEntrysData";
-import { toast } from "react-toastify";
-import { db } from "@/service/firebase";
-import { useRouter } from "next/router";
+import { toast } from 'react-toastify';
+import { db } from '@/service/firebase';
+import { useFetchEntrysData } from '../useFetchEntrysData';
 
 interface IData {
   value: number;
@@ -14,11 +13,11 @@ export default function useAddEntrys(id?: string) {
   const { refetchEntrysData } = useFetchEntrysData(id);
   const addDocument = async (data: IData) => {
     try {
-      const myCollection = collection(db, "users", String(id), "entrys")
+      const myCollection = collection(db, 'users', String(id), 'entrys');
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {
-      throw new Error("mensagem de erro")
+      throw new Error('mensagem de erro');
     }
   };
 
@@ -29,12 +28,12 @@ export default function useAddEntrys(id?: string) {
   } = useMutation(addDocument, {
     onSuccess: () => {
       refetchEntrysData();
-      toast.success("Sucesso ao adicionar entrada",);
+      toast.success('Sucesso ao adicionar entrada');
     },
     onError: () => {
-      toast.error("Erro ao adicionar entrada",);
-    }
+      toast.error('Erro ao adicionar entrada');
+    },
   });
 
   return { addEntrys, isLoadingAddEntrys, statusAddEntrys };
-};
+}

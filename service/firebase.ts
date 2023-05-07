@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,8 +18,8 @@ const db = getFirestore(app);
 
 export { auth, db };
 
-const FixErroBuild = () => {
+function FixErroBuild() {
   return null;
-};
+}
 
 export default FixErroBuild;

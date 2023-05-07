@@ -1,23 +1,26 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  collection, getDocs, query, where,
+} from 'firebase/firestore';
 
 import { useQuery } from '@tanstack/react-query';
-import { db } from "@/service/firebase";;
-import { useState } from "react";
+import { db } from '@/service/firebase';
+import { useState } from 'react';
 
 export interface ExpenseData {
   id: string;
-  type: "Essencial" | "Não essencial" | "Gasto Livre" | ""
+  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
   value: string;
   euro_value: number;
   real_value: number;
-  typeMoney?: "Real" | "Euro" | ""
+  typeMoney?: 'Real' | 'Euro' | ''
 }
 
-export type Filter = "Essencial" | "Não essencial" | "Gasto Livre" | ""
+export type Filter = 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
 
 export const useFetchExpensesData = (id?: string) => {
-  const [filter, setFilter] = useState<Filter>("")
+  const [filter, setFilter] = useState<Filter>('');
 
   const fetchExpensesData = async (value: string) => {
     const docsArray: ExpenseData[] = [];
@@ -25,11 +28,11 @@ export const useFetchExpensesData = (id?: string) => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, "users", String(id), "expenses"),
-        where("type", "==", value)
+        collection(db, 'users', String(id), 'expenses'),
+        where('type', '==', value),
       );
     } else {
-      querySnapshot = collection(db, "users", String(id), "expenses")
+      querySnapshot = collection(db, 'users', String(id), 'expenses');
     }
 
     const get = await getDocs(querySnapshot);
@@ -47,7 +50,7 @@ export const useFetchExpensesData = (id?: string) => {
     status: statusExpensesData,
     refetch: refetchExpensesData,
   } = useQuery({
-    queryKey: ["expenses_data", filter],
+    queryKey: ['expenses_data', filter],
     queryFn: () => fetchExpensesData(filter),
     keepPreviousData: true,
     enabled: !!id,

@@ -1,11 +1,11 @@
 export type ITypeModal =
-  | "edit"
-  | "delete"
-  | "addEntry"
-  | "addExpense"
-  | "totalsEntrys"
-  | "deleteAllExpenses"
-  | "";
+  | 'edit'
+  | 'delete'
+  | 'addEntry'
+  | 'addExpense'
+  | 'totalsEntrys'
+  | 'deleteAllExpenses'
+  | '';
 
 export type Item = {
   description: string;
@@ -23,8 +23,8 @@ export type IFormData = {
   typeMoney: string;
 };
 
-const FixErroBuild = () => {
+function FixErroBuild() {
   return null;
-};
+}
 
 export default FixErroBuild;

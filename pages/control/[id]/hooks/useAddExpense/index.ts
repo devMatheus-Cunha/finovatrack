@@ -1,9 +1,9 @@
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc } from 'firebase/firestore';
 
-import { useMutation }from '@tanstack/react-query';
-import { db } from "@/service/firebase";;
-import { useFetchExpensesData } from "../useFetchExpensesData";
-import { toast } from "react-toastify";
+import { useMutation } from '@tanstack/react-query';
+import { db } from '@/service/firebase';
+import { toast } from 'react-toastify';
+import { useFetchExpensesData } from '../useFetchExpensesData';
 
 interface IData {
   description: string;
@@ -15,14 +15,14 @@ interface IData {
 
 const useAddExpense = (id?: string) => {
   const { refetchExpensesData } = useFetchExpensesData(id);
-  
+
   const addDocument = async (data: IData) => {
     try {
-      const myCollection = collection(db, "users", String(id) , "expenses")
+      const myCollection = collection(db, 'users', String(id), 'expenses');
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {
-      throw new Error("mensagem de erro")
+      throw new Error('mensagem de erro');
     }
   };
 
@@ -33,11 +33,11 @@ const useAddExpense = (id?: string) => {
   } = useMutation(addDocument, {
     onSuccess: () => {
       refetchExpensesData();
-      toast.success("Sucesso ao adicionar gasto");
+      toast.success('Sucesso ao adicionar gasto');
     },
     onError: () => {
-       toast.error("Erro ao adicionar gasto");
-    }
+      toast.error('Erro ao adicionar gasto');
+    },
   });
 
   return { addExpense, isLoadingAddExpense, statusAddExpense };

@@ -1,4 +1,4 @@
-export type TypeAccount = "real" | "euro" | "hybrid"
+export type TypeAccount = 'real' | 'euro' | 'hybrid'
 
 export interface UserData {
   id: string,

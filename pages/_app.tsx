@@ -1,5 +1,6 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+/* eslint-disable react/jsx-props-no-spreading */
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'flowbite/dist/flowbite.css';
@@ -8,9 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
-
 export default function App({ Component, pageProps }: AppProps) {
-
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -20,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         // refetchInterval: 1000 * 60 * 15, // refetch data every 15 minutes
         refetchOnMount: true, // refetch data when component first mounts
         retry: false, // Disable automatic refetch attempts
-        keepPreviousData: true
+        keepPreviousData: true,
       },
     },
   });
@@ -29,9 +28,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class">
         <Component {...pageProps} />
-        <ToastContainer theme='dark' />
+        <ToastContainer theme="dark" />
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider >
-  )
+    </QueryClientProvider>
+  );
 }

@@ -1,4 +1,9 @@
-import { FieldErrors, FieldValues, Path, RegisterOptions, UseFormRegister } from 'react-hook-form';
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/require-default-props */
+import {
+  FieldValues, Path, RegisterOptions, UseFormRegister,
+} from 'react-hook-form';
 import React, { InputHTMLAttributes, ReactNode } from 'react';
 
 interface InputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,7 +14,9 @@ interface InputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInpu
   errors?: ReactNode;
 }
 
-export default function Input<T extends FieldValues>({ label, name, register, rules, errors, ...rest }: InputProps<T>) {
+export default function Input<T extends FieldValues>({
+  label, name, register, rules, errors, ...rest
+}: InputProps<T>) {
   return (
     <div>
       <label htmlFor={name} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

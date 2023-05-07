@@ -2,13 +2,11 @@ import { auth } from '@/service/firebase';
 import { signOut } from '@firebase/auth';
 
 const useLogout = () => {
-  const logout = async () => {
-  return signOut(auth);
-};
+  const logout = async () => signOut(auth);
 
- return {
-   logout,
+  return {
+    logout,
   };
-}
+};
 
 export default useLogout;

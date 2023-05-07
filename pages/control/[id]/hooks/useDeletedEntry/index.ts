@@ -1,8 +1,8 @@
-import { db } from "@/service/firebase";;
-import { deleteDoc, doc } from "@firebase/firestore";
+import { db } from '@/service/firebase';
+import { deleteDoc, doc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
-import useFetchEntrysData from "../useFetchEntrysData";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import useFetchEntrysData from '../useFetchEntrysData';
 
 interface IData {
   value: number;
@@ -13,11 +13,11 @@ const useDeletedEntry = (id?: string) => {
   const { refetchEntrysData } = useFetchEntrysData(id);
 
   const fetchDeletedEntry = async (data: { data: IData }) => {
-    const docRef = doc(db, "users", String(id), "entrys", data.data.id || "")
+    const docRef = doc(db, 'users', String(id), 'entrys', data.data.id || '');
     try {
       await deleteDoc(docRef);
     } catch (error) {
-      throw new Error("mensagem de erro")
+      throw new Error('mensagem de erro');
     }
   };
 
@@ -26,12 +26,12 @@ const useDeletedEntry = (id?: string) => {
     {
       onSuccess: () => {
         refetchEntrysData();
-        toast.success("Sucesso ao deletar entrada",);
+        toast.success('Sucesso ao deletar entrada');
       },
       onError: () => {
-        toast.error("Erro ao deletar entrada",);
-      }
-    }
+        toast.error('Erro ao deletar entrada');
+      },
+    },
   );
 
   return {

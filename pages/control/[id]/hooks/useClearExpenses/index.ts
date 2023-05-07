@@ -1,14 +1,14 @@
-import { db } from "@/service/firebase";;
-import { getDocs, collection, deleteDoc } from "@firebase/firestore";
-import { useFetchExpensesData } from "../useFetchExpensesData";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { db } from '@/service/firebase';
+import { getDocs, collection, deleteDoc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'; import { useFetchExpensesData } from '../useFetchExpensesData';
 
 const useClearExpenses = (id?: string) => {
   const { refetchExpensesData } = useFetchExpensesData(id);
 
   const clearExpenses = async () => {
-    const querySnapshot = await getDocs(collection(db, "users", String(id), "expenses"));
+    const querySnapshot = await getDocs(collection(db, 'users', String(id), 'expenses'));
     const documents = querySnapshot.docs;
 
     const promises: any[] = [];
@@ -22,11 +22,11 @@ const useClearExpenses = (id?: string) => {
   const { mutate: clearExpensesData } = useMutation(clearExpenses, {
     onSuccess: () => {
       refetchExpensesData();
-      toast.success("Sucesso ao limpar gastos",);
+      toast.success('Sucesso ao limpar gastos');
     },
     onError: () => {
-      toast.error("Erro ao limpar gastos",);
-    }
+      toast.error('Erro ao limpar gastos');
+    },
   });
   return {
     clearExpensesData,
