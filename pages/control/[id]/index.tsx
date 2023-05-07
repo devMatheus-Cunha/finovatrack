@@ -230,8 +230,8 @@ export default function Control() {
                             data: values,
                             totalInvested:
                               formatCurrencyMoney(
-                                (totalEntrys
-                                  - getTotals?.real_value
+                                ((totalEntrys
+                                  - getTotals?.real_value)
                                   - calculationTotalExpensesEurToReal),
                                 userData.typeAccount,
                               ),

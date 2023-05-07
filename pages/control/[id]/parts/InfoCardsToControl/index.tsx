@@ -55,7 +55,7 @@ function InfoCardsToControl({
         title={validaTextForTypeAccount[typeAccount]?.titleExpenses}
       />
       <InfoCardMoney
-        infoData={formatCurrencyMoney(totalEntrys - totalExpensesEurToReal, typeAccount)}
+        infoData={formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount)}
         title={validaTextForTypeAccount[typeAccount]?.totalFree}
       />
     </div>

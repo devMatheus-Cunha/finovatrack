@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import DatePicker from 'react-datepicker';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { useRouter } from 'next/router';
+import useUser from '@/hooks/useUserData';
 import useFecthReportsData from './hooks/useFecthReportsData';
 
 const columsHeadProps = [
@@ -37,6 +38,7 @@ interface Query {
 function Reports() {
   const router = useRouter();
   const { id } = router.query as unknown as Query;
+  const { userData } = useUser();
 
   const {
     reportData,
@@ -97,25 +99,35 @@ function Reports() {
          <div className="flex flex-col gap-4">
            <h1 className="text-xl">
              Relatório referente ao período
+             {' '}
              <span className="italic">{data?.period}</span>
            </h1>
            <div className="flex gap-4">
              <h1 className="dark:text-gray-300">
                Total Entradas:
+               {' '}
                <span className="italic dark:text-white">{data.totalEntrys}</span>
              </h1>
              <h1 className="dark:text-gray-300">
                Total Saídas:
+               {' '}
                <span className="italic dark:text-white">{data.totalExpenses}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               Total Investido:
+               Total Livre:
+               {' '}
                <span className="italic dark:text-white">{data.totalInvested}</span>
              </h1>
-             <h1 className="dark:text-gray-300">
-               Cotação Usada:
-               <span className="italic dark:text-white">{data.quatation}</span>
-             </h1>
+             {
+                      userData.typeAccount === 'hybrid' && (
+                        <h1 className="dark:text-gray-300">
+                          Cotação Usada:
+                          {' '}
+                          <span className="italic dark:text-white">{data.quatation}</span>
+                        </h1>
+                      )
+             }
+
            </div>
            <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
              {
