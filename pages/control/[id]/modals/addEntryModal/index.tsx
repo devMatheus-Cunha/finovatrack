@@ -58,7 +58,7 @@ const ContentAddEntryModal = ({
        <Input
         label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
         name="value"
-        placeholder='Ex: R$ 10'
+        placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
         type="number"
         register={register}
         rules={{ required: true }}

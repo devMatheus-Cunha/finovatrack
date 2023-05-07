@@ -32,8 +32,8 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     titleEntrys: "Total Entradas",
     titleExpenses: "Total Gastos",
     totalFree: "Total Investimento",
-    labelValueMoney: 'Ex: R$ 10',
-    placeholderValueAddExpense: ''
+    labelValueMoney: "Valor (R$):",
+    placeholderValueAddExpense: 'Ex: R$ 10'
 
   },
   real: {
