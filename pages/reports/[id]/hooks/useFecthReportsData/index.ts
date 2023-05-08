@@ -1,15 +1,29 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   collection, getDocs, query, where,
 } from 'firebase/firestore';
 
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery, QueryObserverResult, RefetchOptions, RefetchQueryFilters,
+} from '@tanstack/react-query';
 import { db } from '@/service/firebase';
 import { useState } from 'react';
 import { IReportData } from '../useSaveReport';
 
-export const useFecthReportsData = (id?: string) => {
-  const [selectedPeriod, setSelectedPeriod] = useState(new Date());
+ type UseFetchReportsDataReturnType = [
+  reportData: IReportData[] | undefined,
+  isLoadingReportData: boolean,
+  statusReportData: 'idle' | 'loading' | 'error' | 'success',
+  refetchReportData: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<IReportData[], unknown>>,
+  setPeriod: React.Dispatch<React.SetStateAction<string>>
+];
+
+export default function useFetchReportsData(
+  id?: string,
+): UseFetchReportsDataReturnType {
   const [period, setPeriod] = useState('');
 
   const fetchExpensesData = async (value: string) => {
@@ -35,22 +49,18 @@ export const useFecthReportsData = (id?: string) => {
     isLoading: isLoadingReportData,
     status: statusReportData,
     refetch: refetchReportData,
-  } = useQuery<IReportData[]>({
+  } = useQuery<IReportData[], unknown>({
     queryKey: ['report_data', period],
     queryFn: () => fetchExpensesData(period),
     keepPreviousData: true,
     enabled: !!period,
   });
 
-  return {
+  return [
     reportData,
     isLoadingReportData,
     statusReportData,
     refetchReportData,
-    selectedPeriod,
-    setSelectedPeriod,
     setPeriod,
-  };
-};
-
-export default useFecthReportsData;
+  ];
+}

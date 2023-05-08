@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 import { Button, SideBar } from '@/components';
 import { FolderOpen } from '@phosphor-icons/react';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { useRouter } from 'next/router';
 import useUser from '@/hooks/useUserData';
-import useFecthReportsData from './hooks/useFecthReportsData';
+import useFetchReportsData from './hooks/useFecthReportsData';
 
 const columsHeadProps = [
   {
@@ -39,13 +40,15 @@ function Reports() {
   const router = useRouter();
   const { id } = router.query as unknown as Query;
   const { userData } = useUser();
+  const [selectedPeriod, setSelectedPeriod] = useState(new Date());
 
-  const {
+  const [
     reportData,
-    selectedPeriod,
-    setSelectedPeriod,
+    isLoadingReportData,
+    statusReportData,
+    refetchReportData,
     setPeriod,
-  } = useFecthReportsData(id);
+  ] = useFetchReportsData(id);
 
   const [data] = reportData ?? [];
 
