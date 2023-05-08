@@ -3,7 +3,7 @@ import {
   collection, addDoc, getDocs, query, updateDoc, where,
 } from 'firebase/firestore';
 
-import { useMutation } from '@tanstack/react-query';
+import { UseMutateFunction, useMutation } from '@tanstack/react-query';
 import { db } from '@/service/firebase';
 import { toast } from 'react-toastify';
 import { ExpenseData } from '@/pages/control/[id]/hooks/useFetchExpensesData';
@@ -17,7 +17,13 @@ export interface IReportData {
   quatation: string;
 }
 
-export default function useSaveReport(id?: string) {
+interface IUseSaveReportExportProps {
+    saveReport: UseMutateFunction<void, unknown, IReportData, unknown>
+    isLoadingSaveReport: boolean
+    statusSaveReport: 'error' | 'idle' | 'loading' | 'success'
+}
+
+export default function useSaveReport(id?: string): IUseSaveReportExportProps {
   const saveReportData = async ({ data, ...rest }: IReportData) => {
     try {
       const today = new Date();

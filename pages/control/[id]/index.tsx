@@ -224,30 +224,18 @@ export default function Control() {
                   {
                     openModalReport.open && (
                       <ConfirmSaveReportModal
+                        initialData={openModalReport.data}
                         onCancel={handleOpenModalSaveReport}
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({
                             data: values,
-                            totalInvested:
-                              formatCurrencyMoney(
-                                ((totalEntrys
-                                  - getTotals?.real_value)
-                                  - calculationTotalExpensesEurToReal),
-                                userData.typeAccount,
-                              ),
+                            totalInvested: formatCurrencyMoney(((totalEntrys - getTotals?.real_value) - calculationTotalExpensesEurToReal), userData.typeAccount),
                             totalEntrys: formatCurrencyMoney(totalEntrys, userData.typeAccount),
-                            totalExpenses: formatCurrencyMoney(
-                              calculationTotalExpensesEurToReal,
-                              userData.typeAccount,
-                            ),
-                            quatation: formatCurrencyMoney(
-                              lastQuatationData?.current_quotation,
-                              userData.typeAccount,
-                            ),
+                            totalExpenses: formatCurrencyMoney(calculationTotalExpensesEurToReal, userData.typeAccount),
+                            quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, userData.typeAccount),
                           });
                           handleOpenModalSaveReport();
                         }}
-                        initialData={openModalReport.data}
                       />
                     )
                   }
