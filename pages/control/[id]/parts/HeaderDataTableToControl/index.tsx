@@ -5,9 +5,9 @@ import {
   Coins, HandCoins, Broom, FolderOpen, ArrowsCounterClockwise,
 } from '@phosphor-icons/react';
 import React from 'react';
-import { TypeAccount } from '@/hooks/useAuth/types';
-import { ExpenseData } from '@/hooks/useFetchExpensesData';
-import { RefetchQuationDataType } from '@/hooks/useFetchQuatationEur';
+import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
+import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur';
 import { optionsFilter } from '../../utils';
 import { ITypeModal } from '../../types';
 

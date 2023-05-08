@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
-import { ExpenseData } from '@/hooks/useFetchExpensesData';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { useMemo } from 'react';
 
 type InfoCard = {

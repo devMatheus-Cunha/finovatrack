@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { toast } from 'react-toastify';
-import useLogin from '../hooks/useAuth/useLogin';
+import useLogin from '../hooks/auth/useAuth/useLogin';
 
 type FormData = {
   email: string;

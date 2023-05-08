@@ -6,7 +6,7 @@ import {
 } from '@phosphor-icons/react';
 import React, { ReactNode } from 'react';
 import useIsVisibilityDatas from '../../hooks/useIsVisibilityDatas';
-import useLogout from '../../hooks/useAuth/useLogout';
+import useLogout from '../../hooks/auth/useAuth/useLogout';
 
 interface SideBarProps {
   children: ReactNode;

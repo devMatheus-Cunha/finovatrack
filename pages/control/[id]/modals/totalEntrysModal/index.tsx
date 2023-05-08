@@ -6,7 +6,7 @@ import { ButtonGroup } from '@/components';
 import { Trash } from '@phosphor-icons/react';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
-import { UserData } from '@/hooks/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 
 interface IData {
   value: number

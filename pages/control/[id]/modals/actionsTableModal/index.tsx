@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 import { Input, Select } from '@/components/Forms';
 
-import { TypeAccount } from '@/hooks/useAuth/types';
-import { ExpenseData } from '@/hooks/useFetchExpensesData';
+import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { ITypeModal } from '../../types';
 import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
 
