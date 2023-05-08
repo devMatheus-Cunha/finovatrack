@@ -25,7 +25,7 @@ import useUpadtedExpense from '@/hooks/expenses/useUpadtedExpense';
 import useSaveReport from '../../../hooks/reports/useSaveReport';
 
 import {
-  authData, initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
+  initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
 } from './utils';
 
 import { ITypeModal, IFormData } from './types';
@@ -195,7 +195,7 @@ export default function Control() {
                     refetchQuationData={refetchQuationData}
                   />
                   <TableToControl
-                    calculationSumValues={authData.typeAccount === 'hybrid' ? calculationSumValues : expensesData}
+                    calculationSumValues={userData.typeAccount === 'hybrid' ? calculationSumValues : expensesData}
                     typeAccount={userData.typeAccount}
                     handleOpenModal={handleOpenModal}
                     isVisibilityData={isVisibilityData}
