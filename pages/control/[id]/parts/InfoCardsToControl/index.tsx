@@ -3,9 +3,9 @@
 import { InfoCardMoney } from '@/components';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import React from 'react';
-import { TypeAccount } from '@/hooks/useAuth/types';
-import { IData } from '@/hooks/useFetchEntrysData';
-import { ExpenseData } from '@/hooks/useFetchExpensesData';
+import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { IData } from '@/hooks/entrys/useFetchEntrysData';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { validaTextForTypeAccount } from '../../utils';
 import { ITypeModal } from '../../types';
 

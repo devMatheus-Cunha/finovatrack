@@ -1,8 +1,8 @@
 import { db } from '@/service/firebase';
 import { doc, getDoc } from '@firebase/firestore';
-import { UserData } from '../useAuth/types';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
+import { UserData } from '../useAuth/types';
 
 export const initialState: UserData = {
   id: '',
@@ -26,12 +26,12 @@ const useUser = (): IUseUserProps => {
     const myDocSnapshot = await getDoc(myDocRef);
     return myDocSnapshot.data() as UserData;
   };
-  
+
   const { data } = useQuery<UserData>({
     queryKey: ['user_data', id],
     queryFn: checkAuthState,
     staleTime: Infinity, // Manter o cache indefinidamente
-    enabled: !!id
+    enabled: !!id,
   });
 
   const userData = data ?? initialState;

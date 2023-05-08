@@ -10,21 +10,23 @@ import { SubmitHandler } from 'react-hook-form';
 import { SideBar } from '@/components';
 import Loading from '@/components/Loading';
 
-import useFetchQuatationEur, { convertEurosToReais } from '@/hooks/useFetchQuatationEur';
-import useUser from '@/hooks/useUserData';
+import useFetchQuatationEur, { convertEurosToReais } from '@/hooks/quatation/useFetchQuatationEur';
+import useUser from '@/hooks/auth/useUserData';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
-import useAddEntrys from '@/hooks/useAddEntrys';
-import useAddExpense from '@/hooks/useAddExpense';
-import useClearExpenses from '@/hooks/useClearExpenses';
-import useDeletedEntry from '@/hooks/useDeletedEntry';
-import useDeletedExpense from '@/hooks/useDeletedExpense';
-import useFetchEntrysData from '@/hooks/useFetchEntrysData';
-import useFetchExpensesData, { ExpenseData, Filter } from '@/hooks/useFetchExpensesData';
-import useUpadtedExpense from '@/hooks/useUpadtedExpense';
-import useSaveReport from '../../../hooks/useSaveReport';
+import useAddEntrys from '@/hooks/entrys/useAddEntrys';
+import useAddExpense from '@/hooks/expenses/useAddExpense';
+import useClearExpenses from '@/hooks/expenses/useClearExpenses';
+import useDeletedEntry from '@/hooks/entrys/useDeletedEntry';
+import useDeletedExpense from '@/hooks/expenses/useDeletedExpense';
+import useFetchEntrysData from '@/hooks/entrys/useFetchEntrysData';
+import useFetchExpensesData, { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData';
+import useUpadtedExpense from '@/hooks/expenses/useUpadtedExpense';
+import useSaveReport from '../../../hooks/reports/useSaveReport';
 
-import { initialDataSelectedData, useCalculationSumValues, useGetTotalsFree } from './utils';
+import {
+  authData, initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
+} from './utils';
 
 import { ITypeModal, IFormData } from './types';
 
@@ -193,7 +195,7 @@ export default function Control() {
                     refetchQuationData={refetchQuationData}
                   />
                   <TableToControl
-                    calculationSumValues={calculationSumValues}
+                    calculationSumValues={authData.typeAccount === 'hybrid' ? calculationSumValues : expensesData}
                     typeAccount={userData.typeAccount}
                     handleOpenModal={handleOpenModal}
                     isVisibilityData={isVisibilityData}
@@ -226,7 +228,7 @@ export default function Control() {
                   {
                     openModalReport.open && (
                       <ConfirmSaveReportModal
-                        initialData={openModalReport.data}
+                        initialData={expensesData}
                         onCancel={handleOpenModalSaveReport}
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({

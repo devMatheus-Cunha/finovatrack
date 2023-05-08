@@ -1,5 +1,5 @@
 /* eslint-disable default-param-last */
-import { TypeAccount } from '@/hooks/useAuth/types';
+import { TypeAccount } from '@/hooks/auth/useAuth/types';
 
 export default function formatCurrencyMoney(value = 0, typeAccount: TypeAccount) {
   const currency = typeAccount !== 'euro' ? 'BRL' : 'EUR';

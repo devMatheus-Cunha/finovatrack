@@ -6,8 +6,8 @@ import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { useRouter } from 'next/router';
-import useUser from '@/hooks/useUserData';
-import useFetchReportsData from '@/hooks/useFecthReportsData';
+import useUser from '@/hooks/auth/useUserData';
+import useFetchReportsData from '@/hooks/reports/useFecthReportsData';
 
 const columsHeadProps = [
   {
