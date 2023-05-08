@@ -17,11 +17,11 @@ export interface IReportData {
   quatation: string;
 }
 
-type IUseSaveReportExportProps = [
-    saveReport: UseMutateFunction<void, unknown, IReportData, unknown>,
+interface IUseSaveReportExportProps {
+   saveReport: UseMutateFunction<void, unknown, IReportData, unknown>,
     isLoadingSaveReport: boolean,
     statusSaveReport: 'error' | 'idle' | 'loading' | 'success'
-]
+}
 
 export default function useSaveReport(id?: string): IUseSaveReportExportProps {
   const saveReportData = async ({ data, ...rest }: IReportData) => {
@@ -62,9 +62,9 @@ export default function useSaveReport(id?: string): IUseSaveReportExportProps {
     },
   });
 
-  return [
+  return {
     saveReport,
     isLoadingSaveReport,
     statusSaveReport,
-  ];
+  };
 }

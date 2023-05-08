@@ -6,10 +6,10 @@ import {
 } from '@phosphor-icons/react';
 import React from 'react';
 import { TypeAccount } from '@/hooks/useAuth/types';
+import { ExpenseData } from '@/hooks/useFetchExpensesData';
+import { RefetchQuationDataType } from '@/hooks/useFetchQuatationEur';
 import { optionsFilter } from '../../utils';
-import { ExpenseData } from '../../hooks/useFetchExpensesData';
 import { ITypeModal } from '../../types';
-import { RefetchQuationDataType } from '../../hooks/useFetchQuatationEur';
 
 interface IHeaderDataTableToControl {
   typeAccount: TypeAccount;

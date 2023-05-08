@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { useRouter } from 'next/router';
 import useUser from '@/hooks/useUserData';
-import useFetchReportsData from './hooks/useFecthReportsData';
+import useFetchReportsData from '@/hooks/useFecthReportsData';
 
 const columsHeadProps = [
   {
@@ -42,13 +42,10 @@ function Reports() {
   const { userData } = useUser();
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
 
-  const [
+  const {
     reportData,
-    isLoadingReportData,
-    statusReportData,
-    refetchReportData,
     setPeriod,
-  ] = useFetchReportsData(id);
+  } = useFetchReportsData(id);
 
   const [data] = reportData ?? [];
 

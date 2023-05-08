@@ -4,9 +4,9 @@ import { InfoCardMoney } from '@/components';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import React from 'react';
 import { TypeAccount } from '@/hooks/useAuth/types';
+import { IData } from '@/hooks/useFetchEntrysData';
+import { ExpenseData } from '@/hooks/useFetchExpensesData';
 import { validaTextForTypeAccount } from '../../utils';
-import { IData } from '../../hooks/useFetchEntrysData';
-import { ExpenseData } from '../../hooks/useFetchExpensesData';
 import { ITypeModal } from '../../types';
 
 interface IInfoCardsToControl {

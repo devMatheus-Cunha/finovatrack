@@ -5,9 +5,9 @@ import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { Fragment } from 'react';
 import { ButtonGroup, Empty } from '@/components';
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react';
+import { ExpenseData, Filter } from '@/hooks/useFetchExpensesData';
 import { validateColumsHeadProps } from '../../utils';
 import { ITypeModal } from '../../types';
-import { ExpenseData, Filter } from '../../hooks/useFetchExpensesData';
 
 interface ITableToControl {
  typeAccount: TypeAccount

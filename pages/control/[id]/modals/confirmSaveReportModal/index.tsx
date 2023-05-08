@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { FolderPlus } from '@phosphor-icons/react';
-import { ExpenseData } from '../../hooks/useFetchExpensesData';
+import { ExpenseData } from '@/hooks/useFetchExpensesData';
 
 interface IConfirmSaveReportModal {
  onSubmit: (data: ExpenseData[]) => void

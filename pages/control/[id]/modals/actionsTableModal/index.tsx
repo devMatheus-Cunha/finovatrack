@@ -8,9 +8,9 @@ import { ZodError, z } from 'zod';
 import { Input, Select } from '@/components/Forms';
 
 import { TypeAccount } from '@/hooks/useAuth/types';
+import { ExpenseData } from '@/hooks/useFetchExpensesData';
 import { ITypeModal } from '../../types';
 import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
-import { ExpenseData } from '../../hooks/useFetchExpensesData';
 
 type FormData = {
   description: string;

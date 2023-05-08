@@ -11,7 +11,7 @@ import { db } from '@/service/firebase';
 import { useState } from 'react';
 import { IReportData } from '../useSaveReport';
 
- type UseFetchReportsDataReturnType = [
+interface UseFetchReportsDataReturnType {
   reportData: IReportData[] | undefined,
   isLoadingReportData: boolean,
   statusReportData: 'idle' | 'loading' | 'error' | 'success',
@@ -19,7 +19,7 @@ import { IReportData } from '../useSaveReport';
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<IReportData[], unknown>>,
   setPeriod: React.Dispatch<React.SetStateAction<string>>
-];
+}
 
 export default function useFetchReportsData(
   id?: string,
@@ -56,11 +56,11 @@ export default function useFetchReportsData(
     enabled: !!period,
   });
 
-  return [
+  return {
     reportData,
     isLoadingReportData,
     statusReportData,
     refetchReportData,
     setPeriod,
-  ];
+  };
 }
