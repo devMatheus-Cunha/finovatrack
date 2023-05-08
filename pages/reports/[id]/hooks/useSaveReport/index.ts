@@ -6,7 +6,7 @@ import {
 import { UseMutateFunction, useMutation } from '@tanstack/react-query';
 import { db } from '@/service/firebase';
 import { toast } from 'react-toastify';
-import { ExpenseData } from '@/pages/control/[id]/hooks/useFetchExpensesData';
+import { ExpenseData } from '@/hooks/useFetchExpensesData';
 
 export interface IReportData {
   data: ExpenseData[];
@@ -17,11 +17,11 @@ export interface IReportData {
   quatation: string;
 }
 
-interface IUseSaveReportExportProps {
-    saveReport: UseMutateFunction<void, unknown, IReportData, unknown>
-    isLoadingSaveReport: boolean
+type IUseSaveReportExportProps = [
+    saveReport: UseMutateFunction<void, unknown, IReportData, unknown>,
+    isLoadingSaveReport: boolean,
     statusSaveReport: 'error' | 'idle' | 'loading' | 'success'
-}
+]
 
 export default function useSaveReport(id?: string): IUseSaveReportExportProps {
   const saveReportData = async ({ data, ...rest }: IReportData) => {
@@ -62,9 +62,9 @@ export default function useSaveReport(id?: string): IUseSaveReportExportProps {
     },
   });
 
-  return {
+  return [
     saveReport,
     isLoadingSaveReport,
     statusSaveReport,
-  };
+  ];
 }
