@@ -139,7 +139,6 @@ export default function CreateUser() {
                       id={`horizontal-list-radio-${currency.toLowerCase()}`}
                       type="radio"
                       value={currency}
-                      disabled={currency === 'hybrid'}
                       name="type_account"
                       className={`${currency === 'hybrid' ? 'cursor-not-allowed' : 'cursor-pointer'}  w-4 h-4 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500`}
                     />

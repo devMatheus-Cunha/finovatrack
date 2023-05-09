@@ -34,7 +34,7 @@ export const convertEurosToReais = (quatationEur?: number, valueEur?: number) =>
   return valorTotalComTaxa ?? 0;
 };
 
-const useFetchQuatationEur = (amount: string, id?: string) => {
+const useFetchQuatationEur = (amount: number, id?: string) => {
   const toastId: any = React.useRef(null);
 
   const updateQuotationData = async (data: Record<string, any>) => {
@@ -57,7 +57,7 @@ const useFetchQuatationEur = (amount: string, id?: string) => {
     }
   };
 
-  const fetchQuatationRateFromAPI = async (value: string) => {
+  const fetchQuatationRateFromAPI = async (value: number) => {
     const myHeaders = new Headers();
     myHeaders.append('apikey', process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || '');
 
@@ -104,10 +104,9 @@ const useFetchQuatationEur = (amount: string, id?: string) => {
   const { mutate: addLastQuotation } = useMutation(updateQuotationData, {
     onSuccess: async () => await refetchLastQuotationData(),
   });
-
   const { refetch: refetchQuationData } = useQuery({
     queryKey: ['quatation_data'],
-    queryFn: () => fetchQuatationRateFromAPI(amount),
+    queryFn: () => fetchQuatationRateFromAPI(amount === 0 ? 1 : amount),
     enabled: false,
     cacheTime: 0,
     onSuccess: (res) => {
