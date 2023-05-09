@@ -5,8 +5,8 @@ import {
   Archive, ClipboardText, Eye, EyeSlash, SignOut,
 } from '@phosphor-icons/react';
 import React, { ReactNode } from 'react';
-import useIsVisibilityDatas from '../../hooks/useIsVisibilityDatas';
-import useLogout from '../../hooks/auth/useAuth/useLogout';
+import { useLogout } from '@/hooks/auth';
+import { useIsVisibilityDatas } from '@/hooks/globalStates';
 
 interface SideBarProps {
   children: ReactNode;

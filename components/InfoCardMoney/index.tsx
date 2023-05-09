@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
+import { useIsVisibilityDatas } from '@/hooks/globalStates';
 import React, { ReactNode } from 'react';
 
 interface InfoCardProps {

@@ -7,7 +7,7 @@ function DeleteModalContent({ onSubmit, onCancel }: any) {
       <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div className="p-6 text-center">
           <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Você tem certeza que deseja limpar todos os gastos?</h3>
+          <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Você tem certeza que deseja deletar?</h3>
           <button
             onClick={onCancel}
             data-modal-hide="popup-modal"

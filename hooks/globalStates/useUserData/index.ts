@@ -1,8 +1,8 @@
 import { db } from '@/service/firebase';
 import { doc, getDoc } from '@firebase/firestore';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
-import { UserData } from '../useAuth/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { UserData } from '../../auth/useAuth/types';
 
 export const initialState: UserData = {
   id: '',
@@ -13,13 +13,14 @@ export const initialState: UserData = {
   typeAccount: 'hybrid',
 };
 
-interface IUseUserProps {
+export interface IUseUserProps {
   userData: UserData;
 }
 
-const useUser = (): IUseUserProps => {
+const useUserData = (): IUseUserProps => {
   const router = useRouter();
   const { id } = router.query as { id: string };
+  const queryClient = useQueryClient();
 
   const checkAuthState = async () => {
     const myDocRef = doc(db, 'users', id);
@@ -27,18 +28,21 @@ const useUser = (): IUseUserProps => {
     return myDocSnapshot.data() as UserData;
   };
 
-  const { data } = useQuery<UserData>({
+  const userData = queryClient.getQueryData<UserData>(['user_data', id]) ?? initialState;
+
+  useQuery<UserData>({
     queryKey: ['user_data', id],
     queryFn: checkAuthState,
-    staleTime: Infinity, // Manter o cache indefinidamente
+    staleTime: Infinity,
     enabled: !!id,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user_data', id], data);
+    },
   });
-
-  const userData = data ?? initialState;
 
   return {
     userData,
   };
 };
 
-export default useUser;
+export default useUserData;

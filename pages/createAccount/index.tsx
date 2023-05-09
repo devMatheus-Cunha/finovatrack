@@ -10,7 +10,7 @@ import { ZodError, z } from 'zod';
 import { Input } from '@/components/Forms';
 import { toast } from 'react-toastify';
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
-import useCreateAccount from '../../hooks/auth/useAuth/useCreateAccount';
+import { useCreateAccount } from '@/hooks/auth';
 
 type FormData = {
  email: string;

@@ -4,9 +4,9 @@
 import React, { Fragment } from 'react';
 import { ButtonGroup } from '@/components';
 import { Trash } from '@phosphor-icons/react';
-import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
 import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
 import { UserData } from '@/hooks/auth/useAuth/types';
+import { useIsVisibilityDatas } from '@/hooks/globalStates';
 
 interface IData {
   value: number
