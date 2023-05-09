@@ -145,8 +145,8 @@ export const initialDataSelectedData: ExpenseData = {
   type: '',
   description: '',
   value: '',
-  euro_value: '',
-  real_value: '',
+  euro_value: 0,
+  real_value: 0,
   typeMoney: '',
 };
 
