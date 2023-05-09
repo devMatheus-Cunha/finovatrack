@@ -11,10 +11,10 @@ export interface ExpenseData {
   id: string;
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
-  value: string;
   euro_value: number;
   real_value: number;
   typeMoney?: 'Real' | 'Euro' | ''
+  value: string
 }
 
 export type Filter = 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''

@@ -6,7 +6,7 @@ import { db } from '@/service/firebase';
 import { useFetchEntrysData } from '../useFetchEntrysData';
 
 interface IData {
-  value: number;
+  value: string;
 }
 
 export default function useAddEntrys(id?: string) {

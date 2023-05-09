@@ -5,23 +5,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
-import { Input, Select } from '@/components/Forms';
 
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
+import { Input, InputTypeMoney, Select } from '@/components';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
+import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { ITypeModal } from '../../types';
 import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
 
-type FormData = {
-  description: string;
-  value: number;
-  type?: string;
-  typeMoney: string;
-};
-
 interface IContentModal {
-  onSubmit: any
-  handleOpenModal: any
+  onSubmit: (data: IAddExpenseData) => Promise<void>
+  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   type: ITypeModal
@@ -39,7 +34,7 @@ function ContentActionsTableModal({
   const schema = z.object({
     description: z.string().nonempty(),
     typeMoney: typeAccount === 'hybrid' ? z.string().nonempty() : z.string().optional(),
-    value: z.string().regex(/^\d+(\.\d{1,2})?$/),
+    value: z.string().nonempty(),
     type: z.string().nonempty(),
   });
 
@@ -47,13 +42,15 @@ function ContentActionsTableModal({
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<ExpenseFormData>({
     defaultValues: type !== 'addExpense' ? {
       ...initialData,
       value:
-        initialData?.typeMoney === 'Real' || typeAccount === 'real'
-          ? initialData?.real_value : initialData?.euro_value,
+      initialData?.typeMoney === 'Real'
+        ? formatCurrencyMoney(initialData?.real_value, typeAccount)
+        : formatCurrencyMoney(initialData?.euro_value, typeAccount),
     } : undefined,
     resolver: async (data) => {
       try {
@@ -138,31 +135,29 @@ function ContentActionsTableModal({
                   />
                 )
               }
-              <Input
+              <InputTypeMoney
+                control={control}
+                name="value"
                 label={
                   typeAccount === 'hybrid'
                     ? watch().typeMoney === 'Real'
                       ? 'Valor (R$):'
                       : 'Valor (€):'
-                    : validaTextForTypeAccount[typeAccount || 'real']?.labelValueMoney
+                    : validaTextForTypeAccount[typeAccount]?.labelValueMoney
                 }
-                name="value"
                 placeholder={
                   typeAccount === 'hybrid'
                     ? watch().typeMoney === 'Real'
                       ? 'Ex: R$ 10'
                       : 'Ex: € 10'
-                    : validaTextForTypeAccount[typeAccount || 'real']?.placeholderValueAddExpense
+                    : validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense
                 }
-                type="number"
-                register={register}
-                rules={{ required: true }}
                 errors={(
                   <>
                     {errors.value && (
-                      <span className="text-red-500 text-sm ">
-                        Este campo é obrigatório e deve ser um valor numérico válido
-                      </span>
+                    <span className="text-red-500 text-sm ">
+                      Este campo é obrigatório e deve ser um valor numérico válido
+                    </span>
                     )}
                   </>
                 )}
@@ -178,7 +173,7 @@ function ContentActionsTableModal({
                 {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
               </button>
               <button
-                onClick={handleOpenModal}
+                onClick={() => handleOpenModal()}
                 type="button"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
               >

@@ -145,8 +145,8 @@ export const initialDataSelectedData: ExpenseData = {
   type: '',
   description: '',
   value: '',
-  euro_value: 0,
-  real_value: 0,
+  euro_value: '',
+  real_value: '',
   typeMoney: '',
 };
 
@@ -156,8 +156,8 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
 
     const objetoResultado = expensesData.reduce(
       (acumulador, objetoAtual) => {
-        acumulador.real_value += objetoAtual.real_value;
-        acumulador.euro_value += objetoAtual.euro_value;
+        acumulador.real_value += Number(objetoAtual.real_value);
+        acumulador.euro_value += Number(objetoAtual.euro_value);
         return acumulador;
       },
       {

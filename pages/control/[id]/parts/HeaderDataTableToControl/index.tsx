@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 import { Button } from '@/components';
-import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
 import {
   Coins, HandCoins, Broom, FolderOpen, ArrowsCounterClockwise,
 } from '@phosphor-icons/react';

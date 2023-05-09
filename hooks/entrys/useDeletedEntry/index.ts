@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import useFetchEntrysData from '../useFetchEntrysData';
 
 interface IData {
-  value: number;
+  value: string;
   id?: string;
 }
 

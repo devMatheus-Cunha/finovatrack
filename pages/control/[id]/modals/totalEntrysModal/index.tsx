@@ -4,19 +4,15 @@
 import React, { Fragment } from 'react';
 import { ButtonGroup } from '@/components';
 import { Trash } from '@phosphor-icons/react';
-import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { UserData } from '@/hooks/auth/useAuth/types';
 import { useIsVisibilityDatas } from '@/hooks/globalStates';
-
-interface IData {
-  value: number
-  id?: string
-}
+import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 
 interface IContentModal {
   handleOpenModal: any
-  data: IData[]
-  onDelete: ({ data }: { data: IData }) => void
+  data: IEntrysData[]
+  onDelete: ({ data }: { data: IEntrysData }) => void
   userData: UserData
 }
 
@@ -63,29 +59,24 @@ function ContentTotalEntrys({
             </thead>
             <tbody>
               {
-                data?.map((item: any, index: any) => (
+                data?.map((item, index) => (
                   <Fragment key={index}>
                     <tr className="bg-white border-b dark:bg-gray-700 dark:border-gray-600">
                       <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {item?.value !== 0 && isVisibilityData ? formatCurrencyMoney(item?.value, userData.typeAccount) : '-'}
+                        {item?.value !== '' && isVisibilityData ? formatCurrencyMoney(item?.value, userData.typeAccount) : '-'}
                       </th>
-                      {
-                        item.description !== 'Totais' ? (
-                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <ButtonGroup buttonOptions={[
-                              {
-                                onClick: () => {
-                                  onDelete({ data: item });
-                                },
-                                content: <Trash color="#eee2e2" />,
-                              },
-                            ]}
-                            />
-                          </th>
-                        ) : (
-                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" />
-                        )
-                      }
+                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <ButtonGroup buttonOptions={[
+                          {
+                            onClick: () => {
+                              onDelete({ data: item });
+                            },
+                            content: <Trash color="#eee2e2" />,
+                          },
+                        ]}
+                        />
+                      </th>
+
                     </tr>
                   </Fragment>
                 ))

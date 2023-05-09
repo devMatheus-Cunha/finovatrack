@@ -15,16 +15,3 @@ export type Item = {
   typeMoney: string;
   id?: string;
 };
-
-export type IFormData = {
-  description: string;
-  value: number;
-  type: string;
-  typeMoney: string;
-};
-
-function FixErroBuild() {
-  return null;
-}
-
-export default FixErroBuild;

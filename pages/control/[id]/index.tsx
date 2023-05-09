@@ -20,12 +20,14 @@ import { convertEurosToReais } from '@/hooks/quatation/useFetchQuatationEur';
 import { useSaveReport } from '@/hooks/reports';
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 
-import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
+import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
+import { formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
 import {
   initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
 } from './utils';
 
-import { ITypeModal, IFormData } from './types';
+import { ITypeModal } from './types';
 
 import HeaderDataTableToControl from './parts/HeaderDataTableToControl';
 import InfoCardsToControl from './parts/InfoCardsToControl';
@@ -35,10 +37,6 @@ import ContentAddEntryModal from './modals/addEntryModal';
 import DeleteModalContent from './modals/deleteModal';
 import ContentTotalEntrys from './modals/totalEntrysModal';
 import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
-
-interface Query {
-  id: string;
-}
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas();
@@ -87,7 +85,18 @@ export default function Control() {
     data: [],
   });
 
-  const totalEntrys = useMemo(() => entrysData.reduce((acc, item) => acc + Number(item.value), 0), [entrysData]);
+  function SomaValores(array: IEntrysData[]) {
+    const total = useMemo(() => array.reduce((accumulator, item) => {
+      const valorFormatado = item.value.replace(/\./g, '').replace(',', '.');
+      const valorNum = parseFloat(valorFormatado);
+
+      return accumulator + valorNum;
+    }, 0), [array]);
+
+    return total;
+  }
+
+  const totalEntrys = SomaValores(entrysData);
 
   const handleOpenModal = (type?: ITypeModal, data?: ExpenseData) => {
     setConfigModal({
@@ -103,13 +112,13 @@ export default function Control() {
     });
   };
 
-  const onSubmit: SubmitHandler<IFormData> = async (data) => {
+  const onAddExpense = async (data: IAddExpenseData) => {
     const formattedValues = {
       ...data,
       real_value: data.typeMoney === 'Real' || typeAccount === 'real'
-        ? Number(data.value) : 0,
+        ? formatNumberToSubmit(data.value) : 0,
       euro_value: data.typeMoney === 'Euro' || typeAccount === 'euro'
-        ? Number(data.value) : 0,
+        ? formatNumberToSubmit(data.value) : 0,
     };
 
     if (configModal.type === 'edit') {
@@ -130,7 +139,7 @@ export default function Control() {
     });
   };
 
-  const onAddEntrys: SubmitHandler<{ value: number }> = async (data) => {
+  const onAddEntrys: SubmitHandler<{ value: string }> = async (data) => {
     addEntrys(data);
     setConfigModal({
       open: !configModal.open,
@@ -207,7 +216,7 @@ export default function Control() {
                         type={configModal?.type}
                         initialData={configModal?.selectedData}
                         handleOpenModal={handleOpenModal}
-                        onSubmit={onSubmit}
+                        onSubmit={onAddExpense}
                         isLoadingAddExpense={isLoadingAddExpense}
                         typeAccount={typeAccount}
                       />
@@ -224,12 +233,12 @@ export default function Control() {
                   {
                     openModalReport.open && (
                       <ConfirmSaveReportModal
-                        initialData={expensesData}
+                        initialData={calculationSumValues}
                         onCancel={handleOpenModalSaveReport}
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({
                             data: values,
-                            totalInvested: formatCurrencyMoney(((totalEntrys - getTotals?.real_value) - calculationTotalExpensesEurToReal), typeAccount),
+                            totalInvested: formatCurrencyMoney(((totalEntrys - Number(getTotals?.real_value)) - Number(calculationTotalExpensesEurToReal)), typeAccount),
                             totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
                             totalExpenses: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
                             quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),

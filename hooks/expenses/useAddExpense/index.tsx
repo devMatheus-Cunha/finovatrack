@@ -5,18 +5,28 @@ import { db } from '@/service/firebase';
 import { toast } from 'react-toastify';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
-interface IData {
+export interface IAddExpenseData {
+  id?: string;
+  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
-  real_value: number;
-  euro_value: number;
-  type?: string;
-  typeMoney: string;
+  euro_value?: number;
+  real_value?: number;
+  typeMoney?: 'Real' | 'Euro' | ''
+  value: string
 }
+
+export type ExpenseFormData = {
+  id?: string;
+  description: string;
+  value: string;
+  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
+  typeMoney?: 'Real' | 'Euro' | ''
+};
 
 const useAddExpense = (id?: string) => {
   const { refetchExpensesData } = useFetchExpensesData(id);
 
-  const addDocument = async (data: IData) => {
+  const addDocument = async (data: IAddExpenseData) => {
     try {
       const myCollection = collection(db, 'users', String(id), 'expenses');
       const docRef = await addDoc(myCollection, data);
