@@ -4,7 +4,7 @@ import { Button, SideBar } from '@/components';
 import { FolderOpen } from '@phosphor-icons/react';
 import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { useRouter } from 'next/router';
 import { useUserData } from '@/hooks/globalStates';
 import { useFetchReportsData } from '@/hooks/reports';
