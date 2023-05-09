@@ -90,7 +90,7 @@ function HeaderDataTableToControl({
     typeAccount === 'hybrid' && (
     <div className="flex gap-3 justify-center items-center">
       <h3 className="italic">
-        {`Cotação: ${formatCurrencyMoney(currentQuotation, typeAccount)} `}
+        {`Cotação: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
       </h3>
       <button
         type="button"

@@ -64,7 +64,7 @@ export default function Control() {
 
   const { calculationSumValues } = useCalculationSumValues(expensesData);
   const { getTotals } = useGetTotalsFree(calculationSumValues);
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotals?.euro_value ?? '1'), id);
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(getTotals?.euro_value, id);
 
   const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
 
