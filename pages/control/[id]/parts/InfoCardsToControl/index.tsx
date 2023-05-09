@@ -1,11 +1,11 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/jsx-props-no-multi-spaces */
 import { InfoCardMoney } from '@/components';
-import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
 import React from 'react';
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
-import { IData } from '@/hooks/entrys/useFetchEntrysData';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
+import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 import { validaTextForTypeAccount } from '../../utils';
 import { ITypeModal } from '../../types';
 
@@ -14,7 +14,7 @@ interface IInfoCardsToControl {
  totalEntrys: number
  totalExpenseEur: number
  totalExpenseReal: number
- entrysData: IData[]
+ entrysData: IEntrysData[]
  totalExpensesEurToReal: number
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
 }

@@ -4,7 +4,7 @@ import { Button, SideBar } from '@/components';
 import { FolderOpen } from '@phosphor-icons/react';
 import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import formatCurrencyMoney from '@/utils/formatCurrencyMoney';
+import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { useRouter } from 'next/router';
 import { useUserData } from '@/hooks/globalStates';
 import { useFetchReportsData } from '@/hooks/reports';
@@ -136,7 +136,7 @@ function Reports() {
              }
 
            </div>
-           <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
+           <div className="relative overflow-y-auto sm:rounded-lg h-[60vh] w-[100%] bg-gray-800">
              {
            data?.data?.length > 0 ? (
              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

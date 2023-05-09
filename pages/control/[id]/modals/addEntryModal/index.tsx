@@ -1,29 +1,30 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/require-default-props */
 /* eslint-disable indent */
-/* eslint-disable react/jsx-closing-tag-location */
-/* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-no-useless-fragment */
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
-import { Input } from '@/components/Forms';
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { InputTypeMoney } from '@/components';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { validaTextForTypeAccount } from '../../utils';
+import { ITypeModal } from '../../types';
 
 type FormData = {
- value: number;
+ value: string;
 };
 
 interface IContentModal {
- onSubmit?: any
- handleOpenModal?: any
+ onSubmit: (value: FormData)=> void
+ handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
  isLoadingAddExpense?: boolean
  typeAccount: TypeAccount
 }
 
 const schema = z.object({
-  value: z.string().regex(/^\d+(\.\d{1,2})?$/),
+  value: z.string().nonempty(),
 });
 
 function ContentAddEntryModal({
@@ -33,8 +34,8 @@ function ContentAddEntryModal({
   typeAccount,
 }: IContentModal) {
   const {
-    register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: async (data) => {
@@ -52,7 +53,7 @@ function ContentAddEntryModal({
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/2">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[100%]">
+      <form onSubmit={handleSubmit((values) => onSubmit(values))} className="w-[100%]">
         <div className="bg-gray-800 rounded-lg shadow">
           <div className="bg-white rounded-lg shadow dark:bg-gray-700">
             <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -61,22 +62,20 @@ function ContentAddEntryModal({
               </h3>
             </div>
             <div className=" gap-6 mb-6  p-4">
-              <Input
-                label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
+              <InputTypeMoney
+                control={control}
                 name="value"
+                label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
                 placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
-                type="number"
-                register={register}
-                rules={{ required: true }}
                 errors={(
                   <>
                     {errors.value && (
                     <span className="text-red-500 text-sm ">
-                     Este campo é obrigatório e deve ser um valor numérico válido
-                   </span>
-                   )}
+                      Este campo é obrigatório
+                    </span>
+                )}
                   </>
-       )}
+      )}
               />
             </div>
 
@@ -88,7 +87,7 @@ function ContentAddEntryModal({
                 {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
               </button>
               <button
-                onClick={handleOpenModal}
+                onClick={() => handleOpenModal()}
                 type="button"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
               >
