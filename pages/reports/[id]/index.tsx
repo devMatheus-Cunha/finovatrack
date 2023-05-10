@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
 import { Button, SideBar } from '@/components';
@@ -5,40 +6,15 @@ import { FolderOpen } from '@phosphor-icons/react';
 import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
-import { useUserData } from '@/hooks/globalStates';
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 import { useFetchReportsData } from '@/hooks/reports';
 import Head from 'next/head';
-
-const columsHeadProps = [
-  {
-    header: 'Descrição',
-    field: 'description',
-  },
-  {
-    header: 'Valor Euro',
-    field: 'euro_value',
-  },
-  {
-    header: 'Valor Real',
-    field: 'real_value',
-  },
-  {
-    header: 'Tipo',
-    field: 'type',
-  },
-  {
-    header: 'Moeda',
-    field: 'typeMoney',
-  },
-];
-
-interface Query {
- id: string;
-}
+import { validateColumsHeadProps } from './utils';
 
 function Reports() {
   const { userData: { id, typeAccount } } = useUserData();
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
+  const { isVisibilityData } = useIsVisibilityDatas();
 
   const {
     reportData,
@@ -134,14 +110,14 @@ function Reports() {
              }
 
            </div>
-           <div className="relative overflow-y-auto sm:rounded-lg h-[60vh] w-[100%] bg-gray-800">
+           <div className="relative overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] bg-gray-800">
              {
            data?.data?.length > 0 ? (
              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                  <tr>
                    {
-                columsHeadProps.map((item) => (
+                validateColumsHeadProps[typeAccount].map((item: { field: string, header: string }) => (
                   <th scope="col" className="px-6 py-3" key={item.field}>
                     {item.header}
                   </th>
@@ -157,18 +133,32 @@ function Reports() {
                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                        {item.description}
                      </th>
-                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                       {item.euro_value !== 0 ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
-                     </th>
-                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                       {item.real_value !== 0 ? formatCurrencyMoney(item.real_value, 'real') : '-'}
-                     </th>
+                     {
+            (typeAccount === 'euro' || typeAccount === 'hybrid') && (
+            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
+            </th>
+            )
+           }
+
+                     {
+            (typeAccount === 'real' || typeAccount === 'hybrid') && (
+            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, 'real') : '-'}
+            </th>
+            )
+           }
                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                        {item.type}
                      </th>
-                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                       {item.typeMoney}
-                     </th>
+                     {
+            typeAccount === 'hybrid' && (
+            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {item.typeMoney}
+            </th>
+            )
+           }
+
                    </tr>
                  </Fragment>
                ))
