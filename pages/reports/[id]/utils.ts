@@ -55,3 +55,9 @@ export const validateColumsHeadProps: any = {
   real: columsHeadPropsReal,
   hybrid: columsHeadProps,
 };
+
+function FixErroBuild() {
+  return null;
+}
+
+export default FixErroBuild;
