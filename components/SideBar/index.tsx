@@ -35,24 +35,18 @@ export default function SideBar({ children }: SideBarProps) {
     {
       id: 'control',
       label: 'Controle',
-      icon: <ClipboardText size={24} color={routeName === 'control' ? '#06b6d4' : '#eee2e2'} />,
+      icon: <ClipboardText size={24} />,
       action: () => router.push(`/control/${id}`),
     },
     {
       id: 'reports',
       label: 'Relatrios',
-      icon: <Archive size={24} color={routeName === 'reports' ? '#06b6d4' : '#eee2e2'} />,
+      icon: <Archive size={24} />,
       action: () => router.push(`/reports/${id}`),
     },
-    // {
-    //  id: "statistics",
-    //  label: "Relatrios",
-    //  icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
-    //  action: () => router.push("/statistics"),
-    // },
     {
       id: 'logout',
-      label: 'Sair',
+      label: 'Logout',
       icon: <SignOut size={24} />,
       action: () => onLogout(),
     },
@@ -71,7 +65,12 @@ export default function SideBar({ children }: SideBarProps) {
              className="focus:outline-none font-medium rounded-lg text-md dark:tansparent dark:focus:ring-gray-600 dark:border-gray-600 w-[100%] flex items-center justify-center"
              onClick={item.action}
            >
-             {item.icon}
+             <div className={`flex gap-0.5 flex-col justify-center items-center ${routeName === item.id ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
+               {item.icon}
+               <p className="text-xs">
+                 {item.label}
+               </p>
+             </div>
            </button>
          </React.Fragment>
        ))

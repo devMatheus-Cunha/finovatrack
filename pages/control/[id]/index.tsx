@@ -186,12 +186,12 @@ export default function Control() {
             <div className="flex flex-col items-center h-[100vh] w-[100%]">
               <InfoCardsToControl
                 totalEntrys={totalEntrys}
-                typeAccount={typeAccount}
                 entrysData={entrysData}
                 totalExpensesEurToReal={calculationTotalExpensesEurToReal}
                 handleOpenModal={handleOpenModal}
                 totalExpenseEur={getTotals?.euro_value}
                 totalExpenseReal={getTotals?.real_value}
+                typeAccount={typeAccount}
               />
 
               <div className="flex w-[100%] flex-1 justify-center items-center">

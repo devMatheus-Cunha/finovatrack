@@ -90,14 +90,14 @@ function HeaderDataTableToControl({
     typeAccount === 'hybrid' && (
     <div className="flex gap-3 justify-center items-center">
       <h3 className="italic">
-        {`Cotação: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
+        {`Cotação Euro: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
       </h3>
       <button
         type="button"
         onClick={() => refetchQuationData()}
         className="dark:hover:text-gray-400"
       >
-        <ArrowsCounterClockwise size={20} color="#eee2e2" />
+        <ArrowsCounterClockwise size={20} color="#eee2e2" className="dark:hover:opacity-75" />
       </button>
     </div>
     )
