@@ -96,6 +96,12 @@ export default function Control() {
     return total;
   }
 
+  const validateExpenseData = {
+    real: getTotals?.real_value,
+    euro: getTotals?.euro_value,
+    hybrid: calculationTotalExpensesEurToReal,
+  };
+
   const totalEntrys = SomaValores(entrysData);
 
   const handleOpenModal = (type?: ITypeModal, data?: ExpenseData) => {
@@ -240,7 +246,7 @@ export default function Control() {
                             data: values,
                             totalInvested: formatCurrencyMoney(((totalEntrys - Number(getTotals?.real_value)) - Number(calculationTotalExpensesEurToReal)), typeAccount),
                             totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
-                            totalExpenses: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
+                            totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
                             quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),
                           });
                           handleOpenModalSaveReport();
