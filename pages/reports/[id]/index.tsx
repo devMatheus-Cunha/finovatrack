@@ -5,7 +5,6 @@ import { FolderOpen } from '@phosphor-icons/react';
 import { Fragment, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
-import { useRouter } from 'next/router';
 import { useUserData } from '@/hooks/globalStates';
 import { useFetchReportsData } from '@/hooks/reports';
 import Head from 'next/head';
@@ -38,7 +37,6 @@ interface Query {
 }
 
 function Reports() {
-  const router = useRouter();
   const { userData: { id, typeAccount } } = useUserData();
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
 
@@ -73,25 +71,25 @@ function Reports() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <SideBar>
-        <div className="h-[100vh] pt-8 w-[100%]">
-          <div className="flex items-center flex-col w-[100%] gap-10">
-            <div className=" p-7 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[34%]">
+        <div className="h-[100vh] w-[100%]">
+          <div className="flex items-center flex-col w-[100%] gap-10 p-3">
+            <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col">
               <h2>Escolha um período para solicitar um relatório:</h2>
-              <div className="flex gap-4 bg-gray-800 rounded-lg  justify-center">
+              <div className="flex gap-4 bg-gray-800 rounded-lg justify-center">
                 <div>
                   <DatePicker
                     selected={selectedPeriod}
                     onChange={(date: Date) => onChangeDate(date)}
                     dateFormat="MM/yyyy"
                     showMonthYearPicker
-                    className="border ext-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="border ext-sm rounded-lg w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                 </div>
 
                 <Button
                   type="button"
                   onClick={() => onSubmit(selectedPeriod)}
-                  className="font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:border-gray-700"
+                  className="font-medium rounded-lg text-sm p-2 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:border-gray-700"
                 >
                   <div className="flex gap-2 justify-center items-center">
                     <FolderOpen size={20} color="#eee2e2" />
@@ -116,7 +114,7 @@ function Reports() {
                <span className="italic dark:text-white">{data.totalEntrys}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               Total Saídas:
+               Total Gastos:
                {' '}
                <span className="italic dark:text-white">{data.totalExpenses}</span>
              </h1>
