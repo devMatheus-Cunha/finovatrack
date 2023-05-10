@@ -7,22 +7,20 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { toast } from 'react-toastify';
-import { useLogin } from '@/hooks/auth';
-import { Input, InputPassword } from '@/components';
+import { useForgetPassword } from '@/hooks/auth';
+import { Input } from '@/components';
 
 type FormData = {
   email: string;
-  password: number;
 };
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email('Formato de'),
 });
 
-export default function Login() {
+export default function ForgetPassword() {
   const router = useRouter();
-  const { loginWithEmail, upadtedDocumentForUser } = useLogin();
+  const { forgetPassword } = useForgetPassword();
   const {
     register,
     handleSubmit,
@@ -41,22 +39,16 @@ export default function Login() {
     },
   });
 
-  const { mutate, isLoading } = useMutation(loginWithEmail, {
-    onSuccess: async (user) => {
-      upadtedDocumentForUser({
-        id: user.uid,
-        expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
-        token: (await user.getIdTokenResult()).token,
+  const { mutate, isLoading } = useMutation(forgetPassword, {
+    onSuccess: async () => {
+      toast.success('E-mail de recupeção enviado!', {
+        position: toast.POSITION.TOP_RIGHT,
       });
-      router.push(`/control/${user.uid}`);
+      router.push('/');
     },
     onError: ({ message }: { message: string }) => {
-      if (message === 'Firebase: Error (auth/user-not-found).') {
-        toast.error('Conta não encontrada.', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else if (message === 'Firebase: Error (auth/wrong-password).') {
-        toast.error('Senha incorreta', {
+      if (message === 'Firebase: Error (auth/invalid-value-(email),-starting-an-object-on-a-scalar-field).') {
+        toast.error('E-mail inválido. Por favor, insira um endereço de e-mail válido.', {
           position: toast.POSITION.TOP_RIGHT,
         });
       } else {
@@ -71,6 +63,10 @@ export default function Login() {
     <div className="flex h-[100vh] justify-center items-center">
       <form onSubmit={handleSubmit((values: any) => mutate(values))}>
         <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
+          <div className="flex flex-col gap-3 text-center">
+            <p className="text-2xl  font-bold">Esqueceu sua senha?</p>
+            <p className="text-slate-300">Não se preocupe! Insira o seu e-mail de cadastro e enviaremos instruções para você.</p>
+          </div>
           <Input
             label="Email"
             name="email"
@@ -88,34 +84,6 @@ export default function Login() {
               </>
               )}
           />
-          <div className="flex justify-center items-center flex-col gap-3">
-            <InputPassword
-              label="Password"
-              name="password"
-              placeholder="**********"
-              type="password"
-              register={register}
-              rules={{ required: true }}
-              errors={(
-                <>
-                  {errors.password && (
-                  <span className="text-red-500 text-sm ">
-                    Este campo é obrigatório
-                  </span>
-                  )}
-                </>
-              )}
-            />
-            <button
-              type="button"
-              className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline self-end"
-              onClick={() => router.push('/forgetPassword')}
-            >
-              <div className="flex gap-2 justify-center items-center">
-                Esqueceu a senha?
-              </div>
-            </button>
-          </div>
 
           <div className="flex flex-col gap-10 justify-center items-center">
             <button
@@ -123,16 +91,16 @@ export default function Login() {
               className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-700 p-2 w-[100px]"
             >
               <div className="flex gap-2 justify-center items-center">
-                {isLoading ? 'Login...' : 'Login'}
+                {isLoading ? 'Enviar...' : 'Enviar'}
               </div>
             </button>
             <button
               type="button"
               className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline"
-              onClick={() => router.push('/createAccount')}
+              onClick={() => router.push('/')}
             >
               <div className="flex gap-2 justify-center items-center">
-                Criar Conta
+                Voltar
               </div>
             </button>
           </div>
