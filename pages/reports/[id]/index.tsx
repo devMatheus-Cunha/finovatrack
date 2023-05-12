@@ -88,22 +88,22 @@ function Reports() {
              <h1 className="dark:text-gray-300">
                {validaTextForTypeAccount[typeAccount]?.titleEntrys}
                {' '}
-               <span className="italic dark:text-white">{data.totalEntrys}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
                {validaTextForTypeAccount[typeAccount]?.titleExpensesEurToReal}
                {' '}
-               <span className="italic dark:text-white">{data.totalExpenseEurToReal}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
                {validaTextForTypeAccount[typeAccount]?.titleExpenses}
                {' '}
-               <span className="italic dark:text-white">{data.totalExpenses}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
                {validaTextForTypeAccount[typeAccount]?.totalFree}
                {' '}
-               <span className="italic dark:text-white">{data.totalInvested}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
              </h1>
              {
                       typeAccount === 'hybrid' && (
