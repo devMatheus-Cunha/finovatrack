@@ -13,6 +13,7 @@ export interface IReportData {
   totalInvested: string;
   totalEntrys: string;
   totalExpenses: string;
+  totalExpenseEurToReal: string;
   period?: string;
   quatation: string;
 }
