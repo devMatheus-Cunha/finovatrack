@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 type InfoCard = {
   titleEntrys: string;
   titleExpenses: string;
+  titleExpensesEurToReal: string;
   totalFree: string;
   labelValueMoney: string;
   placeholderValueAddExpense: string;
@@ -37,6 +38,7 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     totalFree: 'Total Investimento',
     labelValueMoney: 'Valor (R$):',
     placeholderValueAddExpense: 'Ex: R$ 10',
+    titleExpensesEurToReal: 'Total Gastos Euro',
 
   },
   real: {
@@ -45,6 +47,7 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     totalFree: 'Total Livre ',
     labelValueMoney: 'Valor (R$):',
     placeholderValueAddExpense: 'Ex: R$ 10',
+    titleExpensesEurToReal: '',
 
   },
   euro: {
@@ -53,6 +56,7 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     totalFree: 'Total Livre',
     labelValueMoney: 'Valor (€):',
     placeholderValueAddExpense: 'Ex: € 10',
+    titleExpensesEurToReal: '',
   },
 };
 

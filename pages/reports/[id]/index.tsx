@@ -9,6 +9,7 @@ import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 import { useFetchReportsData } from '@/hooks/reports';
 import Head from 'next/head';
+import { validaTextForTypeAccount } from '@/pages/control/[id]/utils';
 import { validateColumsHeadProps } from './utils';
 
 function Reports() {
@@ -85,19 +86,24 @@ function Reports() {
            </h1>
            <div className="flex gap-4">
              <h1 className="dark:text-gray-300">
-               Total Entradas:
+               {validaTextForTypeAccount[typeAccount]?.titleEntrys}
                {' '}
-               <span className="italic dark:text-white">{data.totalEntrys}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               Total Gastos:
+               {validaTextForTypeAccount[typeAccount]?.titleExpensesEurToReal}
                {' '}
-               <span className="italic dark:text-white">{data.totalExpenses}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               Total Livre:
+               {validaTextForTypeAccount[typeAccount]?.titleExpenses}
                {' '}
-               <span className="italic dark:text-white">{data.totalInvested}</span>
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
+             </h1>
+             <h1 className="dark:text-gray-300">
+               {validaTextForTypeAccount[typeAccount]?.totalFree}
+               {' '}
+               <span className="italic dark:text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
              </h1>
              {
                       typeAccount === 'hybrid' && (

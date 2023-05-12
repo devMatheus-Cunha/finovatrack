@@ -16,6 +16,7 @@ interface IInfoCardsToControl {
  totalExpenseReal: number
  entrysData: IEntrysData[]
  totalExpensesEurToReal: number
+ totalExpensesEurSumRealToReal: number
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
 }
 
@@ -25,17 +26,18 @@ function InfoCardsToControl({
   handleOpenModal,
   entrysData,
   totalExpensesEurToReal,
+  totalExpensesEurSumRealToReal,
   totalExpenseEur,
   totalExpenseReal,
 }: IInfoCardsToControl) {
   const validateExpenseData = {
     real: totalExpenseReal,
     euro: totalExpenseEur,
-    hybrid: totalExpensesEurToReal,
+    hybrid: totalExpensesEurSumRealToReal,
   };
 
   return (
-    <div className="flex w-[100%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+    <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
       <InfoCardMoney
         infoData={formatCurrencyMoney(totalEntrys, typeAccount)}
         title={validaTextForTypeAccount[typeAccount]?.titleEntrys}
@@ -50,6 +52,14 @@ function InfoCardsToControl({
           </button>
    )}
       />
+      {
+        typeAccount === 'hybrid' && (
+        <InfoCardMoney
+          infoData={formatCurrencyMoney(totalExpensesEurToReal, typeAccount)}
+          title={validaTextForTypeAccount[typeAccount]?.titleExpensesEurToReal}
+        />
+        )
+      }
       <InfoCardMoney
         infoData={formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount)}
         title={validaTextForTypeAccount[typeAccount]?.titleExpenses}
