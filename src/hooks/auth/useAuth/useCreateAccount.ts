@@ -5,7 +5,7 @@
 
 import { createUserWithEmailAndPassword, updateProfile } from '@firebase/auth';
 import { doc, setDoc } from '@firebase/firestore';
-import { auth, db } from '../../../../service/firebase';
+import { auth, db } from '../../../service/firebase';
 import { UserData } from './types';
 
 const useCreateAccount = () => {

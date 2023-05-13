@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { useCreateAccount } from '../../../hooks/auth';
 import { TypeAccount } from '../../../hooks/auth/useAuth/types';
-import { Input } from '../../../components';
+import { Input, InputPassword } from '../../../components';
 
 type FormData = {
  email: string;
@@ -30,7 +30,7 @@ const schema = z.object({
   type_account: z.string().nonempty(),
 });
 
-export default function CreateUser() {
+export default function Signin() {
   const router = useRouter();
   const { createAccountUser, createDocumentForUser } = useCreateAccount();
 
@@ -115,11 +115,10 @@ export default function CreateUser() {
               </>
       )}
           />
-          <Input
+          <InputPassword
             label="Password"
             name="password"
             placeholder="**********"
-            type="password"
             register={register}
             rules={{ required: true }}
             errors={(
@@ -130,7 +129,7 @@ export default function CreateUser() {
                 </span>
                 )}
               </>
-      )}
+              )}
           />
           <div>
             <h3 className="mb-4 font-semibold dark:text-white">Tipo da moeda da conta</h3>

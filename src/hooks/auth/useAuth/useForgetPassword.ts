@@ -5,7 +5,7 @@
 'use client';
 
 import { sendPasswordResetEmail } from '@firebase/auth';
-import { auth } from '../../../../service/firebase';
+import { auth } from '../../../service/firebase';
 
 const useForgetPassword = () => {
   const forgetPassword = async ({ email }:{email: string}) => {

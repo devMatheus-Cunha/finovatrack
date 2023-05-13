@@ -25,7 +25,7 @@ export default function InputPassword<T extends FieldValues>({
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(() => (!showPassword));
   };
 
   return (
@@ -44,7 +44,7 @@ export default function InputPassword<T extends FieldValues>({
         <button
           type="button"
           className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none"
-          onClick={togglePasswordVisibility}
+          onClick={() => togglePasswordVisibility()}
         >
           {showPassword ? (
             <EyeSlash size={20} color="#eee2e2" />

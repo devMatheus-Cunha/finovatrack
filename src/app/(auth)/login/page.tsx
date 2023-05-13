@@ -97,7 +97,6 @@ export default function Login() {
               label="Password"
               name="password"
               placeholder="**********"
-              type="password"
               register={register}
               rules={{ required: true }}
               errors={(

@@ -6,7 +6,7 @@ import { doc, updateDoc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
 const useUpadtedExpense = () => {

@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 
 export interface ExpenseData {
   id: string;

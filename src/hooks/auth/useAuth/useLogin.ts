@@ -4,7 +4,7 @@
 
 'use client';
 
-import { auth, db } from '../../../../service/firebase';
+import { auth, db } from '../../../service/firebase';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { doc, updateDoc } from '@firebase/firestore';
 

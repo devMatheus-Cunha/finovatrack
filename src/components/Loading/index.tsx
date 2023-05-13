@@ -20,7 +20,7 @@ function Loading({
       {
    loading ? (
      <div className="flex h-screen w-full items-center justify-center">
-       oi
+       Carregando..
      </div>
    ) : (
      { ...children }

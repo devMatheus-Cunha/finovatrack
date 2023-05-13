@@ -9,7 +9,7 @@ import {
 import { UseMutateFunction, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 
 export interface IReportData {
   data: ExpenseData[];

@@ -173,7 +173,7 @@ export default function Control() {
 
   return (
     <Loading
-      loading={false}
+      loading={!userData.id}
     >
       <main>
         <div className="flex flex-col items-center h-[100vh] w-[100%]">

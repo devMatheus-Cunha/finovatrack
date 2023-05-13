@@ -4,7 +4,7 @@ import { doc, getDoc } from '@firebase/firestore';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { UserData } from '../../auth/useAuth/types';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 
 export const initialState: UserData = {
   id: '',

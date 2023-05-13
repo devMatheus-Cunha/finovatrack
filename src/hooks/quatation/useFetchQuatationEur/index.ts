@@ -14,7 +14,7 @@ import {
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 
 type CurrentQuotation = {
   current_quotation: number;

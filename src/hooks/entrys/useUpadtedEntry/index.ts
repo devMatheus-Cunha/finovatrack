@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
 import { useFetchEntrysData } from '../useFetchEntrysData';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 
 const useUpadtedEntry = () => {
   const router = useParams();

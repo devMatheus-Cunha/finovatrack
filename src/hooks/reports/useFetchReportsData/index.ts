@@ -12,7 +12,7 @@ import {
 } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { db } from '../../../../service/firebase';
+import { db } from '../../../service/firebase';
 import { IReportData } from '../useSaveReport';
 
 interface UseFetchReportsDataReturnType {
