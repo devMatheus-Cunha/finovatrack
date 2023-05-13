@@ -4,6 +4,7 @@ import { collection, addDoc } from 'firebase/firestore';
 
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useParams } from 'next/navigation';
 import { db } from '../../../../service/firebase';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
@@ -25,12 +26,14 @@ export type ExpenseFormData = {
   typeMoney?: 'Real' | 'Euro' | ''
 };
 
-const useAddExpense = (id?: string) => {
-  const { refetchExpensesData } = useFetchExpensesData(id);
+const useAddExpense = () => {
+  const router = useParams();
+
+  const { refetchExpensesData } = useFetchExpensesData();
 
   const addDocument = async (data: IAddExpenseData) => {
     try {
-      const myCollection = collection(db, 'users', String(id), 'expenses');
+      const myCollection = collection(db, 'users', router.id, 'expenses');
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {

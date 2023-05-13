@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import {
   Archive, ClipboardText, Eye, EyeSlash, SignOut,
@@ -18,6 +18,8 @@ interface SideBarProps {
 export default function AppLayout({ children }: SideBarProps) {
   const { isVisibilityData, handleToggleVisibilityData } = useIsVisibilityDatas();
   const router = useRouter();
+  const pathname = usePathname();
+
   const { logout } = useLogout();
   const { userData: { id } } = useUserData();
 
@@ -31,24 +33,28 @@ export default function AppLayout({ children }: SideBarProps) {
     {
       id: 'eye',
       label: 'Visualizar',
+      route: '/eye',
       icon: isVisibilityData ? <Eye size={24} color="#eee2e2" /> : <EyeSlash size={24} color="#eee2e2" />,
       action: () => handleToggleVisibilityData(),
     },
     {
       id: 'control',
       label: 'Controle',
+      route: '/control',
       icon: <ClipboardText size={24} />,
       action: () => router.push(`/control/${id}`),
     },
     {
       id: 'reports',
       label: 'Relatrios',
+      route: '/reports',
       icon: <Archive size={24} />,
       action: () => router.push(`/reports/${id}`),
     },
     {
       id: 'logout',
       label: 'Logout',
+      route: '/logout',
       icon: <SignOut size={24} />,
       action: () => onLogout(),
     },
@@ -67,7 +73,7 @@ export default function AppLayout({ children }: SideBarProps) {
              className="focus:outline-none font-medium rounded-lg text-md dark:tansparent dark:focus:ring-gray-600 dark:border-gray-600 w-[100%] flex items-center justify-center"
              onClick={item.action}
            >
-             <div className={`flex gap-0.5 flex-col justify-center items-center ${item.id === '2' ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
+             <div className={`flex gap-0.5 flex-col justify-center items-center ${pathname.startsWith(item?.route) ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
                {item.icon}
                <p className="text-xs">
                  {item.label}

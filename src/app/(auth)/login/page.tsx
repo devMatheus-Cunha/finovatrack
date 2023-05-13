@@ -12,6 +12,7 @@ import { ZodError, z } from 'zod';
 import { toast } from 'react-toastify';
 import { Input, InputPassword } from '@/components';
 import { useLogin } from '@/hooks/auth';
+import Link from 'next/link';
 
 type FormData = {
   email: string;
@@ -129,15 +130,12 @@ export default function Login() {
                 {isLoading ? 'Login...' : 'Login'}
               </div>
             </button>
-            <button
-              type="button"
+            <Link
               className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline"
-              onClick={() => router.push('/signin')}
+              href="/signin"
             >
-              <div className="flex gap-2 justify-center items-center">
-                Criar Conta
-              </div>
-            </button>
+              Criar Conta
+            </Link>
           </div>
         </div>
       </form>

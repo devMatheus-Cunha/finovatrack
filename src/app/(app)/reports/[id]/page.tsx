@@ -15,14 +15,14 @@ import { validateColumsHeadProps } from './utils';
 import { validaTextForTypeAccount } from '../../control/[id]/utils';
 
 function Reports() {
-  const { userData: { id, typeAccount } } = useUserData();
+  const { userData } = useUserData();
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
   const { isVisibilityData } = useIsVisibilityDatas();
 
   const {
     reportData,
     setPeriod,
-  } = useFetchReportsData(id);
+  } = useFetchReportsData();
 
   const [data] = reportData ?? [];
 
@@ -80,27 +80,27 @@ function Reports() {
            </h1>
            <div className="flex gap-4">
              <h1 className="dark:text-gray-300">
-               {validaTextForTypeAccount[typeAccount]?.titleEntrys}
+               {validaTextForTypeAccount[userData.typeAccount]?.titleEntrys}
                {' '}
                <span className="italic dark:text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               {validaTextForTypeAccount[typeAccount]?.titleExpensesEurToReal}
+               {validaTextForTypeAccount[userData.typeAccount]?.titleExpensesEurToReal}
                {' '}
                <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               {validaTextForTypeAccount[typeAccount]?.titleExpenses}
+               {validaTextForTypeAccount[userData.typeAccount]?.titleExpenses}
                {' '}
                <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
              </h1>
              <h1 className="dark:text-gray-300">
-               {validaTextForTypeAccount[typeAccount]?.totalFree}
+               {validaTextForTypeAccount[userData.typeAccount]?.totalFree}
                {' '}
                <span className="italic dark:text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
              </h1>
              {
-                      typeAccount === 'hybrid' && (
+                      userData.typeAccount === 'hybrid' && (
                         <h1 className="dark:text-gray-300">
                           Cotação Usada:
                           {' '}
@@ -117,7 +117,7 @@ function Reports() {
                <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                  <tr>
                    {
-                validateColumsHeadProps[typeAccount].map((item: { field: string, header: string }) => (
+                validateColumsHeadProps[userData.typeAccount].map((item: { field: string, header: string }) => (
                   <th scope="col" className="px-6 py-3" key={item.field}>
                     {item.header}
                   </th>
@@ -134,7 +134,7 @@ function Reports() {
                        {item.description}
                      </th>
                      {
-            (typeAccount === 'euro' || typeAccount === 'hybrid') && (
+            (userData.typeAccount === 'euro' || userData.typeAccount === 'hybrid') && (
             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
             </th>
@@ -142,7 +142,7 @@ function Reports() {
            }
 
                      {
-            (typeAccount === 'real' || typeAccount === 'hybrid') && (
+            (userData.typeAccount === 'real' || userData.typeAccount === 'hybrid') && (
             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, 'real') : '-'}
             </th>
@@ -152,7 +152,7 @@ function Reports() {
                        {item.type}
                      </th>
                      {
-            typeAccount === 'hybrid' && (
+            userData.typeAccount === 'hybrid' && (
             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {item.typeMoney}
             </th>

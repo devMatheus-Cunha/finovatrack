@@ -5,7 +5,6 @@
 
 'use client';
 
-import { db } from '../../../../service/firebase';
 import {
   doc, getDoc, setDoc, updateDoc,
 } from '@firebase/firestore';
@@ -14,6 +13,8 @@ import {
 } from '@tanstack/react-query';
 import React from 'react';
 import { toast } from 'react-toastify';
+import { useParams } from 'next/navigation';
+import { db } from '../../../../service/firebase';
 
 type CurrentQuotation = {
   current_quotation: number;
@@ -37,16 +38,18 @@ export const convertEurosToReais = (quatationEur?: number, valueEur?: number) =>
   return valorTotalComTaxa ?? 0;
 };
 
-const useFetchQuatationEur = (amount: number, id?: string) => {
+const useFetchQuatationEur = (amount: number) => {
+  const router = useParams();
+
   const toastId: any = React.useRef(null);
 
   const updateQuotationData = async (data: Record<string, any>) => {
     try {
-      if (!id) {
+      if (!router.id) {
         throw new Error('User not logged in');
       }
 
-      const docRef = doc(db, 'users', id, 'quotation', 'last_quotation_data');
+      const docRef = doc(db, 'users', router.id, 'quotation', 'last_quotation_data');
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -92,7 +95,7 @@ const useFetchQuatationEur = (amount: number, id?: string) => {
   };
 
   const fetchLastQuotationData = async () => {
-    const docRef = doc(db, 'users', String(id), 'quotation', 'last_quotation_data');
+    const docRef = doc(db, 'users', router.id, 'quotation', 'last_quotation_data');
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -102,7 +105,11 @@ const useFetchQuatationEur = (amount: number, id?: string) => {
     return undefined;
   };
 
-  const { data: lastQuatationData, refetch: refetchLastQuotationData } = useQuery(['last_quotation_data'], async () => await fetchLastQuotationData(), { enabled: !!id });
+  const { data: lastQuatationData, refetch: refetchLastQuotationData } = useQuery(
+    ['last_quotation_data', router.id],
+    async () => await fetchLastQuotationData(),
+    { enabled: !!router.id },
+  );
 
   const { mutate: addLastQuotation } = useMutation(updateQuotationData, {
     onSuccess: async () => await refetchLastQuotationData(),

@@ -3,14 +3,17 @@
 import { deleteDoc, doc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useParams } from 'next/navigation';
 import { db } from '../../../../service/firebase';
 import useFetchExpensesData, { ExpenseData } from '../useFetchExpensesData';
 
-const useDeletedExpense = (id?: string) => {
-  const { refetchExpensesData } = useFetchExpensesData(id);
+const useDeletedExpense = () => {
+  const router = useParams();
+
+  const { refetchExpensesData } = useFetchExpensesData();
 
   const fetchDeletedExpense = async (data: ExpenseData) => {
-    const docRef = doc(db, 'users', String(id), 'expenses', data?.id || '');
+    const docRef = doc(db, 'users', router.id, 'expenses', data?.id || '');
     try {
       await deleteDoc(docRef);
     } catch (error) {

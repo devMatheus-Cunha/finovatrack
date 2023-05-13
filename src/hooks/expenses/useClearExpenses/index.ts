@@ -4,14 +4,17 @@
 
 import { getDocs, collection, deleteDoc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify'; import { db } from '../../../../service/firebase';
+import { toast } from 'react-toastify'; import { useParams } from 'next/navigation';
+import { db } from '../../../../service/firebase';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
-const useClearExpenses = (id?: string) => {
-  const { refetchExpensesData } = useFetchExpensesData(id);
+const useClearExpenses = () => {
+  const router = useParams();
+
+  const { refetchExpensesData } = useFetchExpensesData();
 
   const clearExpenses = async () => {
-    const querySnapshot = await getDocs(collection(db, 'users', String(id), 'expenses'));
+    const querySnapshot = await getDocs(collection(db, 'users', router.id, 'expenses'));
     const documents = querySnapshot.docs;
 
     const promises: any[] = [];

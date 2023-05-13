@@ -4,18 +4,21 @@
 
 import { doc, updateDoc } from '@firebase/firestore';
 import { useMutation } from '@tanstack/react-query';
-import { db } from '../../../../service/firebase';
 import { toast } from 'react-toastify';
+import { useParams } from 'next/navigation';
+import { db } from '../../../../service/firebase';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
-const useUpadtedExpense = (id?: string) => {
-  const { refetchExpensesData } = useFetchExpensesData(id);
+const useUpadtedExpense = () => {
+  const router = useParams();
+
+  const { refetchExpensesData } = useFetchExpensesData();
 
   const fetchUpadtedExpense = async (data: {
     id?: string;
     data: Record<string, any>;
   }) => {
-    const docRef = doc(db, 'users', String(id), 'expenses', data?.id || '');
+    const docRef = doc(db, 'users', router.id, 'expenses', data?.id || '');
     try {
       await updateDoc(docRef, data.data);
     } catch (error) {

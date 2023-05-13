@@ -4,6 +4,7 @@ import { collection, addDoc } from 'firebase/firestore';
 
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useParams } from 'next/navigation';
 import { db } from '../../../../service/firebase';
 import { useFetchEntrysData } from '../useFetchEntrysData';
 
@@ -11,11 +12,13 @@ interface IData {
   value: string;
 }
 
-export default function useAddEntrys(id?: string) {
-  const { refetchEntrysData } = useFetchEntrysData(id);
+export default function useAddEntrys() {
+  const router = useParams();
+
+  const { refetchEntrysData } = useFetchEntrysData();
   const addDocument = async (data: IData) => {
     try {
-      const myCollection = collection(db, 'users', String(id), 'entrys');
+      const myCollection = collection(db, 'users', String(router.id), 'entrys');
       const docRef = await addDoc(myCollection, data);
       return docRef;
     } catch (error) {

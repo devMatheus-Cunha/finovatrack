@@ -11,6 +11,7 @@ import {
   useQuery, QueryObserverResult, RefetchOptions, RefetchQueryFilters,
 } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { db } from '../../../../service/firebase';
 import { IReportData } from '../useSaveReport';
 
@@ -24,10 +25,9 @@ interface UseFetchReportsDataReturnType {
   setPeriod: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function useFetchReportsData(
-  id?: string,
-): UseFetchReportsDataReturnType {
+export default function useFetchReportsData(): UseFetchReportsDataReturnType {
   const [period, setPeriod] = useState('');
+  const router = useParams();
 
   const fetchExpensesData = async (value: string) => {
     const docsArray: IReportData[] = [];
@@ -35,7 +35,7 @@ export default function useFetchReportsData(
 
     if (value) {
       querySnapshot = query(
-        collection(db, 'users', String(id), 'reports'),
+        collection(db, 'users', String(router.id), 'reports'),
         where('period', '==', value),
       );
       const get = await getDocs(querySnapshot);
@@ -53,10 +53,10 @@ export default function useFetchReportsData(
     status: statusReportData,
     refetch: refetchReportData,
   } = useQuery<IReportData[], unknown>({
-    queryKey: ['report_data', period],
+    queryKey: ['report_data', period, router.id],
     queryFn: () => fetchExpensesData(period),
     keepPreviousData: true,
-    enabled: !!period,
+    enabled: !!period && !!router.id,
   });
 
   return {

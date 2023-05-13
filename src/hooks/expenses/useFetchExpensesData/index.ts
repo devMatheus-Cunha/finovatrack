@@ -8,6 +8,7 @@ import {
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 import { db } from '../../../../service/firebase';
 
 export interface ExpenseData {
@@ -22,7 +23,9 @@ export interface ExpenseData {
 
 export type Filter = 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
 
-export const useFetchExpensesData = (id?: string) => {
+export const useFetchExpensesData = () => {
+  const router = useParams();
+
   const [filter, setFilter] = useState<Filter>('');
 
   const fetchExpensesData = async (value: string) => {
@@ -31,11 +34,11 @@ export const useFetchExpensesData = (id?: string) => {
 
     if (value) {
       querySnapshot = query(
-        collection(db, 'users', String(id), 'expenses'),
+        collection(db, 'users', router.id, 'expenses'),
         where('type', '==', value),
       );
     } else {
-      querySnapshot = collection(db, 'users', String(id), 'expenses');
+      querySnapshot = collection(db, 'users', router.id, 'expenses');
     }
 
     const get = await getDocs(querySnapshot);
@@ -53,10 +56,10 @@ export const useFetchExpensesData = (id?: string) => {
     status: statusExpensesData,
     refetch: refetchExpensesData,
   } = useQuery({
-    queryKey: ['expenses_data', filter],
+    queryKey: ['expenses_data', filter, router.id],
     queryFn: () => fetchExpensesData(filter),
     keepPreviousData: true,
-    enabled: !!id,
+    enabled: !!router.id,
   });
 
   return {

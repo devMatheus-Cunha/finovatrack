@@ -8,7 +8,6 @@ import { useMemo, useState } from 'react';
 
 import { SubmitHandler } from 'react-hook-form';
 
-import { SideBar } from '@/components';
 import Loading from '@/components/Loading';
 
 import { useAddEntrys, useDeletedEntry, useFetchEntrysData } from '@/hooks/entrys';
@@ -44,29 +43,29 @@ export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas();
   const { userData } = useUserData();
   const { id, typeAccount } = userData;
-  const { addExpense, isLoadingAddExpense } = useAddExpense(id);
+  const { addExpense, isLoadingAddExpense } = useAddExpense();
   const {
     expensesData = [],
     setFilter,
     filter,
-  } = useFetchExpensesData(id);
+  } = useFetchExpensesData();
 
-  const { deletedExpense } = useDeletedExpense(id);
-  const { upadtedExpense } = useUpadtedExpense(id);
+  const { deletedExpense } = useDeletedExpense();
+  const { upadtedExpense } = useUpadtedExpense();
 
-  const { entrysData = [] } = useFetchEntrysData(id);
-  const { addEntrys } = useAddEntrys(id);
-  const { deletedEntry } = useDeletedEntry(id);
+  const { entrysData = [] } = useFetchEntrysData();
+  const { addEntrys } = useAddEntrys();
+  const { deletedEntry } = useDeletedEntry();
 
-  const { clearExpensesData } = useClearExpenses(id);
+  const { clearExpensesData } = useClearExpenses();
 
   const {
     saveReport,
-  } = useSaveReport(id);
+  } = useSaveReport();
 
   const { calculationSumValues } = useCalculationSumValues(expensesData);
   const { getTotals } = useGetTotalsFree(calculationSumValues);
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(getTotals?.euro_value, id);
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(getTotals?.euro_value);
 
   const calculationTotalExpensesEurSumRealToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
   const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value));

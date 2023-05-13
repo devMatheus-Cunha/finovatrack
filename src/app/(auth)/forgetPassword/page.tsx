@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 import { useForgetPassword } from '../../../hooks/auth';
 import { Input } from '../../../components';
 
@@ -97,15 +98,12 @@ export default function ForgetPassword() {
                 {isLoading ? 'Enviar...' : 'Enviar'}
               </div>
             </button>
-            <button
-              type="button"
+            <Link
               className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline"
-              onClick={() => router.push('/login')}
+              href="/login"
             >
-              <div className="flex gap-2 justify-center items-center">
-                Voltar
-              </div>
-            </button>
+              Voltar
+            </Link>
           </div>
         </div>
       </form>
