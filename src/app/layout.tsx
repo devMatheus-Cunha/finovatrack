@@ -1,6 +1,6 @@
 'use client';
 
-import './globals.css';
+import '../styles/globals.css';
 import 'flowbite/dist/flowbite.css';
 import 'react-toastify/dist/ReactToastify.css';
 
