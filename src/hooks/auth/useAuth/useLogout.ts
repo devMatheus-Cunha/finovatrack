@@ -1,13 +1,19 @@
 'use client';
 
-import { signOut } from '@firebase/auth';
-import { auth } from '../../../service/firebase';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { logout } from '@/service/auth/logout';
 
 const useLogout = () => {
-  const logout = async () => signOut(auth);
+  const router = useRouter();
+  const { mutate: onLogout } = useMutation(logout, {
+    onSuccess: () => {
+      router.push('/login');
+    },
+  });
 
   return {
-    logout,
+    onLogout,
   };
 };
 

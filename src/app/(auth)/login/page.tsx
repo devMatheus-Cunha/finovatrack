@@ -7,17 +7,11 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
-import { toast } from 'react-toastify';
 import { Input, InputPassword } from '@/components';
 import { useLogin } from '@/hooks/auth';
 import Link from 'next/link';
-
-type FormData = {
-  email: string;
-  password: number;
-};
+import { LoginProps } from '@/service/auth/login';
 
 const schema = z.object({
   email: z.string().email(),
@@ -26,12 +20,13 @@ const schema = z.object({
 
 export default function Login() {
   const router = useRouter();
-  const { loginWithEmail, upadtedDocumentForUser } = useLogin();
+  const { loginWithEmail, isLoading } = useLogin();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<LoginProps>({
     resolver: async (data) => {
       try {
         schema.parse(data);
@@ -45,35 +40,9 @@ export default function Login() {
     },
   });
 
-  const { mutate, isLoading } = useMutation(loginWithEmail, {
-    onSuccess: async (user) => {
-      upadtedDocumentForUser({
-        id: user.uid,
-        expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
-        token: (await user.getIdTokenResult()).token,
-      });
-      router.push(`/control/${user.uid}`);
-    },
-    onError: ({ message }: { message: string }) => {
-      if (message === 'Firebase: Error (auth/user-not-found).') {
-        toast.error('Conta não encontrada.', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else if (message === 'Firebase: Error (auth/wrong-password).') {
-        toast.error('Senha incorreta', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else {
-        toast.error('Erro no Servidor. Tente mais tarde!', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    },
-  });
-
   return (
     <div className="flex h-[100vh] justify-center items-center">
-      <form onSubmit={handleSubmit((values: any) => mutate(values))}>
+      <form onSubmit={handleSubmit((values: LoginProps) => loginWithEmail(values))}>
         <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
           <Input
             label="Email"

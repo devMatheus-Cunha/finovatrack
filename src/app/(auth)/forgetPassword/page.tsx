@@ -4,32 +4,25 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { ZodError, z } from 'zod';
-import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { useForgetPassword } from '../../../hooks/auth';
+import { useForgetPassword } from '@/hooks/auth';
+import { LogoutProps } from '@/service/auth/forgetPassword';
 import { Input } from '../../../components';
-
-type FormData = {
-  email: string;
-};
 
 const schema = z.object({
   email: z.string().email('Formato de'),
 });
 
 export default function ForgetPassword() {
-  const router = useRouter();
-  const { forgetPassword } = useForgetPassword();
+  const { onForgetPassword, isLoading } = useForgetPassword();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<LogoutProps>({
     resolver: async (data) => {
       try {
         schema.parse(data);
@@ -43,29 +36,9 @@ export default function ForgetPassword() {
     },
   });
 
-  const { mutate, isLoading } = useMutation(forgetPassword, {
-    onSuccess: async () => {
-      toast.success('E-mail de recupeção enviado!', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      router.push('/login');
-    },
-    onError: ({ message }: { message: string }) => {
-      if (message === 'Firebase: Error (auth/invalid-value-(email),-starting-an-object-on-a-scalar-field).') {
-        toast.error('E-mail inválido. Por favor, insira um endereço de e-mail válido.', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else {
-        toast.error('Erro no Servidor. Tente mais tarde!', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    },
-  });
-
   return (
     <div className="flex h-[100vh] justify-center items-center">
-      <form onSubmit={handleSubmit((values: any) => mutate(values))}>
+      <form onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}>
         <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
           <div className="flex flex-col gap-3 text-center">
             <p className="text-2xl  font-bold">Esqueceu sua senha?</p>

@@ -2,43 +2,46 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
 
-'use client';
-
-import { auth, db } from '@/service/firebase';
-import { signInWithEmailAndPassword } from '@firebase/auth';
-import { doc, updateDoc } from '@firebase/firestore';
+import { LoginProps, login, upadtedDocumentForUser } from '@/service/auth/login';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const useLogin = () => {
-  const loginWithEmail = async ({
-    email,
-    password,
-  }: {
-  email: string;
-  password: string;
-}) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      const { user } = userCredential;
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  };
-  const upadtedDocumentForUser = async ({ id, expirationTimeToken, token }: {id: string, expirationTimeToken: string, token: string }) => {
-    const myCollection = doc(db, 'users', id);
-    await updateDoc(myCollection, {
-      token,
-      expirationTimeToken,
-    });
-  };
+  const router = useRouter();
+
+  const { mutate: loginWithEmail, isLoading } = useMutation(
+    (values: LoginProps) => login(values),
+    {
+      onSuccess: async (user) => {
+        upadtedDocumentForUser({
+          id: user.uid,
+          expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
+          token: (await user.getIdTokenResult()).token,
+        });
+        router.push(`/control/${user.uid}`);
+      },
+      onError: ({ message }: { message: string }) => {
+        if (message === 'Firebase: Error (auth/user-not-found).') {
+          toast.error('Conta não encontrada.', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        } else if (message === 'Firebase: Error (auth/wrong-password).') {
+          toast.error('Senha incorreta', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        } else {
+          toast.error('Erro no Servidor. Tente mais tarde!', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      },
+    },
+  );
 
   return {
     loginWithEmail,
-    upadtedDocumentForUser,
+    isLoading,
   };
 };
 

@@ -3,7 +3,6 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
 import {
   Archive, ClipboardText, Eye, EyeSlash, SignOut,
 } from '@phosphor-icons/react';
@@ -20,14 +19,8 @@ export default function AppLayout({ children }: SideBarProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { logout } = useLogout();
+  const { onLogout } = useLogout();
   const { userData: { id } } = useUserData();
-
-  const { mutate: onLogout } = useMutation(logout, {
-    onSuccess: () => {
-      router.push('/login');
-    },
-  });
 
   const sidebarItems = [
     {
