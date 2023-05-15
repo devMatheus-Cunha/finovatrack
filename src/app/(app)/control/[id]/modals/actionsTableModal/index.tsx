@@ -40,7 +40,6 @@ function ContentActionsTableModal({
     value: z.string().nonempty(),
     type: z.string().nonempty(),
   });
-
   const {
     register,
     handleSubmit,

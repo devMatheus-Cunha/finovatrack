@@ -1,8 +1,12 @@
 // Importe as dependências necessárias
+import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
-// Componente da landing page
+export const metadata: Metadata = {
+  title: 'FinovaTrack',
+};
+
 function LandingPage() {
   return (
     <div className="text-white h-screen flex flex-col">

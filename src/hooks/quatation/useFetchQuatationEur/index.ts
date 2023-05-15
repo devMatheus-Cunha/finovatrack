@@ -2,26 +2,15 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
-
-'use client';
-
-import {
-  doc, getDoc, setDoc, updateDoc,
-} from '@firebase/firestore';
 import {
   QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation, useQuery,
 } from '@tanstack/react-query';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
-import { db } from '../../../service/firebase';
-
-type CurrentQuotation = {
-  current_quotation: number;
-  date: string;
-  result_calculation: number;
-  status: boolean;
-};
+import { getQuatationRateFromAPI } from '@/service/quatation/getQuatationRateFromAPI';
+import { updateQuotationData } from '@/service/quatation/updateQuotationData';
+import { getLastQuotationData } from '@/service/quatation/getLastQuotationData';
 
 export type RefetchQuationDataType = <TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<{
   result_calculation: number;
@@ -30,93 +19,31 @@ export type RefetchQuationDataType = <TPageData>(options?: (RefetchOptions & Ref
   status: any;
 }, unknown>>
 
-export const convertEurosToReais = (quatationEur?: number, valueEur?: number) => {
-  if (!quatationEur || !valueEur) return 0;
-  const tax = 2.11 / 100;
-  const valorEmReais = valueEur * quatationEur;
-  const valorTotalComTaxa = valorEmReais + valueEur * quatationEur * tax;
-  return valorTotalComTaxa ?? 0;
-};
-
 const useFetchQuatationEur = (amount: number) => {
   const router = useParams();
-
   const toastId: any = React.useRef(null);
-
-  const updateQuotationData = async (data: Record<string, any>) => {
-    try {
-      if (!router.id) {
-        throw new Error('User not logged in');
-      }
-
-      const docRef = doc(db, 'users', router.id, 'quotation', 'last_quotation_data');
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        await updateDoc(docRef, data);
-        return 'Document updated successfully';
-      }
-      await setDoc(docRef, data, { merge: true });
-      return 'Document created successfully';
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const fetchQuatationRateFromAPI = async (value: number) => {
-    const myHeaders = new Headers();
-    myHeaders.append('apikey', process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || '');
-
-    const requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-    };
-
-    if (toastId.current === null) {
-      toastId.current = toast('Atualizando Cotação...', { autoClose: false });
-    }
-
-    const response = await fetch(
-      `https://api.apilayer.com/exchangerates_data/convert?to=brl&from=eur&amount=${value}`,
-      requestOptions,
-    );
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-
-    return {
-      result_calculation: convertEurosToReais(data.info.rate, Number(value)),
-      current_quotation: data.info.rate,
-      date: data?.date,
-      status: data.success,
-    };
-  };
-
-  const fetchLastQuotationData = async () => {
-    const docRef = doc(db, 'users', router.id, 'quotation', 'last_quotation_data');
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      return data as CurrentQuotation;
-    }
-    return undefined;
-  };
 
   const { data: lastQuatationData, refetch: refetchLastQuotationData } = useQuery(
     ['last_quotation_data', router.id],
-    async () => await fetchLastQuotationData(),
+    async () => await getLastQuotationData(router.id),
     { enabled: !!router.id },
   );
 
-  const { mutate: addLastQuotation } = useMutation(updateQuotationData, {
-    onSuccess: async () => await refetchLastQuotationData(),
-  });
+  const { mutate: addLastQuotation } = useMutation(
+    (data: Record<string, any>) => updateQuotationData(router.id, data),
+    {
+      onSuccess: async () => await refetchLastQuotationData(),
+    },
+  );
+
   const { refetch: refetchQuationData } = useQuery({
     queryKey: ['quatation_data'],
-    queryFn: () => fetchQuatationRateFromAPI(amount === 0 ? 1 : amount),
+    queryFn: async () => {
+      if (toastId.current === null) {
+        toastId.current = toast('Atualizando Cotação...', { autoClose: false });
+      }
+      return await getQuatationRateFromAPI(amount === 0 ? 1 : amount);
+    },
     enabled: false,
     cacheTime: 0,
     onSuccess: (res) => {

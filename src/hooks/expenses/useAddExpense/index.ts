@@ -1,11 +1,7 @@
-'use client';
-
-import { collection, addDoc } from 'firebase/firestore';
-
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useParams } from 'next/navigation';
-import { db } from '../../../service/firebase';
+import { addExpenseService } from '@/service/expenses/addExpense';
 import { useFetchExpensesData } from '../useFetchExpensesData';
 
 export interface IAddExpenseData {
@@ -31,21 +27,11 @@ const useAddExpense = () => {
 
   const { refetchExpensesData } = useFetchExpensesData();
 
-  const addDocument = async (data: IAddExpenseData) => {
-    try {
-      const myCollection = collection(db, 'users', router.id, 'expenses');
-      const docRef = await addDoc(myCollection, data);
-      return docRef;
-    } catch (error) {
-      throw new Error('mensagem de erro');
-    }
-  };
-
   const {
     mutate: addExpense,
     isLoading: isLoadingAddExpense,
     status: statusAddExpense,
-  } = useMutation(addDocument, {
+  } = useMutation((values: IAddExpenseData) => addExpenseService(values, router.id), {
     onSuccess: () => {
       refetchExpensesData();
       toast.success('Sucesso ao adicionar gasto');

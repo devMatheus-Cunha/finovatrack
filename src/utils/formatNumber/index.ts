@@ -27,3 +27,11 @@ export function formatCurrencyMoney(
 
   return formattedValue;
 }
+
+export const convertEurToReal = (quatationEur?: number, valueEur?: number) => {
+  if (!quatationEur || !valueEur) return 0;
+  const tax = 2.11 / 100;
+  const valorEmReais = valueEur * quatationEur;
+  const valorTotalComTaxa = valorEmReais + valueEur * quatationEur * tax;
+  return valorTotalComTaxa ?? 0;
+};

@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-return-await */
-import { collection, getDocs } from 'firebase/firestore';
-
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { db } from '../../../service/firebase';
+import { getEntrys } from '@/service/entrys/getEntrys';
 
 export interface IEntrysData {
   value: string;
@@ -14,22 +12,18 @@ export interface IEntrysData {
 export const useFetchEntrysData = () => {
   const router = useParams();
 
-  const fetchEntrysData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'users', router.id, 'entrys'));
-    const docsArray: IEntrysData[] = [];
-    querySnapshot.forEach((doc) => {
-      docsArray.push({ id: doc.id, ...doc.data() } as any);
-    });
-    return docsArray;
-  };
   const {
     data: entrysData,
     isLoading: isLoadingEntrysData,
     status: statusEntrysData,
     refetch: refetchEntrysData,
-  } = useQuery(['entrys_data', router.id], async () => await fetchEntrysData(), {
-    enabled: !!router.id,
-  });
+  } = useQuery(
+    ['entrys_data', router.id],
+    async () => await getEntrys(router.id),
+    {
+      enabled: !!router.id,
+    },
+  );
 
   return {
     entrysData,

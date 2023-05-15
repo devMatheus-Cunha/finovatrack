@@ -16,14 +16,13 @@ import {
 } from '@/hooks/expenses';
 import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData';
 import { useFetchQuatationEur } from '@/hooks/quatation';
-import { convertEurosToReais } from '@/hooks/quatation/useFetchQuatationEur';
 
 import { useSaveReport } from '@/hooks/reports';
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
-import { formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
+import { convertEurToReal, formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
 import {
   initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
 } from './utils';
@@ -54,7 +53,7 @@ export default function Control() {
   const { upadtedExpense } = useUpadtedExpense();
 
   const { entrysData = [] } = useFetchEntrysData();
-  const { addEntrys } = useAddEntrys();
+  const { addEntry } = useAddEntrys();
   const { deletedEntry } = useDeletedEntry();
 
   const { clearExpensesData } = useClearExpenses();
@@ -67,8 +66,8 @@ export default function Control() {
   const { getTotals } = useGetTotalsFree(calculationSumValues);
   const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(getTotals?.euro_value);
 
-  const calculationTotalExpensesEurSumRealToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
-  const calculationTotalExpensesEurToReal = convertEurosToReais(lastQuatationData?.current_quotation, Number(getTotals?.euro_value));
+  const calculationTotalExpensesEurSumRealToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
+  const calculationTotalExpensesEurToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.euro_value));
 
   const [configModal, setConfigModal] = useState<{
     open: boolean
@@ -130,7 +129,7 @@ export default function Control() {
     };
 
     if (configModal.type === 'edit') {
-      upadtedExpense({ id: configModal.selectedData?.id, data: formattedValues });
+      upadtedExpense(formattedValues);
       setConfigModal({
         open: !configModal.open,
         type: '',
@@ -148,7 +147,7 @@ export default function Control() {
   };
 
   const onAddEntrys: SubmitHandler<{ value: string }> = async (data) => {
-    addEntrys(data);
+    addEntry(data);
     setConfigModal({
       open: !configModal.open,
       type: '',
@@ -238,7 +237,7 @@ export default function Control() {
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({
                             data: values,
-                            totalInvested: formatCurrencyMoney(((totalEntrys - Number(getTotals?.real_value)) - Number(calculationTotalExpensesEurSumRealToReal)), typeAccount),
+                            totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
                             totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
                             totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
                             totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),

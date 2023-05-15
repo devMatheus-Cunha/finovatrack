@@ -1,62 +1,20 @@
 /* eslint-disable no-useless-catch */
 
-'use client';
-
-import {
-  collection, addDoc, getDocs, query, updateDoc, where,
-} from 'firebase/firestore';
-
-import { UseMutateFunction, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { db } from '../../../service/firebase';
+import { IReportData } from '@/service/reports/getReport';
+import { saveReportService } from '@/service/reports/saveReport';
+import { useParams } from 'next/navigation';
 
-export interface IReportData {
-  data: ExpenseData[];
-  totalInvested: string;
-  totalEntrys: string;
-  totalExpenses: string;
-  totalExpenseEurToReal: string;
-  period?: string;
-  quatation: string;
-}
-
-interface IUseSaveReportExportProps {
-   saveReport: UseMutateFunction<void, unknown, IReportData, unknown>,
-    isLoadingSaveReport: boolean,
-    statusSaveReport: 'error' | 'idle' | 'loading' | 'success'
-}
-
-export default function useSaveReport(id?: string): IUseSaveReportExportProps {
-  const saveReportData = async ({ data, ...rest }: IReportData) => {
-    try {
-      const today = new Date();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const year = String(today.getFullYear());
-      const format = `${month}/${year}`;
-
-      const myCollection = collection(db, 'users', String(id), 'reports');
-      const querySnapshot = await getDocs(query(myCollection, where('period', '==', format)));
-
-      if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
-        await updateDoc(docRef, { data, period: format, ...rest });
-        return docRef;
-      }
-
-      const docRef = await addDoc(myCollection, { data, period: format, ...rest });
-      return docRef;
-    } catch (error) {
-      throw error;
-    }
-  };
+export default function useSaveReport() {
+  const router = useParams();
 
   const {
     mutate: saveReport,
     isLoading: isLoadingSaveReport,
     status: statusSaveReport,
-  } = useMutation(async ({ data, ...rest }: IReportData) => {
-    await saveReportData({ data, ...rest });
+  } = useMutation(async (data: IReportData) => {
+    await saveReportService(data, router.id);
   }, {
     onSuccess: () => {
       toast.success('Sucesso ao salvar relatório');

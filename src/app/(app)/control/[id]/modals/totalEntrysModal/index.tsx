@@ -15,7 +15,7 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 interface IContentModal {
   handleOpenModal: any
   data: IEntrysData[]
-  onDelete: ({ data }: { data: IEntrysData }) => void
+  onDelete: (itemId?: string) => void
   userData: UserData
 }
 
@@ -72,7 +72,7 @@ function ContentTotalEntrys({
                         <ButtonGroup buttonOptions={[
                           {
                             onClick: () => {
-                              onDelete({ data: item });
+                              onDelete(item?.id);
                             },
                             content: <Trash color="#eee2e2" />,
                           },

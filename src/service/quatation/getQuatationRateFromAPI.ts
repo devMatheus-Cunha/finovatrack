@@ -1,0 +1,33 @@
+/* eslint-disable default-param-last */
+/* eslint-disable import/prefer-default-export */
+
+import { convertEurToReal } from '@/utils/formatNumber';
+
+export interface IEntrysData {
+  value: string;
+  id?: string;
+}
+
+export async function getQuatationRateFromAPI(valueToConvert: number) {
+  const myHeaders = new Headers();
+  myHeaders.append('apikey', process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || '');
+
+  const requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+  };
+
+  const response = await fetch(
+    `https://api.apilayer.com/exchangerates_data/convert?to=brl&from=eur&amount=${valueToConvert}`,
+    requestOptions,
+  );
+
+  const data = await response.json();
+
+  return {
+    result_calculation: convertEurToReal(data.info.rate, valueToConvert),
+    current_quotation: data.info.rate,
+    date: data?.date,
+    status: data.success,
+  };
+}
