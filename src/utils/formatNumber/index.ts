@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
 
 export function formatNumberToSubmit(value: string): number {
