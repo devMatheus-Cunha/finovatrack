@@ -39,7 +39,7 @@ export default function AppLayout({ children }: SideBarProps) {
     },
     {
       id: 'reports',
-      label: 'Relatrios',
+      label: 'Relatórios',
       route: '/reports',
       icon: <Archive size={24} />,
       action: () => router.push(`/reports/${id}`),
