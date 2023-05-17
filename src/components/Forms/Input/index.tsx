@@ -21,7 +21,7 @@ export default function Input<T extends FieldValues>({
   label, name, register, rules, errors, ...rest
 }: InputProps<T>) {
   return (
-    <div>
+    <div className="w-full">
       <label htmlFor={name} className="block mb-2 text-sm font-medium dark:text-white">
         {rules?.required ? `${label} *` : label}
       </label>
