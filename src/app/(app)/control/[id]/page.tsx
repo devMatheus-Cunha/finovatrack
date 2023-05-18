@@ -21,7 +21,7 @@ import { useSaveReport } from '@/hooks/reports';
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
-import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
+import { IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { convertEurToReal, formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
 import {
   initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
@@ -41,7 +41,7 @@ import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas();
   const { userData } = useUserData();
-  const { id, typeAccount } = userData;
+  const { typeAccount } = userData;
   const { addExpense, isLoadingAddExpense } = useAddExpense();
   const {
     expensesData = [],
@@ -171,41 +171,38 @@ export default function Control() {
   };
 
   return (
-    <Loading
-      loading={!userData.id}
-    >
-      <main>
-        <div className="flex flex-col items-center h-[100vh] w-[100%]">
-          <InfoCardsToControl
-            totalEntrys={totalEntrys}
-            entrysData={entrysData}
-            totalExpensesEurSumRealToReal={calculationTotalExpensesEurSumRealToReal}
-            totalExpensesEurToReal={calculationTotalExpensesEurToReal}
-            handleOpenModal={handleOpenModal}
-            totalExpenseEur={getTotals?.euro_value}
-            totalExpenseReal={getTotals?.real_value}
-            typeAccount={typeAccount}
-          />
+    <main>
+      <div className="flex flex-col items-center h-[100vh] w-[100%]">
+        <InfoCardsToControl
+          totalEntrys={totalEntrys}
+          entrysData={entrysData}
+          totalExpensesEurSumRealToReal={calculationTotalExpensesEurSumRealToReal}
+          totalExpensesEurToReal={calculationTotalExpensesEurToReal}
+          handleOpenModal={handleOpenModal}
+          totalExpenseEur={getTotals?.euro_value}
+          totalExpenseReal={getTotals?.real_value}
+          typeAccount={typeAccount}
+        />
 
-          <div className="flex w-[100%] flex-1 justify-center items-center">
-            <div className="flex flex-col gap-4 w-[100%] p-6 justify-center">
-              <HeaderDataTableToControl
-                typeAccount={typeAccount}
-                currentQuotation={lastQuatationData?.current_quotation}
-                handleOpenModal={handleOpenModal}
-                filter={filter}
-                onFilter={onFilter}
-                handleOpenModalSaveReport={handleOpenModalSaveReport}
-                refetchQuationData={refetchQuationData}
-              />
-              <TableToControl
-                calculationSumValues={typeAccount === 'hybrid' ? calculationSumValues : expensesData}
-                typeAccount={typeAccount}
-                handleOpenModal={handleOpenModal}
-                isVisibilityData={isVisibilityData}
-                filter={filter}
-              />
-              {
+        <div className="flex w-[100%] flex-1 justify-center items-center">
+          <div className="flex flex-col gap-4 w-[100%] p-6 justify-center">
+            <HeaderDataTableToControl
+              typeAccount={typeAccount}
+              currentQuotation={lastQuatationData?.current_quotation}
+              handleOpenModal={handleOpenModal}
+              filter={filter}
+              onFilter={onFilter}
+              handleOpenModalSaveReport={handleOpenModalSaveReport}
+              refetchQuationData={refetchQuationData}
+            />
+            <TableToControl
+              calculationSumValues={typeAccount === 'hybrid' ? calculationSumValues : expensesData}
+              typeAccount={typeAccount}
+              handleOpenModal={handleOpenModal}
+              isVisibilityData={isVisibilityData}
+              filter={filter}
+            />
+            {
                     configModal.open
                     && (
                       configModal.type === 'edit'
@@ -221,7 +218,7 @@ export default function Control() {
                       />
                     )
                   }
-              {
+            {
                     configModal.open && (configModal.type === 'delete' || configModal.type === 'deleteAllExpenses') && (
                       <DeleteModalContent
                         onCancel={handleOpenModal}
@@ -229,7 +226,7 @@ export default function Control() {
                       />
                     )
                   }
-              {
+            {
                     openModalReport.open && (
                       <ConfirmSaveReportModal
                         initialData={calculationSumValues}
@@ -248,7 +245,7 @@ export default function Control() {
                       />
                     )
                   }
-              {
+            {
                     configModal.open && configModal.type === 'addEntry' && (
                       <ContentAddEntryModal
                         handleOpenModal={handleOpenModal}
@@ -257,7 +254,7 @@ export default function Control() {
                       />
                     )
                   }
-              {
+            {
                     configModal.open && configModal.type === 'totalsEntrys' && (
                       <ContentTotalEntrys
                         handleOpenModal={handleOpenModal}
@@ -267,10 +264,9 @@ export default function Control() {
                       />
                     )
                   }
-            </div>
           </div>
         </div>
-      </main>
-    </Loading>
+      </div>
+    </main>
   );
 }

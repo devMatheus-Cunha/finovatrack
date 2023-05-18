@@ -3,13 +3,13 @@
 
 'use client';
 
-import React, { ReactElement } from 'react';
+import React from 'react';
 import ReactLoading from 'react-loading';
 
 export type StatusRequestProps = 'idle' | 'error' | 'loading' | 'success';
 
 interface LoadingProps {
- children: ReactElement;
+ children: React.ReactNode;
  loading?: boolean;
 }
 
@@ -30,7 +30,7 @@ function Loading({
        />
      </div>
    ) : (
-     { ...children }
+     { children }
    )
   }
     </>
