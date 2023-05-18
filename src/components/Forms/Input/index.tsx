@@ -18,7 +18,7 @@ interface InputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInpu
 }
 
 export default function Input<T extends FieldValues>({
-  label, name, register, rules, errors, ...rest
+  label, name, register, rules, errors, disabled, ...rest
 }: InputProps<T>) {
   return (
     <div className="w-full">
@@ -27,8 +27,11 @@ export default function Input<T extends FieldValues>({
       </label>
       <input
         id={name as string}
+        disabled={disabled}
         {...register(name, rules)}
-        className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className={`border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+          disabled ? 'dark:opacity-75 cursor-not-allowed' : ''
+        }`}
         {...rest}
       />
       {

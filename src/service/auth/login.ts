@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, updateEmail } from 'firebase/auth';
 import { doc, updateDoc } from '@firebase/firestore';
 import { UserData } from '@/hooks/auth/useAuth/types';
 import { auth, db } from '../firebase';
@@ -39,8 +39,21 @@ export async function updatedDocumentForUser(
     await updateDoc(myCollection, {
       ...props,
     });
+  } catch (error) {
+    throw new Error('Erro no servidor');
+  }
+}
 
-    return { res: 'deu bom' };
+export async function updatedEmailUser(email = '') {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('Nenhum usuário autenticado.');
+    return;
+  }
+
+  try {
+    await updateEmail(user, email);
   } catch (error) {
     throw new Error('Erro no servidor');
   }

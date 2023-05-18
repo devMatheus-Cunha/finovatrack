@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -7,6 +8,7 @@
 'use client';
 
 import { Input } from '@/components';
+import { TypeAccount } from '@/hooks/auth/useAuth/types';
 import { useUserData } from '@/hooks/globalStates';
 import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser';
 import React, { useState } from 'react';
@@ -14,17 +16,24 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 
+type FormValues = {
+  email?: string;
+  name?: string;
+  typeAccount?: TypeAccount;
+};
+
 const schemaName = z.object({
   name: z.string().optional(),
 });
 
 const schemaEmail = z.object({
   email: z.string().email('Email inválido'),
+  typeAccount: z.string().optional(),
 });
 
 function MyProfile() {
   const { userData } = useUserData();
-  const { updatedUserData } = useUpdatedUser();
+  const { updatedUserData, isLoading } = useUpdatedUser();
 
   const [inputsEnabled, setInputsEnabled] = useState<{ [key: string]: boolean }>({
     emailDisabled: false,
@@ -56,7 +65,7 @@ function MyProfile() {
     reset: resetEmail,
     formState: { errors: errorsEmail },
   } = useForm({
-    defaultValues: { email: userData.email },
+    defaultValues: { email: userData.email, typeAccount: userData.typeAccount },
     resolver: async (data) => {
       try {
         schemaEmail.parse(data);
@@ -87,14 +96,13 @@ function MyProfile() {
     toggleInputEnabled(type);
   };
 
-  const handleSubmitName = (values: { name?: string }) => {
+  const handleSubmit = (fieldName: 'email' | 'name', values: FormValues) => {
+    if (values[fieldName] === userData[fieldName]) {
+      toggleInputEnabled(fieldName);
+      return;
+    }
     updatedUserData(values);
-    toggleInputEnabled('name');
-  };
-
-  const handleSubmitEmail = (values: { email?: string }) => {
-    updatedUserData(values);
-    toggleInputEnabled('email');
+    toggleInputEnabled(fieldName);
   };
 
   return (
@@ -146,11 +154,15 @@ function MyProfile() {
                 )}
                 <button
                   type="button"
-                  // type={!inputsEnabled.nameDisabled ? 'button' : 'submit'}
-                  onClick={!inputsEnabled.nameDisabled ? () => toggleInputEnabled('name') : onSubmitName(handleSubmitName)}
-                  className="border text-sm rounded-lg block p-2.5 w-[100px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75 "
+                  onClick={
+                    !inputsEnabled.nameDisabled
+                      ? () => toggleInputEnabled('name')
+                      : onSubmitName((value) => handleSubmit('name', value))
+}
+                  className="border text-sm rounded-lg block p-2.5 w-[110px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75"
                 >
-                  {!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar'}
+                  {isLoading ? 'Salvando...' : (!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar')}
+
                 </button>
               </div>
             </div>
@@ -164,7 +176,6 @@ function MyProfile() {
               name="email"
               placeholder="teste@gmail.com"
               type="email"
-              defaultValue={userData.email}
               disabled={!inputsEnabled.emailDisabled}
               register={registerEmail}
               rules={{ required: true }}
@@ -192,14 +203,20 @@ function MyProfile() {
               )}
               <button
                  type="button"
-                 onClick={!inputsEnabled.emailDisabled ? () => toggleInputEnabled('email') : onSubmitEmail(handleSubmitEmail)}
-                className="border text-sm rounded-lg block p-2.5 w-[100px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75 "
+                onClick={
+                  !inputsEnabled.emailDisabled
+                    ? () => toggleInputEnabled('email')
+                    : onSubmitEmail((value) => handleSubmit('email', value))
+}
+                className="border text-sm rounded-lg block p-2.5 w-[110px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75 "
               >
-                {!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar'}
+                {isLoading ? 'Salvando...' : (!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar')}
+
               </button>
             </div>
           </div>
         </form>
+
         <div>
           <h3 className="mb-4 font-semibold dark:text-white">
             Tipo da moeda da conta
@@ -207,18 +224,17 @@ function MyProfile() {
           <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             {['real', 'euro', 'hybrid'].map((currency) => (
               <li
-                className="w-full border-b sm:border-b-0 sm:border-r dark:border-gray-600"
+                className="w-full border-b sm:border-b-0 sm:border-r dark:border-gray-600 dark:opacity-75"
                 key={currency}
               >
                 <div className="flex items-center pl-3">
                   <input
                     id={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    type="radio"
-                    value={userData.typeAccount}
-                    name="typeAccount"
-                    defaultValue={userData.typeAccount}
+                      type="radio"
+                    value={currency}
                     disabled
-                    className="w-4 h-4 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 cursor-not-allowed"
+                      className="w-4 h-4 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 cursor-not-allowed dark:opacity-75"
+                      {...registerEmail('typeAccount')}
                   />
                   <label
                     htmlFor={`horizontal-list-radio-${currency.toLowerCase()}`}
@@ -231,6 +247,7 @@ function MyProfile() {
             ))}
           </ul>
         </div>
+
       </div>
     </main>
   );

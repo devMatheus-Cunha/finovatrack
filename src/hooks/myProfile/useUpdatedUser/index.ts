@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 
 import { useUserData } from '@/hooks/globalStates';
-import { updatedDocumentForUser } from '@/service/auth/login';
+import { updatedDocumentForUser, updatedEmailUser } from '@/service/auth/login';
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -19,6 +19,7 @@ const useUpdatedUser = () => {
 
   const { mutate: updatedUserData, isLoading } = useMutation(
     async (values: IUpadtedUserProps) => {
+      await updatedEmailUser(values.email);
       await updatedDocumentForUser({
         id: router.id,
         ...values,
