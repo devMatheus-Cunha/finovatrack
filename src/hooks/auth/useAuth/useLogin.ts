@@ -2,10 +2,11 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
 
-import { LoginProps, login, upadtedDocumentForUser } from '@/service/auth/login';
+import { LoginProps, login, updatedDocumentForUser } from '@/service/auth/login';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { TypeAccount } from './types';
 
 const useLogin = () => {
   const router = useRouter();
@@ -14,10 +15,11 @@ const useLogin = () => {
     (values: LoginProps) => login(values),
     {
       onSuccess: async (user) => {
-        upadtedDocumentForUser({
+        updatedDocumentForUser({
           id: user.uid,
           expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
           token: (await user.getIdTokenResult()).token,
+          typeAccount: user.photoURL as TypeAccount,
         });
         router.push(`/control/${user.uid}`);
       },

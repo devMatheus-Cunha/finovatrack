@@ -7,6 +7,7 @@ import {
   Archive, ClipboardText, Eye, EyeSlash, SignOut, User,
 } from '@phosphor-icons/react';
 import React, { ReactNode } from 'react';
+import ReactLoading from 'react-loading';
 import { useIsVisibilityDatas, useUserData } from '../../hooks/globalStates';
 import { useLogout } from '../../hooks/auth';
 
@@ -27,13 +28,15 @@ export default function AppLayout({ children }: SideBarProps) {
       id: 'eye',
       label: 'Visualizar',
       route: '/eye',
-      icon: isVisibilityData ? <Eye size={21} color="#eee2e2" /> : <EyeSlash size={24} color="#eee2e2" />,
+      disabled: false,
+      icon: isVisibilityData ? <Eye size={21} color="#eee2e2" /> : <EyeSlash size={21} color="#eee2e2" />,
       action: () => handleToggleVisibilityData(),
     },
     {
       id: 'control',
       label: 'Controle',
       route: '/control',
+      disabled: false,
       icon: <ClipboardText size={21} />,
       action: () => router.push(`/control/${id}`),
     },
@@ -41,6 +44,7 @@ export default function AppLayout({ children }: SideBarProps) {
       id: 'reports',
       label: 'Relatórios',
       route: '/reports',
+      disabled: false,
       icon: <Archive size={21} />,
       action: () => router.push(`/reports/${id}`),
     },
@@ -48,7 +52,7 @@ export default function AppLayout({ children }: SideBarProps) {
       id: 'myProfile',
       label: 'Perfil',
       route: '/myProfile',
-      disabled: true,
+      disabled: false,
       icon: <User size={21} />,
       action: () => router.push(`/myProfile/${id}`),
     },
@@ -56,6 +60,7 @@ export default function AppLayout({ children }: SideBarProps) {
       id: 'logout',
       label: 'Logout',
       route: '/logout',
+      disabled: false,
       icon: <SignOut size={21} />,
       action: () => onLogout(),
     },
@@ -75,7 +80,7 @@ export default function AppLayout({ children }: SideBarProps) {
              onClick={item.action}
              disabled={item.disabled}
            >
-             <div className={`flex gap-0.5 flex-col justify-center items-center ${pathname.startsWith(item?.route) ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
+             <div className={`flex gap-0.5 flex-col justify-center items-center ${pathname?.startsWith(item?.route) ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
                {item.icon}
                <p className="text-[11px]">
                  {item.label}
@@ -90,8 +95,21 @@ export default function AppLayout({ children }: SideBarProps) {
         </div>
       </aside>
       <div className="flex-auto">
-        {children}
+        {!id ? (
+          <div className="flex h-screen w-full items-center justify-center">
+            {/* @ts-expect-error Async Server Component */}
+            <ReactLoading
+              type="spinningBubbles"
+              color="#13C1ED"
+              height={100}
+              width={100}
+            />
+          </div>
+        ) : (
+          children
+        )}
       </div>
+
     </div>
   );
 }
