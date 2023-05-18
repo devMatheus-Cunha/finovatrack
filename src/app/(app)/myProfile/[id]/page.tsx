@@ -7,8 +7,8 @@
 'use client';
 
 import { Input } from '@/components';
-import Loading from '@/components/Loading';
 import { useUserData } from '@/hooks/globalStates';
+import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser';
 import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
@@ -24,6 +24,7 @@ const schemaEmail = z.object({
 
 function MyProfile() {
   const { userData } = useUserData();
+  const { updatedUserData } = useUpdatedUser();
 
   const [inputsEnabled, setInputsEnabled] = useState<{ [key: string]: boolean }>({
     emailDisabled: false,
@@ -86,13 +87,13 @@ function MyProfile() {
     toggleInputEnabled(type);
   };
 
-  const handleSubmitName = (values: any) => {
-    console.log('Submit Name:', values);
+  const handleSubmitName = (values: { name?: string }) => {
+    updatedUserData(values);
     toggleInputEnabled('name');
   };
 
-  const handleSubmitEmail = (values: any) => {
-    console.log('Submit Email:', values);
+  const handleSubmitEmail = (values: { email?: string }) => {
+    updatedUserData(values);
     toggleInputEnabled('email');
   };
 
