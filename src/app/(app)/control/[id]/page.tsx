@@ -21,7 +21,7 @@ import { useSaveReport } from '@/hooks/reports';
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
-import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
+import { IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { convertEurToReal, formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
 import {
   initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
@@ -41,7 +41,7 @@ import ConfirmSaveReportModal from './modals/confirmSaveReportModal';
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas();
   const { userData } = useUserData();
-  const { id, typeAccount } = userData;
+  const { typeAccount } = userData;
   const { addExpense, isLoadingAddExpense } = useAddExpense();
   const {
     expensesData = [],

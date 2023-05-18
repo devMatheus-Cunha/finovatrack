@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
@@ -23,7 +24,7 @@ const useUpdatedUser = () => {
       await updatedDocumentForUser({
         id: router.id,
         ...values,
-      });
+      } as any);
     },
     {
       onSuccess: async () => {

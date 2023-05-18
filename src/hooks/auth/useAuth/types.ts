@@ -6,5 +6,5 @@ export interface UserData {
   token?: string,
   email?: string,
   name?: string
-  typeAccount?: TypeAccount
+  typeAccount: TypeAccount
 }
