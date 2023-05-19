@@ -69,18 +69,18 @@ export default function AppLayout({ children }: SideBarProps) {
   return (
     <div className="h-[100vh] flex">
       <aside id="default-sidebar" className="w-auto h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <div className="h-full flex flex-col px-2.5 py-3.5 dark:bg-gray-800">
+        <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
           <div className="flex flex-col gap-6">
             {
        sidebarItems.map((item) => (
          <React.Fragment key={item.id}>
            <button
              data-tooltip-target="tooltip-default"
-             className={`focus:outline-none font-medium rounded-lg text-md dark:transparent dark:focus:ring-gray-600 dark:border-gray-600 w-[100%] flex items-center justify-center ${item.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+             className={`focus:outline-none font-medium rounded-lg text-md transparent focus:ring-gray-600 border-gray-600 w-[100%] flex items-center justify-center ${item.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
              onClick={item.action}
              disabled={item.disabled}
            >
-             <div className={`flex gap-0.5 flex-col justify-center items-center ${pathname?.startsWith(item?.route) ? 'text-cyan-500' : '#eee2e2'} dark:hover:opacity-75`}>
+             <div className={`flex gap-0.5 flex-col justify-center items-center ${pathname?.startsWith(item?.route) ? 'text-cyan-500' : '#eee2e2'} hover:opacity-75`}>
                {item.icon}
                <p className="text-[11px]">
                  {item.label}

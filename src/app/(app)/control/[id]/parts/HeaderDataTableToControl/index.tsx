@@ -34,8 +34,8 @@ function HeaderDataTableToControl({
   refetchQuationData,
 }: IHeaderDataTableToControl) {
   return (
-    <div className="flex  justify-between	items-center">
-      <div className="flex flex-wrap justify-betweenitems-center">
+    <div className="flex justify-between items-center">
+      <div className="flex gap-3 items-center justify-center">
         <Button
           type="button"
           onClick={() => handleOpenModal('addExpense')}
@@ -44,7 +44,6 @@ function HeaderDataTableToControl({
             <Coins size={20} color="#eee2e2" />
             Add Gastos
           </div>
-
         </Button>
         <Button
           type="button"
@@ -75,7 +74,17 @@ function HeaderDataTableToControl({
         </Button>
         <select
           id="type"
-          className="cursor-pointer hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          className="
+          cursor-pointer
+          font-medium
+          rounded-lg
+          text-sm
+          px-5
+          py-2.5
+          bg-gray-800
+          hover:bg-gray-700
+          border-gray-700
+          "
           onChange={(e) => onFilter(e)}
           value={filter}
         >
@@ -90,20 +99,20 @@ function HeaderDataTableToControl({
         </select>
       </div>
       {
-    typeAccount === 'hybrid' && (
-    <div className="flex gap-3 justify-center items-center">
-      <h3 className="italic">
-        {`Cotação Euro: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
-      </h3>
-      <button
-        type="button"
-        onClick={() => refetchQuationData()}
-        className="dark:hover:text-gray-400"
-      >
-        <ArrowsCounterClockwise size={20} color="#eee2e2" className="dark:hover:opacity-75" />
-      </button>
-    </div>
-    )
+        typeAccount === 'hybrid' && (
+        <div className="flex gap-3 justify-center items-center">
+          <h3 className="italic">
+            {`Cotação Euro: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
+          </h3>
+          <button
+            type="button"
+            onClick={() => refetchQuationData()}
+            className="hover:text-gray-400"
+          >
+            <ArrowsCounterClockwise size={20} color="#eee2e2" className="hover:opacity-75" />
+          </button>
+        </div>
+        )
    }
     </div>
   );

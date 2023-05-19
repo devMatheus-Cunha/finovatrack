@@ -44,23 +44,23 @@ function Reports() {
   return (
     <div className="h-[100vh] w-[100%]">
       <div className="flex items-center flex-col w-[100%] gap-10 p-3">
-        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col">
+        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[30%]">
           <h2>Escolha um período para solicitar um relatório:</h2>
-          <div className="flex gap-4 bg-gray-800 rounded-lg justify-center">
-            <div>
+          <div className="flex gap-4 bg-gray-800 rounded-lg justify-center items-center">
+            <div className="w-full">
               <DatePicker
                 selected={selectedPeriod}
                 onChange={(date: Date) => onChangeDate(date)}
                 dateFormat="MM/yyyy"
                 showMonthYearPicker
-                className="border ext-sm rounded-lg w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="border text-sm rounded-lg w-full p-1.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <Button
               type="button"
               onClick={() => onSubmit(selectedPeriod)}
-              className="font-medium rounded-lg text-sm p-2 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-600 dark:border-gray-700"
+              className="font-medium rounded-lg text-sm p-2 bg-gray-700 hover:bg-gray-600 focus:ring-gray-600 border-gray-700 w-full"
             >
               <div className="flex gap-2 justify-center items-center">
                 <FolderOpen size={20} color="#eee2e2" />
@@ -79,32 +79,32 @@ function Reports() {
              <span className="italic">{data?.period}</span>
            </h1>
            <div className="flex gap-4">
-             <h1 className="dark:text-gray-300">
+             <h1 className="text-gray-300">
                {validaTextForTypeAccount[userData.typeAccount]?.titleEntrys}
                {' '}
-               <span className="italic dark:text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
+               <span className="italic text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
              </h1>
-             <h1 className="dark:text-gray-300">
+             <h1 className="text-gray-300">
                {validaTextForTypeAccount[userData.typeAccount]?.titleExpensesEurToReal}
                {' '}
-               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
+               <span className="italic text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
              </h1>
-             <h1 className="dark:text-gray-300">
+             <h1 className="text-gray-300">
                {validaTextForTypeAccount[userData.typeAccount]?.titleExpenses}
                {' '}
-               <span className="italic dark:text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
+               <span className="italic text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
              </h1>
-             <h1 className="dark:text-gray-300">
+             <h1 className="text-gray-300">
                {validaTextForTypeAccount[userData.typeAccount]?.totalFree}
                {' '}
-               <span className="italic dark:text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
+               <span className="italic text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
              </h1>
              {
                       userData.typeAccount === 'hybrid' && (
-                        <h1 className="dark:text-gray-300">
+                        <h1 className="text-gray-300">
                           Cotação Usada:
                           {' '}
-                          <span className="italic dark:text-white">{data.quatation}</span>
+                          <span className="italic text-white">{data.quatation}</span>
                         </h1>
                       )
              }
@@ -113,8 +113,8 @@ function Reports() {
            <div className="relative overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] bg-gray-800">
              {
            data?.data?.length > 0 ? (
-             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-               <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+             <table className="w-full text-sm text-left text-gray-500 text-gray-400">
+               <thead className="text-md text-gray-700 uppercase  bg-gray-800 text-gray-400 border-b border-gray-700">
                  <tr>
                    {
                 validateColumsHeadProps[userData.typeAccount].map((item: { field: string, header: string }) => (
@@ -129,13 +129,13 @@ function Reports() {
                  {
                data.data.map((item, index) => (
                  <Fragment key={index}>
-                   <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   <tr className="border-b bg-gray-800 border-gray-700">
+                     <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
                        {item.description}
                      </th>
                      {
             (userData.typeAccount === 'euro' || userData.typeAccount === 'hybrid') && (
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
             </th>
             )
@@ -143,17 +143,17 @@ function Reports() {
 
                      {
             (userData.typeAccount === 'real' || userData.typeAccount === 'hybrid') && (
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, 'real') : '-'}
             </th>
             )
            }
-                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                     <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
                        {item.type}
                      </th>
                      {
             userData.typeAccount === 'hybrid' && (
-            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.typeMoney}
             </th>
             )
