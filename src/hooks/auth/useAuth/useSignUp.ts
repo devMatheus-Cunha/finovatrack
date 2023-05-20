@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { TypeAccount } from './types';
 
-const useCreateAccount = () => {
+const useSignUp = () => {
   const router = useRouter();
 
   const { mutate: createAccountUser, isLoading } = useMutation(siging, {
@@ -41,4 +41,4 @@ const useCreateAccount = () => {
   };
 };
 
-export default useCreateAccount;
+export default useSignUp;
