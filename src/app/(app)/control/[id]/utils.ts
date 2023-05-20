@@ -65,15 +65,15 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
 
 export const validateTextToModal: any = {
   addExpense: {
-    title: 'Add Expense',
+    title: 'Adicionar Gasto',
     description: 'Add a new Expense',
   },
   edit: {
-    title: 'edit data',
+    title: 'Editar Gasto',
     description: 'edit data',
   },
   delete: {
-    title: 'delete data',
+    title: 'Deletar Gasto',
     description: 'delete data',
   },
 };

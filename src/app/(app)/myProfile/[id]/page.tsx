@@ -7,11 +7,11 @@
 
 'use client';
 
-import { Input } from '@/components';
+import { Button, Input } from '@/components';
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
 import { useUserData } from '@/hooks/globalStates';
 import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
@@ -107,14 +107,14 @@ function MyProfile() {
 
   return (
     <main className="flex flex-col w-[100%] p-6 justify-center items-center h-[100vh]">
-      <div className="flex flex-col gap-6 w-[550px] p-6 dark:bg-gray-800 rounded-lg shadow-lg">
+      <div className="flex flex-col gap-6 w-[550px] p-6 bg-gray-800 rounded-lg shadow-lg">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-bold mb-4 dark:text-white">
+          <h1 className="text-3xl font-bold mb-4 text-white">
             Olá
             {' '}
             {userData.name}
           </h1>
-          <p className="dark:text-gray-300">
+          <p className="text-gray-300">
             Aqui você pode visualizar e alterar as informações do seu perfil de forma simples e fácil.
           </p>
         </div>
@@ -143,27 +143,27 @@ function MyProfile() {
               <div className="flex gap-2 self-end">
                 {inputsEnabled.nameDisabled && (
                   <>
-                    <button
+                    <Button
                       type="button"
                       onClick={() => handleCancel('name')}
-                      className="border text-sm rounded-lg block p-2.5 w-[100px] dark:bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  self-end dark:hover:opacity-75"
+                      variant="cancel"
                     >
                       Cancelar
-                    </button>
+                    </Button>
                   </>
                 )}
-                <button
+                <Button
+                  variant={!inputsEnabled.nameDisabled ? 'default700' : 'confirm'}
                   type="button"
                   onClick={
                     !inputsEnabled.nameDisabled
                       ? () => toggleInputEnabled('name')
                       : onSubmitName((value) => handleSubmit('name', value))
 }
-                  className="border text-sm rounded-lg block p-2.5 w-[110px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75"
                 >
                   {isLoading ? 'Salvando...' : (!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar')}
 
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -192,39 +192,39 @@ function MyProfile() {
             <div className="flex gap-2 self-end">
               {inputsEnabled.emailDisabled && (
                 <>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleCancel('email')}
-                    className="border text-sm rounded-lg block p-2.5 w-[100px] dark:bg-transparent dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  self-end dark:hover:opacity-75"
+                    variant="cancel"
                   >
                     Cancelar
-                  </button>
+                  </Button>
                 </>
               )}
-              <button
-                 type="button"
+              <Button
+                variant={!inputsEnabled.emailDisabled ? 'default700' : 'confirm'}
+                type="button"
                 onClick={
                   !inputsEnabled.emailDisabled
                     ? () => toggleInputEnabled('email')
                     : onSubmitEmail((value) => handleSubmit('email', value))
 }
-                className="border text-sm rounded-lg block p-2.5 w-[110px] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:hover:opacity-75 "
               >
                 {isLoading ? 'Salvando...' : (!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar')}
 
-              </button>
+              </Button>
             </div>
           </div>
         </form>
 
         <div>
-          <h3 className="mb-4 font-semibold dark:text-white">
+          <h3 className="mb-4 font-semibold text-white">
             Tipo da moeda da conta
           </h3>
-          <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex bg-gray-800 border-gray-600 text-white">
             {['real', 'euro', 'hybrid'].map((currency) => (
               <li
-                className="w-full border-b sm:border-b-0 sm:border-r dark:border-gray-600 dark:opacity-75"
+                className="w-full border-b sm:border-b-0 sm:border-r border-gray-600 opacity-75"
                 key={currency}
               >
                 <div className="flex items-center pl-3">
@@ -233,12 +233,12 @@ function MyProfile() {
                       type="radio"
                     value={currency}
                     disabled
-                      className="w-4 h-4 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 cursor-not-allowed dark:opacity-75"
+                      className="w-4 h-4 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500 cursor-not-allowed opacity-75"
                       {...registerEmail('typeAccount')}
                   />
                   <label
                     htmlFor={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    className="w-full py-3 ml-2 text-sm font-medium dark:text-gray-300"
+                    className="w-full py-3 ml-2 text-sm font-medium text-gray-300"
                   >
                     {currency}
                   </label>

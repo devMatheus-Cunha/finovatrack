@@ -7,10 +7,9 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
-import Link from 'next/link';
 import { useForgetPassword } from '@/hooks/auth';
 import { LogoutProps } from '@/service/auth/forgetPassword';
-import { Input } from '../../../components';
+import { Button, Input } from '../../../components';
 
 const schema = z.object({
   email: z.string().email('Formato de'),
@@ -37,50 +36,48 @@ export default function ForgetPassword() {
   });
 
   return (
-    <div className="flex h-[100vh] justify-center items-center">
-      <form onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}>
-        <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
-          <div className="flex flex-col gap-3 text-center">
-            <p className="text-2xl  font-bold">Esqueceu sua senha?</p>
-            <p className="text-slate-300">Não se preocupe! Insira o seu e-mail de cadastro e enviaremos instruções para você.</p>
-          </div>
-          <Input
-            label="Email"
-            name="email"
-            placeholder="exemplo@gmail.com"
-            type="email"
-            register={register}
-            rules={{ required: true }}
-            errors={(
-              <>
-                {errors.email && (
+    <form onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}>
+      <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
+        <div className="flex flex-col gap-3 text-center">
+          <p className="text-2xl  font-bold">Esqueceu sua senha?</p>
+          <p className="text-slate-300">Não se preocupe! Insira o seu e-mail de cadastro e enviaremos instruções para você.</p>
+        </div>
+        <Input
+          label="Email"
+          name="email"
+          placeholder="exemplo@gmail.com"
+          type="email"
+          register={register}
+          rules={{ required: true }}
+          errors={(
+            <>
+              {errors.email && (
                 <span className="text-red-500 text-sm ">
                   Este campo é obrigatório
                 </span>
-                )}
-              </>
               )}
-          />
+            </>
+              )}
+        />
 
-          <div className="flex flex-col gap-10 justify-center items-center">
-            <button
-              type="submit"
-              className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-700 p-2 w-[100px]"
-            >
-              <div className="flex gap-2 justify-center items-center">
-                {isLoading ? 'Enviar...' : 'Enviar'}
-              </div>
-            </button>
-            <Link
-              className="text-white bg-gray-800 dark:focus:outline-none font-medium rounded-lg text-sm dark:bg-gray-800 underline"
-              href="/login"
-            >
-              Voltar
-            </Link>
-          </div>
+        <div className="flex flex-col gap-10 justify-center items-center">
+          <Button
+            type="submit"
+            variant="default700"
+          >
+            <div className="flex gap-2 justify-center items-center">
+              {isLoading ? 'Enviar...' : 'Enviar'}
+            </div>
+          </Button>
+          <Button
+            variant="link"
+            routeLink="/login"
+          >
+            Voltar
+          </Button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
 
   );
 }

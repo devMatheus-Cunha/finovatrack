@@ -1,4 +1,5 @@
 // Importe as dependências necessárias
+import Header from '@/components/Header';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -10,21 +11,18 @@ export const metadata: Metadata = {
 function LandingPage() {
   return (
     <div className="text-white h-screen flex flex-col">
-      <header className="flex items-center justify-between p-4 bg-text-cyan-500 text-white">
-        <h1 className="text-2xl font-bold">FinovaTrack</h1>
-        <div className="gap-4 flex">
-          <Link href="/login">
-            Login
-          </Link>
-          <Link href="/signup">
-            Criar Conta
-          </Link>
-        </div>
-      </header>
+
+      <Header />
 
       <main className="container mx-auto p-4 flex-grow">
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Gerencie suas finanças com facilidade</h2>
+        <section
+          className="mb-8"
+        >
+          <h2
+            className="text-xl font-semibold mb-2"
+          >
+            Gerencie suas finanças com facilidade
+          </h2>
           <p className="text-gray-300">
             Nossa plataforma de Controle de Gestão Pessoal permite que você tenha o controle total
             dos seus gastos e receitas. Registre, edite e acompanhe suas informações financeiras de

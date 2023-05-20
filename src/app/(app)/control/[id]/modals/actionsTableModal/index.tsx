@@ -11,7 +11,9 @@ import { ZodError, z } from 'zod';
 
 import { TypeAccount } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { Input, InputTypeMoney, Select } from '@/components';
+import {
+  Button, Input, InputTypeMoney, Select,
+} from '@/components';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { ITypeModal } from '../../types';
@@ -68,53 +70,52 @@ function ContentActionsTableModal({
   });
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/2">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[100%]">
-        <div className="bg-gray-800 rounded-lg shadow">
-          <div className="bg-white rounded-lg shadow dark:bg-gray-700">
-            <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                {validateTextToModal[type || '']?.title}
-              </h3>
-            </div>
-            <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
-              <Input
-                label="Descrição"
-                name="description"
-                placeholder="Ex: Compra carro"
-                type="text"
-                register={register}
-                rules={{ required: true }}
-                errors={(
-                  <>
-                    {errors.description && (
-                      <span className="text-red-500 text-sm">Este campo é obrigatório</span>
-                    )}
-                  </>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="rounded-lg shadow">
+        <div className="rounded-lg shadow bg-gray-800">
+          <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
+            <h3 className="text-xl font-semibold text-white">
+              {validateTextToModal[type || '']?.title}
+            </h3>
+          </div>
+          <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
+            <Input
+              label="Descrição"
+              name="description"
+              placeholder="Ex: Compra carro"
+              type="text"
+              register={register}
+              rules={{ required: true }}
+              errors={(
+                <>
+                  {errors.description && (
+                  <span className="text-red-500 text-sm">Este campo é obrigatório</span>
+                  )}
+                </>
                 )}
-              />
+            />
 
-              <Select
-                label="Selecione o tipo"
-                rules={{ required: true }}
-                name="type"
-                options={[
-                  { label: 'Essencial', value: 'Essencial' },
-                  { label: 'Não essencial', value: 'Não essencial' },
-                  { label: 'Gasto Livre', value: 'Gasto Livre' },
-                ]}
-                register={register}
-                errors={(
-                  <>
-                    {errors.type && (
-                      <span className="text-red-500 text-sm">
-                        Este campo é obrigatório
-                      </span>
-                    )}
-                  </>
+            <Select
+              label="Selecione o tipo"
+              rules={{ required: true }}
+              name="type"
+              options={[
+                { label: 'Essencial', value: 'Essencial' },
+                { label: 'Não essencial', value: 'Não essencial' },
+                { label: 'Gasto Livre', value: 'Gasto Livre' },
+              ]}
+              register={register}
+              errors={(
+                <>
+                  {errors.type && (
+                  <span className="text-red-500 text-sm">
+                    Este campo é obrigatório
+                  </span>
+                  )}
+                </>
                 )}
-              />
-              {
+            />
+            {
                 typeAccount === 'hybrid' && (
                   <Select
                     label="Selecione Moeda"
@@ -137,55 +138,54 @@ function ContentActionsTableModal({
                   />
                 )
               }
-              <InputTypeMoney
-                control={control}
-                name="value"
-                label={
+            <InputTypeMoney
+              control={control}
+              name="value"
+              label={
                   typeAccount === 'hybrid'
                     ? watch().typeMoney === 'Real'
                       ? 'Valor (R$):'
                       : 'Valor (€):'
                     : validaTextForTypeAccount[typeAccount]?.labelValueMoney
                 }
-                placeholder={
+              placeholder={
                   typeAccount === 'hybrid'
                     ? watch().typeMoney === 'Real'
                       ? 'Ex: R$ 10'
                       : 'Ex: € 10'
                     : validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense
                 }
-                errors={(
-                  <>
-                    {errors.value && (
+              errors={(
+                <>
+                  {errors.value && (
                     <span className="text-red-500 text-sm ">
                       Este campo é obrigatório e deve ser um valor numérico válido
                     </span>
-                    )}
-                  </>
+                  )}
+                </>
                 )}
-              />
+            />
 
-            </div>
+          </div>
 
-            <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-              <button
-                type="submit"
-                className="text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
-                {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-              </button>
-              <button
-                onClick={() => handleOpenModal()}
-                type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              >
-                Cancelar
-              </button>
-            </div>
+          <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
+            <Button
+              variant="confirm"
+              type="submit"
+            >
+              {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
+            </Button>
+            <Button
+              onClick={() => handleOpenModal()}
+              type="button"
+              variant="cancel"
+            >
+              Cancelar
+            </Button>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 

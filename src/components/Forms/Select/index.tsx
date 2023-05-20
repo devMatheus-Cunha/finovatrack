@@ -26,13 +26,13 @@ export default function Select<T extends FieldValues>({
 }: SelectFieldProps<T>) {
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+      <label htmlFor={name} className="block mb-2 text-sm font-medium  text-white">
         {rules?.required ? `${label} *` : label}
       </label>
       <select
         id={name as string}
         {...register(name, rules)}
-        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="bg-gray-50 border  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
       >
         <option value="" disabled selected>
           Escolha opção
