@@ -235,23 +235,25 @@ export default function Control() {
                   }
             {
                     openModalReport.open && (
-                      <Modal>
-                        <ConfirmSaveReportModal
-                          initialData={calculationSumValues}
-                          onCancel={handleOpenModalSaveReport}
-                          onSubmit={(values: ExpenseData[]) => {
-                            saveReport({
-                              data: values,
-                              totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
-                              totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
-                              totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
-                              totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
-                              quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),
-                            });
-                            handleOpenModalSaveReport();
-                          }}
-                        />
-                      </Modal>
+                    <Modal
+                      width="35%"
+                    >
+                      <ConfirmSaveReportModal
+                        initialData={calculationSumValues}
+                        onCancel={handleOpenModalSaveReport}
+                        onSubmit={(values: ExpenseData[]) => {
+                          saveReport({
+                            data: values,
+                            totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
+                            totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
+                            totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
+                            totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
+                            quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),
+                          });
+                          handleOpenModalSaveReport();
+                        }}
+                      />
+                    </Modal>
 
                     )
                   }
