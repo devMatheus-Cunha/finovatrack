@@ -55,52 +55,50 @@ function ContentAddEntryModal({
   });
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/2">
-      <form onSubmit={handleSubmit((values) => onSubmit(values))} className="w-[100%]">
-        <div className="bg-gray-800 rounded-lg shadow">
-          <div className="rounded-lg shadowbg-gray-800">
-            <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
-              <h3 className="text-xl font-semibold text-white">
-                Adicione uma Entrada
-              </h3>
-            </div>
-            <div className="gap-6 mb-6 p-4">
-              <InputTypeMoney
-                control={control}
-                name="value"
-                label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
-                placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
-                errors={(
-                  <>
-                    {errors.value && (
+    <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+      <div className="bg-gray-800 rounded-lg shadow">
+        <div className="rounded-lg shadowbg-gray-800">
+          <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
+            <h3 className="text-xl font-semibold text-white">
+              Adicione uma Entrada
+            </h3>
+          </div>
+          <div className="gap-6 mb-6 p-4">
+            <InputTypeMoney
+              control={control}
+              name="value"
+              label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
+              placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
+              errors={(
+                <>
+                  {errors.value && (
                     <span className="text-red-500 text-sm ">
                       Este campo é obrigatório
                     </span>
                 )}
-                  </>
+                </>
       )}
-              />
-            </div>
+            />
+          </div>
 
-            <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
-              <Button
-                variant="confirm"
-                type="submit"
-              >
-                {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-              </Button>
-              <Button
-                onClick={() => handleOpenModal()}
-                type="button"
-                variant="cancel"
-              >
-                Cancelar
-              </Button>
-            </div>
+          <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
+            <Button
+              variant="confirm"
+              type="submit"
+            >
+              {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
+            </Button>
+            <Button
+              onClick={() => handleOpenModal()}
+              type="button"
+              variant="cancel"
+            >
+              Cancelar
+            </Button>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 

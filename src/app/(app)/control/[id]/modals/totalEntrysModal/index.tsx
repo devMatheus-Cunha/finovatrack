@@ -39,29 +39,28 @@ function ContentTotalEntrys({
   const { isVisibilityData } = useIsVisibilityDatas();
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-50 w-1/2">
-      <div className="bg-gray-800 rounded-lg shadow">
-        <div className="rounded-lg shadow bg-gray-800">
-          <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
-            <h3 className="text-xl font-semibold text-white">
-              Veja todas entradas
-            </h3>
-          </div>
+    <div className="bg-gray-800 rounded-lg shadow">
+      <div className="rounded-lg shadow bg-gray-800">
+        <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
+          <h3 className="text-xl font-semibold text-white">
+            Veja todas entradas
+          </h3>
+        </div>
 
-          <table className="w-full text-sm text-left">
-            <thead className="text-md uppercase border-b border-gray-600 text-gray-300">
-              <tr>
-                {
+        <table className="w-full text-sm text-left">
+          <thead className="text-md uppercase border-b border-gray-600 text-gray-300">
+            <tr>
+              {
                   columsHeadProps?.map((item: any) => (
                     <th scope="col" className="px-6 py-3" key={item.field}>
                       {item.header}
                     </th>
                   ))
                 }
-              </tr>
-            </thead>
-            <tbody>
-              {
+            </tr>
+          </thead>
+          <tbody>
+            {
                 data?.map((item, index) => (
                   <Fragment key={index}>
                     <tr className="border-b bg-gray-800 border-gray-600">
@@ -84,18 +83,17 @@ function ContentTotalEntrys({
                   </Fragment>
                 ))
               }
-            </tbody>
-          </table>
+          </tbody>
+        </table>
 
-          <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
-            <Button
-              onClick={handleOpenModal}
-              type="button"
-              variant="cancel"
-            >
-              Cancelar
-            </Button>
-          </div>
+        <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
+          <Button
+            onClick={handleOpenModal}
+            type="button"
+            variant="cancel"
+          >
+            Cancelar
+          </Button>
         </div>
       </div>
     </div>

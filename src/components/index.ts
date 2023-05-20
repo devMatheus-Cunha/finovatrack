@@ -6,3 +6,4 @@ export { default as Input } from './Forms/Input';
 export { default as Select } from './Forms/Select';
 export { default as Empty } from './Empty';
 export { default as InputPassword } from './Forms/InputPassword';
+export { default as Modal } from './Modal';

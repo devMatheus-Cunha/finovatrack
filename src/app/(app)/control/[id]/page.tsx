@@ -23,6 +23,7 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates';
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 import { IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { convertEurToReal, formatCurrencyMoney, formatNumberToSubmit } from '@/utils/formatNumber';
+import { Modal } from '@/components';
 import {
   initialDataSelectedData, useCalculationSumValues, useGetTotalsFree,
 } from './utils';
@@ -208,6 +209,7 @@ export default function Control() {
                       configModal.type === 'edit'
                       || configModal.type === 'addExpense'
                     ) && (
+                    <Modal>
                       <ContentActionsTableModal
                         type={configModal?.type}
                         initialData={configModal?.selectedData}
@@ -216,53 +218,67 @@ export default function Control() {
                         isLoadingAddExpense={isLoadingAddExpense}
                         typeAccount={typeAccount}
                       />
+                    </Modal>
                     )
                   }
             {
                     configModal.open && (configModal.type === 'delete' || configModal.type === 'deleteAllExpenses') && (
+                    <Modal
+                      width="27%"
+                    >
                       <DeleteModalContent
                         onCancel={handleOpenModal}
                         onSubmit={configModal.type === 'deleteAllExpenses' ? clearExpensesData : onDelete}
                       />
+                    </Modal>
                     )
                   }
             {
                     openModalReport.open && (
-                      <ConfirmSaveReportModal
-                        initialData={calculationSumValues}
-                        onCancel={handleOpenModalSaveReport}
-                        onSubmit={(values: ExpenseData[]) => {
-                          saveReport({
-                            data: values,
-                            totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
-                            totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
-                            totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
-                            totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
-                            quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),
-                          });
-                          handleOpenModalSaveReport();
-                        }}
-                      />
+                      <Modal>
+                        <ConfirmSaveReportModal
+                          initialData={calculationSumValues}
+                          onCancel={handleOpenModalSaveReport}
+                          onSubmit={(values: ExpenseData[]) => {
+                            saveReport({
+                              data: values,
+                              totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
+                              totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
+                              totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
+                              totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
+                              quatation: formatCurrencyMoney(lastQuatationData?.current_quotation, typeAccount),
+                            });
+                            handleOpenModalSaveReport();
+                          }}
+                        />
+                      </Modal>
+
                     )
                   }
             {
-                    configModal.open && configModal.type === 'addEntry' && (
-                      <ContentAddEntryModal
-                        handleOpenModal={handleOpenModal}
-                        onSubmit={onAddEntrys}
-                        typeAccount={typeAccount}
-                      />
-                    )
+              configModal.open && configModal.type === 'addEntry' && (
+                <Modal
+                  width="37%"
+                >
+                  <ContentAddEntryModal
+                    handleOpenModal={handleOpenModal}
+                    onSubmit={onAddEntrys}
+                    typeAccount={typeAccount}
+                  />
+                </Modal>
+              )
                   }
             {
-                    configModal.open && configModal.type === 'totalsEntrys' && (
-                      <ContentTotalEntrys
-                        handleOpenModal={handleOpenModal}
-                        data={entrysData}
-                        onDelete={deletedEntry}
-                        userData={userData}
-                      />
-                    )
+              configModal.open && configModal.type === 'totalsEntrys' && (
+                <Modal>
+                  <ContentTotalEntrys
+                    handleOpenModal={handleOpenModal}
+                    data={entrysData}
+                    onDelete={deletedEntry}
+                    userData={userData}
+                  />
+                </Modal>
+              )
                   }
           </div>
         </div>
