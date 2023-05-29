@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { IData } from "./hooks/useFetchExpensesData";
 
 export const validateTextToModal: any = {
   addExpense: {
@@ -52,7 +51,7 @@ export const initialDataSelectedData = {
   id: "",
 };
 
-export const useCalculationSumValues = (expensesData: IData[]) => {
+export const useCalculationSumValues = (expensesData: any[]) => {
   const calculationSumValues = useMemo(() => {
     if (expensesData.length > 0) {
       const objetoResultado = expensesData.reduce(
@@ -80,7 +79,7 @@ export const useCalculationSumValues = (expensesData: IData[]) => {
   };
 };
 
-export const useGetTotalsFree = (calculationSumValues: IData[]) => {
+export const useGetTotalsFree = (calculationSumValues: any[]) => {
   const getTotalsFree = useMemo(() => {
     return calculationSumValues.find((item) => {
       return item.description === "Totais";
