@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { logout } from "@/pages/lib/login";
 import { Archive, ChartPie, ClipboardText, Eye, EyeSlash, SignOut } from "@phosphor-icons/react";
 import useIsVisibilityDatas from "../../hooks/useIsVisibilityDatas"
+import React from "react";
 
 export default function SideBar({ children }: any) {
  const { isVisibilityData, handleToggleVisibilityData } = useIsVisibilityDatas()
@@ -22,16 +23,16 @@ export default function SideBar({ children }: any) {
    action: () => router.push("/control"),
   },
   {
-   id: "statistics",
-   label: "Relatrios",
-   icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
-   action: () => router.push("/statistics"),
-  },
-  {
    id: "reports",
    label: "Relatrios",
    icon: <Archive size={24} color={routeName === "reports" ? "#06b6d4" : "#eee2e2"} />,
    action: () => router.push("/reports"),
+  },
+  {
+   id: "statistics",
+   label: "Relatrios",
+   icon: <ChartPie size={24} color={routeName === "statistics" ? "#06b6d4" : "#eee2e2"} />,
+   action: () => router.push("/statistics"),
   },
  ];
 
@@ -47,16 +48,15 @@ export default function SideBar({ children }: any) {
      <div className="flex flex-col gap-6">
       {
        sidebarItems.map((item) => (
-        <>
+        <React.Fragment key={item.id}>
          <button
           data-tooltip-target="tooltip-default"
           className="focus:outline-none font-medium rounded-lg text-md dark:tansparent dark:focus:ring-gray-600 dark:border-gray-600 w-[100%] flex items-center justify-center"
-          key={item.id}
           onClick={item.action}
          >
           {item.icon}
          </button>
-        </>
+        </React.Fragment>
        ))
       }
      </div>
