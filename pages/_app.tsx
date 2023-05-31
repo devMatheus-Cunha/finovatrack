@@ -6,6 +6,7 @@ import 'flowbite/dist/flowbite.css';
 import { ThemeProvider } from 'next-themes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,8 +22,6 @@ export const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-
-
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
