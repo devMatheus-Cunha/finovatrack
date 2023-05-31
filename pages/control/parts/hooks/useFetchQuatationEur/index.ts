@@ -27,7 +27,7 @@ const useFetchQuatationEur = (amount: string) => {
       const docRef = await updateDoc(myCollection, data);
       return docRef;
     } catch (error) {
-      console.log(error);
+      throw error
     }
   };
 
