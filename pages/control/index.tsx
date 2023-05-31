@@ -21,7 +21,7 @@ import useClearExpenses from './parts/hooks/useClearExpenses';
 import useDeletedEntry from './parts/hooks/useDeletedEntry';
 import useDeletedExpense from './parts/hooks/useDeletedExpense';
 import useFetchEntrysData from './parts/hooks/useFetchEntrysData';
-import useFetchExpensesData, { Filter } from './parts/hooks/useFetchExpensesData';
+import useFetchExpensesData, { ExpenseData, Filter } from './parts/hooks/useFetchExpensesData';
 import useUpadtedExpense from './parts/hooks/useUpadtedExpense';
 
 import { ITypeModal, Item, IFormData } from './types';
@@ -29,8 +29,10 @@ import ContentTotalEntrys from './parts/modals/totalEntrysModal';
 import router from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { checkAuthState } from '../lib/login';
-import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash } from '@phosphor-icons/react';
+import { Coins, HandCoins, Broom, ArrowsCounterClockwise, PencilSimpleLine, Trash, FolderOpen } from '@phosphor-icons/react';
 import useIsVisibilityDatas from '@/hooks/useIsVisibilityDatas';
+import useSaveReport from '../reports/hooks/useSaveReport';
+import ConfirmSaveReportModal from './parts/modals/confirmSaveReportModal';
 
 
 export default function Control() {
@@ -43,6 +45,13 @@ export default function Control() {
     open: false,
     type: "",
     selectedData: initialDataSelectedData,
+  })
+  const [openModalReport, setOpenModalReport] = useState<{
+    open: boolean
+    data: ExpenseData[]
+  }>({
+    open: false,
+    data: [],
   })
 
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -62,6 +71,8 @@ export default function Control() {
 
   const { clearExpensesData } = useClearExpenses()
 
+  const { saveReport } = useSaveReport()
+
   const { calculationSumValues } = useCalculationSumValues(expensesData)
   const { getTotalsFree } = useGetTotalsFree(calculationSumValues)
   const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(String(getTotalsFree?.euro_value ?? "0"))
@@ -78,6 +89,12 @@ export default function Control() {
       open: !configModal.open,
       type: type || "",
       selectedData: data
+    })
+  }
+  const handleOpenModalSaveReport = (data: ExpenseData[] | undefined = []) => {
+    setOpenModalReport({
+      open: !openModalReport.open,
+      data: data
     })
   }
 
@@ -202,6 +219,15 @@ export default function Control() {
                         <div className='flex gap-2 justify-center items-center'>
                           <Broom size={20} color="#eee2e2" />
                           Limpar Dados
+                        </div>
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => handleOpenModalSaveReport(calculationSumValues)}
+                      >
+                        <div className='flex gap-2 justify-center items-center'>
+                          <FolderOpen size={20} color="#eee2e2" />
+                          Salvar Relatorio
                         </div>
                       </Button>
                       <select
@@ -329,6 +355,24 @@ export default function Control() {
                       <DeleteModalContent
                         onCancel={handleOpenModal}
                         onSubmit={configModal.type === "deleteAllExpenses" ? clearExpensesData : onDelete}
+                      />
+                    )
+                  }
+                  {
+                    openModalReport.open && (
+                      <ConfirmSaveReportModal
+                        onCancel={handleOpenModalSaveReport}
+                        onSubmit={(values: ExpenseData[]) => {
+                          saveReport({
+                            data: values,
+                            totalInvested: formatCurrency((totalEntrys - (getTotalsFree?.real_value || 0) - (calculationTotalExpensesEurToReal || 0)), "BRL"),
+                            totalEntrys: formatCurrency(totalEntrys, "BRL"),
+                            totalExpenses: formatCurrency(calculationTotalExpensesEurToReal || 0, "BRL"),
+                            quatation: formatCurrency(lastQuatationData?.current_quotation || 0, "BRL"),
+                          })
+                          handleOpenModalSaveReport()
+                        }}
+                        initialData={openModalReport.data}
                       />
                     )
                   }
