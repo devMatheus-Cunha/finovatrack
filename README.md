@@ -40,4 +40,12 @@ To get started with Personal Management Control, follow these steps:
 
 That's it! You can now start managing your finances efficiently and organizedly using Personal Management Control.
 
-Feel free to contribute to the project by submitting bug reports or feature requests. We appreciate your feedback!
+## Contributing
+
+To contribute to the project, please follow these guidelines:
+
+1. Open a new pull request.
+2. Use the `develop` branch as the base branch for your pull request.
+3. Ensure your changes are properly tested and validated.
+
+Feel free to submit bug reports or feature requests as well. We appreciate your feedback!
