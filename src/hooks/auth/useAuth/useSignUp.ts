@@ -1,35 +1,50 @@
 /* eslint-disable no-useless-catch */
-/* eslint-disable camelcase */
 
 import { useMutation } from '@tanstack/react-query';
-import { createDocumentForUser, siging } from '@/service/auth/siging';
+import { SigingProps, createDocumentForUser, siging } from '@/service/auth/siging';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { TypeAccount } from './types';
+import { User } from '@firebase/auth';
 
 const useSignUp = () => {
   const router = useRouter();
 
-  const { mutate: createAccountUser, isLoading } = useMutation(siging, {
-    onSuccess: async (user) => {
-      await createDocumentForUser({
-        id: user.uid,
-        expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
-        token: (await user.getIdTokenResult()).token,
-        email: user.email || '',
-        name: user.displayName || '',
-        typeAccount: user.photoURL as TypeAccount,
-      });
+  const { mutate: createAccountUser, isLoading } = useMutation({
+    onMutate: async (values: SigingProps) => {
+      try {
+        if (!values.email || !values.password || !values.confirmPassword || !values.name) {
+          throw new Error('Todos os campos são obrigatórios.');
+        }
+
+        if (values.password !== values.confirmPassword) {
+          throw new Error('As senhas não correspondem.');
+        }
+
+        const formattedValues = {
+          ...values,
+          primary_currency: values.typeAccount === 'hybrid' ? values.primary_currency : values.typeAccount,
+          secondary_currency: values.typeAccount === 'hybrid' ? values.secondary_currency : '',
+          typeAccount: values.typeAccount !== 'hybrid' ? 'oneCurrency' : values.typeAccount,
+        };
+
+        const res = await siging(formattedValues);
+
+        if (res?.uid) {
+          await createDocumentForUser({ id: res.uid, ...formattedValues });
+          return true;
+        }
+        return false;
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: async (user: User) => {
+      console.log({ user });
       router.push(`/control/${user.uid}`);
     },
     onError: ({ message }: { message: string }) => {
-      if (message === 'Firebase: Error (auth/email-already-in-use).') {
-        toast.error('Este email já esta em uso', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
-      }
-      toast.error('Erro no Servidor. Tente mais tarde!', {
+      console.log({ message });
+      toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
     },
