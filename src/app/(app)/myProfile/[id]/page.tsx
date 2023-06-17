@@ -128,7 +128,7 @@ function MyProfile() {
                 type="text"
                 disabled={!inputsEnabled.nameDisabled}
                 register={registerName}
-                rules={{ required: true }}
+                required
                 errors={(
                   <>
 
@@ -178,7 +178,7 @@ function MyProfile() {
               type="email"
               disabled={!inputsEnabled.emailDisabled}
               register={registerEmail}
-              rules={{ required: true }}
+              required
               errors={(
                 <>
                   {errorsEmail.email && (
