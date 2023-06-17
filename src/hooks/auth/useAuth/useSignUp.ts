@@ -10,11 +10,9 @@ const useSignUp = () => {
   const { mutate: createAccountUser, isLoading } = useMutation({
     mutationFn: async (values: SigingProps) => siging(values),
     onSuccess: (id: string) => {
-      console.log(id);
       router.push(`/control/${id}`);
     },
     onError: ({ message }: {message: string}) => {
-      console.log({ message });
       toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
