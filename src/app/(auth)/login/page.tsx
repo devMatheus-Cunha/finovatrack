@@ -42,14 +42,25 @@ export default function Login() {
 
   return (
     <form onSubmit={handleSubmit((values: LoginProps) => loginWithEmail(values))}>
-      <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
+      <div
+        className="
+          flex
+          flex-col
+          gap-6
+          w-[100%]
+          bg-gray-800
+          py-7
+          px-5
+          rounded-lg
+        "
+      >
         <Input
           label="Email"
           name="email"
           placeholder="exemplo@gmail.com"
           type="email"
           register={register}
-          rules={{ required: true }}
+          required
           errors={(
             <>
               {errors.email && (
@@ -66,7 +77,7 @@ export default function Login() {
             name="password"
             placeholder="**********"
             register={register}
-            rules={{ required: true }}
+            required
             errors={(
               <>
                 {errors.password && (

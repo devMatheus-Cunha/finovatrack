@@ -1,35 +1,19 @@
 /* eslint-disable no-useless-catch */
-/* eslint-disable camelcase */
-
 import { useMutation } from '@tanstack/react-query';
-import { createDocumentForUser, siging } from '@/service/auth/siging';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { TypeAccount } from './types';
+import { SigingProps, siging } from '@/service/auth/siging';
+import { toast } from 'react-toastify';
 
 const useSignUp = () => {
   const router = useRouter();
 
-  const { mutate: createAccountUser, isLoading } = useMutation(siging, {
-    onSuccess: async (user) => {
-      await createDocumentForUser({
-        id: user.uid,
-        expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
-        token: (await user.getIdTokenResult()).token,
-        email: user.email || '',
-        name: user.displayName || '',
-        typeAccount: user.photoURL as TypeAccount,
-      });
-      router.push(`/control/${user.uid}`);
+  const { mutate: createAccountUser, isLoading } = useMutation({
+    mutationFn: async (values: SigingProps) => siging(values),
+    onSuccess: (id: string) => {
+      router.push(`/control/${id}`);
     },
-    onError: ({ message }: { message: string }) => {
-      if (message === 'Firebase: Error (auth/email-already-in-use).') {
-        toast.error('Este email já esta em uso', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
-      }
-      toast.error('Erro no Servidor. Tente mais tarde!', {
+    onError: ({ message }: {message: string}) => {
+      toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
     },

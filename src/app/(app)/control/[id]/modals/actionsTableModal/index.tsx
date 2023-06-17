@@ -85,7 +85,7 @@ function ContentActionsTableModal({
               placeholder="Ex: Compra carro"
               type="text"
               register={register}
-              rules={{ required: true }}
+              required
               errors={(
                 <>
                   {errors.description && (
@@ -97,7 +97,6 @@ function ContentActionsTableModal({
 
             <Select
               label="Selecione o tipo"
-              rules={{ required: true }}
               name="type"
               options={[
                 { label: 'Essencial', value: 'Essencial' },
@@ -125,7 +124,6 @@ function ContentActionsTableModal({
                       { label: 'Euro', value: 'Euro' },
                     ]}
                     register={register}
-                    rules={{ required: true }}
                     errors={(
                       <>
                         {errors.typeMoney && (

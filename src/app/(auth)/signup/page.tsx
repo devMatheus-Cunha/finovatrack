@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-no-useless-fragment */
@@ -7,18 +9,12 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
-import { ZodError, z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { SigingProps } from '@/service/auth/siging';
 import Link from 'next/link';
 import { useSignUp } from '../../../hooks/auth';
 import { Button, Input, InputPassword } from '../../../components';
-
-const schema = z.object({
-  email: z.string().email('Email invalido').nonempty(),
-  name: z.string(),
-  password: z.string().min(6).nonempty(),
-  typeAccount: z.string().nonempty(),
-});
+import { optionsCurrency, optionsCurrencyHybrid, schema } from './utils';
 
 export default function Signup() {
   const { isLoading, createAccountUser } = useSignUp();
@@ -26,99 +22,200 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SigingProps>({
-    resolver: async (data) => {
-      try {
-        schema.parse(data);
-        return { values: data, errors: {} };
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors };
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } };
-      }
-    },
+    resolver: zodResolver(schema),
   });
 
   return (
-    <form onSubmit={handleSubmit((values: SigingProps) => createAccountUser(values))}>
-      <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
-        <Input
-          label="Nome"
-          name="name"
-          placeholder="Pedro..."
-          type="text"
-          register={register}
-          rules={{ required: true }}
-          errors={(
-            <>
-              {errors.email && (
-                <span className="text-red-500 text-sm ">
-                  Este campo é obrigatório
-                </span>
-              )}
-            </>
+    <form
+      onSubmit={
+        handleSubmit((values: SigingProps) => createAccountUser(values))
+       }
+    >
+      <div
+        className="
+          flex
+          flex-col
+          gap-6
+          w-[100%]
+          bg-gray-800
+          py-5
+          px-5
+          rounded-lg
+        "
+      >
+        <div className="flex gap-6">
+          <Input
+            label="Nome"
+            name="name"
+            placeholder="Pedro..."
+            type="text"
+            required
+            register={register}
+            errors={(
+              <>
+                {errors.name && (
+                  <span className="text-red-500 text-sm ">
+                    {errors.name.message}
+                  </span>
+                )}
+              </>
       )}
-        />
-        <Input
-          label="Email"
-          name="email"
-          placeholder="teste@gmail.com"
-          type="email"
-          register={register}
-          rules={{ required: true }}
-          errors={(
-            <>
-              {errors.email && (
+          />
+          <Input
+            label="Email"
+            name="email"
+            placeholder="teste@gmail.com"
+            type="email"
+            required
+            register={register}
+            errors={(
+              <>
+                {errors.email && (
                 <span className="text-red-500 text-sm ">
-                  Este campo é obrigatório
+                  {errors.email.message}
                 </span>
-              )}
-            </>
+                )}
+              </>
       )}
-        />
-        <InputPassword
-          label="Password"
-          name="password"
-          placeholder="**********"
-          register={register}
-          rules={{ required: true }}
-          errors={(
-            <>
-              {errors.password && (
+          />
+        </div>
+        <div className="flex gap-6">
+          <InputPassword
+            label="Password"
+            name="password"
+            required
+            placeholder="**********"
+            register={register}
+            errors={(
+              <>
+                {errors.password && (
                 <span className="text-red-500 text-sm ">
-                  Este campo é obrigatório
+                  {errors.password.message}
                 </span>
+                )}
+              </>
               )}
-            </>
+          />
+          <InputPassword
+            label="Confirmar Password"
+            name="confirmPassword"
+            required
+            placeholder="**********"
+            register={register}
+            errors={(
+              <>
+                {errors.confirmPassword && (
+                <span className="text-red-500 text-sm ">
+                  {errors.confirmPassword.message}
+                </span>
+                )}
+              </>
               )}
-        />
-        <div>
-          <h3 className="mb-4 font-semibold text-white">Tipo da moeda da conta</h3>
-          <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex bg-gray-800 border-gray-600 text-white">
-            {['real', 'euro', 'hybrid'].map((currency) => (
-              <li className="w-full border-b sm:border-b-0 sm:border-r border-gray-600" key={currency}>
-                <div className="flex items-center pl-3">
-                  <input
-                    {...register('typeAccount', { required: true })}
-                    id={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    type="radio"
-                    value={currency}
-                    disabled={currency === 'hybrid'}
-                    name="typeAccount"
-                    className={`${currency === 'hybrid' ? 'cursor-not-allowed' : 'cursor-pointer'}  w-4 h-4 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500`}
-                  />
-                  <label htmlFor={`horizontal-list-radio-${currency.toLowerCase()}`} className="w-full py-3 ml-2 text-sm font-medium text-gray-300">
-                    {currency}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ul>
+          />
         </div>
 
-        <div className="flex flex-col gap-10 justify-center items-center">
+        <div className="w-full">
+          <label
+            htmlFor="typeAccount"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Selecione moeda da conta *
+          </label>
+          <select
+            id="typeAccount"
+            {...register('typeAccount')}
+            className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
+          >
+            {optionsCurrency.map(({
+              value, disabled, label, selected,
+            }) => (
+              <option
+                key={value}
+                value={value}
+                disabled={disabled}
+                selected={selected}
+              >
+                {label}
+              </option>
+            ))}
+          </select>
+          {errors.typeAccount && (
+          <span className="text-red-500 text-sm ">
+            {errors.typeAccount.message}
+          </span>
+          )}
+        </div>
+        {
+      watch().typeAccount === 'hybrid' && (
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-6">
+            <div className="w-full">
+              <label
+                htmlFor="primary_currency"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Selecione moeda primária *
+              </label>
+              <select
+                id="primary_currency"
+                {...register('primary_currency')}
+                className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
+              >
+                {optionsCurrencyHybrid.map(({
+                  value, disabled, label, selected,
+                }) => (
+                  <option key={value} value={value} disabled={disabled} selected={selected}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+              {errors.primary_currency && (
+                <span className="text-red-500 text-sm ">
+                  {errors.primary_currency.message}
+                </span>
+              )}
+            </div>
+            <div className="w-full">
+              <label
+                htmlFor="secondary_currency"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Selecione moeda secundária *
+              </label>
+              <select
+                id="secondary_currency"
+                {...register('secondary_currency')}
+                className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
+              >
+                {optionsCurrencyHybrid.map(({
+                  value, disabled, label, selected,
+                }) => (
+                  <option key={value} value={value} disabled={disabled} selected={selected}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+              {errors.secondary_currency && (
+                <span className="text-red-500 text-sm ">
+                  {errors.secondary_currency.message}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="p-4 text-sm bg-yellow-300 bg-opacity-75 text-gray-900 rounded-lg">
+            <strong>Exemplo: BRL (Moeda Primária) / EUR (Moeda Secundária)</strong>
+            <br />
+            As entradas serão feitas utilizando a moeda principal escolhida. Você poderá adicionar gastos tanto em BRL quanto em EUR e visualizar o total de gastos separadamente em cada uma dessas moedas. Além disso, o valor total de gastos em EUR será automaticamente convertido para a moeda principal, utilizando a taxa de câmbio do dia. Você também poderá visualizar o valor total de gastos completo em BRL, somando os gastos em EUR e BRL.
+          </div>
+
+        </div>
+      )
+    }
+
+        <div className="flex flex-col gap-7 justify-center items-center">
           <Button
             type="submit"
             variant="default700"
