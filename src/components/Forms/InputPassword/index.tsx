@@ -7,7 +7,7 @@
 import { InputHTMLAttributes, ReactNode, useState } from 'react';
 import { EyeSlash, Eye } from '@phosphor-icons/react';
 import {
-  FieldValues, Path, RegisterOptions, UseFormRegister,
+  FieldValues, Path, UseFormRegister,
 } from 'react-hook-form';
 
 interface PasswordInputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
@@ -15,12 +15,12 @@ interface PasswordInputProps<T extends FieldValues> extends InputHTMLAttributes<
   placeholder: string;
   name: Path<T>;
   register: UseFormRegister<T>;
-  rules?: RegisterOptions<T>;
+  required?: boolean
   errors?: ReactNode;
 }
 
 export default function InputPassword<T extends FieldValues>({
-  label, name, register, rules, errors, ...rest
+  label, name, register, required, errors, ...rest
 }: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,14 +31,14 @@ export default function InputPassword<T extends FieldValues>({
   return (
     <div className="w-[100%]">
       <label htmlFor={name} className="block mb-2 text-sm font-medium text-white">
-        {rules?.required ? `${label} *` : label}
+        {required ? `${label} *` : label}
       </label>
       <div className="relative">
         <input
           id={name as string}
           type={showPassword ? 'text' : 'password'}
           className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-          {...register(name, rules)}
+          {...register(name)}
           {...rest}
         />
         <button

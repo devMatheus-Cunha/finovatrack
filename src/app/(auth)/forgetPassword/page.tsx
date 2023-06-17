@@ -37,7 +37,17 @@ export default function ForgetPassword() {
 
   return (
     <form onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}>
-      <div className="flex flex-col gap-8 w-[400px] bg-gray-800 p-7 rounded-lg ">
+      <div className="
+          flex
+          flex-col
+          gap-6
+          w-[100%]
+          bg-gray-800
+          py-7
+          px-5
+          rounded-lg
+        "
+      >
         <div className="flex flex-col gap-3 text-center">
           <p className="text-2xl  font-bold">Esqueceu sua senha?</p>
           <p className="text-slate-300">Não se preocupe! Insira o seu e-mail de cadastro e enviaremos instruções para você.</p>
@@ -48,7 +58,7 @@ export default function ForgetPassword() {
           placeholder="exemplo@gmail.com"
           type="email"
           register={register}
-          rules={{ required: true }}
+          required
           errors={(
             <>
               {errors.email && (
