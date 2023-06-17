@@ -1,4 +1,6 @@
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from '@firebase/firestore';
 import { auth, db } from '../firebase';
 
@@ -8,25 +10,30 @@ export interface SigingProps {
   confirmPassword: string;
   name: string;
   typeAccount: string;
-  primary_currency?: string;
-  secondary_currency?: string;
+  primary_currency: string;
+  secondary_currency: string;
   id?: string;
+}
+
+export type TDataUser = Omit<SigingProps, 'password' | 'confirmPassword'>
+
+async function createDocumentForUser(data: TDataUser) {
+  try {
+    const myCollection = doc(db, 'users', data.id || '');
+    await setDoc(myCollection, data, { merge: true });
+  } catch (error) {
+    throw new Error('Erro no servidor. Tente novamente mais tarde.');
+  }
 }
 
 export async function siging({
   email,
   password,
-  confirmPassword,
-  name,
+  primary_currency,
+  secondary_currency,
+  typeAccount,
+  ...rest
 }: SigingProps) {
-  if (!email || !password || !confirmPassword || !name) {
-    throw new Error('Todos os campos são obrigatórios.');
-  }
-
-  if (password !== confirmPassword) {
-    throw new Error('As senhas não correspondem.');
-  }
-
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -35,21 +42,23 @@ export async function siging({
     );
 
     const { user } = userCredential;
-    return user;
+
+    const data: TDataUser = {
+      email,
+      primary_currency: typeAccount === 'hybrid' ? primary_currency : typeAccount,
+      secondary_currency: typeAccount === 'hybrid' ? secondary_currency : '',
+      typeAccount: typeAccount !== 'hybrid' ? 'oneCurrency' : typeAccount,
+      id: user.uid,
+      ...rest,
+    };
+
+    await createDocumentForUser(data);
+
+    return user.uid;
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
       throw new Error('Este email já está em uso.');
-    } else {
-      throw new Error('Erro no servidor. Tente novamente mais tarde.');
     }
+    throw new Error('Erro no servidor. Tente novamente mais tarde.');
   }
-}
-
-export async function createDocumentForUser(data: SigingProps) {
-  if (!data.id) {
-    throw new Error('O ID do usuário é obrigatório.');
-  }
-
-  const myCollection = doc(db, 'users', data.id);
-  await setDoc(myCollection, data, { merge: true });
 }

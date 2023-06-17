@@ -9,26 +9,12 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SigingProps } from '@/service/auth/siging';
 import Link from 'next/link';
 import { useSignUp } from '../../../hooks/auth';
 import { Button, Input, InputPassword } from '../../../components';
-import { optionsCurrency, optionsCurrencyHybrid } from './utils';
-
-const schema = z.object({
-  email: z.string().nonempty('Campo obrigatório').email('Email inválido'),
-  name: z.string().nonempty('Campo obrigatório'),
-  password: z.string().nonempty('Campo obrigatório').min(8, 'Deve conter no mínimo 8 caracteres'),
-  confirmPassword: z.string().nonempty('Campo obrigatório').min(8, 'Deve conter no mínimo 8 caracteres'),
-  typeAccount: z.string().nonempty('Campo obrigatório'),
-  primary_currency: z.string().nonempty('Campo obrigatório'),
-  secondary_currency: z.string().nonempty('Campo obrigatório'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'As senhas não correspondem',
-  path: ['confirmPassword'],
-});
+import { optionsCurrency, optionsCurrencyHybrid, schema } from './utils';
 
 export default function Signup() {
   const { isLoading, createAccountUser } = useSignUp();
@@ -141,11 +127,17 @@ export default function Signup() {
           <select
             id="typeAccount"
             {...register('typeAccount')}
-            defaultValue=""
             className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
           >
-            {optionsCurrency.map(({ value, disabled, label }) => (
-              <option key={value} value={value} disabled={disabled}>
+            {optionsCurrency.map(({
+              value, disabled, label, selected,
+            }) => (
+              <option
+                key={value}
+                value={value}
+                disabled={disabled}
+                selected={selected}
+              >
                 {label}
               </option>
             ))}
@@ -172,12 +164,19 @@ export default function Signup() {
                 {...register('primary_currency')}
                 className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
               >
-                {optionsCurrencyHybrid.map(({ value, disabled, label }) => (
-                  <option key={value} value={value} disabled={disabled}>
+                {optionsCurrencyHybrid.map(({
+                  value, disabled, label, selected,
+                }) => (
+                  <option key={value} value={value} disabled={disabled} selected={selected}>
                     {label}
                   </option>
                 ))}
               </select>
+              {errors.primary_currency && (
+                <span className="text-red-500 text-sm ">
+                  {errors.primary_currency.message}
+                </span>
+              )}
             </div>
             <div className="w-full">
               <label
@@ -191,12 +190,19 @@ export default function Signup() {
                 {...register('secondary_currency')}
                 className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
               >
-                {optionsCurrencyHybrid.map(({ value, disabled, label }) => (
-                  <option key={value} value={value} disabled={disabled}>
+                {optionsCurrencyHybrid.map(({
+                  value, disabled, label, selected,
+                }) => (
+                  <option key={value} value={value} disabled={disabled} selected={selected}>
                     {label}
                   </option>
                 ))}
               </select>
+              {errors.secondary_currency && (
+                <span className="text-red-500 text-sm ">
+                  {errors.secondary_currency.message}
+                </span>
+              )}
             </div>
           </div>
           <div className="p-4 text-sm bg-yellow-300 bg-opacity-75 text-gray-900 rounded-lg">
