@@ -71,7 +71,7 @@ function Reports() {
         </div>
         <div className="w-[95%]">
           {
-       data && (
+       data ? (
          <div className="flex flex-col gap-4">
            <h1 className="text-xl">
              Relatório referente ao período
@@ -175,15 +175,12 @@ function Reports() {
            </div>
          </div>
        )
-          }
-          {
-            reportData !== undefined && (
-              <div className="flex flex-col items-center justify-center h-full">
-                <h1 className="mt-4 text-3xl font-bold text-white">Nenhum relatório gerado</h1>
-                <p className="mt-2 text-md text-gray-300">Não há dados disponíveis para este período.</p>
-              </div>
-
-            )
+         : (
+           <div className="flex flex-col items-center justify-center h-full">
+             <h1 className="mt-4 text-3xl font-bold text-white">Nenhum relatório gerado</h1>
+             <p className="mt-2 text-md text-gray-300">Não há dados disponíveis para este período.</p>
+           </div>
+         )
           }
         </div>
       </div>
