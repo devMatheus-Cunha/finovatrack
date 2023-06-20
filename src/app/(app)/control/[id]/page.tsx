@@ -189,7 +189,7 @@ export default function Control() {
         <div className="flex w-[100%] flex-1 justify-center items-center">
           <div className="flex flex-col gap-4 w-[100%] p-6 justify-center">
             <HeaderDataTableToControl
-              typeAccount={typeAccount}
+              userData={userData}
               currentQuotation={lastQuatationData?.current_quotation}
               handleOpenModal={handleOpenModal}
               filter={filter}

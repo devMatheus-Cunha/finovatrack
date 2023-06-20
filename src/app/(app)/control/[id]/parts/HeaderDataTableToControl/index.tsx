@@ -8,14 +8,14 @@ import {
   Coins, HandCoins, Broom, FolderOpen, ArrowsCounterClockwise,
 } from '@phosphor-icons/react';
 import React from 'react';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur';
 import { optionsFilter } from '../../utils';
 import { ITypeModal } from '../../types';
 
 interface IHeaderDataTableToControl {
-  typeAccount: TypeAccount;
+  userData: UserData;
   currentQuotation: number | undefined;
   filter: string;
   onFilter: (filter: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -25,7 +25,7 @@ interface IHeaderDataTableToControl {
 }
 
 function HeaderDataTableToControl({
-  typeAccount,
+  userData,
   currentQuotation,
   handleOpenModal,
   filter,
@@ -99,10 +99,10 @@ function HeaderDataTableToControl({
         </select>
       </div>
       {
-        typeAccount === 'hybrid' && (
+        userData.typeAccount === 'hybrid' && (
         <div className="flex gap-3 justify-center items-center">
           <h3 className="italic">
-            {`Cotação Euro: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
+            {`Cotação ${userData.primary_currency}: ${formatCurrencyMoney(currentQuotation ?? 0, userData.primary_currency)} `}
           </h3>
           <button
             type="button"

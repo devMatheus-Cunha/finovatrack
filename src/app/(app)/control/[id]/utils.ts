@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
@@ -161,6 +162,8 @@ export const initialDataSelectedData: ExpenseData = {
   value: '',
   euro_value: 0,
   real_value: 0,
+  value_primary_currency: 0,
+  value_secondary_currency: 0,
   typeMoney: '',
 };
 
@@ -168,10 +171,10 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
   const calculationSumValues = useMemo(() => {
     if (expensesData.length <= 0) return [];
 
-    const objetoResultado = expensesData.reduce(
+    const calculation = expensesData.reduce(
       (acumulador, objetoAtual) => {
-        acumulador.real_value += Number(objetoAtual.real_value);
-        acumulador.euro_value += Number(objetoAtual.euro_value);
+        acumulador.value_primary_currency = (acumulador.value_primary_currency ?? 0) + Number(objetoAtual.value_primary_currency);
+        acumulador.value_secondary_currency = (acumulador.value_secondary_currency ?? 0) + Number(objetoAtual.value_secondary_currency);
         return acumulador;
       },
       {
@@ -181,10 +184,12 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
         value: '',
         euro_value: 0,
         real_value: 0,
+        value_primary_currency: 0,
+        value_secondary_currency: 0,
         typeMoney: '',
       },
     );
-    return [...expensesData, objetoResultado];
+    return [...expensesData, calculation];
   }, [expensesData]);
 
   return {
