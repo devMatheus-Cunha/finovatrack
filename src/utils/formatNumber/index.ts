@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
 
 export function formatNumberToSubmit(value: string): number {
   const removeCaractheres = value.replace(/^(R\$|\€)\s*/g, '');
@@ -10,14 +9,15 @@ export function formatNumberToSubmit(value: string): number {
 
 export function formatCurrencyMoney(
   value: string | number | undefined,
-  typeAccount: TypeAccount,
+  currency: string,
 ) {
-  const currency = typeAccount !== 'euro' ? 'BRL' : 'EUR';
-  const locale = typeAccount !== 'euro' ? 'pt-BR' : 'pt-BR';
-
   const numberValue = typeof value === 'string' ? parseFloat(value.replace(/\./g, '').replace(',', '.')) : Number(value);
 
-  const formattedValue = new Intl.NumberFormat(locale, {
+  if (currency === 'hybrid') {
+    return numberValue.toLocaleString();
+  }
+
+  const formattedValue = new Intl.NumberFormat(currency, {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,

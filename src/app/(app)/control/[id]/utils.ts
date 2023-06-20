@@ -101,10 +101,6 @@ export const columsHeadProps = (primaryCurrency: string, secondaryCurrency: stri
     field: 'secondary_currency',
   },
   {
-    header: 'Tipo',
-    field: 'type',
-  },
-  {
     header: 'Moeda',
     field: 'typeMoney',
   },

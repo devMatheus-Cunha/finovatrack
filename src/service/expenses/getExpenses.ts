@@ -16,6 +16,8 @@ export interface ExpenseData {
   description: string;
   euro_value: number;
   real_value: number;
+  primary_currency?: number;
+  secondary_currency?: number;
   typeMoney?: 'Real' | 'Euro' | ''
   value: string
 }
