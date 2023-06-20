@@ -11,6 +11,7 @@ import { useParams } from 'next/navigation';
 import { getQuatationRateFromAPI } from '@/service/quatation/getQuatationRateFromAPI';
 import { updateQuotationData } from '@/service/quatation/updateQuotationData';
 import { getLastQuotationData } from '@/service/quatation/getLastQuotationData';
+import { UserData } from '@/hooks/auth/useAuth/types';
 
 export type RefetchQuationDataType = <TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<{
   result_calculation: number;
@@ -19,7 +20,7 @@ export type RefetchQuationDataType = <TPageData>(options?: (RefetchOptions & Ref
   status: any;
 }, unknown>>
 
-const useFetchQuatationEur = (amount: number) => {
+const useFetchQuatationEur = (userData: UserData, amount = 0) => {
   const router = useParams();
   const toastId: any = React.useRef(null);
 
@@ -42,7 +43,10 @@ const useFetchQuatationEur = (amount: number) => {
       if (toastId.current === null) {
         toastId.current = toast('Atualizando Cotação...', { autoClose: false });
       }
-      return await getQuatationRateFromAPI(amount === 0 ? 1 : amount);
+      return await getQuatationRateFromAPI(amount === 0 ? 1 : amount, {
+        primary_currency: userData.primary_currency,
+        secondary_currency: userData.secondary_currency,
+      });
     },
     enabled: false,
     cacheTime: 0,

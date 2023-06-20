@@ -65,10 +65,10 @@ export default function Control() {
 
   const { calculationSumValues } = useCalculationSumValues(expensesData);
   const { getTotals } = useGetTotalsFree(calculationSumValues);
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(getTotals?.euro_value);
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(userData, getTotals?.value_secondary_currency);
 
-  const calculationTotalExpensesEurSumRealToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.euro_value)) + getTotals?.real_value;
-  const calculationTotalExpensesEurToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.euro_value));
+  const calculationTotalExpensesEurSumRealToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.value_secondary_currency)) + (getTotals?.value_primary_currency || 0);
+  const calculationTotalExpensesEurToReal = convertEurToReal(lastQuatationData?.current_quotation, Number(getTotals?.value_secondary_currency));
 
   const [configModal, setConfigModal] = useState<{
     open: boolean
@@ -181,9 +181,9 @@ export default function Control() {
           totalExpensesEurSumRealToReal={calculationTotalExpensesEurSumRealToReal}
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           handleOpenModal={handleOpenModal}
-          totalExpenseEur={getTotals?.euro_value}
-          totalExpenseReal={getTotals?.real_value}
-          typeAccount={typeAccount}
+          totalExpenseEur={getTotals?.value_primary_currency}
+          totalExpenseReal={getTotals?.value_secondary_currency}
+          userData={userData}
         />
 
         <div className="flex w-[100%] flex-1 justify-center items-center">

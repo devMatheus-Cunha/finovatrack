@@ -8,7 +8,10 @@ export interface IEntrysData {
   id?: string;
 }
 
-export async function getQuatationRateFromAPI(valueToConvert: number) {
+export async function getQuatationRateFromAPI(valueToConvert: number, currency: {
+  primary_currency: string
+  secondary_currency: string
+}) {
   const myHeaders = new Headers();
   myHeaders.append('apikey', process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || '');
 
@@ -18,7 +21,7 @@ export async function getQuatationRateFromAPI(valueToConvert: number) {
   };
 
   const response = await fetch(
-    `https://api.apilayer.com/exchangerates_data/convert?to=brl&from=eur&amount=${valueToConvert}`,
+    `https://api.apilayer.com/exchangerates_data/convert?to=${currency.primary_currency}&from=${currency.secondary_currency}&amount=${valueToConvert}`,
     requestOptions,
   );
 

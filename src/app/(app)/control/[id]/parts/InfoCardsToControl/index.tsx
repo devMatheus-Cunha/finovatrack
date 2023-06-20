@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/jsx-props-no-multi-spaces */
 
@@ -6,17 +7,17 @@
 import { InfoCardMoney } from '@/components';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
 import React from 'react';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
 import { validaTextForTypeAccount } from '../../utils';
 import { ITypeModal } from '../../types';
 
 interface IInfoCardsToControl {
- typeAccount: TypeAccount
+ userData: UserData
  totalEntrys: number
- totalExpenseEur: number
- totalExpenseReal: number
+ totalExpenseEur: number | undefined
+ totalExpenseReal: number | undefined
  entrysData: IEntrysData[]
  totalExpensesEurToReal: number
  totalExpensesEurSumRealToReal: number
@@ -24,7 +25,7 @@ interface IInfoCardsToControl {
 }
 
 function InfoCardsToControl({
-  typeAccount,
+  userData,
   totalEntrys,
   handleOpenModal,
   entrysData,
@@ -33,7 +34,7 @@ function InfoCardsToControl({
   totalExpenseEur,
   totalExpenseReal,
 }: IInfoCardsToControl) {
-  const validateExpenseData = {
+  const validateExpenseData: any = {
     real: totalExpenseReal,
     euro: totalExpenseEur,
     hybrid: totalExpensesEurSumRealToReal,
@@ -42,8 +43,8 @@ function InfoCardsToControl({
   return (
     <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
       <InfoCardMoney
-        infoData={formatCurrencyMoney(totalEntrys, typeAccount)}
-        title={validaTextForTypeAccount[typeAccount]?.titleEntrys}
+        infoData={formatCurrencyMoney(totalEntrys, userData.primary_currency)}
+        title="Total Entradas"
 
         contentAction={(
           <button
@@ -56,20 +57,20 @@ function InfoCardsToControl({
    )}
       />
       {
-        typeAccount === 'hybrid' && (
+        userData.typeAccount === 'hybrid' && (
         <InfoCardMoney
-          infoData={formatCurrencyMoney(totalExpensesEurToReal, typeAccount)}
-          title={validaTextForTypeAccount[typeAccount]?.titleExpensesEurToReal}
+          infoData={formatCurrencyMoney(totalExpensesEurToReal, userData.primary_currency)}
+          title={`Total Gastos em ${userData.secondary_currency}`}
         />
         )
       }
       <InfoCardMoney
-        infoData={formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount)}
-        title={validaTextForTypeAccount[typeAccount]?.titleExpenses}
+        infoData={formatCurrencyMoney(validateExpenseData[userData.typeAccount], userData.primary_currency)}
+        title="Total Gastos"
       />
       <InfoCardMoney
-        infoData={formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount)}
-        title={validaTextForTypeAccount[typeAccount]?.totalFree}
+        infoData={formatCurrencyMoney(totalEntrys - validateExpenseData[userData.typeAccount], userData.primary_currency)}
+        title="Total Livre"
       />
     </div>
   );
