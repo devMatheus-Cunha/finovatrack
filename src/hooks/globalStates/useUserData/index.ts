@@ -12,6 +12,8 @@ export const initialState: UserData = {
   token: '',
   email: '',
   name: '',
+  primary_currency: '',
+  secondary_currency: '',
   typeAccount: 'hybrid',
 };
 

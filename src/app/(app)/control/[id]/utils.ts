@@ -78,18 +78,27 @@ export const validateTextToModal: any = {
   },
 };
 
-export const columsHeadProps = [
+export const optionsCurrency: any = {
+  USD: 'Valor Dólar USD',
+  CAD: 'Valor Dólar CAD',
+  EUR: 'Valor Euro',
+  CHF: 'Valor Franco Suíço',
+  GBP: 'Valor Libra',
+  BRL: 'Valor Real',
+};
+
+export const columsHeadProps = (primaryCurrency: string, secondaryCurrency: string) => [
   {
     header: 'Descrição',
     field: 'description',
   },
   {
-    header: 'Valor Euro',
-    field: 'euro_value',
+    header: optionsCurrency[primaryCurrency],
+    field: 'primary_currency',
   },
   {
-    header: 'Valor Real',
-    field: 'real_value',
+    header: optionsCurrency[secondaryCurrency],
+    field: 'secondary_currency',
   },
   {
     header: 'Tipo',
@@ -104,6 +113,7 @@ export const columsHeadProps = [
     field: 'actions',
   },
 ];
+
 export const columsHeadPropsEuro = [
   {
     header: 'Descrição',
@@ -145,6 +155,7 @@ export const validateColumsHeadProps: any = {
   euro: columsHeadPropsEuro,
   real: columsHeadPropsReal,
   hybrid: columsHeadProps,
+  oneCurrency: columsHeadProps,
 };
 
 export const initialDataSelectedData: ExpenseData = {

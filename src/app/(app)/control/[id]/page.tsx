@@ -102,6 +102,7 @@ export default function Control() {
     real: getTotals?.real_value,
     euro: getTotals?.euro_value,
     hybrid: calculationTotalExpensesEurSumRealToReal,
+    oneCurrency: calculationTotalExpensesEurSumRealToReal,
   };
 
   const totalEntrys = SomaValores(entrysData);
@@ -198,7 +199,7 @@ export default function Control() {
             />
             <TableToControl
               calculationSumValues={typeAccount === 'hybrid' ? calculationSumValues : expensesData}
-              typeAccount={typeAccount}
+              userData={userData}
               handleOpenModal={handleOpenModal}
               isVisibilityData={isVisibilityData}
               filter={filter}

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from '@firebase/firestore';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { auth, db } from '../firebase';
 
 export interface SigingProps {
@@ -15,9 +16,7 @@ export interface SigingProps {
   id?: string;
 }
 
-export type TDataUser = Omit<SigingProps, 'password' | 'confirmPassword'>
-
-async function createDocumentForUser(data: TDataUser) {
+async function createDocumentForUser(data: UserData) {
   try {
     const myCollection = doc(db, 'users', data.id || '');
     await setDoc(myCollection, data, { merge: true });
@@ -43,11 +42,11 @@ export async function siging({
 
     const { user } = userCredential;
 
-    const data: TDataUser = {
+    const data: UserData = {
       email,
       primary_currency: typeAccount === 'hybrid' ? primary_currency : typeAccount,
       secondary_currency: typeAccount === 'hybrid' ? secondary_currency : '',
-      typeAccount: typeAccount !== 'hybrid' ? 'oneCurrency' : typeAccount,
+      typeAccount: typeAccount !== 'hybrid' ? 'oneCurrency' : 'hybrid',
       id: user.uid,
       ...rest,
     };

@@ -1,4 +1,4 @@
-export type TypeAccount = 'real' | 'euro' | 'hybrid'
+export type TypeAccount = 'real' | 'euro' | 'hybrid' | 'oneCurrency'
 
 export interface UserData {
   id: string,
@@ -7,4 +7,6 @@ export interface UserData {
   email?: string,
   name?: string
   typeAccount: TypeAccount
+  primary_currency: string;
+  secondary_currency: string;
 }

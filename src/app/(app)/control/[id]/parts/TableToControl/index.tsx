@@ -1,31 +1,32 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 'use client';
 
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { TypeAccount, UserData } from '@/hooks/auth/useAuth/types';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { Fragment } from 'react';
 import { ButtonGroup, Empty } from '@/components';
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react';
 import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData';
-import { validateColumsHeadProps } from '../../utils';
+import { columsHeadProps, validateColumsHeadProps } from '../../utils';
 import { ITypeModal } from '../../types';
 
 interface ITableToControl {
- typeAccount: TypeAccount
  calculationSumValues: ExpenseData[]
  isVisibilityData: boolean
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
  filter: Filter
+ userData: UserData
 }
 
 function TableToControl({
   calculationSumValues,
-  typeAccount,
   handleOpenModal,
   isVisibilityData,
   filter,
+  userData,
 }: ITableToControl) {
   return (
     <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
@@ -35,11 +36,11 @@ function TableToControl({
         <thead className="text-md uppercase bg-gray-800 text-gray-400 border-b border-gray-700">
           <tr>
             {
-         validateColumsHeadProps[typeAccount].map((item: { field: string, header: string }) => (
-           <th scope="col" className="px-6 py-3" key={item.field}>
-             {item.header}
-           </th>
-         ))
+        columsHeadProps(userData.primary_currency, userData.secondary_currency).map((item: { field: string, header: string }) => (
+          <th scope="col" className="px-6 py-3" key={item.field}>
+            {item.header}
+          </th>
+        ))
         }
           </tr>
         </thead>
@@ -52,7 +53,7 @@ function TableToControl({
                 {item.description}
               </th>
               {
-            (typeAccount === 'euro' || typeAccount === 'hybrid') && (
+            (userData.typeAccount === 'euro' || userData.typeAccount === 'hybrid') && (
             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
             </th>
@@ -60,7 +61,7 @@ function TableToControl({
            }
 
               {
-            (typeAccount === 'real' || typeAccount === 'hybrid') && (
+            (userData.typeAccount === 'real' || userData.typeAccount === 'hybrid') && (
             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, 'real') : '-'}
             </th>
@@ -70,7 +71,7 @@ function TableToControl({
                 {item.type}
               </th>
               {
-            typeAccount === 'hybrid' && (
+            userData.typeAccount === 'hybrid' && (
             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
               {item.typeMoney}
             </th>
