@@ -14,10 +14,8 @@ export interface ExpenseData {
   id: string;
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
-  euro_value: number;
-  real_value: number;
-  primary_currency?: number;
-  secondary_currency?: number;
+  value_primary_currency?: number;
+  value_secondary_currency?: number;
   typeMoney?: 'Real' | 'Euro' | ''
   value: string
 }

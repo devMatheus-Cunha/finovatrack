@@ -9,10 +9,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { Button, InputTypeMoney } from '@/components';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { validaTextForTypeAccount } from '../../utils';
+import { labelCurrency } from '../../utils';
 import { ITypeModal } from '../../types';
 
 type FormData = {
@@ -23,7 +23,7 @@ interface IContentModal {
  onSubmit: (value: FormData)=> void
  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
  isLoadingAddExpense?: boolean
- typeAccount: TypeAccount
+ userData: UserData
 }
 
 const schema = z.object({
@@ -34,7 +34,7 @@ function ContentAddEntryModal({
   onSubmit,
   handleOpenModal,
   isLoadingAddExpense,
-  typeAccount,
+  userData,
 }: IContentModal) {
   const {
     handleSubmit,
@@ -67,8 +67,8 @@ function ContentAddEntryModal({
             <InputTypeMoney
               control={control}
               name="value"
-              label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
-              placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
+              label={`Valor (${labelCurrency[userData.primary_currency]})`}
+              placeholder={`Ex: ${labelCurrency[userData.primary_currency]} 10,00`}
               errors={(
                 <>
                   {errors.value && (

@@ -80,22 +80,26 @@ function Reports() {
            </h1>
            <div className="flex gap-4">
              <h1 className="text-gray-300">
-               {validaTextForTypeAccount[userData.typeAccount]?.titleEntrys}
+               Total Entradas:
                {' '}
                <span className="italic text-white">{isVisibilityData ? data.totalEntrys : '****'}</span>
              </h1>
+             {
+              userData.typeAccount === 'hybrid' && (
+                <h1 className="text-gray-300">
+                  {`Total gastos em ${userData.secondary_currency}:`}
+                  {' '}
+                  <span className="italic text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
+                </h1>
+              )
+             }
              <h1 className="text-gray-300">
-               {validaTextForTypeAccount[userData.typeAccount]?.titleExpensesEurToReal}
-               {' '}
-               <span className="italic text-white">{isVisibilityData ? data.totalExpenseEurToReal : '****'}</span>
-             </h1>
-             <h1 className="text-gray-300">
-               {validaTextForTypeAccount[userData.typeAccount]?.titleExpenses}
+               Total Gastos:
                {' '}
                <span className="italic text-white">{isVisibilityData ? data.totalExpenses : '****'}</span>
              </h1>
              <h1 className="text-gray-300">
-               {validaTextForTypeAccount[userData.typeAccount]?.totalFree}
+               Total Livre
                {' '}
                <span className="italic text-white">{isVisibilityData ? data.totalInvested : '****'}</span>
              </h1>
@@ -134,17 +138,17 @@ function Reports() {
                        {item.description}
                      </th>
                      {
-            (userData.typeAccount === 'euro' || userData.typeAccount === 'hybrid') && (
+            (userData.primary_currency) && (
             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
-              {item.euro_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.euro_value, 'euro') : '-'}
+              {item.value_primary_currency !== 0 && isVisibilityData ? formatCurrencyMoney(item.value_primary_currency, userData.primary_currency) : '-'}
             </th>
             )
            }
 
                      {
-            (userData.typeAccount === 'real' || userData.typeAccount === 'hybrid') && (
+            (userData.secondary_currency) && (
             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap text-white">
-              {item.real_value !== 0 && isVisibilityData ? formatCurrencyMoney(item.real_value, 'real') : '-'}
+              {item.value_secondary_currency !== 0 && isVisibilityData ? formatCurrencyMoney(item.value_secondary_currency, userData.secondary_currency) : '-'}
             </th>
             )
            }

@@ -9,15 +9,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError, z } from 'zod';
 
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import {
   Button, Input, InputTypeMoney, Select,
 } from '@/components';
-import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { ExpenseFormData, IAddExpenseData } from '@/hooks/expenses/useAddExpense';
 import { ITypeModal } from '../../types';
-import { validaTextForTypeAccount, validateTextToModal } from '../../utils';
+import {
+  labelCurrency, validateTextToModal,
+} from '../../utils';
 
 interface IContentModal {
   onSubmit: (data: IAddExpenseData) => Promise<void>
@@ -25,7 +26,7 @@ interface IContentModal {
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   type: ITypeModal
-  typeAccount: TypeAccount
+  userData: UserData
 }
 
 function ContentActionsTableModal({
@@ -34,11 +35,11 @@ function ContentActionsTableModal({
   isLoadingAddExpense,
   initialData,
   type,
-  typeAccount,
+  userData,
 }: IContentModal) {
   const schema = z.object({
     description: z.string().nonempty(),
-    typeMoney: typeAccount === 'hybrid' ? z.string().nonempty() : z.string().optional(),
+    typeMoney: userData.typeAccount === 'hybrid' ? z.string().nonempty() : z.string().optional(),
     value: z.string().nonempty(),
     type: z.string().nonempty(),
   });
@@ -52,9 +53,9 @@ function ContentActionsTableModal({
     defaultValues: type !== 'addExpense' ? {
       ...initialData,
       value:
-      initialData?.typeMoney === 'Real'
-        ? formatCurrencyMoney(initialData?.real_value, typeAccount)
-        : formatCurrencyMoney(initialData?.euro_value, typeAccount),
+      initialData?.typeMoney === userData.primary_currency
+        ? String(initialData?.value_primary_currency)
+        : String(initialData?.value_secondary_currency),
     } : undefined,
     resolver: async (data) => {
       try {
@@ -115,13 +116,19 @@ function ContentActionsTableModal({
                 )}
             />
             {
-                typeAccount === 'hybrid' && (
+                userData.typeAccount === 'hybrid' && (
                   <Select
                     label="Selecione Moeda"
                     name="typeMoney"
                     options={[
-                      { label: 'Real', value: 'Real' },
-                      { label: 'Euro', value: 'Euro' },
+                      {
+                        label: userData.primary_currency,
+                        value: userData.primary_currency,
+                      },
+                      {
+                        label: userData.secondary_currency,
+                        value: userData.secondary_currency,
+                      },
                     ]}
                     register={register}
                     errors={(
@@ -140,19 +147,9 @@ function ContentActionsTableModal({
               control={control}
               name="value"
               label={
-                  typeAccount === 'hybrid'
-                    ? watch().typeMoney === 'Real'
-                      ? 'Valor (R$):'
-                      : 'Valor (€):'
-                    : validaTextForTypeAccount[typeAccount]?.labelValueMoney
-                }
-              placeholder={
-                  typeAccount === 'hybrid'
-                    ? watch().typeMoney === 'Real'
-                      ? 'Ex: R$ 10'
-                      : 'Ex: € 10'
-                    : validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense
-                }
+                `Valor (${labelCurrency[watch().typeMoney || userData.primary_currency]})`
+}
+              placeholder={`Ex: ${labelCurrency[watch().typeMoney || userData.primary_currency]} 10,00`}
               errors={(
                 <>
                   {errors.value && (

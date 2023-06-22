@@ -8,8 +8,6 @@ export interface ExpenseData {
   id: string;
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
-  euro_value: number;
-  real_value: number;
   value_primary_currency?: number;
   value_secondary_currency?: number;
   typeMoney?: 'Real' | 'Euro' | ''

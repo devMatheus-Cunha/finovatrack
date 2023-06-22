@@ -88,6 +88,15 @@ export const optionsCurrency: any = {
   BRL: 'Valor Real',
 };
 
+export const labelCurrency: any = {
+  USD: '$',
+  CAD: 'CA$',
+  EUR: '€',
+  CHF: 'CHF',
+  GBP: '£',
+  BRL: 'R$',
+};
+
 export const columsHeadProps = (primaryCurrency: string, secondaryCurrency: string) => [
   {
     header: 'Descrição',
@@ -160,8 +169,6 @@ export const initialDataSelectedData: ExpenseData = {
   type: '',
   description: '',
   value: '',
-  euro_value: 0,
-  real_value: 0,
   value_primary_currency: 0,
   value_secondary_currency: 0,
   typeMoney: '',
@@ -182,8 +189,6 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
         type: '',
         description: 'Totais',
         value: '',
-        euro_value: 0,
-        real_value: 0,
         value_primary_currency: 0,
         value_secondary_currency: 0,
         typeMoney: '',

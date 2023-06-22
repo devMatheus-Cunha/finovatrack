@@ -10,7 +10,6 @@ import React from 'react';
 import { UserData } from '@/hooks/auth/useAuth/types';
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData';
-import { validaTextForTypeAccount } from '../../utils';
 import { ITypeModal } from '../../types';
 
 interface IInfoCardsToControl {

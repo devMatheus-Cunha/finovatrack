@@ -87,7 +87,7 @@ export default function Control() {
     data: [],
   });
 
-  function SomaValores(array: IEntrysData[]) {
+  function SumValues(array: IEntrysData[]) {
     const total = useMemo(() => array.reduce((accumulator, item) => {
       const valorFormatado = item.value.replace(/\./g, '').replace(',', '.');
       const valorNum = parseFloat(valorFormatado);
@@ -99,13 +99,11 @@ export default function Control() {
   }
 
   const validateExpenseData = {
-    real: getTotals?.real_value,
-    euro: getTotals?.euro_value,
     hybrid: calculationTotalExpensesEurSumRealToReal,
-    oneCurrency: calculationTotalExpensesEurSumRealToReal,
+    oneCurrency: getTotals?.value_primary_currency,
   };
 
-  const totalEntrys = SomaValores(entrysData);
+  const totalEntrys = SumValues(entrysData);
 
   const handleOpenModal = (type?: ITypeModal, data?: ExpenseData) => {
     setConfigModal({
@@ -124,9 +122,9 @@ export default function Control() {
   const onAddExpense = async (data: IAddExpenseData) => {
     const formattedValues = {
       ...data,
-      real_value: data.typeMoney === 'Real' || typeAccount === 'real'
+      value_primary_currency: data.typeMoney === userData.primary_currency
         ? formatNumberToSubmit(data.value) : 0,
-      euro_value: data.typeMoney === 'Euro' || typeAccount === 'euro'
+      value_secondary_currency: data.typeMoney === userData.secondary_currency
         ? formatNumberToSubmit(data.value) : 0,
     };
 
@@ -217,7 +215,7 @@ export default function Control() {
                         handleOpenModal={handleOpenModal}
                         onSubmit={onAddExpense}
                         isLoadingAddExpense={isLoadingAddExpense}
-                        typeAccount={typeAccount}
+                        userData={userData}
                       />
                     </Modal>
                     )
@@ -245,7 +243,7 @@ export default function Control() {
                         onSubmit={(values: ExpenseData[]) => {
                           saveReport({
                             data: values,
-                            totalInvested: formatCurrencyMoney(totalEntrys - validateExpenseData[typeAccount], typeAccount),
+                            totalInvested: formatCurrencyMoney(totalEntrys - (validateExpenseData[typeAccount] || 0), typeAccount),
                             totalEntrys: formatCurrencyMoney(totalEntrys, typeAccount),
                             totalExpenses: formatCurrencyMoney(validateExpenseData[typeAccount], typeAccount),
                             totalExpenseEurToReal: formatCurrencyMoney(calculationTotalExpensesEurToReal, typeAccount),
@@ -266,7 +264,7 @@ export default function Control() {
                   <ContentAddEntryModal
                     handleOpenModal={handleOpenModal}
                     onSubmit={onAddEntrys}
-                    typeAccount={typeAccount}
+                    userData={userData}
                   />
                 </Modal>
               )

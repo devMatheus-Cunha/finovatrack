@@ -8,8 +8,6 @@ export interface IAddExpenseData {
   id?: string;
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string;
-  euro_value?: number;
-  real_value?: number;
   typeMoney?: 'Real' | 'Euro' | ''
   value: string
 }
@@ -17,7 +15,9 @@ export interface IAddExpenseData {
 export type ExpenseFormData = {
   id?: string;
   description: string;
-  value: string;
+  primary_currency: number;
+  secondary_currency: number;
+  value: string
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   typeMoney?: 'Real' | 'Euro' | ''
 };

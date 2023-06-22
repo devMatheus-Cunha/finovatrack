@@ -4,13 +4,13 @@
 
 'use client';
 
-import { TypeAccount, UserData } from '@/hooks/auth/useAuth/types';
+import { UserData } from '@/hooks/auth/useAuth/types';
 import { formatCurrencyMoney } from '@/utils/formatNumber';
 import { Fragment } from 'react';
 import { ButtonGroup, Empty } from '@/components';
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react';
 import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData';
-import { columsHeadProps, validateColumsHeadProps } from '../../utils';
+import { columsHeadProps } from '../../utils';
 import { ITypeModal } from '../../types';
 
 interface ITableToControl {
