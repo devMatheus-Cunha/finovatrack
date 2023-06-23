@@ -3,18 +3,18 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 
-'use client';
+'use client'
 
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { useMemo } from 'react';
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+import { useMemo } from 'react'
 
 type InfoCard = {
-  titleEntrys: string;
-  titleExpenses: string;
-  titleExpensesEurToReal: string;
-  totalFree: string;
-  labelValueMoney: string;
-  placeholderValueAddExpense: string;
+  titleEntrys: string
+  titleExpenses: string
+  titleExpensesEurToReal: string
+  totalFree: string
+  labelValueMoney: string
+  placeholderValueAddExpense: string
 }
 
 enum TypeAccount {
@@ -24,16 +24,16 @@ enum TypeAccount {
 }
 
 type AuthData = {
-  typeAccount?: TypeAccount | '';
+  typeAccount?: TypeAccount | ''
 }
 
 type ValidTextForTypeAccount = {
-  [key in TypeAccount]: InfoCard;
+  [key in TypeAccount]: InfoCard
 }
 
 export const authData: AuthData = {
   typeAccount: TypeAccount.hybrid,
-};
+}
 
 export const validaTextForTypeAccount: ValidTextForTypeAccount = {
   hybrid: {
@@ -43,7 +43,6 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     labelValueMoney: 'Valor (R$):',
     placeholderValueAddExpense: 'Ex: R$ 10',
     titleExpensesEurToReal: 'Total Gastos Euro',
-
   },
   real: {
     titleEntrys: 'Total Entradas',
@@ -52,7 +51,6 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     labelValueMoney: 'Valor (R$):',
     placeholderValueAddExpense: 'Ex: R$ 10',
     titleExpensesEurToReal: '',
-
   },
   euro: {
     titleEntrys: 'Total Entradas',
@@ -62,7 +60,7 @@ export const validaTextForTypeAccount: ValidTextForTypeAccount = {
     placeholderValueAddExpense: 'Ex: € 10',
     titleExpensesEurToReal: '',
   },
-};
+}
 
 export const validateTextToModal: any = {
   addExpense: {
@@ -77,7 +75,7 @@ export const validateTextToModal: any = {
     title: 'Deletar Gasto',
     description: 'delete data',
   },
-};
+}
 
 export const optionsCurrency: any = {
   USD: 'Valor Dólar USD',
@@ -86,7 +84,7 @@ export const optionsCurrency: any = {
   CHF: 'Valor Franco Suíço',
   GBP: 'Valor Libra',
   BRL: 'Valor Real',
-};
+}
 
 export const labelCurrency: any = {
   USD: '$',
@@ -95,9 +93,12 @@ export const labelCurrency: any = {
   CHF: 'CHF',
   GBP: '£',
   BRL: 'R$',
-};
+}
 
-export const columsHeadProps = (primaryCurrency: string, secondaryCurrency: string) => [
+export const columsHeadProps = (
+  primaryCurrency: string,
+  secondaryCurrency: string,
+) => [
   {
     header: 'Descrição',
     field: 'description',
@@ -115,10 +116,14 @@ export const columsHeadProps = (primaryCurrency: string, secondaryCurrency: stri
     field: 'typeMoney',
   },
   {
+    header: 'Tipo',
+    field: 'type',
+  },
+  {
     header: 'Ação',
     field: 'actions',
   },
-];
+]
 
 export const columsHeadPropsEuro = [
   {
@@ -137,7 +142,7 @@ export const columsHeadPropsEuro = [
     header: 'Ação',
     field: 'actions',
   },
-];
+]
 export const columsHeadPropsReal = [
   {
     header: 'Descrição',
@@ -155,14 +160,14 @@ export const columsHeadPropsReal = [
     header: 'Ação',
     field: 'actions',
   },
-];
+]
 
 export const validateColumsHeadProps: any = {
   euro: columsHeadPropsEuro,
   real: columsHeadPropsReal,
   hybrid: columsHeadProps,
   oneCurrency: columsHeadProps,
-};
+}
 
 export const initialDataSelectedData: ExpenseData = {
   id: '',
@@ -172,17 +177,21 @@ export const initialDataSelectedData: ExpenseData = {
   value_primary_currency: 0,
   value_secondary_currency: 0,
   typeMoney: '',
-};
+}
 
 export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
   const calculationSumValues = useMemo(() => {
-    if (expensesData.length <= 0) return [];
+    if (expensesData.length <= 0) return []
 
     const calculation = expensesData.reduce(
       (acumulador, objetoAtual) => {
-        acumulador.value_primary_currency = (acumulador.value_primary_currency ?? 0) + Number(objetoAtual.value_primary_currency);
-        acumulador.value_secondary_currency = (acumulador.value_secondary_currency ?? 0) + Number(objetoAtual.value_secondary_currency);
-        return acumulador;
+        acumulador.value_primary_currency =
+          (acumulador.value_primary_currency ?? 0) +
+          Number(objetoAtual.value_primary_currency)
+        acumulador.value_secondary_currency =
+          (acumulador.value_secondary_currency ?? 0) +
+          Number(objetoAtual.value_secondary_currency)
+        return acumulador
       },
       {
         id: '',
@@ -193,38 +202,40 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
         value_secondary_currency: 0,
         typeMoney: '',
       },
-    );
-    return [...expensesData, calculation];
-  }, [expensesData]);
+    )
+    return [...expensesData, calculation]
+  }, [expensesData])
 
   return {
     calculationSumValues,
-  };
-};
+  }
+}
 
 export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
   const getTotals: ExpenseData = useMemo(() => {
-    const result = calculationSumValues.find((item) => item.description === 'Totais');
+    const result = calculationSumValues.find(
+      (item) => item.description === 'Totais',
+    )
 
-    if (result) return result;
+    if (result) return result
 
-    return initialDataSelectedData;
-  }, [calculationSumValues]);
+    return initialDataSelectedData
+  }, [calculationSumValues])
 
   return {
     getTotals,
-  };
-};
+  }
+}
 
 export const optionsFilter = [
   { label: 'Limpar', value: '' },
   { label: 'Essencial', value: 'Essencial' },
   { label: 'Não essencial', value: 'Não essencial' },
   { label: 'Gasto Livre', value: 'Gasto Livre' },
-];
+]
 
 function FixErroBuild() {
-  return null;
+  return null
 }
 
-export default FixErroBuild;
+export default FixErroBuild

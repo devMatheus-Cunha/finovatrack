@@ -1,11 +1,11 @@
 /* eslint-disable import/prefer-default-export */
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../firebase';
+import { sendPasswordResetEmail } from 'firebase/auth'
+import { auth } from '../firebase'
 
 export interface LogoutProps {
- email: string
+  email: string
 }
 
-export async function forgetPassword({ email }:LogoutProps) {
-  await sendPasswordResetEmail(auth, email);
+export async function forgetPassword({ email }: LogoutProps) {
+  await sendPasswordResetEmail(auth, email)
 }
