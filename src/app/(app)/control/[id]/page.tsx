@@ -4,11 +4,9 @@
 
 'use client'
 
-import { useMemo, useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 
 import { SubmitHandler } from 'react-hook-form'
-
-import Loading from '@/components/Loading'
 
 import {
   useAddEntrys,
@@ -191,7 +189,7 @@ export default function Control() {
     })
   }
 
-  const onFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onFilter = (event: ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault()
     setFilter(event.target.value as Filter)
   }

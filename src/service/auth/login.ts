@@ -44,7 +44,6 @@ export async function updatedEmailUser(email = '') {
 
   if (!user) {
     throw new Error('Nenhum usuário autenticado.')
-    return
   }
 
   try {

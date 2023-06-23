@@ -8,34 +8,7 @@
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { useMemo } from 'react'
 
-type InfoCard = {
-  titleEntrys: string
-  titleExpenses: string
-  titleExpensesEurToReal: string
-  totalFree: string
-  labelValueMoney: string
-  placeholderValueAddExpense: string
-}
-
-enum TypeAccount {
-  hybrid = 'hybrid',
-  real = 'real',
-  euro = 'euro',
-}
-
-type AuthData = {
-  typeAccount?: TypeAccount | ''
-}
-
-type ValidTextForTypeAccount = {
-  [key in TypeAccount]: InfoCard
-}
-
-export const authData: AuthData = {
-  typeAccount: TypeAccount.hybrid,
-}
-
-export const validaTextForTypeAccount: ValidTextForTypeAccount = {
+export const validaTextForTypeAccount: any = {
   hybrid: {
     titleEntrys: 'Total Entradas',
     titleExpenses: 'Total Gastos',

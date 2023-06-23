@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/inline-script-id */
 /* eslint-disable react/no-danger */
 
 'use client'

@@ -12,7 +12,6 @@ import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { validateColumsHeadProps } from './utils'
-import { validaTextForTypeAccount } from '../../control/[id]/utils'
 
 function Reports() {
   const { userData } = useUserData()
