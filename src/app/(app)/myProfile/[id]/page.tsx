@@ -7,8 +7,8 @@
 
 'use client'
 
+import { dropdownOptionsCurrency } from '@/app/(auth)/signup/utils'
 import { Button, Input } from '@/components'
-import { TypeAccount } from '@/hooks/auth/useAuth/types'
 import { useUserData } from '@/hooks/globalStates'
 import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ import { ZodError, z } from 'zod'
 type FormValues = {
   email?: string
   name?: string
-  typeAccount?: TypeAccount
+  primary_currency?: string
 }
 
 const schemaName = z.object({
@@ -67,7 +67,11 @@ function MyProfile() {
     reset: resetEmail,
     formState: { errors: errorsEmail },
   } = useForm({
-    defaultValues: { email: userData.email, typeAccount: userData.typeAccount },
+    defaultValues: {
+      email: userData.email,
+      primary_currency: userData.primary_currency,
+      secondary_currency: userData.secondary_currency,
+    },
     resolver: async (data) => {
       try {
         schemaEmail.parse(data)
@@ -227,35 +231,69 @@ function MyProfile() {
           </div>
         </form>
 
-        <div>
-          <h3 className="mb-4 font-semibold text-white">
-            Tipo da moeda da conta
-          </h3>
-          <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex bg-gray-800 border-gray-600 text-white">
-            {['real', 'euro', 'hybrid'].map((currency) => (
-              <li
-                className="w-full border-b sm:border-b-0 sm:border-r border-gray-600 opacity-75"
-                key={currency}
-              >
-                <div className="flex items-center pl-3">
-                  <input
-                    id={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    type="radio"
-                    value={currency}
-                    disabled
-                    className="w-4 h-4 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500 cursor-not-allowed opacity-75"
-                    {...registerEmail('typeAccount')}
-                  />
-                  <label
-                    htmlFor={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    className="w-full py-3 ml-2 text-sm font-medium text-gray-300"
+        <div className="flex gap-6">
+          <div className="w-full">
+            <label
+              htmlFor="primary_currency"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              {userData.typeAccount === 'oneCurrency'
+                ? 'Moeda Selecionada'
+                : 'Moeda Principal Selecionada'}
+            </label>
+            <select
+              id="primary_currency"
+              {...registerEmail}
+              disabled
+              name="primary_currency"
+              defaultValue={userData.primary_currency}
+              className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed"
+            >
+              {dropdownOptionsCurrency.map(
+                ({ value, disabled, label, selected }) => (
+                  <option
+                    key={value}
+                    value={value}
+                    disabled={disabled}
+                    selected={selected}
                   >
-                    {currency}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ul>
+                    {label}
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
+          {userData.typeAccount === 'hybrid' && (
+            <div className="w-full">
+              <label
+                htmlFor="secondary_currency"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Moeda Secundária Selecionada
+              </label>
+              <select
+                id="secondary_currency"
+                {...registerEmail}
+                disabled
+                name="secondary_currency"
+                defaultValue={userData.secondary_currency}
+                className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed"
+              >
+                {dropdownOptionsCurrency.map(
+                  ({ value, disabled, label, selected }) => (
+                    <option
+                      key={value}
+                      value={value}
+                      disabled={disabled}
+                      selected={selected}
+                    >
+                      {label}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+          )}
         </div>
       </div>
     </main>
