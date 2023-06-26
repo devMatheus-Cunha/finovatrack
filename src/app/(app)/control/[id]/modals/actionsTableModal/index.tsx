@@ -17,7 +17,10 @@ import {
   IAddExpenseData,
 } from '@/hooks/expenses/useAddExpense'
 import { ITypeModal } from '../../types'
-import { labelCurrency, validateTextToModal } from '../../utils'
+import {
+  optionsLabelCurrencyKeyAndValue,
+  validateTextToModal,
+} from '../../utils'
 
 interface IContentModal {
   onSubmit: (data: IAddExpenseData) => Promise<void>
@@ -152,10 +155,14 @@ function ContentActionsTableModal({
               control={control}
               name="value"
               label={`Valor (${
-                labelCurrency[watch().typeMoney || userData.primary_currency]
+                optionsLabelCurrencyKeyAndValue[
+                  watch().typeMoney || userData.primary_currency
+                ]
               })`}
               placeholder={`Ex: ${
-                labelCurrency[watch().typeMoney || userData.primary_currency]
+                optionsLabelCurrencyKeyAndValue[
+                  watch().typeMoney || userData.primary_currency
+                ]
               } 10,00`}
               errors={
                 <>

@@ -6,34 +6,8 @@
 'use client'
 
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { useMemo } from 'react'
-
-export const validaTextForTypeAccount: any = {
-  hybrid: {
-    titleEntrys: 'Total Entradas',
-    titleExpenses: 'Total Gastos',
-    totalFree: 'Total Investimento',
-    labelValueMoney: 'Valor (R$):',
-    placeholderValueAddExpense: 'Ex: R$ 10',
-    titleExpensesEurToReal: 'Total Gastos Euro',
-  },
-  real: {
-    titleEntrys: 'Total Entradas',
-    titleExpenses: 'Total Gastos',
-    totalFree: 'Total Livre ',
-    labelValueMoney: 'Valor (R$):',
-    placeholderValueAddExpense: 'Ex: R$ 10',
-    titleExpensesEurToReal: '',
-  },
-  euro: {
-    titleEntrys: 'Total Entradas',
-    titleExpenses: 'Total Gastos',
-    totalFree: 'Total Livre',
-    labelValueMoney: 'Valor (€):',
-    placeholderValueAddExpense: 'Ex: € 10',
-    titleExpensesEurToReal: '',
-  },
-}
 
 export const validateTextToModal: any = {
   addExpense: {
@@ -50,24 +24,6 @@ export const validateTextToModal: any = {
   },
 }
 
-export const optionsCurrency: any = {
-  USD: 'Valor Dólar USD',
-  CAD: 'Valor Dólar CAD',
-  EUR: 'Valor Euro',
-  CHF: 'Valor Franco Suíço',
-  GBP: 'Valor Libra',
-  BRL: 'Valor Real',
-}
-
-export const labelCurrency: any = {
-  USD: '$',
-  CAD: 'CA$',
-  EUR: '€',
-  CHF: 'CHF',
-  GBP: '£',
-  BRL: 'R$',
-}
-
 export const columsHeadProps = (
   primaryCurrency: string,
   secondaryCurrency: string,
@@ -77,11 +33,11 @@ export const columsHeadProps = (
     field: 'description',
   },
   {
-    header: optionsCurrency[primaryCurrency],
+    header: optionsCurrencyKeyAndValue[primaryCurrency],
     field: 'primary_currency',
   },
   {
-    header: optionsCurrency[secondaryCurrency],
+    header: optionsCurrencyKeyAndValue[secondaryCurrency],
     field: 'secondary_currency',
   },
   {
@@ -98,46 +54,7 @@ export const columsHeadProps = (
   },
 ]
 
-export const columsHeadPropsEuro = [
-  {
-    header: 'Descrição',
-    field: 'description',
-  },
-  {
-    header: 'Valor Euro',
-    field: 'euro_value',
-  },
-  {
-    header: 'Tipo',
-    field: 'type',
-  },
-  {
-    header: 'Ação',
-    field: 'actions',
-  },
-]
-export const columsHeadPropsReal = [
-  {
-    header: 'Descrição',
-    field: 'description',
-  },
-  {
-    header: 'Valor Real',
-    field: 'real_value',
-  },
-  {
-    header: 'Tipo',
-    field: 'type',
-  },
-  {
-    header: 'Ação',
-    field: 'actions',
-  },
-]
-
 export const validateColumsHeadProps: any = {
-  euro: columsHeadPropsEuro,
-  real: columsHeadPropsReal,
   hybrid: columsHeadProps,
   oneCurrency: columsHeadProps,
 }

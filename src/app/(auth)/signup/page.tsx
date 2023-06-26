@@ -14,7 +14,11 @@ import { SigingProps } from '@/service/auth/siging'
 import Link from 'next/link'
 import { useSignUp } from '../../../hooks/auth'
 import { Button, Input, InputPassword } from '../../../components'
-import { optionsCurrency, optionsCurrencyHybrid, schema } from './utils'
+import {
+  dropdownOptionsCurrency,
+  dropdownPptionsCurrencyHybrid,
+  schema,
+} from './utils'
 
 export default function Signup() {
   const { isLoading, createAccountUser } = useSignUp()
@@ -129,16 +133,18 @@ export default function Signup() {
             {...register('typeAccount')}
             className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
           >
-            {optionsCurrency.map(({ value, disabled, label, selected }) => (
-              <option
-                key={value}
-                value={value}
-                disabled={disabled}
-                selected={selected}
-              >
-                {label}
-              </option>
-            ))}
+            {dropdownOptionsCurrency.map(
+              ({ value, disabled, label, selected }) => (
+                <option
+                  key={value}
+                  value={value}
+                  disabled={disabled}
+                  selected={selected}
+                >
+                  {label}
+                </option>
+              ),
+            )}
           </select>
           {errors.typeAccount && (
             <span className="text-red-500 text-sm ">
@@ -161,7 +167,7 @@ export default function Signup() {
                   {...register('primary_currency')}
                   className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
                 >
-                  {optionsCurrencyHybrid.map(
+                  {dropdownPptionsCurrencyHybrid.map(
                     ({ value, disabled, label, selected }) => (
                       <option
                         key={value}
@@ -192,7 +198,7 @@ export default function Signup() {
                   {...register('secondary_currency')}
                   className="'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'"
                 >
-                  {optionsCurrencyHybrid.map(
+                  {dropdownPptionsCurrencyHybrid.map(
                     ({ value, disabled, label, selected }) => (
                       <option
                         key={value}

@@ -268,23 +268,23 @@ export default function Control() {
                       data: values,
                       totalInvested: formatCurrencyMoney(
                         totalEntrys - (validateExpenseData[typeAccount] || 0),
-                        typeAccount,
+                        userData.primary_currency,
                       ),
                       totalEntrys: formatCurrencyMoney(
                         totalEntrys,
-                        typeAccount,
+                        userData.primary_currency,
                       ),
                       totalExpenses: formatCurrencyMoney(
                         validateExpenseData[typeAccount],
-                        typeAccount,
+                        userData.primary_currency,
                       ),
                       totalExpenseEurToReal: formatCurrencyMoney(
                         calculationTotalExpensesEurToReal,
-                        typeAccount,
+                        userData.primary_currency,
                       ),
                       quatation: formatCurrencyMoney(
                         lastQuatationData?.current_quotation,
-                        typeAccount,
+                        userData.primary_currency,
                       ),
                     })
                     handleOpenModalSaveReport()

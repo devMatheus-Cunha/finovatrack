@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 /* eslint-disable import/prefer-default-export */
-export const optionsCurrency = [
+export const dropdownOptionsCurrency = [
   {
     label: 'Escolher Moeda',
     value: '',
@@ -17,7 +17,7 @@ export const optionsCurrency = [
   { label: 'Real', value: 'BRL' },
 ]
 
-export const optionsCurrencyHybrid = [
+export const dropdownPptionsCurrencyHybrid = [
   {
     label: 'Escolher Moeda',
     value: '',

@@ -12,7 +12,7 @@ import { ZodError, z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { Button, InputTypeMoney } from '@/components'
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
-import { labelCurrency } from '../../utils'
+import { optionsLabelCurrencyKeyAndValue } from '../../utils'
 import { ITypeModal } from '../../types'
 
 type FormData = {
@@ -67,9 +67,11 @@ function ContentAddEntryModal({
             <InputTypeMoney
               control={control}
               name="value"
-              label={`Valor (${labelCurrency[userData.primary_currency]})`}
+              label={`Valor (${
+                optionsLabelCurrencyKeyAndValue[userData.primary_currency]
+              })`}
               placeholder={`Ex: ${
-                labelCurrency[userData.primary_currency]
+                optionsLabelCurrencyKeyAndValue[userData.primary_currency]
               } 10,00`}
               errors={
                 <>
