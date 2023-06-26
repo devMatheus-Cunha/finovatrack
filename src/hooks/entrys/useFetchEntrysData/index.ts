@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-return-await */
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import { getEntrys } from '@/service/entrys/getEntrys';
+import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'next/navigation'
+import { getEntrys } from '@/service/entrys/getEntrys'
 
 export interface IEntrysData {
-  value: string;
-  id?: string;
+  value: string
+  id?: string
 }
 
 export const useFetchEntrysData = () => {
-  const router = useParams();
+  const router = useParams()
 
   const {
     data: entrysData,
@@ -23,14 +23,14 @@ export const useFetchEntrysData = () => {
     {
       enabled: !!router.id,
     },
-  );
+  )
 
   return {
     entrysData,
     isLoadingEntrysData,
     statusEntrysData,
     refetchEntrysData,
-  };
-};
+  }
+}
 
-export default useFetchEntrysData;
+export default useFetchEntrysData

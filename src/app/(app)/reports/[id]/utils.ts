@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-'use client';
+'use client'
 
 export const columsHeadProps = [
   {
@@ -23,7 +23,7 @@ export const columsHeadProps = [
     header: 'Moeda',
     field: 'typeMoney',
   },
-];
+]
 export const columsHeadPropsEuro = [
   {
     header: 'Descrição',
@@ -37,7 +37,7 @@ export const columsHeadPropsEuro = [
     header: 'Tipo',
     field: 'type',
   },
-];
+]
 export const columsHeadPropsReal = [
   {
     header: 'Descrição',
@@ -51,16 +51,16 @@ export const columsHeadPropsReal = [
     header: 'Tipo',
     field: 'type',
   },
-];
+]
 
 export const validateColumsHeadProps: any = {
   euro: columsHeadPropsEuro,
   real: columsHeadPropsReal,
   hybrid: columsHeadProps,
-};
-
-function FixErroBuild() {
-  return null;
 }
 
-export default FixErroBuild;
+function FixErroBuild() {
+  return null
+}
+
+export default FixErroBuild

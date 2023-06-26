@@ -4,37 +4,37 @@
 /* eslint-disable indent */
 /* eslint-disable react/jsx-no-useless-fragment */
 
-'use client';
+'use client'
 
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { ZodError, z } from 'zod';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
-import { Button, InputTypeMoney } from '@/components';
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { validaTextForTypeAccount } from '../../utils';
-import { ITypeModal } from '../../types';
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { ZodError, z } from 'zod'
+import { UserData } from '@/hooks/auth/useAuth/types'
+import { Button, InputTypeMoney } from '@/components'
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+import { ITypeModal } from '../../types'
+import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 
 type FormData = {
- value: string;
-};
+  value: string
+}
 
 interface IContentModal {
- onSubmit: (value: FormData)=> void
- handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
- isLoadingAddExpense?: boolean
- typeAccount: TypeAccount
+  onSubmit: (value: FormData) => void
+  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
+  isLoadingAddExpense?: boolean
+  userData: UserData
 }
 
 const schema = z.object({
   value: z.string().nonempty(),
-});
+})
 
 function ContentAddEntryModal({
   onSubmit,
   handleOpenModal,
   isLoadingAddExpense,
-  typeAccount,
+  userData,
 }: IContentModal) {
   const {
     handleSubmit,
@@ -43,16 +43,16 @@ function ContentAddEntryModal({
   } = useForm<FormData>({
     resolver: async (data) => {
       try {
-        schema.parse(data);
-        return { values: data, errors: {} };
+        schema.parse(data)
+        return { values: data, errors: {} }
       } catch (error: any) {
         if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors };
+          return { values: {}, errors: error.formErrors.fieldErrors }
         }
-        return { values: {}, errors: { [error.path[0]]: error.message } };
+        return { values: {}, errors: { [error.path[0]]: error.message } }
       }
     },
-  });
+  })
 
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values))}>
@@ -67,25 +67,26 @@ function ContentAddEntryModal({
             <InputTypeMoney
               control={control}
               name="value"
-              label={validaTextForTypeAccount[typeAccount]?.labelValueMoney}
-              placeholder={validaTextForTypeAccount[typeAccount]?.placeholderValueAddExpense}
-              errors={(
+              label={`Valor (${
+                optionsLabelCurrencyKeyAndValue[userData.primary_currency]
+              })`}
+              placeholder={`Ex: ${
+                optionsLabelCurrencyKeyAndValue[userData.primary_currency]
+              } 10,00`}
+              errors={
                 <>
                   {errors.value && (
                     <span className="text-red-500 text-sm ">
                       Este campo é obrigatório
                     </span>
-                )}
+                  )}
                 </>
-      )}
+              }
             />
           </div>
 
           <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
-            <Button
-              variant="confirm"
-              type="submit"
-            >
+            <Button variant="confirm" type="submit">
               {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
             </Button>
             <Button
@@ -99,7 +100,7 @@ function ContentAddEntryModal({
         </div>
       </div>
     </form>
-  );
+  )
 }
 
-export default ContentAddEntryModal;
+export default ContentAddEntryModal

@@ -1,36 +1,41 @@
 /* eslint-disable no-useless-escape */
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
 
 export function formatNumberToSubmit(value: string): number {
-  const removeCaractheres = value.replace(/^(R\$|\€)\s*/g, '');
-  const valueWithoutFormatting = removeCaractheres.replace(/\./g, '').replace(',', '.');
-  const number = parseFloat(valueWithoutFormatting);
-  return number;
+  const removeCaractheres = value.replace(/^(R\$|\€)\s*/g, '')
+  const valueWithoutFormatting = removeCaractheres
+    .replace(/\./g, '')
+    .replace(',', '.')
+  const number = parseFloat(valueWithoutFormatting)
+  return number
 }
 
 export function formatCurrencyMoney(
   value: string | number | undefined,
-  typeAccount: TypeAccount,
+  currency: string,
 ) {
-  const currency = typeAccount !== 'euro' ? 'BRL' : 'EUR';
-  const locale = typeAccount !== 'euro' ? 'pt-BR' : 'pt-BR';
+  const numberValue =
+    typeof value === 'string'
+      ? parseFloat(value.replace(/\./g, '').replace(',', '.'))
+      : Number(value)
 
-  const numberValue = typeof value === 'string' ? parseFloat(value.replace(/\./g, '').replace(',', '.')) : Number(value);
+  if (currency === 'hybrid') {
+    return numberValue.toLocaleString()
+  }
 
-  const formattedValue = new Intl.NumberFormat(locale, {
+  const formattedValue = new Intl.NumberFormat(currency, {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(numberValue);
+  }).format(numberValue)
 
-  return formattedValue;
+  return formattedValue
 }
 
 export const convertEurToReal = (quatationEur?: number, valueEur?: number) => {
-  if (!quatationEur || !valueEur) return 0;
-  const tax = 2.11 / 100;
-  const valorEmReais = valueEur * quatationEur;
-  const valorTotalComTaxa = valorEmReais + valueEur * quatationEur * tax;
-  return valorTotalComTaxa ?? 0;
-};
+  if (!quatationEur || !valueEur) return 0
+  const tax = 2.11 / 100
+  const valorEmReais = valueEur * quatationEur
+  const valorTotalComTaxa = valorEmReais + valueEur * quatationEur * tax
+  return valorTotalComTaxa ?? 0
+}

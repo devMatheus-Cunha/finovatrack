@@ -3,21 +3,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/require-default-props */
 
-'use client';
+'use client'
 
-import React, { ReactNode } from 'react';
-import {
-  Controller, Control, FieldValues, Path,
-} from 'react-hook-form';
-import { NumericFormat } from 'react-number-format';
+import React, { ReactNode } from 'react'
+import { Controller, Control, FieldValues, Path } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
 
 type InputTypeMoneyProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  placeholder: string;
- label: string;
-  errors?: ReactNode;
-};
+  control: Control<T>
+  name: Path<T>
+  placeholder: string
+  label: string
+  errors?: ReactNode
+}
 
 function InputTypeMoney<T extends FieldValues>({
   control,
@@ -28,7 +26,10 @@ function InputTypeMoney<T extends FieldValues>({
 }: InputTypeMoneyProps<T>) {
   return (
     <div>
-      <label htmlFor={name} className="block mb-2 text-sm font-medium  text-white">
+      <label
+        htmlFor={name}
+        className="block mb-2 text-sm font-medium  text-white"
+      >
         {`${label} *`}
       </label>
       <Controller
@@ -49,15 +50,9 @@ function InputTypeMoney<T extends FieldValues>({
           />
         )}
       />
-       {
-        errors && (
-          <>
-            {errors}
-          </>
-        )
-      }
+      {errors && <>{errors}</>}
     </div>
-  );
+  )
 }
 
-export default InputTypeMoney;
+export default InputTypeMoney

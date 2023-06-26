@@ -5,40 +5,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-no-useless-fragment */
 
-'use client';
+'use client'
 
-import { Button, Input } from '@/components';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
-import { useUserData } from '@/hooks/globalStates';
-import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser';
-import { useState } from 'react';
+import { dropdownOptionsCurrency } from '@/app/(auth)/signup/utils'
+import { Button, Input } from '@/components'
+import { useUserData } from '@/hooks/globalStates'
+import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
+import { useState } from 'react'
 
-import { useForm } from 'react-hook-form';
-import { ZodError, z } from 'zod';
+import { useForm } from 'react-hook-form'
+import { ZodError, z } from 'zod'
 
 type FormValues = {
-  email?: string;
-  name?: string;
-  typeAccount?: TypeAccount;
-};
+  email?: string
+  name?: string
+  primary_currency?: string
+}
 
 const schemaName = z.object({
   name: z.string().optional(),
-});
+})
 
 const schemaEmail = z.object({
   email: z.string().email('Email inválido'),
   typeAccount: z.string().optional(),
-});
+})
 
 function MyProfile() {
-  const { userData } = useUserData();
-  const { updatedUserData, isLoading } = useUpdatedUser();
+  const { userData } = useUserData()
+  const { updatedUserData, isLoading } = useUpdatedUser()
 
-  const [inputsEnabled, setInputsEnabled] = useState<{ [key: string]: boolean }>({
+  const [inputsEnabled, setInputsEnabled] = useState<{
+    [key: string]: boolean
+  }>({
     emailDisabled: false,
     nameDisabled: false,
-  });
+  })
 
   const {
     register: registerName,
@@ -49,73 +51,76 @@ function MyProfile() {
     defaultValues: { name: userData.name },
     resolver: async (data) => {
       try {
-        schemaName.parse(data);
-        return { values: data, errors: {} };
+        schemaName.parse(data)
+        return { values: data, errors: {} }
       } catch (error: any) {
         if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors };
+          return { values: {}, errors: error.formErrors.fieldErrors }
         }
-        return { values: {}, errors: { [error.path[0]]: error.message } };
+        return { values: {}, errors: { [error.path[0]]: error.message } }
       }
     },
-  });
+  })
   const {
     register: registerEmail,
     handleSubmit: onSubmitEmail,
     reset: resetEmail,
     formState: { errors: errorsEmail },
   } = useForm({
-    defaultValues: { email: userData.email, typeAccount: userData.typeAccount },
+    defaultValues: {
+      email: userData.email,
+      primary_currency: userData.primary_currency,
+      secondary_currency: userData.secondary_currency,
+    },
     resolver: async (data) => {
       try {
-        schemaEmail.parse(data);
-        return { values: data, errors: {} };
+        schemaEmail.parse(data)
+        return { values: data, errors: {} }
       } catch (error: any) {
         if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors };
+          return { values: {}, errors: error.formErrors.fieldErrors }
         }
-        return { values: {}, errors: { [error.path[0]]: error.message } };
+        return { values: {}, errors: { [error.path[0]]: error.message } }
       }
     },
-  });
+  })
 
   const toggleInputEnabled = (type: 'email' | 'name') => {
     setInputsEnabled((prevState: Record<string, boolean>) => ({
       ...prevState,
       [`${type}Disabled`]: !prevState[`${type}Disabled`],
-    }));
-  };
+    }))
+  }
 
   const handleCancel = (type: 'email' | 'name') => {
     if (type === 'email') {
-      resetEmail();
-      toggleInputEnabled(type);
-      return;
+      resetEmail()
+      toggleInputEnabled(type)
+      return
     }
-    resetName();
-    toggleInputEnabled(type);
-  };
+    resetName()
+    toggleInputEnabled(type)
+  }
 
   const handleSubmit = (fieldName: 'email' | 'name', values: FormValues) => {
     if (values[fieldName] === userData[fieldName]) {
-      toggleInputEnabled(fieldName);
-      return;
+      toggleInputEnabled(fieldName)
+      return
     }
-    updatedUserData(values);
-    toggleInputEnabled(fieldName);
-  };
+    updatedUserData(values)
+    toggleInputEnabled(fieldName)
+  }
 
   return (
     <main className="flex flex-col w-[100%] p-6 justify-center items-center h-[100vh]">
       <div className="flex flex-col gap-6 w-[550px] p-6 bg-gray-800 rounded-lg shadow-lg">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold mb-4 text-white">
-            Olá
-            {' '}
-            {userData.name}
+            Olá {userData.name}
           </h1>
           <p className="text-gray-300">
-            Aqui você pode visualizar e alterar as informações do seu perfil de forma simples e fácil.
+            Aqui você pode visualizar e alterar as informações do seu perfil de
+            forma simples e fácil.
           </p>
         </div>
         <form>
@@ -129,16 +134,15 @@ function MyProfile() {
                 disabled={!inputsEnabled.nameDisabled}
                 register={registerName}
                 required
-                errors={(
+                errors={
                   <>
-
                     {errorsName.name && (
                       <span className="text-red-500 text-sm">
                         Este campo é obrigatório
                       </span>
                     )}
                   </>
-                )}
+                }
               />
               <div className="flex gap-2 self-end">
                 {inputsEnabled.nameDisabled && (
@@ -153,16 +157,21 @@ function MyProfile() {
                   </>
                 )}
                 <Button
-                  variant={!inputsEnabled.nameDisabled ? 'default700' : 'confirm'}
+                  variant={
+                    !inputsEnabled.nameDisabled ? 'default700' : 'confirm'
+                  }
                   type="button"
                   onClick={
                     !inputsEnabled.nameDisabled
                       ? () => toggleInputEnabled('name')
                       : onSubmitName((value) => handleSubmit('name', value))
-}
+                  }
                 >
-                  {isLoading ? 'Salvando...' : (!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar')}
-
+                  {isLoading
+                    ? 'Salvando...'
+                    : !inputsEnabled.nameDisabled
+                    ? 'Alterar'
+                    : 'Salvar'}
                 </Button>
               </div>
             </div>
@@ -179,7 +188,7 @@ function MyProfile() {
               disabled={!inputsEnabled.emailDisabled}
               register={registerEmail}
               required
-              errors={(
+              errors={
                 <>
                   {errorsEmail.email && (
                     <span className="text-red-500 text-sm">
@@ -187,7 +196,7 @@ function MyProfile() {
                     </span>
                   )}
                 </>
-              )}
+              }
             />
             <div className="flex gap-2 self-end">
               {inputsEnabled.emailDisabled && (
@@ -202,55 +211,93 @@ function MyProfile() {
                 </>
               )}
               <Button
-                variant={!inputsEnabled.emailDisabled ? 'default700' : 'confirm'}
+                variant={
+                  !inputsEnabled.emailDisabled ? 'default700' : 'confirm'
+                }
                 type="button"
                 onClick={
                   !inputsEnabled.emailDisabled
                     ? () => toggleInputEnabled('email')
                     : onSubmitEmail((value) => handleSubmit('email', value))
-}
+                }
               >
-                {isLoading ? 'Salvando...' : (!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar')}
-
+                {isLoading
+                  ? 'Salvando...'
+                  : !inputsEnabled.emailDisabled
+                  ? 'Alterar'
+                  : 'Salvar'}
               </Button>
             </div>
           </div>
         </form>
 
-        <div>
-          <h3 className="mb-4 font-semibold text-white">
-            Tipo da moeda da conta
-          </h3>
-          <ul className="items-center w-full text-sm font-medium border rounded-lg sm:flex bg-gray-800 border-gray-600 text-white">
-            {['real', 'euro', 'hybrid'].map((currency) => (
-              <li
-                className="w-full border-b sm:border-b-0 sm:border-r border-gray-600 opacity-75"
-                key={currency}
-              >
-                <div className="flex items-center pl-3">
-                  <input
-                    id={`horizontal-list-radio-${currency.toLowerCase()}`}
-                      type="radio"
-                    value={currency}
-                    disabled
-                      className="w-4 h-4 focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500 cursor-not-allowed opacity-75"
-                      {...registerEmail('typeAccount')}
-                  />
-                  <label
-                    htmlFor={`horizontal-list-radio-${currency.toLowerCase()}`}
-                    className="w-full py-3 ml-2 text-sm font-medium text-gray-300"
+        <div className="flex gap-6">
+          <div className="w-full">
+            <label
+              htmlFor="primary_currency"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              {userData.typeAccount === 'oneCurrency'
+                ? 'Moeda Selecionada'
+                : 'Moeda Principal Selecionada'}
+            </label>
+            <select
+              id="primary_currency"
+              {...registerEmail}
+              disabled
+              name="primary_currency"
+              defaultValue={userData.primary_currency}
+              className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed"
+            >
+              {dropdownOptionsCurrency.map(
+                ({ value, disabled, label, selected }) => (
+                  <option
+                    key={value}
+                    value={value}
+                    disabled={disabled}
+                    selected={selected}
                   >
-                    {currency}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ul>
+                    {label}
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
+          {userData.typeAccount === 'hybrid' && (
+            <div className="w-full">
+              <label
+                htmlFor="secondary_currency"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Moeda Secundária Selecionada
+              </label>
+              <select
+                id="secondary_currency"
+                {...registerEmail}
+                disabled
+                name="secondary_currency"
+                defaultValue={userData.secondary_currency}
+                className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed"
+              >
+                {dropdownOptionsCurrency.map(
+                  ({ value, disabled, label, selected }) => (
+                    <option
+                      key={value}
+                      value={value}
+                      disabled={disabled}
+                      selected={selected}
+                    >
+                      {label}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+          )}
         </div>
-
       </div>
     </main>
-  );
+  )
 }
 
-export default MyProfile;
+export default MyProfile

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 export type ITypeModal =
   | 'edit'
@@ -7,10 +7,10 @@ export type ITypeModal =
   | 'addExpense'
   | 'totalsEntrys'
   | 'deleteAllExpenses'
-  | '';
+  | ''
 
 function FixErroBuild() {
-  return null;
+  return null
 }
 
-export default FixErroBuild;
+export default FixErroBuild

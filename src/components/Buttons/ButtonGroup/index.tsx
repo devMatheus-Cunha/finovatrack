@@ -1,17 +1,17 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable react/no-array-index-key */
 
-'use client';
+'use client'
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from 'react'
 
 interface ButtonOption {
- onClick: () => void;
- content: ReactNode;
+  onClick: () => void
+  content: ReactNode
 }
 
 interface ButtonGroupProps {
- buttonOptions: ButtonOption[];
+  buttonOptions: ButtonOption[]
 }
 
 function ButtonGroup({ buttonOptions }: ButtonGroupProps) {
@@ -29,7 +29,7 @@ function ButtonGroup({ buttonOptions }: ButtonGroupProps) {
         </React.Fragment>
       ))}
     </>
-  );
+  )
 }
 
-export default ButtonGroup;
+export default ButtonGroup

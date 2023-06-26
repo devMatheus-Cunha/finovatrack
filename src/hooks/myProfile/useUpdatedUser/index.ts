@@ -3,48 +3,48 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable camelcase */
 
-import { useUserData } from '@/hooks/globalStates';
-import { updatedDocumentForUser, updatedEmailUser } from '@/service/auth/login';
-import { useMutation } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { useUserData } from '@/hooks/globalStates'
+import { updatedDocumentForUser, updatedEmailUser } from '@/service/auth/login'
+import { useMutation } from '@tanstack/react-query'
+import { useParams } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 interface IUpadtedUserProps {
- name?: string
- email?: string
+  name?: string
+  email?: string
 }
 
 const useUpdatedUser = () => {
-  const router = useParams();
-  const { refetchUserData } = useUserData();
+  const router = useParams()
+  const { refetchUserData } = useUserData()
 
   const { mutate: updatedUserData, isLoading } = useMutation(
     async (values: IUpadtedUserProps) => {
-      await updatedEmailUser(values.email);
+      await updatedEmailUser(values.email)
       await updatedDocumentForUser({
         id: router.id,
         ...values,
-      } as any);
+      } as any)
     },
     {
       onSuccess: async () => {
-        await refetchUserData();
+        await refetchUserData()
         toast.success('Usuario atualizado com sucesso!', {
           position: toast.POSITION.TOP_RIGHT,
-        });
+        })
       },
       onError: () => {
         toast.error('Erro ao atualizar usuario.', {
           position: toast.POSITION.TOP_RIGHT,
-        });
+        })
       },
     },
-  );
+  )
 
   return {
     updatedUserData,
     isLoading,
-  };
-};
+  }
+}
 
-export default useUpdatedUser;
+export default useUpdatedUser

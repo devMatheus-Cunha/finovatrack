@@ -1,28 +1,28 @@
-'use client';
+'use client'
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const useIsVisibilityDatas = () => {
-  const queryClient = useQueryClient();
-  let initialData = true;
+  const queryClient = useQueryClient()
+  let initialData = true
 
   if (typeof localStorage !== 'undefined') {
-    initialData = localStorage.getItem('isVisibilityData') === 'true';
+    initialData = localStorage.getItem('isVisibilityData') === 'true'
   }
 
-  const {
-    data: isVisibilityData,
-  } = useQuery(['is_visibility_data'], {
+  const { data: isVisibilityData } = useQuery(['is_visibility_data'], {
     initialData,
-  });
+  })
 
   const handleToggleVisibilityData = () => {
-    const [queryKey, data] = queryClient.getQueriesData(['is_visibility_data']).flat(Infinity);
-    queryClient.setQueryData([queryKey], !data);
-    localStorage.setItem('isVisibilityData', String(!data));
-  };
+    const [queryKey, data] = queryClient
+      .getQueriesData(['is_visibility_data'])
+      .flat(Infinity)
+    queryClient.setQueryData([queryKey], !data)
+    localStorage.setItem('isVisibilityData', String(!data))
+  }
 
-  return { isVisibilityData, handleToggleVisibilityData };
-};
+  return { isVisibilityData, handleToggleVisibilityData }
+}
 
-export default useIsVisibilityDatas;
+export default useIsVisibilityDatas
