@@ -1,24 +1,25 @@
+/* eslint-disable @next/next/inline-script-id */
 /* eslint-disable react/no-danger */
 
-'use client';
+'use client'
 
-import '../styles/globals.css';
-import 'react-toastify/dist/ReactToastify.css';
-import 'flowbite/dist/flowbite.css';
+import '../styles/globals.css'
+import 'flowbite/dist/flowbite.css'
+import 'react-toastify/dist/ReactToastify.css'
 
-import Providers from '@/utils/reactQuery/provider';
-import React from 'react';
+import Providers from '@/utils/reactQuery/provider'
+import React from 'react'
 
-import 'react-datepicker/dist/react-datepicker.css';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ThemeProvider } from 'next-themes';
-import { ToastContainer } from 'react-toastify';
-import Script from 'next/script';
+import 'react-datepicker/dist/react-datepicker.css'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ThemeProvider } from 'next-themes'
+import { ToastContainer } from 'react-toastify'
+import Script from 'next/script'
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
@@ -37,9 +38,7 @@ export default function RootLayout({
               `,
         }}
       />
-      <body
-        suppressHydrationWarning
-      >
+      <body suppressHydrationWarning>
         <Providers>
           <ThemeProvider attribute="class">
             {children}
@@ -49,5 +48,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }

@@ -1,31 +1,35 @@
 /* eslint-disable no-tabs */
 
-'use client';
+'use client'
 
-import { Button } from '@/components';
-import { formatCurrencyMoney } from '@/utils/formatNumber';
+import { Button } from '@/components'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
 import {
-  Coins, HandCoins, Broom, FolderOpen, ArrowsCounterClockwise,
-} from '@phosphor-icons/react';
-import React from 'react';
-import { TypeAccount } from '@/hooks/auth/useAuth/types';
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData';
-import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur';
-import { optionsFilter } from '../../utils';
-import { ITypeModal } from '../../types';
+  Coins,
+  HandCoins,
+  Broom,
+  FolderOpen,
+  ArrowsCounterClockwise,
+} from '@phosphor-icons/react'
+import React from 'react'
+import { UserData } from '@/hooks/auth/useAuth/types'
+import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
+import { optionsFilter } from '../../utils'
+import { ITypeModal } from '../../types'
 
 interface IHeaderDataTableToControl {
-  typeAccount: TypeAccount;
-  currentQuotation: number | undefined;
-  filter: string;
-  onFilter: (filter: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleOpenModal: (type?: ITypeModal | undefined, data?: ExpenseData) => void;
-  handleOpenModalSaveReport: (data?: ExpenseData[]) => void;
-  refetchQuationData: RefetchQuationDataType;
+  userData: UserData
+  currentQuotation: number | undefined
+  filter: string
+  onFilter: (filter: React.ChangeEvent<HTMLSelectElement>) => void
+  handleOpenModal: (type?: ITypeModal | undefined, data?: ExpenseData) => void
+  handleOpenModalSaveReport: (data?: ExpenseData[]) => void
+  refetchQuationData: RefetchQuationDataType
 }
 
 function HeaderDataTableToControl({
-  typeAccount,
+  userData,
   currentQuotation,
   handleOpenModal,
   filter,
@@ -36,19 +40,13 @@ function HeaderDataTableToControl({
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-3 items-center justify-center">
-        <Button
-          type="button"
-          onClick={() => handleOpenModal('addExpense')}
-        >
+        <Button type="button" onClick={() => handleOpenModal('addExpense')}>
           <div className="flex gap-2 justify-center items-center">
             <Coins size={20} color="#eee2e2" />
             Add Gastos
           </div>
         </Button>
-        <Button
-          type="button"
-          onClick={() => handleOpenModal('addEntry')}
-        >
+        <Button type="button" onClick={() => handleOpenModal('addEntry')}>
           <div className="flex gap-2 justify-center items-center">
             <HandCoins size={20} color="#eee2e2" />
             Add Entrada
@@ -63,10 +61,7 @@ function HeaderDataTableToControl({
             Limpar Gastos
           </div>
         </Button>
-        <Button
-          type="button"
-          onClick={() => handleOpenModalSaveReport()}
-        >
+        <Button type="button" onClick={() => handleOpenModalSaveReport()}>
           <div className="flex gap-2 justify-center items-center">
             <FolderOpen size={20} color="#eee2e2" />
             Salvar Relatório
@@ -98,24 +93,29 @@ function HeaderDataTableToControl({
           ))}
         </select>
       </div>
-      {
-        typeAccount === 'hybrid' && (
+      {userData.typeAccount === 'hybrid' && (
         <div className="flex gap-3 justify-center items-center">
           <h3 className="italic">
-            {`Cotação Euro: ${formatCurrencyMoney(currentQuotation ?? 0, typeAccount)} `}
+            {`Cotação ${userData.secondary_currency}: ${formatCurrencyMoney(
+              currentQuotation ?? 0,
+              userData.primary_currency,
+            )} `}
           </h3>
           <button
             type="button"
             onClick={() => refetchQuationData()}
             className="hover:text-gray-400"
           >
-            <ArrowsCounterClockwise size={20} color="#eee2e2" className="hover:opacity-75" />
+            <ArrowsCounterClockwise
+              size={20}
+              color="#eee2e2"
+              className="hover:opacity-75"
+            />
           </button>
         </div>
-        )
-   }
+      )}
     </div>
-  );
+  )
 }
 
-export default HeaderDataTableToControl;
+export default HeaderDataTableToControl

@@ -2,31 +2,42 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/require-default-props */
 
-'use client';
+'use client'
 
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 import {
-  FieldValues, Path, RegisterOptions, UseFormRegister,
-} from 'react-hook-form';
+  FieldValues,
+  Path,
+  RegisterOptions,
+  UseFormRegister,
+} from 'react-hook-form'
 
 interface SelectFieldProps<T extends FieldValues> {
- label: string;
- name: Path<T>;
- rules?: RegisterOptions<T>;
- options: {
-  label: string;
-  value: string;
- }[];
- register: UseFormRegister<T>;
- errors?: ReactNode;
+  label: string
+  name: Path<T>
+  rules?: RegisterOptions<T>
+  options: {
+    label: string
+    value: string
+  }[]
+  register: UseFormRegister<T>
+  errors?: ReactNode
 }
 
 export default function Select<T extends FieldValues>({
-  label, name, options, register, errors, rules,
+  label,
+  name,
+  options,
+  register,
+  errors,
+  rules,
 }: SelectFieldProps<T>) {
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="block mb-2 text-sm font-medium  text-white">
+      <label
+        htmlFor={name}
+        className="block mb-2 text-sm font-medium  text-white"
+      >
         {rules?.required ? `${label} *` : label}
       </label>
       <select
@@ -43,13 +54,7 @@ export default function Select<T extends FieldValues>({
           </option>
         ))}
       </select>
-      {
-    errors && (
-    <>
-      {errors}
-    </>
-    )
-   }
+      {errors && <>{errors}</>}
     </div>
-  );
+  )
 }

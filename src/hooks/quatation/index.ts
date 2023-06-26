@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-'use client';
+'use client'
 
-export { default as useFetchQuatationEur } from './useFetchQuatationEur';
+export { default as useFetchQuatationEur } from './useFetchQuatationEur'

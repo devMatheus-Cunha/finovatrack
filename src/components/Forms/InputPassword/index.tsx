@@ -2,35 +2,42 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/require-default-props */
 
-'use client';
+'use client'
 
-import { InputHTMLAttributes, ReactNode, useState } from 'react';
-import { EyeSlash, Eye } from '@phosphor-icons/react';
-import {
-  FieldValues, Path, UseFormRegister,
-} from 'react-hook-form';
+import { InputHTMLAttributes, ReactNode, useState } from 'react'
+import { EyeSlash, Eye } from '@phosphor-icons/react'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-interface PasswordInputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  placeholder: string;
-  name: Path<T>;
-  register: UseFormRegister<T>;
+interface PasswordInputProps<T extends FieldValues>
+  extends InputHTMLAttributes<HTMLInputElement> {
+  label: string
+  placeholder: string
+  name: Path<T>
+  register: UseFormRegister<T>
   required?: boolean
-  errors?: ReactNode;
+  errors?: ReactNode
 }
 
 export default function InputPassword<T extends FieldValues>({
-  label, name, register, required, errors, ...rest
+  label,
+  name,
+  register,
+  required,
+  errors,
+  ...rest
 }: PasswordInputProps<T>) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => {
-    setShowPassword(() => (!showPassword));
-  };
+    setShowPassword(() => !showPassword)
+  }
 
   return (
     <div className="w-[100%]">
-      <label htmlFor={name} className="block mb-2 text-sm font-medium text-white">
+      <label
+        htmlFor={name}
+        className="block mb-2 text-sm font-medium text-white"
+      >
         {required ? `${label} *` : label}
       </label>
       <div className="relative">
@@ -53,13 +60,7 @@ export default function InputPassword<T extends FieldValues>({
           )}
         </button>
       </div>
-      {
-        errors && (
-          <>
-            {errors}
-          </>
-        )
-      }
+      {errors && <>{errors}</>}
     </div>
-  );
+  )
 }

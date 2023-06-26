@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-'use client';
+'use client'
 
-import { Button } from '@/components';
-import React from 'react';
+import { Button } from '@/components'
+import React from 'react'
 
 function DeleteModalContent({ onSubmit, onCancel }: any) {
   return (
@@ -24,7 +24,9 @@ function DeleteModalContent({ onSubmit, onCancel }: any) {
             d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <h3 className="mb-5 text-lg font-normal text-gray-400">Você tem certeza que deseja deletar?</h3>
+        <h3 className="mb-5 text-lg font-normal text-gray-400">
+          Você tem certeza que deseja deletar?
+        </h3>
         <div className="flex gap-3 justify-center">
           <Button
             onClick={onCancel}
@@ -45,7 +47,7 @@ function DeleteModalContent({ onSubmit, onCancel }: any) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default DeleteModalContent;
+export default DeleteModalContent
