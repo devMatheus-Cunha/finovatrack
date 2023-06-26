@@ -50,32 +50,40 @@ export const formattedValuesSubmitExpense = (
 export const columsHeadProps = (
   primaryCurrency: string,
   secondaryCurrency: string,
-) => [
-  {
-    header: 'Descrição',
-    field: 'description',
-  },
-  {
-    header: optionsCurrencyKeyAndValue[primaryCurrency],
-    field: 'primary_currency',
-  },
-  {
-    header: optionsCurrencyKeyAndValue[secondaryCurrency],
-    field: 'secondary_currency',
-  },
-  {
-    header: 'Moeda',
-    field: 'typeMoney',
-  },
-  {
-    header: 'Tipo',
-    field: 'type',
-  },
-  {
-    header: 'Ação',
-    field: 'actions',
-  },
-]
+  typeAccount: string,
+) => {
+  const columns = [
+    {
+      header: 'Descrição',
+      field: 'description',
+    },
+    {
+      header: optionsCurrencyKeyAndValue[primaryCurrency],
+      field: 'primary_currency',
+    },
+    {
+      header: 'Tipo',
+      field: 'type',
+    },
+    {
+      header: 'Ação',
+      field: 'actions',
+    },
+  ]
+
+  if (typeAccount === 'hybrid') {
+    columns.splice(2, 0, {
+      header: optionsCurrencyKeyAndValue[secondaryCurrency],
+      field: 'secondary_currency',
+    })
+    columns.splice(3, 0, {
+      header: 'Moeda',
+      field: 'typeMoney',
+    })
+  }
+
+  return columns
+}
 
 export const validateColumsHeadProps: any = {
   hybrid: columsHeadProps,

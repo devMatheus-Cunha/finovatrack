@@ -37,6 +37,7 @@ function TableToControl({
               {columsHeadProps(
                 userData.primary_currency,
                 userData.secondary_currency,
+                userData.typeAccount,
               ).map((item: { field: string; header: string }) => (
                 <th scope="col" className="px-6 py-3" key={item.field}>
                   {item.header}
@@ -69,24 +70,26 @@ function TableToControl({
                   )}
 
                   {userData.secondary_currency && (
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                    >
-                      {item.value_secondary_currency !== 0 && isVisibilityData
-                        ? formatCurrencyMoney(
-                            item.value_secondary_currency,
-                            userData.secondary_currency,
-                          )
-                        : '-'}
-                    </th>
+                    <>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                      >
+                        {item.value_secondary_currency !== 0 && isVisibilityData
+                          ? formatCurrencyMoney(
+                              item.value_secondary_currency,
+                              userData.secondary_currency,
+                            )
+                          : '-'}
+                      </th>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                      >
+                        {item.typeMoney}
+                      </th>
+                    </>
                   )}
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                  >
-                    {item.typeMoney}
-                  </th>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium whitespace-nowrap text-white"
