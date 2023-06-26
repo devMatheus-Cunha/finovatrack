@@ -66,7 +66,10 @@ function ContentTotalEntrys({
                     className="px-6 py-4 font-medium whitespace-nowrap text-white"
                   >
                     {item?.value !== '' && isVisibilityData
-                      ? formatCurrencyMoney(item?.value, userData.typeAccount)
+                      ? formatCurrencyMoney(
+                          item?.value,
+                          userData.primary_currency,
+                        )
                       : '-'}
                   </th>
                   <th
@@ -90,7 +93,7 @@ function ContentTotalEntrys({
           </tbody>
         </table>
 
-        <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
+        <div className="flex items-center p-6 space-x-2 border-t  rounded-b border-gray-600">
           <Button onClick={handleOpenModal} type="button" variant="cancel">
             Cancelar
           </Button>
