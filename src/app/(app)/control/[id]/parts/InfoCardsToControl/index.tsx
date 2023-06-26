@@ -15,8 +15,6 @@ import { ITypeModal } from '../../types'
 interface IInfoCardsToControl {
   userData: UserData
   totalEntrys: number
-  totalExpenseEur: number | undefined
-  totalExpenseReal: number | undefined
   entrysData: IEntrysData[]
   totalExpensesEurToReal: number
   totalExpensesEurSumRealToReal: number
@@ -30,14 +28,11 @@ function InfoCardsToControl({
   entrysData,
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
-  totalExpenseEur,
-  totalExpenseReal,
 }: IInfoCardsToControl) {
-  const validateExpenseData: any = {
-    real: totalExpenseReal,
-    euro: totalExpenseEur,
-    hybrid: totalExpensesEurSumRealToReal,
-  }
+  console.log({
+    totalExpensesEurSumRealToReal,
+    totalExpensesEurToReal,
+  })
 
   return (
     <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
@@ -69,14 +64,14 @@ function InfoCardsToControl({
       )}
       <InfoCardMoney
         infoData={formatCurrencyMoney(
-          validateExpenseData[userData.typeAccount],
+          totalExpensesEurSumRealToReal,
           userData.primary_currency,
         )}
         title="Total Gastos"
       />
       <InfoCardMoney
         infoData={formatCurrencyMoney(
-          totalEntrys - validateExpenseData[userData.typeAccount],
+          totalEntrys - totalExpensesEurSumRealToReal,
           userData.primary_currency,
         )}
         title="Total Livre"

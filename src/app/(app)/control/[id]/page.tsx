@@ -28,13 +28,10 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { IAddExpenseData } from '@/hooks/expenses/useAddExpense'
-import {
-  convertEurToReal,
-  formatCurrencyMoney,
-  formatNumberToSubmit,
-} from '@/utils/formatNumber'
+import { convertEurToReal, formatCurrencyMoney } from '@/utils/formatNumber'
 import { Modal } from '@/components'
 import {
+  formattedValuesSubmitExpense,
   initialDataSelectedData,
   useCalculationSumValues,
   useGetTotalsFree,
@@ -140,20 +137,8 @@ export default function Control() {
   }
 
   const onAddExpense = async (data: IAddExpenseData) => {
-    const formattedValues = {
-      ...data,
-      value_primary_currency:
-        data.typeMoney === userData.primary_currency
-          ? formatNumberToSubmit(data.value)
-          : 0,
-      value_secondary_currency:
-        data.typeMoney === userData.secondary_currency
-          ? formatNumberToSubmit(data.value)
-          : 0,
-    }
-
     if (configModal.type === 'edit') {
-      upadtedExpense(formattedValues)
+      upadtedExpense(formattedValuesSubmitExpense(data, userData))
       setConfigModal({
         open: !configModal.open,
         type: '',
@@ -161,7 +146,7 @@ export default function Control() {
       })
       return
     }
-    addExpense(formattedValues)
+    addExpense(formattedValuesSubmitExpense(data, userData))
     setFilter('')
     setConfigModal({
       open: !configModal.open,
@@ -205,8 +190,6 @@ export default function Control() {
           }
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           handleOpenModal={handleOpenModal}
-          totalExpenseEur={getTotals?.value_primary_currency}
-          totalExpenseReal={getTotals?.value_secondary_currency}
           userData={userData}
         />
 

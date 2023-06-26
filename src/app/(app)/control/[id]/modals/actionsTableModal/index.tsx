@@ -17,10 +17,8 @@ import {
   IAddExpenseData,
 } from '@/hooks/expenses/useAddExpense'
 import { ITypeModal } from '../../types'
-import {
-  optionsLabelCurrencyKeyAndValue,
-  validateTextToModal,
-} from '../../utils'
+import { validateTextToModal } from '../../utils'
+import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 
 interface IContentModal {
   onSubmit: (data: IAddExpenseData) => Promise<void>
@@ -60,7 +58,9 @@ function ContentActionsTableModal({
         ? {
             ...initialData,
             value:
-              initialData?.typeMoney === userData.primary_currency
+              userData.typeAccount === 'oneCurrency'
+                ? String(initialData?.value_primary_currency)
+                : initialData?.typeMoney === userData.primary_currency
                 ? String(initialData?.value_primary_currency)
                 : String(initialData?.value_secondary_currency),
           }
@@ -156,12 +156,12 @@ function ContentActionsTableModal({
               name="value"
               label={`Valor (${
                 optionsLabelCurrencyKeyAndValue[
-                  watch().typeMoney || userData.primary_currency
+                  watch()?.typeMoney || userData.primary_currency
                 ]
               })`}
               placeholder={`Ex: ${
                 optionsLabelCurrencyKeyAndValue[
-                  watch().typeMoney || userData.primary_currency
+                  watch()?.typeMoney || userData.primary_currency
                 ]
               } 10,00`}
               errors={
@@ -177,7 +177,7 @@ function ContentActionsTableModal({
             />
           </div>
 
-          <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
+          <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
             <Button variant="confirm" type="submit">
               {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
             </Button>

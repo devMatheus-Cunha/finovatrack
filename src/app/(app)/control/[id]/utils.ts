@@ -5,8 +5,11 @@
 
 'use client'
 
+import { UserData } from '@/hooks/auth/useAuth/types'
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+import { IAddExpenseData } from '@/service/expenses/addExpense'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
+import { formatNumberToSubmit } from '@/utils/formatNumber'
 import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
@@ -22,6 +25,26 @@ export const validateTextToModal: any = {
     title: 'Deletar Gasto',
     description: 'delete data',
   },
+}
+
+export const formattedValuesSubmitExpense = (
+  data: IAddExpenseData,
+  userData: UserData,
+) => {
+  const formattedValues = {
+    ...data,
+    value_primary_currency:
+      userData.typeAccount === 'oneCurrency' ||
+      data.typeMoney === userData.primary_currency
+        ? formatNumberToSubmit(data.value)
+        : 0,
+    value_secondary_currency:
+      userData.typeAccount !== 'oneCurrency' &&
+      data.typeMoney === userData.secondary_currency
+        ? formatNumberToSubmit(data.value)
+        : 0,
+  }
+  return formattedValues
 }
 
 export const columsHeadProps = (
