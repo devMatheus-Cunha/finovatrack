@@ -12,8 +12,8 @@ import { ZodError, z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { Button, InputTypeMoney } from '@/components'
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
-import { optionsLabelCurrencyKeyAndValue } from '../../utils'
 import { ITypeModal } from '../../types'
+import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 
 type FormData = {
   value: string
