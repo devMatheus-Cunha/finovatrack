@@ -29,11 +29,6 @@ function InfoCardsToControl({
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
 }: IInfoCardsToControl) {
-  console.log({
-    totalExpensesEurSumRealToReal,
-    totalExpensesEurToReal,
-  })
-
   return (
     <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
       <InfoCardMoney
