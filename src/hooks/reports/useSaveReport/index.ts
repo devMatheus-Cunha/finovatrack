@@ -15,6 +15,7 @@ export default function useSaveReport() {
     status: statusSaveReport,
   } = useMutation(
     async (data: IReportData) => {
+      console.log('saveReport:', data)
       await saveReportService(data, router.id)
     },
     {

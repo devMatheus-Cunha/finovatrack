@@ -242,13 +242,16 @@ export default function Control() {
                 </Modal>
               )}
             {openModalReport.open && (
-              <Modal width="35%">
+              <Modal width="41%">
                 <ConfirmSaveReportModal
                   initialData={calculationSumValues}
                   onCancel={handleOpenModalSaveReport}
-                  onSubmit={(values: ExpenseData[]) => {
+                  onSubmit={({ data, period }: any) => {
+                    console.log('ConfirmSaveReportModalData:', data)
+                    console.log('ConfirmSaveReportModalperiod:', period)
                     saveReport({
-                      data: values,
+                      data,
+                      period,
                       totalInvested: formatCurrencyMoney(
                         totalEntrys - (validateExpenseData[typeAccount] || 0),
                         userData.primary_currency,
