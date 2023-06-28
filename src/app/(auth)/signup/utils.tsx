@@ -1,3 +1,4 @@
+import { OptionsType } from '@/components/Forms/Select'
 import { z } from 'zod'
 
 /* eslint-disable import/prefer-default-export */
@@ -17,7 +18,7 @@ export const dropdownOptionsCurrency = [
   { label: 'Real', value: 'BRL' },
 ]
 
-export const dropdownPptionsCurrencyHybrid = [
+export const dropdownOptionsCurrencyHybrid: OptionsType = [
   {
     label: 'Escolher Moeda',
     value: '',

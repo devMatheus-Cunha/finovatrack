@@ -12,6 +12,8 @@ import { toast } from 'react-toastify'
 interface IUpadtedUserProps {
   name?: string
   email?: string
+  primary_currency?: string
+  secondary_currency?: string
 }
 
 const useUpdatedUser = () => {
