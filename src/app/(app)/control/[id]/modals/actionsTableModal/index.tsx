@@ -110,6 +110,12 @@ function ContentActionsTableModal({
               label="Selecione o tipo"
               name="type"
               options={[
+                {
+                  label: `Ex: Essencial`,
+                  value: '',
+                  disabled: true,
+                  selected: true,
+                },
                 { label: 'Essencial', value: 'Essencial' },
                 { label: 'Não essencial', value: 'Não essencial' },
                 { label: 'Gasto Livre', value: 'Gasto Livre' },
@@ -130,6 +136,12 @@ function ContentActionsTableModal({
                 label="Selecione Moeda"
                 name="typeMoney"
                 options={[
+                  {
+                    label: `Ex: ${userData.primary_currency}`,
+                    value: '',
+                    disabled: true,
+                    selected: true,
+                  },
                   {
                     label: userData.primary_currency,
                     value: userData.primary_currency,
