@@ -7,15 +7,18 @@
 
 'use client'
 
-import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
-import { Button, Input, Select } from '@/components'
-import { useUserData } from '@/hooks/globalStates'
-import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useUserData } from '@/hooks/globalStates'
 
 import { useForm } from 'react-hook-form'
-import { ZodError, z } from 'zod'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
+
+import { Button, Select } from '@/components'
+import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
+import EditableField from './parts/EditableField'
 
 type FormValues = {
   email?: string
@@ -54,13 +57,6 @@ function MyProfile() {
   const { userData } = useUserData()
   const { updatedUserData } = useUpdatedUser()
 
-  const [inputsEnabled, setInputsEnabled] = useState<{
-    [key: string]: boolean
-  }>({
-    emailDisabled: false,
-    nameDisabled: false,
-  })
-
   const [optionsCurrencyEnabled, setOptionsCurrencyEnabled] = useState(false)
 
   const {
@@ -70,39 +66,20 @@ function MyProfile() {
     formState: { errors: errorsName },
   } = useForm({
     defaultValues: { name: userData.name },
-    resolver: async (data) => {
-      try {
-        schemaName.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    },
+    resolver: zodResolver(schemaName),
   })
   const {
     register: registerEmail,
     handleSubmit: onSubmitEmail,
     reset: resetEmail,
     formState: { errors: errorsEmail },
-  } = useForm({
+  } = useForm<{ email: string | undefined }>({
     defaultValues: {
       email: userData.email,
     },
-    resolver: async (data) => {
-      try {
-        schemaEmail.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    },
+    resolver: zodResolver(schemaEmail),
   })
+
   const {
     register: registerCurrencys,
     handleSubmit: onSubmitCurrencys,
@@ -116,35 +93,14 @@ function MyProfile() {
     resolver: zodResolver(schemaTypeAccount),
   })
 
-  const toggleInputEnabled = (type: 'email' | 'name' | 'typeAccount') => {
-    setInputsEnabled((prevState: Record<string, boolean>) => ({
-      ...prevState,
-      [`${type}Disabled`]: !prevState[`${type}Disabled`],
-    }))
-  }
-
-  const handleCancel = (type: 'email' | 'name') => {
-    if (type === 'email') {
-      resetEmail()
-      toggleInputEnabled(type)
-      return
-    }
-    resetName()
-    toggleInputEnabled(type)
-  }
-
   const handleOptionsCurrencyEnabled = () => {
     setOptionsCurrencyEnabled(false)
     resetTypeAccount()
   }
 
   const handleSubmit = (fieldName: 'email' | 'name', values: FormValues) => {
-    if (values[fieldName] === userData[fieldName]) {
-      toggleInputEnabled(fieldName)
-      return
-    }
+    if (values[fieldName] === userData[fieldName]) return
     updatedUserData(values)
-    toggleInputEnabled(fieldName)
   }
 
   const updatedCurrencys = async (values: FormValuesCurrencys) => {
@@ -171,95 +127,45 @@ function MyProfile() {
             forma simples e fácil.
           </p>
         </div>
-        <form className="flex gap-2">
-          <Input
-            label="Nome"
-            name="name"
-            placeholder="Pedro..."
-            type="text"
-            disabled={!inputsEnabled.nameDisabled}
-            register={registerName}
-            required
-            errors={
-              <>
-                {errorsName.name && (
-                  <span className="text-red-500 text-sm">
-                    Este campo é obrigatório
-                  </span>
-                )}
-              </>
-            }
-          />
-          <div className="flex gap-2 self-end">
-            {inputsEnabled.nameDisabled && (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => handleCancel('name')}
-                  variant="cancel"
-                >
-                  Cancelar
-                </Button>
-              </>
-            )}
-            <Button
-              variant={!inputsEnabled.nameDisabled ? 'default700' : 'confirm'}
-              type="button"
-              onClick={
-                !inputsEnabled.nameDisabled
-                  ? () => toggleInputEnabled('name')
-                  : onSubmitName((value) => handleSubmit('name', value))
-              }
-            >
-              {!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar'}
-            </Button>
-          </div>
-        </form>
 
-        <form className="flex gap-2">
-          <Input
-            label="Email"
-            name="email"
-            placeholder="teste@gmail.com"
-            type="email"
-            disabled={!inputsEnabled.emailDisabled}
-            register={registerEmail}
-            required
-            errors={
-              <>
-                {errorsEmail.email && (
-                  <span className="text-red-500 text-sm">
-                    Este campo é obrigatório
-                  </span>
-                )}
-              </>
-            }
-          />
-          <div className="flex gap-2 self-end">
-            {inputsEnabled.emailDisabled && (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => handleCancel('email')}
-                  variant="cancel"
-                >
-                  Cancelar
-                </Button>
-              </>
-            )}
-            <Button
-              variant={!inputsEnabled.emailDisabled ? 'default700' : 'confirm'}
-              type="button"
-              onClick={
-                !inputsEnabled.emailDisabled
-                  ? () => toggleInputEnabled('email')
-                  : onSubmitEmail((value) => handleSubmit('email', value))
-              }
-            >
-              {!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar'}
-            </Button>
-          </div>
-        </form>
+        <EditableField
+          label="Nome"
+          name="name"
+          placeholder="Pedro..."
+          type="text"
+          onCancel={() => resetName()}
+          onSubmit={onSubmitName((value) => handleSubmit('name', value))}
+          register={registerName as any}
+          required
+          errors={
+            <>
+              {errorsName.name && (
+                <span className="text-red-500 text-sm">
+                  Este campo é obrigatório
+                </span>
+              )}
+            </>
+          }
+        />
+        <EditableField
+          label="Email"
+          name="email"
+          placeholder="teste@gmail.com"
+          type="email"
+          onCancel={() => resetEmail()}
+          onSubmit={onSubmitEmail((value) => handleSubmit('email', value))}
+          register={registerEmail as any}
+          required
+          errors={
+            <>
+              {errorsEmail.email && (
+                <span className="text-red-500 text-sm">
+                  Este campo é obrigatório
+                </span>
+              )}
+            </>
+          }
+        />
 
         <form className="flex gap-2 flex-col w-[100%]">
           <div className="flex gap-2">
