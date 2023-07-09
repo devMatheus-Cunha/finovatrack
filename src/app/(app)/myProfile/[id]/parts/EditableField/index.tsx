@@ -26,17 +26,23 @@ export default function EditableField({
   }
 
   return (
-    <form className="flex gap-2">
+    <form className="flex gap-2 flex-col sm:flex-row">
       <Input disabled={!isEditing} {...rest} />
-      <div className="flex gap-2 self-end">
+      <div className="flex gap-2 sm:self-end">
         {isEditing && (
-          <Button type="button" onClick={handleCancel} variant="cancel">
+          <Button
+            type="button"
+            onClick={handleCancel}
+            className="w-[100%]"
+            variant="cancel"
+          >
             Cancelar
           </Button>
         )}
         <Button
           variant={!isEditing ? 'default700' : 'confirm'}
           type="button"
+          className="w-[100%]"
           onClick={!isEditing ? () => setIsEditing(true) : () => handleSubmit()}
         >
           {!isEditing ? 'Alterar' : 'Salvar'}
