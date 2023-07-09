@@ -80,11 +80,7 @@ export default function AppLayout({ children }: SideBarProps) {
 
   return (
     <div className="h-[100vh] flex">
-      <aside
-        id="default-sidebar"
-        className="w-auto h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidebar"
-      >
+      <aside className="hidden md:block transition-opacity duration-300">
         <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
           <div className="flex flex-col gap-6">
             {sidebarItems.map((item) => (
@@ -115,7 +111,7 @@ export default function AppLayout({ children }: SideBarProps) {
           </div>
         </div>
       </aside>
-      <div className="flex-auto">
+      <div className="flex-auto w-full p-0 md:p-4">
         {!id ? (
           <div className="flex h-screen w-full items-center justify-center">
             {/* @ts-expect-error Async Server Component */}

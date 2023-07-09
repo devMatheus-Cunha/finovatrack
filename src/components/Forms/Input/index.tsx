@@ -7,7 +7,7 @@
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import React, { InputHTMLAttributes, ReactNode } from 'react'
 
-interface InputProps<T extends FieldValues>
+export interface InputProps<T extends FieldValues>
   extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   name: Path<T>
