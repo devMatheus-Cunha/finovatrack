@@ -10,24 +10,40 @@ export const metadata: Metadata = {
 
 function LandingPage() {
   return (
-    <div className="text-white h-screen flex flex-col">
+    <div className=" text-white h-screen flex flex-col">
       <Header />
 
-      <main className="container mx-auto p-4 flex-grow">
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">
-            Gerencie suas finanças com facilidade
+      <main className="flex mt-6 gap-8 flex-col p-8 flex-grow">
+        <section className="flex items-center flex-col justify-center text-center gap-2">
+          <h2 className="text-5xl font-bold text-white">
+            Domine suas finanças em qualquer moeda
           </h2>
-          <p className="text-gray-300">
-            Nossa plataforma de Controle de Gestão Pessoal permite que você
-            tenha o controle total dos seus gastos e receitas. Registre, edite e
-            acompanhe suas informações financeiras de forma simples e eficiente.
+          <p className="text-lg text-gray-200 max-w-[66%]">
+            Domine suas finanças em várias moedas. Registre, edite e acompanhe
+            suas informações financeiras de forma simples e eficiente, mantendo
+            o controle total sobre seus gastos e entradas em diferentes moedas.
           </p>
+          <div className="flex mt-4 gap-4">
+            <Link
+              href="/signup"
+              className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+            >
+              Abra sua conta!
+            </Link>
+            <Link
+              href="/login"
+              className="text-white py-2 px-4 rounded-md bg-transparent border border-gray-600 hover:border-gray-500"
+            >
+              Entrar
+            </Link>
+          </div>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Recursos em destaque:</h2>
-          <ul className="list-disc list-inside text-gray-300">
+        <section className="">
+          <h2 className="text-2xl font-semibold text-white mb-2">
+            Recursos em destaque:
+          </h2>
+          <ul className="list-disc list-inside text-gray-200">
             <li>Adicione e edite seus gastos facilmente</li>
             <li>Cálculo automático de entradas, gastos e saldo</li>
             <li>Registre suas entradas de valor</li>
@@ -45,11 +61,11 @@ function LandingPage() {
           </ul>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">
+        <section className="">
+          <h2 className="text-xl font-semibold text-white mb-2">
             Funcionalidades futuras:
           </h2>
-          <p className="text-gray-300">
+          <p className="text-gray-200">
             Estamos constantemente aprimorando nossa plataforma para oferecer
             ainda mais recursos. Em breve, você poderá desfrutar de estatísticas
             detalhadas dos gastos e receber dicas personalizadas para
@@ -57,15 +73,27 @@ function LandingPage() {
           </p>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Comece agora mesmo!</h2>
-          <p className="text-gray-300">
+        <section className="">
+          <h2 className="text-xl font-semibold text-white mb-2">
+            Comece agora mesmo!
+          </h2>
+          <p className="text-gray-200">
             Crie sua conta ou faça login para começar a gerenciar suas finanças
             de forma eficiente e organizada.
           </p>
           <div className="flex mt-4 gap-4">
-            <Link href="/login">Login</Link>
-            <Link href="/signup">Criar Conta</Link>
+            <Link
+              href="/login"
+              className="bg-blue-500 text-white py-2 px-4 rounded-md"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="bg-green-500 text-white py-2 px-4 rounded-md"
+            >
+              Criar Conta
+            </Link>
           </div>
         </section>
       </main>
