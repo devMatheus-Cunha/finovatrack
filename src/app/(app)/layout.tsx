@@ -98,7 +98,7 @@ export default function AppLayout({ children }: SideBarProps) {
                   <div
                     className={`flex gap-0.5 flex-col justify-center items-center ${
                       pathname?.startsWith(item?.route)
-                        ? 'text-cyan-500'
+                        ? 'text-cyan-600'
                         : '#eee2e2'
                     } hover:opacity-75`}
                   >

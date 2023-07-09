@@ -8,7 +8,14 @@ import React, { ButtonHTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'cancel' | 'confirm' | 'delete' | 'default' | 'link' | 'default700'
+  variant?:
+    | 'cancel'
+    | 'confirm'
+    | 'delete'
+    | 'default'
+    | 'link'
+    | 'default700'
+    | 'primary'
   routeLink?: string
 }
 
@@ -22,6 +29,7 @@ function Button({
     confirm: `text-white bg-green-600 hover:bg-green-700`,
     delete: `bg-red-600 hover:bg-red-800`,
     link: `text-white bg-gray-800 focus:outline-none bg-gray-800 underline`,
+    primary: `text-white bg-cyan-600 hover:bg-cyan-700`,
     default: `bg-gray-800 hover:bg-gray-700 border-gray-700`,
     default700: `w-full bg-gray-700 hover:bg-gray-700 border-gray-700`,
   }
@@ -37,7 +45,7 @@ function Button({
     <button
       {...props}
       className={twMerge(
-        `${validateStyles[variant]} px-5 py-2.5 text-sm font-medium rounded-lg `,
+        `px-5 py-2.5 text-sm font-medium rounded-lg ${validateStyles[variant]} `,
         props.className,
       )}
     >
