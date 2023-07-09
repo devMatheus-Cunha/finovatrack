@@ -1,21 +1,14 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/jsx-indent-props */
-/* eslint-disable max-len */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
-import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
-import { Button, Input, Select } from '@/components'
-import { useUserData } from '@/hooks/globalStates'
-import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-
+import { useUserData } from '@/hooks/globalStates'
 import { useForm } from 'react-hook-form'
-import { ZodError, z } from 'zod'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
+import { Button, Select } from '@/components'
+import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
+import EditableField from './parts/EditableField'
 
 type FormValues = {
   email?: string
@@ -54,13 +47,6 @@ function MyProfile() {
   const { userData } = useUserData()
   const { updatedUserData } = useUpdatedUser()
 
-  const [inputsEnabled, setInputsEnabled] = useState<{
-    [key: string]: boolean
-  }>({
-    emailDisabled: false,
-    nameDisabled: false,
-  })
-
   const [optionsCurrencyEnabled, setOptionsCurrencyEnabled] = useState(false)
 
   const {
@@ -70,39 +56,21 @@ function MyProfile() {
     formState: { errors: errorsName },
   } = useForm({
     defaultValues: { name: userData.name },
-    resolver: async (data) => {
-      try {
-        schemaName.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    },
+    resolver: zodResolver(schemaName),
   })
+
   const {
     register: registerEmail,
     handleSubmit: onSubmitEmail,
     reset: resetEmail,
     formState: { errors: errorsEmail },
-  } = useForm({
+  } = useForm<{ email: string | undefined }>({
     defaultValues: {
       email: userData.email,
     },
-    resolver: async (data) => {
-      try {
-        schemaEmail.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    },
+    resolver: zodResolver(schemaEmail),
   })
+
   const {
     register: registerCurrencys,
     handleSubmit: onSubmitCurrencys,
@@ -116,35 +84,14 @@ function MyProfile() {
     resolver: zodResolver(schemaTypeAccount),
   })
 
-  const toggleInputEnabled = (type: 'email' | 'name' | 'typeAccount') => {
-    setInputsEnabled((prevState: Record<string, boolean>) => ({
-      ...prevState,
-      [`${type}Disabled`]: !prevState[`${type}Disabled`],
-    }))
-  }
-
-  const handleCancel = (type: 'email' | 'name') => {
-    if (type === 'email') {
-      resetEmail()
-      toggleInputEnabled(type)
-      return
-    }
-    resetName()
-    toggleInputEnabled(type)
-  }
-
   const handleOptionsCurrencyEnabled = () => {
     setOptionsCurrencyEnabled(false)
     resetTypeAccount()
   }
 
   const handleSubmit = (fieldName: 'email' | 'name', values: FormValues) => {
-    if (values[fieldName] === userData[fieldName]) {
-      toggleInputEnabled(fieldName)
-      return
-    }
+    if (values[fieldName] === userData[fieldName]) return
     updatedUserData(values)
-    toggleInputEnabled(fieldName)
   }
 
   const updatedCurrencys = async (values: FormValuesCurrencys) => {
@@ -160,181 +107,130 @@ function MyProfile() {
   }
 
   return (
-    <main className="flex w-[100%] justify-center items-center h-[100vh]">
-      <div className="flex flex-col gap-6 w-[550px] p-6 bg-gray-800 rounded-lg shadow-lg">
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-bold mb-4 text-white">
-            Olá {userData.name}
-          </h1>
-          <p className="text-gray-300">
-            Aqui você pode visualizar e alterar as informações do seu perfil de
-            forma simples e fácil.
-          </p>
-        </div>
-        <form className="flex gap-2">
-          <Input
-            label="Nome"
-            name="name"
-            placeholder="Pedro..."
-            type="text"
-            disabled={!inputsEnabled.nameDisabled}
-            register={registerName}
-            required
-            errors={
-              <>
-                {errorsName.name && (
-                  <span className="text-red-500 text-sm">
-                    Este campo é obrigatório
-                  </span>
-                )}
-              </>
-            }
-          />
-          <div className="flex gap-2 self-end">
-            {inputsEnabled.nameDisabled && (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => handleCancel('name')}
-                  variant="cancel"
-                >
-                  Cancelar
-                </Button>
-              </>
-            )}
-            <Button
-              variant={!inputsEnabled.nameDisabled ? 'default700' : 'confirm'}
-              type="button"
-              onClick={
-                !inputsEnabled.nameDisabled
-                  ? () => toggleInputEnabled('name')
-                  : onSubmitName((value) => handleSubmit('name', value))
-              }
-            >
-              {!inputsEnabled.nameDisabled ? 'Alterar' : 'Salvar'}
-            </Button>
-          </div>
-        </form>
+    <main className="flex flex-col gap-4 sm:gap-6 w-full max-w-[600px] p-6 bg-gray-800 rounded-lg shadow-lg">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-[23px] sm:text-3xl font-bold ">
+          Olá {userData.name}
+        </h1>
+        <p className="text-gray-300 text-[14px] sm:md">
+          Aqui você pode visualizar e alterar as informações do seu perfil de
+          forma simples e fácil.
+        </p>
+      </div>
 
-        <form className="flex gap-2">
-          <Input
-            label="Email"
-            name="email"
-            placeholder="teste@gmail.com"
-            type="email"
-            disabled={!inputsEnabled.emailDisabled}
-            register={registerEmail}
-            required
-            errors={
-              <>
-                {errorsEmail.email && (
-                  <span className="text-red-500 text-sm">
-                    Este campo é obrigatório
-                  </span>
-                )}
-              </>
-            }
-          />
-          <div className="flex gap-2 self-end">
-            {inputsEnabled.emailDisabled && (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => handleCancel('email')}
-                  variant="cancel"
-                >
-                  Cancelar
-                </Button>
-              </>
+      <EditableField
+        label="Nome"
+        name="name"
+        placeholder="Pedro..."
+        type="text"
+        onCancel={() => resetName()}
+        onSubmit={onSubmitName((value) => handleSubmit('name', value))}
+        register={registerName as any}
+        required
+        errors={
+          <>
+            {errorsName.name && (
+              <span className="text-red-500 text-sm">
+                Este campo é obrigatório
+              </span>
             )}
-            <Button
-              variant={!inputsEnabled.emailDisabled ? 'default700' : 'confirm'}
-              type="button"
-              onClick={
-                !inputsEnabled.emailDisabled
-                  ? () => toggleInputEnabled('email')
-                  : onSubmitEmail((value) => handleSubmit('email', value))
-              }
-            >
-              {!inputsEnabled.emailDisabled ? 'Alterar' : 'Salvar'}
-            </Button>
-          </div>
-        </form>
+          </>
+        }
+      />
 
-        <form className="flex gap-2 flex-col w-[100%]">
-          <div className="flex gap-2">
+      <EditableField
+        label="Email"
+        name="email"
+        placeholder="teste@gmail.com"
+        type="email"
+        onCancel={() => resetEmail()}
+        onSubmit={onSubmitEmail((value) => handleSubmit('email', value))}
+        register={registerEmail as any}
+        required
+        errors={
+          <>
+            {errorsEmail.email && (
+              <span className="text-red-500 text-sm">
+                Este campo é obrigatório
+              </span>
+            )}
+          </>
+        }
+      />
+
+      <form className="flex flex-col w-full">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="w-full">
+            <Select
+              label={
+                userData.typeAccount === 'oneCurrency'
+                  ? 'Moeda Selecionada'
+                  : 'Moeda Principal Selecionada'
+              }
+              disabledSelect={!optionsCurrencyEnabled}
+              name="primary_currency"
+              className={`border text-sm rounded-lg block p-2.5 w-full placeholder-gray-400 ${
+                !optionsCurrencyEnabled
+                  ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
+                  : 'bg-gray-800 border-gray-700 text-white'
+              }`}
+              options={dropdownOptionsCurrencyHybrid}
+              register={registerCurrencys}
+            />
+          </div>
+
+          {userData.typeAccount === 'hybrid' && (
             <div className="w-full">
               <Select
-                label={
-                  userData.typeAccount === 'oneCurrency'
-                    ? 'Moeda Selecionada'
-                    : 'Moeda Principal Selecionada'
-                }
+                label="Moeda Secundária Selecionada"
+                name="secondary_currency"
                 disabledSelect={!optionsCurrencyEnabled}
-                name="primary_currency"
-                className={`border text-sm rounded-lg block p-2.5  w-full placeholder-gray-400 w-[100%] ${
+                className={`border text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 ${
                   !optionsCurrencyEnabled
                     ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
                     : 'bg-gray-800 border-gray-700 text-white'
                 }`}
                 options={dropdownOptionsCurrencyHybrid}
                 register={registerCurrencys}
+                errors={
+                  <>
+                    {errors.secondary_currency && (
+                      <span className="text-red-500 text-sm">
+                        {errors.secondary_currency.message}
+                      </span>
+                    )}
+                  </>
+                }
               />
             </div>
-            <div className="w-full">
-              {userData.typeAccount === 'hybrid' && (
-                <Select
-                  label="Moeda Secundária Selecionada"
-                  name="secondary_currency"
-                  disabledSelect={!optionsCurrencyEnabled}
-                  className={`border text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 ${
-                    !optionsCurrencyEnabled
-                      ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
-                      : 'bg-gray-800 border-gray-700 text-white'
-                  }`}
-                  options={dropdownOptionsCurrencyHybrid}
-                  register={registerCurrencys}
-                  errors={
-                    <>
-                      {errors.secondary_currency && (
-                        <span className="text-red-500 text-sm">
-                          {errors.secondary_currency.message}
-                        </span>
-                      )}
-                    </>
-                  }
-                />
-              )}
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {optionsCurrencyEnabled && (
-              <>
-                <Button
-                  type="button"
-                  onClick={() => handleOptionsCurrencyEnabled()}
-                  variant="cancel"
-                  addStyleInTheCurrent="w-[100%]"
-                >
-                  Cancelar
-                </Button>
-              </>
-            )}
+          )}
+        </div>
+
+        <div className="flex gap-2">
+          {optionsCurrencyEnabled && (
             <Button
-              variant={!optionsCurrencyEnabled ? 'default700' : 'confirm'}
-              type={!optionsCurrencyEnabled ? 'submit' : 'button'}
-              addStyleInTheCurrent="w-[100%]"
-              onClick={
-                !optionsCurrencyEnabled
-                  ? () => setOptionsCurrencyEnabled(true)
-                  : onSubmitCurrencys(updatedCurrencys)
-              }
+              type="button"
+              onClick={() => handleOptionsCurrencyEnabled()}
+              variant="cancel"
+              className="w-[100%]"
             >
-              {!optionsCurrencyEnabled ? 'Alterar' : 'Salvar'}
+              Cancelar
             </Button>
-          </div>
-        </form>
-      </div>
+          )}
+          <Button
+            variant={!optionsCurrencyEnabled ? 'default700' : 'confirm'}
+            type={!optionsCurrencyEnabled ? 'submit' : 'button'}
+            className="w-[100%]"
+            onClick={
+              !optionsCurrencyEnabled
+                ? () => setOptionsCurrencyEnabled(true)
+                : onSubmitCurrencys(updatedCurrencys)
+            }
+          >
+            {!optionsCurrencyEnabled ? 'Alterar' : 'Salvar'}
+          </Button>
+        </div>
+      </form>
     </main>
   )
 }

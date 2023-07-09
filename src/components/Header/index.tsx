@@ -16,11 +16,7 @@ export default function Header() {
           <Button type="button" variant="link" routeLink="/login">
             Login
           </Button>
-          <Button
-            type="button"
-            onClick={() => router.push('/signup')}
-            variant="default700"
-          >
+          <Button onClick={() => router.push('/signup')} variant="primary">
             Sign up
           </Button>
         </div>
