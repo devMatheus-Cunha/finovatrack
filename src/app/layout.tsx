@@ -41,7 +41,22 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Providers>
           <ThemeProvider attribute="class">
-            {children}
+            <div className="hidden md:block">{children}</div>
+            <div className="flex flex-col gap-4 justify-center items-center h-screen text-center p-4">
+              <h1 className="text-4xl text-red-600 italic font-bold">
+                Atenção!
+              </h1>
+              <p>
+                Estamos trabalhando para lançar em breve uma versão mobile do
+                nosso sistema, permitindo que você acesse facilmente todas as
+                funcionalidades pelo seu smartphone, mesmo quando estiver em
+                movimento.
+              </p>
+              <p className="italic text-gray-300 font-bold text-sm">
+                Aproveite todos os benefícios da nossa plataforma gratuitamente
+                acessando-a em um laptop ou tablet.
+              </p>
+            </div>
             <ToastContainer theme="dark" />
           </ThemeProvider>
           <ReactQueryDevtools initialIsOpen={false} />
