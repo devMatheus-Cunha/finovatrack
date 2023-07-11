@@ -38,18 +38,16 @@ function Reports() {
   return (
     <div className="h-[100vh] w-[100%]">
       <div className="flex items-center flex-col w-[100%] gap-10 p-3">
-        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[30%]">
+        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[40%]">
           <h2>Escolha um período para solicitar um relatório:</h2>
           <div className="flex gap-4 bg-gray-800 rounded-lg justify-center items-center">
-            <div className="w-full">
-              <DatePicker
-                selected={selectedPeriod}
-                onChange={(date: Date) => onChangeDate(date)}
-                dateFormat="MM/yyyy"
-                showMonthYearPicker
-                className="border text-sm rounded-lg w-full p-1.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <DatePicker
+              selected={selectedPeriod}
+              onChange={(date: Date) => onChangeDate(date)}
+              dateFormat="MM/yyyy"
+              showMonthYearPicker
+              className="border text-sm rounded-lg w-full p-1.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            />
 
             <Button
               type="button"

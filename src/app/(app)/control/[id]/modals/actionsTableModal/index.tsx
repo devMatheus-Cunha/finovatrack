@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { ZodError, z } from 'zod'
+import { z } from 'zod'
 
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
@@ -19,6 +19,7 @@ import {
 import { ITypeModal } from '../../types'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface IContentModal {
   onSubmit: (data: IAddExpenseData) => Promise<void>
@@ -65,17 +66,7 @@ function ContentActionsTableModal({
                 : String(initialData?.value_secondary_currency),
           }
         : undefined,
-    resolver: async (data) => {
-      try {
-        schema.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    },
+    resolver: zodResolver(schema),
   })
 
   return (
@@ -175,7 +166,7 @@ function ContentActionsTableModal({
                 optionsLabelCurrencyKeyAndValue[
                   watch()?.typeMoney || userData.primary_currency
                 ]
-              } 10,00`}
+              } 10.00`}
               errors={
                 <>
                   {errors.value && (
