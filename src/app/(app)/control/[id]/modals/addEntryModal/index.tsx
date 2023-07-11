@@ -72,7 +72,7 @@ function ContentAddEntryModal({
               })`}
               placeholder={`Ex: ${
                 optionsLabelCurrencyKeyAndValue[userData.primary_currency]
-              } 10,00`}
+              } 10.00`}
               errors={
                 <>
                   {errors.value && (
