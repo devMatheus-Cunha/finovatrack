@@ -10,8 +10,9 @@ const useUpadtedExpense = () => {
   const router = useParams()
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutate: upadtedExpense } = useMutation(
-    (data: Record<string, any>) => updatedExpenseService(router.id, data),
+  const { mutateAsync: upadtedExpense } = useMutation(
+    async (data: Record<string, any>) =>
+      await updatedExpenseService(data, router.id),
     {
       onSuccess: () => {
         refetchExpensesData()

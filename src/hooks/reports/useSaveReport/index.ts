@@ -10,7 +10,7 @@ export default function useSaveReport() {
   const router = useParams()
 
   const {
-    mutate: saveReport,
+    mutateAsync: saveReport,
     isLoading: isLoadingSaveReport,
     status: statusSaveReport,
   } = useMutation(

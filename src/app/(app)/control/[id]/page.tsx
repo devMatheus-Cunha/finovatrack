@@ -138,7 +138,8 @@ export default function Control() {
 
   const onAddExpense = async (data: IAddExpenseData) => {
     if (configModal.type === 'edit') {
-      upadtedExpense(formattedValuesSubmitExpense(data, userData))
+      console.log(data, userData)
+      await upadtedExpense(formattedValuesSubmitExpense(data, userData))
       setConfigModal({
         open: !configModal.open,
         type: '',

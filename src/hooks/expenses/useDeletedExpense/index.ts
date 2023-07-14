@@ -8,7 +8,7 @@ const useDeletedExpense = () => {
   const router = useParams()
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutate: deletedExpense } = useMutation(
+  const { mutateAsync: deletedExpense } = useMutation(
     async (data: ExpenseData) => deleteExpense(router.id, data),
     {
       onSuccess: () => {

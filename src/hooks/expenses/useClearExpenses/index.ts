@@ -10,7 +10,7 @@ const useClearExpenses = () => {
 
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutate: clearExpensesData } = useMutation(
+  const { mutateAsync: clearExpensesData } = useMutation(
     () => clearExpenses(router.id),
     {
       onSuccess: () => {
