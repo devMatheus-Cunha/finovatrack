@@ -13,7 +13,6 @@ import { db } from '../firebase'
 import { IReportData } from './getReport'
 
 export async function saveReportService(data: IReportData, idUser: string) {
-  console.log('saveReportService:', data)
   const myCollection = collection(db, 'users', idUser, 'reports')
   const querySnapshot = await getDocs(
     query(myCollection, where('period', '==', data.period)),

@@ -25,7 +25,6 @@ function ConfirmSaveReportModal({
     setSelectedPeriod(date)
   }
 
-  console.log(selectedPeriod)
   return (
     <div className="relative rounded-lg shadow bg-gray-800">
       <div className="p-5 gap-3 text-center flex flex-col justify-center items-center">
