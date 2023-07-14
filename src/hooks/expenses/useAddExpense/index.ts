@@ -28,7 +28,7 @@ const useAddExpense = () => {
   const { refetchExpensesData } = useFetchExpensesData()
 
   const {
-    mutate: addExpense,
+    mutateAsync: addExpense,
     isLoading: isLoadingAddExpense,
     status: statusAddExpense,
   } = useMutation(

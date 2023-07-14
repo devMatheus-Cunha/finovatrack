@@ -20,7 +20,7 @@ const useUpdatedUser = () => {
   const router = useParams()
   const { refetchUserData } = useUserData()
 
-  const { mutate: updatedUserData, isLoading } = useMutation(
+  const { mutateAsync: updatedUserData, isLoading } = useMutation(
     async (values: IUpadtedUserProps) => {
       await updatedEmailUser(values.email)
       await updatedDocumentForUser({

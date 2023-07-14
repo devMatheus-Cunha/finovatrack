@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 
 const useForgetPassword = () => {
   const router = useRouter()
-  const { mutate: onForgetPassword, isLoading } = useMutation(forgetPassword, {
+  const { mutateAsync: onForgetPassword, isLoading } = useMutation(forgetPassword, {
     onSuccess: async () => {
       toast.success('E-mail de recupeção enviado!', {
         position: toast.POSITION.TOP_RIGHT,

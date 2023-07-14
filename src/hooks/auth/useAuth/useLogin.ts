@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 const useLogin = () => {
   const router = useRouter()
 
-  const { mutate: loginWithEmail, isLoading } = useMutation(
+  const { mutateAsync: loginWithEmail, isLoading } = useMutation(
     (values: LoginProps) => login(values),
     {
       onSuccess: async (user) => {

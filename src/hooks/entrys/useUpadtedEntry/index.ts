@@ -9,7 +9,7 @@ const useUpadtedEntry = () => {
   const router = useParams()
   const { refetchEntrysData } = useFetchEntrysData()
 
-  const { mutate: upadtedEntry } = useMutation(
+  const { mutateAsync: upadtedEntry } = useMutation(
     (data: IEntrysData) => updatedEntry(router.id, data),
     {
       onSuccess: () => {

@@ -6,7 +6,7 @@ import { logout } from '@/service/auth/logout'
 
 const useLogout = () => {
   const router = useRouter()
-  const { mutate: onLogout } = useMutation(logout, {
+  const { mutateAsync: onLogout } = useMutation(logout, {
     onSuccess: () => {
       router.push('/login')
     },
