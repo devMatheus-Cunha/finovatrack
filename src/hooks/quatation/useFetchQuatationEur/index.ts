@@ -42,7 +42,7 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
       { enabled: !!router.id },
     )
 
-  const { mutate: addLastQuotation } = useMutation(
+  const { mutateAsync: addLastQuotation } = useMutation(
     (data: Record<string, any>) => updateQuotationData(router.id, data),
     {
       onSuccess: async () => await refetchLastQuotationData(),

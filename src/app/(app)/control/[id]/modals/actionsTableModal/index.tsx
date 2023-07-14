@@ -70,7 +70,11 @@ function ContentActionsTableModal({
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit((data) =>
+        onSubmit({ ...data, id: initialData?.id }),
+      )}
+    >
       <div className="rounded-lg shadow">
         <div className="rounded-lg shadow bg-gray-800">
           <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">

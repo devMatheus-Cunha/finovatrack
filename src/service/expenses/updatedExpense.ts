@@ -5,9 +5,10 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 
 export async function updatedExpenseService(
-  idUser: string,
   data: Record<string, any>,
+  idUser: string,
 ) {
+  console.log({ idUser, id: data?.id })
   const docRef = doc(db, 'users', idUser, 'expenses', data?.id || '')
   await updateDoc(docRef, data)
 }

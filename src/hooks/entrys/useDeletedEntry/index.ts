@@ -11,7 +11,7 @@ const useDeletedEntry = () => {
 
   const { refetchEntrysData } = useFetchEntrysData()
 
-  const { mutate: deletedEntry } = useMutation(
+  const { mutateAsync: deletedEntry } = useMutation(
     async (itemId?: string) => deleteEntry(itemId, router.id),
     {
       onSuccess: () => {

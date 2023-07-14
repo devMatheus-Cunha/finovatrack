@@ -12,7 +12,7 @@ export default function useAddEntrys() {
   const { refetchEntrysData } = useFetchEntrysData()
 
   const {
-    mutate: addEntry,
+    mutateAsync: addEntry,
     isLoading: isLoadingAddEntrys,
     status: statusAddEntrys,
   } = useMutation(
