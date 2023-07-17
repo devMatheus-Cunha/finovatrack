@@ -138,7 +138,6 @@ export default function Control() {
 
   const onAddExpense = async (data: IAddExpenseData) => {
     if (configModal.type === 'edit') {
-      console.log(data, userData)
       await upadtedExpense(formattedValuesSubmitExpense(data, userData))
       setConfigModal({
         open: !configModal.open,
@@ -248,8 +247,6 @@ export default function Control() {
                   initialData={calculationSumValues}
                   onCancel={handleOpenModalSaveReport}
                   onSubmit={({ data, period }: any) => {
-                    console.log('ConfirmSaveReportModalData:', data)
-                    console.log('ConfirmSaveReportModalperiod:', period)
                     saveReport({
                       data,
                       period,
