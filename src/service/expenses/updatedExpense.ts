@@ -8,6 +8,7 @@ export async function updatedExpenseService(
   data: Record<string, any>,
   idUser: string,
 ) {
+  console.log({ idUser, id: data?.id })
   const docRef = doc(db, 'users', idUser, 'expenses', data?.id || '')
   await updateDoc(docRef, data)
 }
