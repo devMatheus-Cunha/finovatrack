@@ -12,14 +12,12 @@ import { z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { Button, Input, InputTypeMoney, Select } from '@/components'
-import {
-  ExpenseFormData,
-  IAddExpenseData,
-} from '@/hooks/expenses/useAddExpense'
+import { ExpenseFormData } from '@/hooks/expenses/useAddExpense'
 import { ITypeModal } from '../../types'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { IAddExpenseData } from '@/service/expenses/addExpense'
 
 interface IContentModal {
   onSubmit: (data: IAddExpenseData) => Promise<void>
@@ -72,7 +70,7 @@ function ContentActionsTableModal({
   return (
     <form
       onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, id: initialData?.id }),
+        onSubmit({ ...data, id: initialData?.id ?? '' }),
       )}
     >
       <div className="rounded-lg shadow">

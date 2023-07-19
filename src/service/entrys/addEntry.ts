@@ -3,7 +3,7 @@ import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase'
 
 export interface IAddEntryServiceProps {
-  value: string
+  value: number
 }
 
 export async function addEntryService(data: IAddEntryServiceProps, id: string) {

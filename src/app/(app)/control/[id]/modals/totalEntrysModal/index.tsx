@@ -65,9 +65,9 @@ function ContentTotalEntrys({
                     scope="row"
                     className="px-6 py-4 font-medium whitespace-nowrap text-white"
                   >
-                    {item?.value !== '' && isVisibilityData
+                    {isVisibilityData
                       ? formatCurrencyMoney(
-                          item?.value,
+                          item.value,
                           userData.primary_currency,
                         )
                       : '-'}

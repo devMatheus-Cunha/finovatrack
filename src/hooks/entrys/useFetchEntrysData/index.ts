@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { getEntrys } from '@/service/entrys/getEntrys'
 
 export interface IEntrysData {
-  value: string
+  value: number
   id?: string
 }
 

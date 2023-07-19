@@ -27,7 +27,6 @@ import { useSaveReport } from '@/hooks/reports'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
-import { IAddExpenseData } from '@/hooks/expenses/useAddExpense'
 import { convertEurToReal, formatCurrencyMoney } from '@/utils/formatNumber'
 import { Modal } from '@/components'
 import {
@@ -47,14 +46,15 @@ import ContentAddEntryModal from './modals/addEntryModal'
 import DeleteModalContent from './modals/deleteModal'
 import ContentTotalEntrys from './modals/totalEntrysModal'
 import ConfirmSaveReportModal from './modals/confirmSaveReportModal'
+import { IAddExpenseData } from '@/service/expenses/addExpense'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
   const { typeAccount } = userData
+
   const { addExpense, isLoadingAddExpense } = useAddExpense()
   const { expensesData = [], setFilter, filter } = useFetchExpensesData()
-
   const { deletedExpense } = useDeletedExpense()
   const { upadtedExpense } = useUpadtedExpense()
 
@@ -104,10 +104,7 @@ export default function Control() {
     const total = useMemo(
       () =>
         array.reduce((accumulator, item) => {
-          const valorFormatado = item.value.replace(/\./g, '').replace(',', '.')
-          const valorNum = parseFloat(valorFormatado)
-
-          return accumulator + valorNum
+          return accumulator + item.value
         }, 0),
       [array],
     )
@@ -155,8 +152,8 @@ export default function Control() {
     })
   }
 
-  const onAddEntrys: SubmitHandler<{ value: string }> = async (data) => {
-    addEntry(data)
+  const onAddEntrys: SubmitHandler<{ value: string }> = async ({ value }) => {
+    addEntry({ value: Number(value) })
     setConfigModal({
       open: !configModal.open,
       type: '',

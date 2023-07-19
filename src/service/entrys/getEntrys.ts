@@ -2,11 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
-
-export interface IEntrysData {
-  value: string
-  id?: string
-}
+import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 
 export async function getEntrys(idUser: string) {
   const querySnapshot = await getDocs(collection(db, 'users', idUser, 'entrys'))

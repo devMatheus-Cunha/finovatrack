@@ -1,16 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { addExpenseService } from '@/service/expenses/addExpense'
+import {
+  IAddExpenseData,
+  addExpenseService,
+} from '@/service/expenses/addExpense'
 import { useFetchExpensesData } from '../useFetchExpensesData'
-
-export interface IAddExpenseData {
-  id?: string
-  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
-  description: string
-  typeMoney?: 'Real' | 'Euro' | ''
-  value: string
-}
 
 export type ExpenseFormData = {
   id?: string
@@ -19,7 +14,7 @@ export type ExpenseFormData = {
   secondary_currency: number
   value: string
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
-  typeMoney?: 'Real' | 'Euro' | ''
+  typeMoney?: string
 }
 
 const useAddExpense = () => {
