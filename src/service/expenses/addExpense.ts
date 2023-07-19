@@ -3,12 +3,12 @@ import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase'
 
 export interface IAddExpenseData {
-  id?: string
+  id: string
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   description: string
-  euro_value?: number
-  real_value?: number
-  typeMoney?: 'Real' | 'Euro' | ''
+  value_primary_currency?: number
+  value_secondary_currency?: number
+  typeMoney?: string
   value: string
 }
 
@@ -17,11 +17,14 @@ export type ExpenseFormData = {
   description: string
   value: string
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
-  typeMoney?: 'Real' | 'Euro' | ''
+  typeMoney?: string
 }
 
-export async function addExpenseService(data: IAddExpenseData, id: string) {
-  const myCollection = collection(db, 'users', id, 'expenses')
-  const docRef = await addDoc(myCollection, data)
+export async function addExpenseService(
+  { id, ...rest }: IAddExpenseData,
+  idUser: string,
+) {
+  const myCollection = collection(db, 'users', idUser, 'expenses')
+  const docRef = await addDoc(myCollection, rest)
   return docRef
 }

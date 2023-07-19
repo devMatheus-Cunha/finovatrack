@@ -10,7 +10,7 @@ export interface ExpenseData {
   description: string
   value_primary_currency?: number
   value_secondary_currency?: number
-  typeMoney?: 'Real' | 'Euro' | ''
+  typeMoney?: string
   value: string
 }
 
@@ -27,7 +27,7 @@ export const useFetchExpensesData = () => {
     refetch: refetchExpensesData,
   } = useQuery({
     queryKey: ['expenses_data', filter, router.id],
-    queryFn: () => getExpenses(router.id, filter),
+    queryFn: async () => await getExpenses(router.id, filter),
     keepPreviousData: true,
     enabled: !!router.id,
   })

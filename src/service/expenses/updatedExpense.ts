@@ -3,12 +3,12 @@
 /* eslint-disable import/prefer-default-export */
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
+import { IAddExpenseData } from './addExpense'
 
 export async function updatedExpenseService(
-  data: Record<string, any>,
+  data: IAddExpenseData,
   idUser: string,
 ) {
-  console.log({ idUser, id: data?.id })
-  const docRef = doc(db, 'users', idUser, 'expenses', data?.id || '')
-  await updateDoc(docRef, data)
+  const docRef = doc(db, 'users', idUser, 'expenses', data.id)
+  await updateDoc(docRef, { ...data })
 }

@@ -3,11 +3,6 @@
 
 import { convertEurToReal } from '@/utils/formatNumber'
 
-export interface IEntrysData {
-  value: string
-  id?: string
-}
-
 export async function getQuatationRateFromAPI(
   valueToConvert: number,
   currency: {
