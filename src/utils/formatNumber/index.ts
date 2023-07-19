@@ -9,17 +9,9 @@ export function formatNumberToSubmit(value: string): number {
   return number
 }
 
-export function formatCurrencyMoney(
-  value: string | number | undefined,
-  currency: string,
-) {
-  const numberValue =
-    typeof value === 'string'
-      ? parseFloat(value.replace(/\./g, '').replace(',', '.'))
-      : Number(value)
-
+export function formatCurrencyMoney(value = 0, currency: string) {
   if (currency === 'hybrid') {
-    return numberValue.toLocaleString()
+    return value.toLocaleString()
   }
 
   const formattedValue = new Intl.NumberFormat(currency, {
@@ -27,7 +19,7 @@ export function formatCurrencyMoney(
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(numberValue)
+  }).format(value)
 
   return formattedValue
 }

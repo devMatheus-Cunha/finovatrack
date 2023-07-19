@@ -4,11 +4,6 @@
 import { doc, getDoc, updateDoc, setDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 
-export interface IEntrysData {
-  value: string
-  id?: string
-}
-
 export async function updateQuotationData(
   idUser: string,
   data: Record<string, any>,
