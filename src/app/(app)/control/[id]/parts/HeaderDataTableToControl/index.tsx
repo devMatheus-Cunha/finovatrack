@@ -38,7 +38,7 @@ function HeaderDataTableToControl({
   refetchQuationData,
 }: IHeaderDataTableToControl) {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between">
       <div className="flex gap-3 items-center justify-center">
         <Button type="button" onClick={() => handleOpenModal('addExpense')}>
           <div className="flex gap-2 justify-center items-center">
@@ -52,6 +52,12 @@ function HeaderDataTableToControl({
             Add Entrada
           </div>
         </Button>
+        <Button type="button" onClick={() => handleOpenModalSaveReport()}>
+          <div className="flex gap-2 justify-center items-center">
+            <FolderOpen size={20} color="#eee2e2" />
+            Salvar Relatório
+          </div>
+        </Button>
         <Button
           type="button"
           onClick={() => handleOpenModal('deleteAllExpenses')}
@@ -59,12 +65,6 @@ function HeaderDataTableToControl({
           <div className="flex gap-2 justify-center items-center">
             <Broom size={20} color="#eee2e2" />
             Limpar Gastos
-          </div>
-        </Button>
-        <Button type="button" onClick={() => handleOpenModalSaveReport()}>
-          <div className="flex gap-2 justify-center items-center">
-            <FolderOpen size={20} color="#eee2e2" />
-            Salvar Relatório
           </div>
         </Button>
         <select
@@ -93,27 +93,30 @@ function HeaderDataTableToControl({
           ))}
         </select>
       </div>
-      {userData.typeAccount === 'hybrid' && (
-        <div className="flex gap-3 justify-center items-center">
-          <h3 className="italic">
-            {`Cotação ${userData.secondary_currency}: ${formatCurrencyMoney(
-              currentQuotation ?? 0,
-              userData.primary_currency,
-            )} `}
-          </h3>
-          <button
-            type="button"
-            onClick={() => refetchQuationData()}
-            className="hover:text-gray-400"
-          >
-            <ArrowsCounterClockwise
-              size={20}
-              color="#eee2e2"
-              className="hover:opacity-75"
-            />
-          </button>
-        </div>
-      )}
+
+      <div className="flex gap-2 justify-center items-center">
+        {userData.typeAccount === 'hybrid' && (
+          <>
+            <h3 className="italic">
+              {`Cotação ${userData.secondary_currency}: ${formatCurrencyMoney(
+                currentQuotation ?? 0,
+                userData.primary_currency,
+              )} `}
+            </h3>
+            <button
+              type="button"
+              onClick={() => refetchQuationData()}
+              className="hover:text-gray-400"
+            >
+              <ArrowsCounterClockwise
+                size={20}
+                color="#eee2e2"
+                className="hover:opacity-75"
+              />
+            </button>
+          </>
+        )}
+      </div>
     </div>
   )
 }

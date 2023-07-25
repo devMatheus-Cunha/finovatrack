@@ -1,14 +1,5 @@
 /* eslint-disable no-useless-escape */
 
-export function formatNumberToSubmit(value: string): number {
-  const removeCaractheres = value.replace(/^(R\$|\€)\s*/g, '')
-  const valueWithoutFormatting = removeCaractheres
-    .replace(/\./g, '')
-    .replace(',', '.')
-  const number = parseFloat(valueWithoutFormatting)
-  return number
-}
-
 export function formatCurrencyMoney(value = 0, currency: string) {
   if (currency === 'hybrid') {
     return value.toLocaleString()

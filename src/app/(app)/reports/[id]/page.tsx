@@ -36,7 +36,7 @@ function Reports() {
   }
 
   return (
-    <div className="h-[100vh] w-[100%]">
+    <div className=" w-[100%]">
       <div className="flex items-center flex-col w-[100%] gap-10 p-3">
         <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[40%]">
           <h2>Escolha um período para solicitar um relatório:</h2>
@@ -104,8 +104,8 @@ function Reports() {
               </div>
               <div className="relative overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] bg-gray-800">
                 {data?.data?.length > 0 ? (
-                  <table className="w-full text-sm text-left text-gray-500 text-gray-400">
-                    <thead className="text-md text-gray-700 uppercase  bg-gray-800 text-gray-400 border-b border-gray-700">
+                  <table className="w-full text-sm text-left">
+                    <thead className="text-md uppercase  bg-gray-800 text-gray-400 border-b border-gray-700">
                       <tr>
                         {validateColumsHeadProps[userData.typeAccount].map(
                           (item: { field: string; header: string }) => (

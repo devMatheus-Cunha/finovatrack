@@ -29,7 +29,7 @@ function TableToControl({
   userData,
 }: ITableToControl) {
   return (
-    <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] w-[100%] bg-gray-800">
+    <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] bg-gray-800">
       {calculationSumValues?.length > 0 ? (
         <table className="w-full text-sm text-left text-gray-400">
           <thead className="text-md uppercase bg-gray-800 text-gray-400 border-b border-gray-700">
@@ -48,7 +48,7 @@ function TableToControl({
           <tbody>
             {calculationSumValues.map((item, index) => (
               <Fragment key={index}>
-                <tr className="bg-white border-b bg-gray-800 border-gray-700">
+                <tr className="border-b bg-gray-800 border-gray-700">
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium whitespace-nowrap text-white"

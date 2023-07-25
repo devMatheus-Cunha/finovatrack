@@ -4,7 +4,6 @@
 'use client'
 
 import '../styles/globals.css'
-import 'flowbite/dist/flowbite.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Providers from '@/utils/reactQuery/provider'

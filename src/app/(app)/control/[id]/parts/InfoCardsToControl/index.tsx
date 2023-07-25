@@ -18,6 +18,7 @@ interface IInfoCardsToControl {
   entrysData: IEntrysData[]
   totalExpensesEurToReal: number
   totalExpensesEurSumRealToReal: number
+  infoAction?: () => void
   handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
 }
 
@@ -28,9 +29,10 @@ function InfoCardsToControl({
   entrysData,
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
+  infoAction,
 }: IInfoCardsToControl) {
   return (
-    <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+    <div className="flex justify-center gap-6">
       <InfoCardMoney
         infoData={formatCurrencyMoney(totalEntrys, userData.primary_currency)}
         title="Total Entradas"
@@ -54,6 +56,7 @@ function InfoCardsToControl({
             totalExpensesEurToReal,
             userData.primary_currency,
           )}
+          infoAction={infoAction}
           title={`Total Gastos em ${userData.secondary_currency}`}
         />
       )}

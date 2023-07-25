@@ -22,7 +22,7 @@ function ButtonGroup({ buttonOptions }: ButtonGroupProps) {
           <button
             type="button"
             onClick={item?.onClick}
-            className="border  focus:ring-4 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 hover:border-gray-400 text-white-500 hover:text-gray-400 focus:ring-gray-800"
+            className="border focus:ring-4 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 hover:border-gray-400 text-white-500 hover:text-gray-400 focus:ring-gray-800"
           >
             {item?.content}
           </button>

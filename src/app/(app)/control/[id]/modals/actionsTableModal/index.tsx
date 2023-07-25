@@ -73,50 +73,81 @@ function ContentActionsTableModal({
         onSubmit({ ...data, id: initialData?.id ?? '' }),
       )}
     >
-      <div className="rounded-lg shadow">
-        <div className="rounded-lg shadow bg-gray-800">
-          <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
-            <h3 className="text-xl font-semibold text-white">
-              {validateTextToModal[type || '']?.title}
-            </h3>
-          </div>
-          <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
-            <Input
-              label="Descrição"
-              name="description"
-              placeholder="Ex: Compra carro"
-              type="text"
-              register={register}
-              required
-              errors={
-                <>
-                  {errors.description && (
-                    <span className="text-red-500 text-sm">
-                      Este campo é obrigatório
-                    </span>
-                  )}
-                </>
-              }
-            />
+      <div className="rounded-lg shadow bg-gray-800">
+        <div className="p-4 border-b border-gray-600">
+          <h3 className="text-xl font-semibold text-white">
+            {validateTextToModal[type || '']?.title}
+          </h3>
+        </div>
 
+        <div className="grid gap-6 md:grid-cols-2 p-4">
+          <Input
+            label="Descrição"
+            name="description"
+            placeholder="Ex: Compra carro"
+            type="text"
+            register={register}
+            required
+            errors={
+              <>
+                {errors.description && (
+                  <span className="text-red-500 text-sm">
+                    Este campo é obrigatório
+                  </span>
+                )}
+              </>
+            }
+          />
+
+          <Select
+            label="Selecione o tipo"
+            name="type"
+            options={[
+              {
+                label: `Ex: Essencial`,
+                value: '',
+                disabled: true,
+                selected: true,
+              },
+              { label: 'Essencial', value: 'Essencial' },
+              { label: 'Não essencial', value: 'Não essencial' },
+              { label: 'Gasto Livre', value: 'Gasto Livre' },
+            ]}
+            register={register}
+            errors={
+              <>
+                {errors.type && (
+                  <span className="text-red-500 text-sm">
+                    Este campo é obrigatório
+                  </span>
+                )}
+              </>
+            }
+          />
+          {userData.typeAccount === 'hybrid' && (
             <Select
-              label="Selecione o tipo"
-              name="type"
+              label="Selecione Moeda"
+              name="typeMoney"
               options={[
                 {
-                  label: `Ex: Essencial`,
+                  label: `Ex: ${userData.primary_currency}`,
                   value: '',
                   disabled: true,
                   selected: true,
                 },
-                { label: 'Essencial', value: 'Essencial' },
-                { label: 'Não essencial', value: 'Não essencial' },
-                { label: 'Gasto Livre', value: 'Gasto Livre' },
+                {
+                  label: userData.primary_currency,
+                  value: userData.primary_currency,
+                },
+                {
+                  label: userData.secondary_currency,
+                  value: userData.secondary_currency,
+                },
               ]}
               register={register}
               errors={
                 <>
-                  {errors.type && (
+                  {errors.typeMoney && (
                     <span className="text-red-500 text-sm">
                       Este campo é obrigatório
                     </span>
@@ -124,76 +155,43 @@ function ContentActionsTableModal({
                 </>
               }
             />
-            {userData.typeAccount === 'hybrid' && (
-              <Select
-                label="Selecione Moeda"
-                name="typeMoney"
-                options={[
-                  {
-                    label: `Ex: ${userData.primary_currency}`,
-                    value: '',
-                    disabled: true,
-                    selected: true,
-                  },
-                  {
-                    label: userData.primary_currency,
-                    value: userData.primary_currency,
-                  },
-                  {
-                    label: userData.secondary_currency,
-                    value: userData.secondary_currency,
-                  },
-                ]}
-                register={register}
-                errors={
-                  <>
-                    {errors.typeMoney && (
-                      <span className="text-red-500 text-sm">
-                        Este campo é obrigatório
-                      </span>
-                    )}
-                  </>
-                }
-              />
-            )}
-            <InputTypeMoney
-              control={control}
-              name="value"
-              label={`Valor (${
-                optionsLabelCurrencyKeyAndValue[
-                  watch()?.typeMoney || userData.primary_currency
-                ]
-              })`}
-              placeholder={`Ex: ${
-                optionsLabelCurrencyKeyAndValue[
-                  watch()?.typeMoney || userData.primary_currency
-                ]
-              } 10.00`}
-              errors={
-                <>
-                  {errors.value && (
-                    <span className="text-red-500 text-sm ">
-                      Este campo é obrigatório e deve ser um valor numérico
-                      válido
-                    </span>
-                  )}
-                </>
-              }
-            />
-          </div>
+          )}
+          <InputTypeMoney
+            control={control}
+            name="value"
+            label={`Valor (${
+              optionsLabelCurrencyKeyAndValue[
+                watch()?.typeMoney || userData.primary_currency
+              ]
+            })`}
+            placeholder={`Ex: ${
+              optionsLabelCurrencyKeyAndValue[
+                watch()?.typeMoney || userData.primary_currency
+              ]
+            } 10.00`}
+            errors={
+              <>
+                {errors.value && (
+                  <span className="text-red-500 text-sm ">
+                    Este campo é obrigatório e deve ser um valor numérico válido
+                  </span>
+                )}
+              </>
+            }
+          />
+        </div>
 
-          <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
-            <Button variant="confirm" type="submit">
-              {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-            </Button>
-            <Button
-              onClick={() => handleOpenModal()}
-              type="button"
-              variant="cancel"
-            >
-              Cancelar
-            </Button>
-          </div>
+        <div className="flex justify-end px-4 py-6 gap-3 border-t border-gray-600">
+          <Button
+            onClick={() => handleOpenModal()}
+            type="button"
+            variant="cancel"
+          >
+            Cancelar
+          </Button>
+          <Button variant="confirm" type="submit">
+            {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
+          </Button>
         </div>
       </div>
     </form>

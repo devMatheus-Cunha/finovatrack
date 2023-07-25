@@ -124,7 +124,7 @@ export default function Signup() {
         <div className="w-full">
           <label
             htmlFor="typeAccount"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-white"
           >
             Selecione moeda da conta *
           </label>
@@ -158,7 +158,7 @@ export default function Signup() {
               <div className="w-full">
                 <label
                   htmlFor="primary_currency"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Selecione moeda primária *
                 </label>
@@ -189,7 +189,7 @@ export default function Signup() {
               <div className="w-full">
                 <label
                   htmlFor="secondary_currency"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Selecione moeda secundária *
                 </label>

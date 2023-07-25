@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function MyProfileLayout({ children }: SideBarProps) {
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-[2%]">
+    <div className="flex flex-col items-center justify-center h-[90vh] p-[2%]">
       {children}
     </div>
   )

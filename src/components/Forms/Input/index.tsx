@@ -36,12 +36,12 @@ export default function Input<T extends FieldValues>({
       <input
         id={name as string}
         disabled={disabled}
-        {...register(name)}
         className={
           disabled
             ? 'border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed'
             : 'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'
         }
+        {...register(name)}
         {...rest}
       />
       {errors && <>{errors}</>}

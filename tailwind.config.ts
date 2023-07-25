@@ -12,7 +12,7 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'media',
+  darkMode: 'dark',
   theme: {
     extend: {
       colors: {
@@ -41,4 +41,4 @@ module.exports = {
     extend: {},
   },
   plugins: [require('flowbite/plugin')],
-};
+}

@@ -9,7 +9,7 @@ import { Button, Logo } from '..'
 export default function Header() {
   const router = useRouter()
   return (
-    <nav className="bg-white border-gray-200 bg-gray-800">
+    <nav className="bg-gray-800 border-gray-200">
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
         <Logo />
         <div className="flex items-center md:order-2 gap-7">
