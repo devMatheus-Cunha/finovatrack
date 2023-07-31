@@ -106,7 +106,7 @@ export default function Control() {
     const total = useMemo(
       () =>
         array.reduce((accumulator, item) => {
-          return accumulator + item.value
+          return accumulator + Number(item.value)
         }, 0),
       [array],
     )
