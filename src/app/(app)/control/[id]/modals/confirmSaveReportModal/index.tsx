@@ -5,9 +5,9 @@
 import React, { useState } from 'react'
 
 import { FolderPlus } from '@phosphor-icons/react'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { Button } from '@/components'
 import DatePicker from 'react-datepicker'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 interface IConfirmSaveReportModal {
   onSubmit: (data: any) => void

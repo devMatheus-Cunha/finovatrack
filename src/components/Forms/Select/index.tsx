@@ -41,7 +41,7 @@ export default function Select<T extends FieldValues>({
   disabledSelect,
 }: SelectFieldProps<T>) {
   return (
-    <div className="mb-4">
+    <div className="w-[100%]">
       <label
         htmlFor={name}
         className="block mb-2 text-sm font-medium  text-white"
@@ -54,7 +54,7 @@ export default function Select<T extends FieldValues>({
         disabled={disabledSelect}
         className={
           className ||
-          'border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500'
+          'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500'
         }
       >
         {options.map(({ value, disabled, label, selected }) => (

@@ -4,16 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { getExpenses } from '@/service/expenses/getExpenses'
 
-export interface ExpenseData {
-  id: string
-  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
-  description: string
-  value_primary_currency?: number
-  value_secondary_currency?: number
-  typeMoney?: string
-  value: string
-}
-
 export type Filter = 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
 
 export const useFetchExpensesData = () => {

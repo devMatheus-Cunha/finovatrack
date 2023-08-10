@@ -13,6 +13,7 @@ export interface ExpenseData {
   value_secondary_currency?: number
   typeMoney?: string
   value: string
+  payment: 'Pago' | 'A Pagar' | ''
 }
 
 export async function getExpenses(idUser: string, filter: Filter) {

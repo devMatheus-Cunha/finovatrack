@@ -1,8 +1,8 @@
 /* eslint-disable default-param-last */
 /* eslint-disable import/prefer-default-export */
 import { deleteDoc, doc } from 'firebase/firestore'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { db } from '../firebase'
+import { ExpenseData } from './getExpenses'
 
 export interface IDeleteEntryServiceProps {
   value: string

@@ -13,10 +13,11 @@ import {
 } from '@phosphor-icons/react'
 import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilter } from '../../utils'
 import { ITypeModal } from '../../types'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 interface IHeaderDataTableToControl {
   userData: UserData

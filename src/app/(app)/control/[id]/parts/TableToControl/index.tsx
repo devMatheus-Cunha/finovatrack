@@ -9,9 +9,10 @@ import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Fragment } from 'react'
 import { ButtonGroup, Empty } from '@/components'
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react'
-import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData'
+import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { columsHeadProps } from '../../utils'
 import { ITypeModal } from '../../types'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -95,6 +96,16 @@ function TableToControl({
                     className="px-6 py-4 font-medium whitespace-nowrap text-white"
                   >
                     {item.type}
+                  </th>
+                  <th
+                    scope="row"
+                    className={`px-6 py-4 font-medium whitespace-nowrap ${
+                      item.payment === 'A Pagar'
+                        ? ' text-red-500'
+                        : 'text-green-500'
+                    }`}
+                  >
+                    {item.payment ?? '-'}
                   </th>
 
                   {item.description !== 'Totais' ? (
