@@ -11,9 +11,9 @@ import { useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { Button, InputTypeMoney } from '@/components'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { ITypeModal } from '../../types'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 type FormData = {
   value: string

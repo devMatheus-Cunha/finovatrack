@@ -20,7 +20,7 @@ import {
   useUpadtedExpense,
   useClearExpenses,
 } from '@/hooks/expenses'
-import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData'
+import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { useFetchQuatationEur } from '@/hooks/quatation'
 
 import { useSaveReport } from '@/hooks/reports'
@@ -46,7 +46,7 @@ import ContentAddEntryModal from './modals/addEntryModal'
 import DeleteModalContent from './modals/deleteModal'
 import ContentTotalEntrys from './modals/totalEntrysModal'
 import ConfirmSaveReportModal from './modals/confirmSaveReportModal'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -135,7 +135,7 @@ export default function Control() {
     })
   }
 
-  const onAddExpense = async (data: IAddExpenseData) => {
+  const onAddExpense = async (data: ExpenseData) => {
     if (configModal.type === 'edit') {
       await upadtedExpense(formattedValuesSubmitExpense(data, userData))
       setConfigModal({

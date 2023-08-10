@@ -206,7 +206,7 @@ function MyProfile() {
           )}
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-4">
           {optionsCurrencyEnabled && (
             <Button
               type="button"

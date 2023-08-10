@@ -6,8 +6,7 @@
 'use client'
 
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { useMemo } from 'react'
 
@@ -27,7 +26,7 @@ export const validateTextToModal: any = {
 }
 
 export const formattedValuesSubmitExpense = (
-  data: IAddExpenseData,
+  data: ExpenseData,
   userData: UserData,
 ) => {
   const formattedValues = {
@@ -65,6 +64,10 @@ export const columsHeadProps = (
       field: 'type',
     },
     {
+      header: 'Status Pagamento',
+      field: 'payment',
+    },
+    {
       header: 'Ação',
       field: 'actions',
     },
@@ -97,6 +100,7 @@ export const initialDataSelectedData: ExpenseData = {
   value_primary_currency: 0,
   value_secondary_currency: 0,
   typeMoney: '',
+  payment: '',
 }
 
 export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
@@ -121,6 +125,7 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
         value_primary_currency: 0,
         value_secondary_currency: 0,
         typeMoney: '',
+        payment: '',
       },
     )
     return [...expensesData, calculation]
