@@ -2,7 +2,7 @@
 
 'use client'
 
-import { Button } from '@/components'
+import { Button, DropdownFilter } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import {
   Coins,
@@ -18,12 +18,13 @@ import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilter } from '../../utils'
 import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
+import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 
 interface IHeaderDataTableToControl {
   userData: UserData
   currentQuotation: number | undefined
   filter: string
-  onFilter: (filter: React.ChangeEvent<HTMLSelectElement>) => void
+  onFilter: (filter: Filter) => void
   handleOpenModal: (type?: ITypeModal | undefined, data?: ExpenseData) => void
   handleOpenModalSaveReport: (data?: ExpenseData[]) => void
   refetchQuationData: RefetchQuationDataType
@@ -39,8 +40,8 @@ function HeaderDataTableToControl({
   refetchQuationData,
 }: IHeaderDataTableToControl) {
   return (
-    <div className="flex justify-between">
-      <div className="flex gap-3 items-center justify-center">
+    <div className="flex justify-between flex-wrap">
+      <div className="flex gap-3 items-center justify-center flex-wrap">
         <Button type="button" onClick={() => handleOpenModal('addExpense')}>
           <div className="flex gap-2 justify-center items-center">
             <Coins size={20} color="#eee2e2" />
@@ -68,37 +69,17 @@ function HeaderDataTableToControl({
             Limpar Gastos
           </div>
         </Button>
-        <select
-          id="type"
-          className="
-          cursor-pointer
-          font-medium
-          rounded-lg
-          text-sm
-          px-5
-          py-2.5
-          bg-gray-800
-          hover:bg-gray-700
-          border-gray-700
-          "
-          onChange={(e) => onFilter(e)}
+        <DropdownFilter
           value={filter}
-        >
-          <option defaultValue="clear" value="clear" disabled>
-            Filtre o Tipo
-          </option>
-          {optionsFilter.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          options={optionsFilter}
+          onFilter={onFilter}
+        />
       </div>
 
       <div className="flex gap-2 justify-center items-center">
         {userData.typeAccount === 'hybrid' && (
           <>
-            <h3 className="italic">
+            <h3 className="italic text-[12px] md:text-ms">
               {`Cotação ${userData.secondary_currency}: ${formatCurrencyMoney(
                 currentQuotation ?? 0,
                 userData.primary_currency,

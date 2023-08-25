@@ -16,6 +16,7 @@ import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpenseData } from '@/service/expenses/getExpenses'
+import { Trash } from '@phosphor-icons/react'
 
 interface IContentModal {
   onSubmit: (data: ExpenseData) => Promise<void>
@@ -24,6 +25,7 @@ interface IContentModal {
   initialData: ExpenseData | undefined
   type: ITypeModal
   userData: UserData
+  onDelete: () => void
 }
 
 function ContentActionsTableModal({
@@ -33,6 +35,7 @@ function ContentActionsTableModal({
   initialData,
   type,
   userData,
+  onDelete,
 }: IContentModal) {
   const schema = z.object({
     description: z.string().nonempty(),
@@ -66,6 +69,12 @@ function ContentActionsTableModal({
     resolver: zodResolver(schema),
   })
 
+  const handleActionsModal = (type: 'cancel' | 'delete') => {
+    if (type === 'cancel') handleOpenModal()
+    handleOpenModal()
+    handleOpenModal('delete', initialData)
+  }
+
   return (
     <form
       onSubmit={handleSubmit((data) =>
@@ -79,7 +88,7 @@ function ContentActionsTableModal({
           </h3>
         </div>
 
-        <div className="flex flex-col  gap-6 p-4">
+        <div className="flex flex-col flex-wrap gap-6 p-4">
           <Input
             label="Descrição"
             name="description"
@@ -98,7 +107,7 @@ function ContentActionsTableModal({
             }
           />
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <Select
               label="Selecione o tipo"
               name="type"
@@ -150,7 +159,7 @@ function ContentActionsTableModal({
             />
           </div>
 
-          <div className="flex gap-4 ">
+          <div className="flex gap-4 flex-wrap">
             {userData.typeAccount === 'hybrid' && (
               <Select
                 label="Selecione Moeda"
@@ -210,17 +219,27 @@ function ContentActionsTableModal({
           </div>
         </div>
 
-        <div className="flex justify-end px-4 py-6 gap-3 border-t border-gray-600">
+        <div className="flex justify-between md:justify-end items-center px-4 py-6  border-t border-gray-600">
           <Button
-            onClick={() => handleOpenModal()}
+            onClick={() => onDelete()}
             type="button"
-            variant="cancel"
+            className="md:hidden flex justify-center items-center gap-1 text-red-500 p-0"
           >
-            Cancelar
+            Deletar
+            <Trash color="#ef4444" />
           </Button>
-          <Button variant="confirm" type="submit">
-            {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={() => handleActionsModal('cancel')}
+              type="button"
+              variant="cancel"
+            >
+              Cancelar
+            </Button>
+            <Button variant="confirm" type="submit">
+              {type === 'addExpense' ? 'Adicionar' : 'Editar'}
+            </Button>
+          </div>
         </div>
       </div>
     </form>

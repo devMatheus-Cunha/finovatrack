@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 
-export function formatCurrencyMoney(value = 0, currency: string) {
+export function formatCurrencyMoney(value = 0, currency?: string) {
   if (currency === 'hybrid') {
     return value.toLocaleString()
   }
