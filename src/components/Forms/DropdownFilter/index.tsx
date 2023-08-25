@@ -1,6 +1,6 @@
 'use client'
 
-import { CaretDown, CaretUp } from '@phosphor-icons/react'
+import { CaretDown } from '@phosphor-icons/react'
 import React from 'react'
 
 interface Option {
