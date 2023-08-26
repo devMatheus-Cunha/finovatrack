@@ -38,9 +38,9 @@ function Reports() {
   return (
     <div className=" w-[100%]">
       <div className="flex items-center flex-col w-[100%] gap-10 p-3">
-        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col w-[40%]">
+        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col md:w-[40%]">
           <h2>Escolha um período para solicitar um relatório:</h2>
-          <div className="flex gap-4 bg-gray-800 rounded-lg justify-center items-center">
+          <div className="flex gap-2 md:gap-4 bg-gray-800 rounded-lg justify-center items-center">
             <DatePicker
               selected={selectedPeriod}
               onChange={(date: Date) => onChangeDate(date)}
@@ -52,9 +52,9 @@ function Reports() {
             <Button
               type="button"
               onClick={() => onSubmit(selectedPeriod)}
-              className="font-medium rounded-lg text-sm p-2 bg-gray-700 hover:bg-gray-600 focus:ring-gray-600 border-gray-700 w-full"
+              className="font-medium rounded-lg text-[13px] md:text-sm p-2 bg-gray-700 hover:bg-gray-600 focus:ring-gray-600 border-gray-700 w-full"
             >
-              <div className="flex gap-2 justify-center items-center">
+              <div className="flex gap-1 md:gap-2 justify-center items-center">
                 <FolderOpen size={20} color="#eee2e2" />
                 Solicitar Relatório
               </div>
@@ -63,8 +63,8 @@ function Reports() {
         </div>
         <div className="w-[95%]">
           {data ? (
-            <div className="flex flex-col gap-4">
-              <h1 className="text-xl">
+            <div className="flex flex-wrap flex-col gap-4">
+              <h1 className="md:text-xl">
                 Relatório referente ao período{' '}
                 <span className="italic">{data?.period}</span>
               </h1>
@@ -187,7 +187,7 @@ function Reports() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
-              <h1 className="mt-4 text-3xl font-bold text-white">
+              <h1 className="mt-4 text-2xl md:text-3xl font-bold text-white">
                 Nenhum relatório gerado
               </h1>
               <p className="mt-2 text-md text-gray-300">

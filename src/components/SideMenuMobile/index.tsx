@@ -20,6 +20,8 @@ const SideMenuMobile = ({
 }) => {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
+
+  console.log(pathname?.startsWith('/reports'))
   return (
     <>
       <div className="flex gap-3 item-center">
@@ -65,9 +67,11 @@ const SideMenuMobile = ({
                   <button
                     onClick={item.action}
                     disabled={item.disabled}
-                    className={` ${
-                      pathname?.startsWith(item?.route) ? '' : '#eee2e2'
-                    } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800 text-white w-full`}
+                    className={`${
+                      pathname?.startsWith(item?.route)
+                        ? 'text-cyan-600'
+                        : 'text-white'
+                    } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
                   >
                     {item.icon}
                     <p className="text-[11px]">{item.label}</p>

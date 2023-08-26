@@ -226,9 +226,9 @@ export default function Control() {
             <>
               <div
                 onClick={() => handleOpenModal('edit', item)}
-                className="flex h-[80px] w-[100%] text-white bg-gray-800 rounded-lg justify-between items-center p-3"
+                className="flex h-[80px] w-[100%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
               >
-                <div className="flex flex-col gap-4 flex-1">
+                <div className="flex flex-col gap-4 ">
                   <p className="text-ms">{item.description}</p>
                   <p className="-mt-1 font-sans text-md md:text-2xl font-semibold">
                     {isVisibilityData
@@ -236,7 +236,7 @@ export default function Control() {
                       : '-'}
                   </p>
                 </div>
-                <div className="flex flex-col gap-4 text-left w-[30%]">
+                <div className="flex flex-col gap-4 text-left w-[33%]">
                   <p
                     className={`font-medium text-ms ${
                       item.payment === 'A Pagar'
