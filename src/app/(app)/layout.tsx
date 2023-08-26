@@ -80,7 +80,7 @@ export default function AppLayout({ children }: SideBarProps) {
   ]
 
   return (
-    <div className="h-[100vh] flex flex-col md:flex-row">
+    <div className="h-[100vh] flex flex-col lg:flex-row">
       <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
 
       <HeaderMobile>

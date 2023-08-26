@@ -25,7 +25,7 @@ function InfoCardMoney({
 
   return (
     <>
-      <div className="h-[80px] md:h-[99px] w-[45%] md:w-[100%] flex pl-4 justify-center flex-col text-white bg-gray-800 rounded-lg">
+      <div className="h-[80px] md:h-[99px] w-[45%] lg:w-[100%] flex pl-4 justify-center flex-col text-white bg-gray-800 rounded-lg">
         <div className="flex gap-0.5 mb-1 items-center">
           <p className="text-[11px] md:text-ms">{title}</p>
           {infoAction && (

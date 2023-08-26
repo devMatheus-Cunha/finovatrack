@@ -183,7 +183,7 @@ export default function Control() {
   }
 
   return (
-    <main className="flex flex-col gap-10 items-center  w-[100%] px-2 py-4">
+    <main className="flex flex-col gap-10 items-center w-[100%] px-2 py-4">
       <div className="w-[100%]">
         <InfoCardsToControl
           infoAction={handleInfoAction}
@@ -209,7 +209,7 @@ export default function Control() {
           refetchQuationData={refetchQuationData}
         />
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <TableToControl
             calculationSumValues={
               typeAccount === 'hybrid' ? calculationSumValues : expensesData
@@ -221,16 +221,16 @@ export default function Control() {
           />
         </div>
 
-        <div className="md:hidden flex flex-col gap-4">
+        <div className="lg:hidden flex  flex-nowrap md:flex-wrap gap-4">
           {expensesData.map((item) => (
             <>
               <div
                 onClick={() => handleOpenModal('edit', item)}
-                className="flex h-[80px] w-[100%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
+                className="flex h-[85px] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
               >
                 <div className="flex flex-col gap-4 ">
                   <p className="text-ms">{item.description}</p>
-                  <p className="-mt-1 font-sans text-md md:text-2xl font-semibold">
+                  <p className="-mt-1 font-sans text-m font-semibold">
                     {isVisibilityData
                       ? formatCurrencyMoney(Number(item.value), item.typeMoney)
                       : '-'}
@@ -258,7 +258,7 @@ export default function Control() {
         {configModal.open &&
           (configModal.type === 'edit' ||
             configModal.type === 'addExpense') && (
-            <Modal className="w-[95%] md:w-[50%]">
+            <Modal className="w-[95%] lg:w-[50%]">
               <ContentActionsTableModal
                 type={configModal?.type}
                 initialData={configModal?.selectedData}
@@ -273,7 +273,7 @@ export default function Control() {
         {configModal.open &&
           (configModal.type === 'delete' ||
             configModal.type === 'deleteAllExpenses') && (
-            <Modal className="w-[95%] md:w-[27%]">
+            <Modal className="w-[95%] lg:w-[27%]">
               <DeleteModalContent
                 onCancel={handleOpenModal}
                 onSubmit={
@@ -285,7 +285,7 @@ export default function Control() {
             </Modal>
           )}
         {openModalReport.open && (
-          <Modal className="w-[95%] md:w-[41%]">
+          <Modal className="w-[95%] lg:w-[41%]">
             <ConfirmSaveReportModal
               initialData={calculationSumValues}
               onCancel={handleOpenModalSaveReport}
@@ -320,7 +320,7 @@ export default function Control() {
           </Modal>
         )}
         {configModal.open && configModal.type === 'addEntry' && (
-          <Modal className="w-[95%] md:w-[37%]">
+          <Modal className="w-[95%] lg:w-[37%]">
             <ContentAddEntryModal
               handleOpenModal={handleOpenModal}
               onSubmit={onAddEntrys}
@@ -329,7 +329,7 @@ export default function Control() {
           </Modal>
         )}
         {configModal.open && configModal.type === 'totalsEntrys' && (
-          <Modal className="w-[95%] md:w-[50%]">
+          <Modal className="w-[95%] lg:w-[50%]">
             <ContentTotalEntrys
               handleOpenModal={handleOpenModal}
               data={entrysData}
@@ -339,7 +339,7 @@ export default function Control() {
           </Modal>
         )}
         {openModalInfoCard && (
-          <Modal className="w-[95%] md:w-[30%]">
+          <Modal className="w-[95%] lg:w-[30%]">
             <div className="bg-gray-800 rounded-lg shadow">
               <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
                 <h3 className="text-xl font-semibold text-white">

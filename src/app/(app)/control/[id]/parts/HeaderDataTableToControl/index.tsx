@@ -68,45 +68,45 @@ function HeaderDataTableToControl({
       <div className="flex gap-3 items-center justify-center flex-wrap">
         <Button
           type="button"
-          className="hidden md:block"
+          className="hidden lg:block"
           onClick={() => handleOpenModal('addExpense')}
         >
           <div className="flex gap-2 justify-center items-center">
             <Coins size={20} color="#eee2e2" />
-            <p className="hidden md:block">Add Gastos</p>
+            <p className="hidden lg:block">Add Gastos</p>
           </div>
         </Button>
         <Button
-          className="hidden md:block"
+          className="hidden lg:block"
           type="button"
           onClick={() => handleOpenModal('addEntry')}
         >
           <div className="flex gap-2 justify-center items-center">
             <HandCoins size={20} color="#eee2e2" />
-            <p className="hidden md:block">Add Entrada</p>
+            <p className="hidden lg:block">Add Entrada</p>
           </div>
         </Button>
         <Button
-          className="hidden md:block"
+          className="hidden lg:block"
           type="button"
           onClick={() => handleOpenModalSaveReport()}
         >
           <div className="flex gap-2 justify-center items-center">
             <FolderOpen size={20} color="#eee2e2" />
-            <p className="hidden md:block">Salvar Relatório</p>
+            <p className="hidden lg:block">Salvar Relatório</p>
           </div>
         </Button>
         <Button
           type="button"
-          className="hidden md:block"
+          className="hidden lg:block"
           onClick={() => handleOpenModal('deleteAllExpenses')}
         >
           <div className="flex gap-2 justify-center items-center">
             <Broom size={20} color="#eee2e2" />
-            <p className="hidden md:block">Limpar Gastos</p>
+            <p className="hidden lg:block">Limpar Gastos</p>
           </div>
         </Button>
-        <div className="block md:hidden">
+        <div className="block lg:hidden">
           <div className="hs-dropdown relative inline-flex [--strategy:absolute]">
             <button
               id="s-dropdown-left-but-right-on-lg"

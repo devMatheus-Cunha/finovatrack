@@ -33,7 +33,7 @@ function InfoCardsToControl({
   infoAction,
 }: IInfoCardsToControl) {
   return (
-    <div className="flex flex-wrap md:flex-nowrap	justify-center gap-6">
+    <div className="flex flex-wrap lg:flex-nowrap	justify-center gap-6">
       <InfoCardMoney
         infoData={formatCurrencyMoney(totalEntrys, userData.primary_currency)}
         title="Total Entradas"

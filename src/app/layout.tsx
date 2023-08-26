@@ -45,7 +45,7 @@ export default function RootLayout({
         <Providers>
           <ThemeProvider attribute="class">
             <div>{children}</div>
-            {/* <div className=" md:hidden flex flex-col gap-4 justify-center items-center h-screen text-center p-4"> */}
+            {/* <div className=" lg:hidden flex flex-col gap-4 justify-center items-center h-screen text-center p-4"> */}
             {/* <h1 className="text-4xl text-red-600 italic font-bold">
                 Atenção!
               </h1>

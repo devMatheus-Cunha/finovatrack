@@ -17,7 +17,7 @@ const SideMenu = ({
   }[]
 }) => {
   return (
-    <aside className="hidden md:block transition-opacity duration-300">
+    <aside className="hidden lg:block transition-opacity duration-300">
       <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
         <div className="flex flex-col gap-6">
           {sidebarItems.map((item) => (
