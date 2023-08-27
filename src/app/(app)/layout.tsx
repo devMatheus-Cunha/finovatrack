@@ -84,7 +84,7 @@ export default function AppLayout({ children }: SideBarProps) {
       <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
 
       <HeaderMobile>
-        <Logo className="md:text-lg" />
+        <Logo className="text-xl md:text-lg" />
         <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
       </HeaderMobile>
 
