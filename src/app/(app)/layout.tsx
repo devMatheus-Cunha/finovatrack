@@ -15,6 +15,7 @@ import React, { ReactNode } from 'react'
 import ReactLoading from 'react-loading'
 import { useIsVisibilityDatas, useUserData } from '../../hooks/globalStates'
 import { useLogout } from '../../hooks/auth'
+import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
 
 interface SideBarProps {
   children: ReactNode
@@ -79,38 +80,14 @@ export default function AppLayout({ children }: SideBarProps) {
   ]
 
   return (
-    <div className="h-[100vh] flex">
-      <aside className="hidden md:block transition-opacity duration-300">
-        <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
-          <div className="flex flex-col gap-6">
-            {sidebarItems.map((item) => (
-              <React.Fragment key={item.id}>
-                <button
-                  data-tooltip-target="tooltip-default"
-                  className={`focus:outline-none font-medium rounded-lg text-md transparent focus:ring-gray-600 border-gray-600 w-[100%] flex items-center justify-center ${
-                    item.disabled
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer'
-                  }`}
-                  onClick={item.action}
-                  disabled={item.disabled}
-                >
-                  <div
-                    className={`flex gap-0.5 flex-col justify-center items-center ${
-                      pathname?.startsWith(item?.route)
-                        ? 'text-cyan-600'
-                        : '#eee2e2'
-                    } hover:opacity-75`}
-                  >
-                    {item.icon}
-                    <p className="text-[11px]">{item.label}</p>
-                  </div>
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </aside>
+    <div className="h-[100vh] flex flex-col lg:flex-row">
+      <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
+
+      <HeaderMobile>
+        <Logo className="md:text-lg" />
+        <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
+      </HeaderMobile>
+
       <div className="flex-auto w-full p-0 md:p-4">
         {!id ? (
           <div className="flex h-screen w-full items-center justify-center">

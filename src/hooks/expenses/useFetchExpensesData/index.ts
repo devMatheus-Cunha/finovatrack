@@ -4,7 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { getExpenses } from '@/service/expenses/getExpenses'
 
-export type Filter = 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
+export type Filter =
+  | 'Essencial'
+  | 'Não essencial'
+  | 'Gasto Livre'
+  | 'Clear'
+  | ''
 
 export const useFetchExpensesData = () => {
   const router = useParams()

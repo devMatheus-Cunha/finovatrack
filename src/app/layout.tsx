@@ -7,7 +7,7 @@ import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Providers from '@/utils/reactQuery/provider'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -20,12 +20,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    import('preline')
+  }, [])
   return (
     <html lang="en">
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-L8G3KWJZDF"
       />
+      <Script src="./node_modules/preline/dist/preline.js" />
       <Script
         dangerouslySetInnerHTML={{
           __html: `
@@ -40,9 +44,9 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Providers>
           <ThemeProvider attribute="class">
-            <div className="hidden md:block">{children}</div>
-            <div className=" md:hidden flex flex-col gap-4 justify-center items-center h-screen text-center p-4">
-              <h1 className="text-4xl text-red-600 italic font-bold">
+            <div>{children}</div>
+            {/* <div className=" lg:hidden flex flex-col gap-4 justify-center items-center h-screen text-center p-4"> */}
+            {/* <h1 className="text-4xl text-red-600 italic font-bold">
                 Atenção!
               </h1>
               <p>
@@ -55,7 +59,7 @@ export default function RootLayout({
                 Aproveite todos os benefícios da nossa plataforma gratuitamente
                 acessando-a em um laptop ou tablet.
               </p>
-            </div>
+            </div> */}
 
             <ToastContainer theme="dark" />
           </ThemeProvider>

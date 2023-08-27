@@ -2,10 +2,10 @@
 module.exports = {
   mode: 'jit',
   content: [
-    './node_modules/flowbite/**/*.js',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/preline/dist/*.{js,ts,jsx,tsx,mdx}',
   ],
   purge: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -40,5 +40,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('flowbite/plugin')],
+  plugins: [require('preline/plugin'), require('@tailwindcss/forms')],
 }

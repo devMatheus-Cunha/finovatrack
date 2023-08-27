@@ -4,7 +4,7 @@
 
 'use client'
 
-import { ChangeEvent, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { SubmitHandler } from 'react-hook-form'
 
@@ -173,9 +173,9 @@ export default function Control() {
     })
   }
 
-  const onFilter = (event: ChangeEvent<HTMLSelectElement>) => {
-    event.preventDefault()
-    setFilter(event.target.value as Filter)
+  const onFilter = (value: Filter) => {
+    const validate = value === 'Clear' ? '' : value
+    setFilter(validate)
   }
 
   const handleInfoAction = () => {
@@ -183,7 +183,7 @@ export default function Control() {
   }
 
   return (
-    <main className="flex flex-col gap-20 items-center  w-[100%] px-5 py-4">
+    <main className="flex flex-col gap-10 items-center w-[100%] px-2 py-4">
       <div className="w-[100%]">
         <InfoCardsToControl
           infoAction={handleInfoAction}
@@ -209,22 +209,56 @@ export default function Control() {
           refetchQuationData={refetchQuationData}
         />
 
-        <TableToControl
-          calculationSumValues={
-            typeAccount === 'hybrid' ? calculationSumValues : expensesData
-          }
-          userData={userData}
-          handleOpenModal={handleOpenModal}
-          isVisibilityData={isVisibilityData}
-          filter={filter}
-        />
+        <div className="hidden lg:block">
+          <TableToControl
+            calculationSumValues={
+              typeAccount === 'hybrid' ? calculationSumValues : expensesData
+            }
+            userData={userData}
+            handleOpenModal={handleOpenModal}
+            isVisibilityData={isVisibilityData}
+            filter={filter}
+          />
+        </div>
+
+        <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
+          {expensesData.map((item) => (
+            <>
+              <div
+                onClick={() => handleOpenModal('edit', item)}
+                className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
+              >
+                <div className="flex flex-col gap-4 ">
+                  <p className="text-ms">{item.description}</p>
+                  <p className="-mt-1 font-sans text-m font-semibold">
+                    {isVisibilityData
+                      ? formatCurrencyMoney(Number(item.value), item.typeMoney)
+                      : '-'}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 text-left w-[33%]">
+                  <p
+                    className={`font-medium text-ms ${
+                      item.payment === 'A Pagar'
+                        ? ' text-red-500'
+                        : 'text-green-500'
+                    }`}
+                  >
+                    {item.payment}
+                  </p>
+                  <p className="text-ms">{item.type}</p>
+                </div>
+              </div>
+            </>
+          ))}
+        </div>
       </div>
 
       <>
         {configModal.open &&
           (configModal.type === 'edit' ||
             configModal.type === 'addExpense') && (
-            <Modal>
+            <Modal className="w-[95%] lg:w-[50%]">
               <ContentActionsTableModal
                 type={configModal?.type}
                 initialData={configModal?.selectedData}
@@ -232,13 +266,14 @@ export default function Control() {
                 onSubmit={onAddExpense}
                 isLoadingAddExpense={isLoadingAddExpense}
                 userData={userData}
+                onDelete={onDelete}
               />
             </Modal>
           )}
         {configModal.open &&
           (configModal.type === 'delete' ||
             configModal.type === 'deleteAllExpenses') && (
-            <Modal width="27%">
+            <Modal className="w-[95%] lg:w-[27%]">
               <DeleteModalContent
                 onCancel={handleOpenModal}
                 onSubmit={
@@ -250,7 +285,7 @@ export default function Control() {
             </Modal>
           )}
         {openModalReport.open && (
-          <Modal width="41%">
+          <Modal className="w-[95%] lg:w-[41%]">
             <ConfirmSaveReportModal
               initialData={calculationSumValues}
               onCancel={handleOpenModalSaveReport}
@@ -285,7 +320,7 @@ export default function Control() {
           </Modal>
         )}
         {configModal.open && configModal.type === 'addEntry' && (
-          <Modal width="37%">
+          <Modal className="w-[95%] lg:w-[37%]">
             <ContentAddEntryModal
               handleOpenModal={handleOpenModal}
               onSubmit={onAddEntrys}
@@ -294,7 +329,7 @@ export default function Control() {
           </Modal>
         )}
         {configModal.open && configModal.type === 'totalsEntrys' && (
-          <Modal>
+          <Modal className="w-[95%] lg:w-[50%]">
             <ContentTotalEntrys
               handleOpenModal={handleOpenModal}
               data={entrysData}
@@ -304,7 +339,7 @@ export default function Control() {
           </Modal>
         )}
         {openModalInfoCard && (
-          <Modal width="30%">
+          <Modal className="w-[95%] lg:w-[30%]">
             <div className="bg-gray-800 rounded-lg shadow">
               <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
                 <h3 className="text-xl font-semibold text-white">

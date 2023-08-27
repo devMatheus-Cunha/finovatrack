@@ -153,10 +153,10 @@ export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
 }
 
 export const optionsFilter = [
-  { label: 'Limpar', value: '' },
-  { label: 'Essencial', value: 'Essencial' },
-  { label: 'Não essencial', value: 'Não essencial' },
-  { label: 'Gasto Livre', value: 'Gasto Livre' },
+  { text: 'Limpar', value: 'Clear' },
+  { text: 'Essencial', value: 'Essencial' },
+  { text: 'Não essencial', value: 'Não essencial' },
+  { text: 'Gasto Livre', value: 'Gasto Livre' },
 ]
 
 function FixErroBuild() {
