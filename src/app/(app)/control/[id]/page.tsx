@@ -221,12 +221,12 @@ export default function Control() {
           />
         </div>
 
-        <div className="lg:hidden flex  flex-nowrap md:flex-wrap gap-4">
+        <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
           {expensesData.map((item) => (
             <>
               <div
                 onClick={() => handleOpenModal('edit', item)}
-                className="flex h-[85px] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
+                className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
               >
                 <div className="flex flex-col gap-4 ">
                   <p className="text-ms">{item.description}</p>

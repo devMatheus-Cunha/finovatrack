@@ -57,7 +57,7 @@ const SideMenuMobile = ({
           </a>
         </div>
         <nav
-          className="hs-accordion-group  w-full flex flex-col flex-wrap"
+          className="hs-accordion-group w-full flex flex-col flex-wrap"
           data-hs-accordion-always-open
         >
           <ul className="space-y-1.5">
@@ -74,7 +74,7 @@ const SideMenuMobile = ({
                     } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
                   >
                     {item.icon}
-                    <p className="text-[11px]">{item.label}</p>
+                    <p className="text-[14px]">{item.label}</p>
                   </button>
                 </li>
               </React.Fragment>
