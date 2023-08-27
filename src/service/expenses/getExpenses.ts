@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */
 /* eslint-disable import/prefer-default-export */
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { db } from '../firebase'
 
@@ -24,9 +24,13 @@ export async function getExpenses(idUser: string, filter: Filter) {
     querySnapshot = query(
       collection(db, 'users', idUser, 'expenses'),
       where('type', '==', filter),
+      orderBy('type'),
     )
   } else {
-    querySnapshot = collection(db, 'users', idUser, 'expenses')
+    querySnapshot = query(
+      collection(db, 'users', idUser, 'expenses'),
+      orderBy('type'),
+    )
   }
 
   const get = await getDocs(querySnapshot)
