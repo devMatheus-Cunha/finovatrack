@@ -102,7 +102,7 @@ function Reports() {
                   </h1>
                 )}
               </div>
-              <div className="relative overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
+              <div className="relative md:overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
                 {data?.data?.length > 0 ? (
                   <>
                     <table className="w-full text-sm text-left hidden lg:block">
@@ -187,7 +187,7 @@ function Reports() {
                               <div className="flex flex-col gap-4 ">
                                 <p className="text-ms">{item?.description}</p>
                                 <p className="-mt-1 font-sans text-m font-semibold">
-                                  {isVisibilityData && item?.value
+                                  {isVisibilityData
                                     ? formatCurrencyMoney(
                                         Number(item?.value),
                                         item?.typeMoney,
