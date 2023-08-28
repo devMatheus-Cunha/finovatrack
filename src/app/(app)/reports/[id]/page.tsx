@@ -11,7 +11,7 @@ import { Button } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
-import { validateColumsHeadProps } from './utils'
+import { columsHeadProps } from './utils'
 
 function Reports() {
   const { userData } = useUserData()
@@ -105,20 +105,22 @@ function Reports() {
               <div className="relative md:overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
                 {data?.data?.length > 0 ? (
                   <>
-                    <table className="w-full text-sm text-left hidden lg:block">
+                    <table className="w-full text-sm text-left">
                       <thead className="text-md uppercase  bg-gray-800 text-gray-400 border-b border-gray-700">
                         <tr>
-                          {validateColumsHeadProps[userData.typeAccount].map(
-                            (item: { field: string; header: string }) => (
-                              <th
-                                scope="col"
-                                className="px-6 py-3"
-                                key={item.field}
-                              >
-                                {item.header}
-                              </th>
-                            ),
-                          )}
+                          {columsHeadProps(
+                            userData.primary_currency,
+                            userData.secondary_currency,
+                            userData.typeAccount,
+                          ).map((item: { field: string; header: string }) => (
+                            <th
+                              scope="col"
+                              className="px-6 py-3"
+                              key={item.field}
+                            >
+                              {item.header}
+                            </th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
@@ -160,12 +162,6 @@ function Reports() {
                                     : '-'}
                                 </th>
                               )}
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                              >
-                                {item.type}
-                              </th>
                               {userData.typeAccount === 'hybrid' && (
                                 <th
                                   scope="row"
@@ -174,6 +170,22 @@ function Reports() {
                                   {item.typeMoney}
                                 </th>
                               )}
+                              <th
+                                scope="row"
+                                className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                              >
+                                {item.type}
+                              </th>
+                              <th
+                                scope="row"
+                                className={`px-6 py-4 font-medium whitespace-nowrap ${
+                                  item.payment === 'A Pagar'
+                                    ? ' text-red-500'
+                                    : 'text-green-500'
+                                }`}
+                              >
+                                {item.payment ?? '-'}
+                              </th>
                             </tr>
                           </Fragment>
                         ))}
