@@ -232,7 +232,12 @@ export default function Control() {
                   <p className="text-ms">{item.description}</p>
                   <p className="-mt-1 font-sans text-m font-semibold">
                     {isVisibilityData
-                      ? formatCurrencyMoney(Number(item.value), item.typeMoney)
+                      ? formatCurrencyMoney(
+                          Number(item.value),
+                          userData.typeAccount === 'oneCurrency'
+                            ? userData.primary_currency
+                            : item.typeMoney,
+                        )
                       : '-'}
                   </p>
                 </div>

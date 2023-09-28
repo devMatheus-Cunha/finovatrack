@@ -64,13 +64,13 @@ function TableToControl({
                       {item.value_primary_currency !== 0 && isVisibilityData
                         ? formatCurrencyMoney(
                             item.value_primary_currency,
-                            userData.primary_currency,
+                            userData?.primary_currency,
                           )
                         : '-'}
                     </th>
                   )}
 
-                  {userData.secondary_currency && (
+                  {userData.secondary_currency !== '' && (
                     <>
                       <th
                         scope="row"

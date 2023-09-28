@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "dependencies": {
     "@firebase/auth": "^0.22.0",
@@ -45,7 +46,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@rocketseat/eslint-config": "^1.2.0",
+    "@rocketseat/eslint-config": "^2.1.0",
     "@tailwindcss/forms": "^0.5.5"
   }
 }

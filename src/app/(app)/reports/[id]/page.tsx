@@ -148,7 +148,7 @@ function Reports() {
                                 </th>
                               )}
 
-                              {userData.secondary_currency && (
+                              {userData.secondary_currency !== '' && (
                                 <th
                                   scope="row"
                                   className="px-6 py-4 font-medium whitespace-nowrap text-white"
@@ -202,7 +202,9 @@ function Reports() {
                                   {isVisibilityData
                                     ? formatCurrencyMoney(
                                         Number(item?.value),
-                                        item?.typeMoney,
+                                        userData.typeAccount === 'oneCurrency'
+                                          ? userData.primary_currency
+                                          : item?.typeMoney,
                                       )
                                     : '-'}
                                 </p>

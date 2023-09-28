@@ -21,7 +21,6 @@ const SideMenuMobile = ({
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
 
-  console.log(pathname?.startsWith('/reports'))
   return (
     <>
       <div className="flex gap-3 item-center">
