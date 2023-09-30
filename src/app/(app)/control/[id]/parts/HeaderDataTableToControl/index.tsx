@@ -16,7 +16,7 @@ import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
-import { optionsFilter } from '../../utils'
+import { optionsFilterCategory, optionsFilterType } from '../../utils'
 import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
@@ -25,7 +25,7 @@ interface IHeaderDataTableToControl {
   userData: UserData
   currentQuotation: number | undefined
   filter: string
-  onFilter: (filter: Filter) => void
+  onFilter: (filter: any) => void
   handleOpenModal: (type?: ITypeModal | undefined, data?: ExpenseData) => void
   handleOpenModalSaveReport: (data?: ExpenseData[]) => void
   refetchQuationData: RefetchQuationDataType
@@ -138,8 +138,15 @@ function HeaderDataTableToControl({
         </div>
         <DropdownFilter
           value={filter}
-          options={optionsFilter}
+          options={optionsFilterType}
           onFilter={onFilter}
+          label="Filtrar Tipo"
+        />
+        <DropdownFilter
+          value={filter}
+          options={optionsFilterCategory}
+          onFilter={onFilter}
+          label="Filtrar Categoria"
         />
       </div>
 

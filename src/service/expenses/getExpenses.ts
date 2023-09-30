@@ -8,6 +8,7 @@ import { db } from '../firebase'
 export interface ExpenseData {
   id: string
   type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
+  category?: string
   description: string
   value_primary_currency?: number
   value_secondary_currency?: number
@@ -15,28 +16,25 @@ export interface ExpenseData {
   value: string
   payment: 'Pago' | 'A Pagar' | ''
 }
-
-export async function getExpenses(idUser: string, filter: Filter) {
+export async function getExpenses(idUser: string, filter: any) {
   const docsArray: ExpenseData[] = []
-  let querySnapshot
-
-  if (filter) {
-    querySnapshot = query(
-      collection(db, 'users', idUser, 'expenses'),
-      where('type', '==', filter),
-      orderBy('type'),
-    )
-  } else {
-    querySnapshot = query(
-      collection(db, 'users', idUser, 'expenses'),
-      orderBy('type'),
-    )
+  let queryRef = collection(db, 'users', idUser, 'expenses') as any
+  if (filter.value !== '') {
+    console.log(filter)
+    if (filter.type === 'type') {
+      queryRef = query(queryRef, where('type', '==', filter.value))
+    }
+    if (filter.type === 'category') {
+      queryRef = query(queryRef, where('category', '==', filter.value))
+    }
   }
 
-  const get = await getDocs(querySnapshot)
+  queryRef = query(queryRef, orderBy(filter.type || 'type'))
 
-  get.forEach((doc) => {
-    docsArray.push({ id: doc.id, ...doc.data() } as any)
+  const querySnapshot = await getDocs(queryRef)
+
+  querySnapshot.forEach((doc) => {
+    docsArray.push({ id: doc.id, ...(doc.data() as any) } as any)
   })
 
   return docsArray

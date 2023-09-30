@@ -28,6 +28,7 @@ interface SelectFieldProps<T extends FieldValues> {
   errors?: ReactNode
   className?: string
   disabledSelect?: boolean
+  required?: boolean
 }
 
 export default function Select<T extends FieldValues>({
@@ -39,6 +40,7 @@ export default function Select<T extends FieldValues>({
   rules,
   className,
   disabledSelect,
+  required,
 }: SelectFieldProps<T>) {
   return (
     <div className="w-[100%]">
@@ -46,7 +48,7 @@ export default function Select<T extends FieldValues>({
         htmlFor={name}
         className="block mb-2 text-sm font-medium  text-white"
       >
-        {rules?.required ? `${label} *` : label}
+        {required ? `${label} *` : label}
       </label>
       <select
         id={name as string}

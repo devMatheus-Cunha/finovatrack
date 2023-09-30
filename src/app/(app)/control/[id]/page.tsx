@@ -173,9 +173,8 @@ export default function Control() {
     })
   }
 
-  const onFilter = (value: Filter) => {
-    const validate = value === 'Clear' ? '' : value
-    setFilter(validate)
+  const onFilter = (value: any) => {
+    setFilter(value)
   }
 
   const handleInfoAction = () => {

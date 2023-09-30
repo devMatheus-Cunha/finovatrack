@@ -99,6 +99,12 @@ function TableToControl({
                   </th>
                   <th
                     scope="row"
+                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                  >
+                    {item.category}
+                  </th>
+                  <th
+                    scope="row"
                     className={`px-6 py-4 font-medium whitespace-nowrap ${
                       item.payment === 'A Pagar'
                         ? ' text-red-500'

@@ -6,18 +6,21 @@ import React from 'react'
 interface Option {
   text: string
   value: string
+  type: string
 }
 
 interface DropdownFilterProps {
   options: Option[]
   value: string
   onFilter: any
+  label: string
 }
 
 const DropdownFilter: React.FC<DropdownFilterProps> = ({
   options,
   value,
   onFilter,
+  label,
 }) => {
   return (
     <div className="hs-dropdown relative inline-flex [--strategy:absolute]">
@@ -28,7 +31,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       >
         <div className="hidden lg:block">
           <div className="flex gap-3 ">
-            Filtros
+            {label}
             <CaretDown size={20} color="#eee2e2" />
           </div>
         </div>
@@ -40,14 +43,14 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
         aria-labelledby="hs-dropdown-basic"
       >
         <span className="block lg:hidden py-2 px-3 text-xs font-medium uppercase text-gray-400 dark:text-gray-500">
-          Filtros
+          {label}
         </span>
         {options.map((item) => (
           <>
             <button
               className={`flex w-full items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-white hover:bg-gray-700 border-gray-700 
               ${value === item.value ? 'bg-gray-700' : 'bg-transparent'}`}
-              onClick={() => onFilter(item.value)}
+              onClick={() => onFilter({ value: item.value, type: item.type })}
             >
               {item.text}
             </button>

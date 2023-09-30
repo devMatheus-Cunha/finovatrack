@@ -31,7 +31,6 @@ interface IContentModal {
 function ContentActionsTableModal({
   onSubmit,
   handleOpenModal,
-  isLoadingAddExpense,
   initialData,
   type,
   userData,
@@ -45,6 +44,7 @@ function ContentActionsTableModal({
         : z.string().optional(),
     value: z.string().nonempty(),
     type: z.string().nonempty(),
+    category: z.string().nonempty(),
     payment: z.string().nonempty(),
   })
   const {
@@ -111,6 +111,7 @@ function ContentActionsTableModal({
             <Select
               label="Selecione o tipo"
               name="type"
+              required
               options={[
                 {
                   label: `Ex: Essencial`,
@@ -134,8 +135,44 @@ function ContentActionsTableModal({
               }
             />
             <Select
+              label="Selecione a categoria"
+              name="category"
+              required
+              options={[
+                {
+                  label: 'Ex: Alimentação',
+                  value: '',
+                  disabled: true,
+                  selected: true,
+                },
+                { label: 'Alimentação', value: 'Alimentação' },
+                { label: 'Contas', value: 'Contas' },
+                { label: 'Economias', value: 'Economias' },
+                { label: 'Educação', value: 'Educação' },
+                { label: 'Entretenimento', value: 'Entretenimento' },
+                { label: 'Lazer', value: 'Lazer' },
+                { label: 'Moradia', value: 'Moradia' },
+                { label: 'Roupas', value: 'Roupas' },
+                { label: 'Saúde', value: 'Saúde' },
+                { label: 'Seguro', value: 'Seguro' },
+                { label: 'Transporte', value: 'Transporte' },
+                { label: 'Viagens', value: 'Viagens' },
+              ]}
+              register={register}
+              errors={
+                <>
+                  {errors.category && (
+                    <span className="text-red-500 text-sm">
+                      Este campo é obrigatório
+                    </span>
+                  )}
+                </>
+              }
+            />
+            <Select
               label="Status de Pagamento"
               name="payment"
+              required
               options={[
                 {
                   label: `Ex: A Pagar`,
@@ -164,6 +201,7 @@ function ContentActionsTableModal({
               <Select
                 label="Selecione Moeda"
                 name="typeMoney"
+                required
                 options={[
                   {
                     label: `Ex: ${userData.primary_currency}`,
@@ -195,6 +233,7 @@ function ContentActionsTableModal({
             <InputTypeMoney
               control={control}
               name="value"
+              required
               label={`Valor (${
                 optionsLabelCurrencyKeyAndValue[
                   watch()?.typeMoney || userData.primary_currency

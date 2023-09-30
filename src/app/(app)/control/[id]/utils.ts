@@ -64,6 +64,10 @@ export const columsHeadProps = (
       field: 'type',
     },
     {
+      header: 'Categoria',
+      field: 'category',
+    },
+    {
       header: 'Status Pagamento',
       field: 'payment',
     },
@@ -95,6 +99,7 @@ export const validateColumsHeadProps: any = {
 export const initialDataSelectedData: ExpenseData = {
   id: '',
   type: '',
+  category: '',
   description: '',
   value: '',
   value_primary_currency: 0,
@@ -120,6 +125,7 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
       {
         id: '',
         type: '',
+        category: '',
         description: 'Totais',
         value: '',
         value_primary_currency: 0,
@@ -152,11 +158,26 @@ export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
   }
 }
 
-export const optionsFilter = [
-  { text: 'Limpar', value: 'Clear' },
-  { text: 'Essencial', value: 'Essencial' },
-  { text: 'Não essencial', value: 'Não essencial' },
-  { text: 'Gasto Livre', value: 'Gasto Livre' },
+export const optionsFilterType = [
+  { text: 'Limpar', value: '', type: 'type' },
+  { text: 'Essencial', value: 'Essencial', type: 'type' },
+  { text: 'Gasto Livre', value: 'Gasto Livre', type: 'type' },
+  { text: 'Não essencial', value: 'Não essencial', type: 'type' },
+]
+export const optionsFilterCategory = [
+  { text: 'Limpar', value: '', type: 'category' },
+  { text: 'Alimentação', value: 'Alimentação', type: 'category' },
+  { text: 'Contas', value: 'Contas', type: 'category' },
+  { text: 'Economias', value: 'Economias', type: 'category' },
+  { text: 'Educação', value: 'Educação', type: 'category' },
+  { text: 'Entretenimento', value: 'Entretenimento', type: 'category' },
+  { text: 'Lazer', value: 'Lazer', type: 'category' },
+  { text: 'Moradia', value: 'Moradia', type: 'category' },
+  { text: 'Roupas', value: 'Roupas', type: 'category' },
+  { text: 'Saúde', value: 'Saúde', type: 'category' },
+  { text: 'Seguro', value: 'Seguro', type: 'category' },
+  { text: 'Transporte', value: 'Transporte', type: 'category' },
+  { text: 'Viagens', value: 'Viagens', type: 'category' },
 ]
 
 function FixErroBuild() {
