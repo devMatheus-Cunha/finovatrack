@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable no-unsafe-optional-chaining */
@@ -20,7 +21,6 @@ import {
   useUpadtedExpense,
   useClearExpenses,
 } from '@/hooks/expenses'
-import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { useFetchQuatationEur } from '@/hooks/quatation'
 
 import { useSaveReport } from '@/hooks/reports'
@@ -78,6 +78,7 @@ export default function Control() {
       lastQuatationData?.current_quotation,
       Number(getTotals?.value_secondary_currency),
     ) + (getTotals?.value_primary_currency || 0)
+
   const calculationTotalExpensesEurToReal = convertEurToReal(
     lastQuatationData?.current_quotation,
     Number(getTotals?.value_secondary_currency),
@@ -128,6 +129,7 @@ export default function Control() {
       selectedData: data || initialDataSelectedData,
     })
   }
+
   const handleOpenModalSaveReport = (data: ExpenseData[] = []) => {
     setOpenModalReport({
       open: !openModalReport.open,

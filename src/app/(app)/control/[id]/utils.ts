@@ -5,9 +5,11 @@
 
 'use client'
 
+import { TableColumn } from '@/components/Table'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
@@ -49,7 +51,8 @@ export const columsHeadProps = (
   primaryCurrency: string,
   secondaryCurrency: string,
   typeAccount: string,
-) => {
+  isVisibilityData: boolean,
+): TableColumn[] => {
   const columns = [
     {
       header: 'Descrição',
@@ -57,7 +60,11 @@ export const columsHeadProps = (
     },
     {
       header: optionsCurrencyKeyAndValue[primaryCurrency],
-      field: 'primary_currency',
+      field: 'value_primary_currency',
+      modifier: (value: number) =>
+        !isVisibilityData || !value
+          ? '-'
+          : formatCurrencyMoney(value, primaryCurrency),
     },
     {
       header: 'Tipo',
@@ -70,6 +77,9 @@ export const columsHeadProps = (
     {
       header: 'Status Pagamento',
       field: 'payment',
+      styles: (value: any) => ({
+        color: value === 'A Pagar' ? 'red' : 'blue',
+      }),
     },
     {
       header: 'Ação',
@@ -80,7 +90,11 @@ export const columsHeadProps = (
   if (typeAccount === 'hybrid') {
     columns.splice(2, 0, {
       header: optionsCurrencyKeyAndValue[secondaryCurrency],
-      field: 'secondary_currency',
+      field: 'value_secondary_currency',
+      modifier: (value: number) =>
+        !isVisibilityData || !value
+          ? '-'
+          : formatCurrencyMoney(value, secondaryCurrency),
     })
     columns.splice(3, 0, {
       header: 'Moeda',
@@ -89,11 +103,6 @@ export const columsHeadProps = (
   }
 
   return columns
-}
-
-export const validateColumsHeadProps: any = {
-  hybrid: columsHeadProps,
-  oneCurrency: columsHeadProps,
 }
 
 export const initialDataSelectedData: ExpenseData = {

@@ -11,7 +11,8 @@ import { Button } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
-import { columsHeadProps } from './utils'
+import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
+import Table, { TableColumn } from '@/components/Table'
 
 function Reports() {
   const { userData } = useUserData()
@@ -33,6 +34,55 @@ function Reports() {
     })
 
     setPeriod(formattedDate)
+  }
+
+  const columsHeadProps = (): TableColumn[] => {
+    const columns = [
+      {
+        header: 'Descrição',
+        field: 'description',
+      },
+      {
+        header: optionsCurrencyKeyAndValue[userData.primary_currency],
+        field: 'value_primary_currency',
+        modifier: (value: number) =>
+          !isVisibilityData || !value
+            ? '-'
+            : formatCurrencyMoney(value, userData?.primary_currency),
+      },
+      {
+        header: 'Tipo',
+        field: 'type',
+      },
+      {
+        header: 'Categoria',
+        field: 'category',
+      },
+      {
+        header: 'Status Pagamento',
+        field: 'payment',
+        styles: (value: string) => ({
+          color: value === 'A Pagar' ? 'red' : 'green',
+        }),
+      },
+    ]
+
+    if (userData.typeAccount === 'hybrid') {
+      columns.splice(2, 0, {
+        header: optionsCurrencyKeyAndValue[userData.secondary_currency],
+        field: 'value_secondary_currency',
+        modifier: (value: number) =>
+          !isVisibilityData || !value
+            ? '-'
+            : formatCurrencyMoney(value, userData.secondary_currency),
+      })
+      columns.splice(3, 0, {
+        header: 'Moeda',
+        field: 'typeMoney',
+      })
+    }
+
+    return columns
   }
 
   return (
@@ -105,92 +155,7 @@ function Reports() {
               <div className="relative md:overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
                 {data?.data?.length > 0 ? (
                   <>
-                    <table className="w-full text-sm text-left">
-                      <thead className="text-md uppercase  bg-gray-800 text-gray-400 border-b border-gray-700">
-                        <tr>
-                          {columsHeadProps(
-                            userData.primary_currency,
-                            userData.secondary_currency,
-                            userData.typeAccount,
-                          ).map((item: { field: string; header: string }) => (
-                            <th
-                              scope="col"
-                              className="px-6 py-3"
-                              key={item.field}
-                            >
-                              {item.header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.data.map((item, index) => (
-                          <Fragment key={index}>
-                            <tr className="border-b bg-gray-800 border-gray-700">
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                              >
-                                {item.description}
-                              </th>
-                              {userData.primary_currency && (
-                                <th
-                                  scope="row"
-                                  className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                                >
-                                  {item.value_primary_currency !== 0 &&
-                                  isVisibilityData
-                                    ? formatCurrencyMoney(
-                                        item.value_primary_currency,
-                                        userData.primary_currency,
-                                      )
-                                    : '-'}
-                                </th>
-                              )}
-
-                              {userData.secondary_currency !== '' && (
-                                <th
-                                  scope="row"
-                                  className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                                >
-                                  {item.value_secondary_currency !== 0 &&
-                                  isVisibilityData
-                                    ? formatCurrencyMoney(
-                                        item.value_secondary_currency,
-                                        userData.secondary_currency,
-                                      )
-                                    : '-'}
-                                </th>
-                              )}
-                              {userData.typeAccount === 'hybrid' && (
-                                <th
-                                  scope="row"
-                                  className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                                >
-                                  {item.typeMoney}
-                                </th>
-                              )}
-                              <th
-                                scope="row"
-                                className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                              >
-                                {item.type}
-                              </th>
-                              <th
-                                scope="row"
-                                className={`px-6 py-4 font-medium whitespace-nowrap ${
-                                  item.payment === 'A Pagar'
-                                    ? ' text-red-500'
-                                    : 'text-green-500'
-                                }`}
-                              >
-                                {item.payment ?? '-'}
-                              </th>
-                            </tr>
-                          </Fragment>
-                        ))}
-                      </tbody>
-                    </table>
+                    <Table columns={columsHeadProps()} data={data?.data} />
                     <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
                       {data?.data.map((item) => (
                         <>

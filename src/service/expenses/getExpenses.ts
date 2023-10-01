@@ -20,7 +20,6 @@ export async function getExpenses(idUser: string, filter: any) {
   const docsArray: ExpenseData[] = []
   let queryRef = collection(db, 'users', idUser, 'expenses') as any
   if (filter.value !== '') {
-    console.log(filter)
     if (filter.type === 'type') {
       queryRef = query(queryRef, where('type', '==', filter.value))
     }
@@ -29,7 +28,7 @@ export async function getExpenses(idUser: string, filter: any) {
     }
   }
 
-  queryRef = query(queryRef, orderBy(filter.type || 'type'))
+  queryRef = query(queryRef, orderBy(filter.type || 'category'))
 
   const querySnapshot = await getDocs(queryRef)
 
