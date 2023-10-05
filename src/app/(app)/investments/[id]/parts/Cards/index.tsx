@@ -43,13 +43,13 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      Number(monthlycontributionData?.value),
+                      Number(monthlycontributionData?.value || 0),
                       userData?.primary_currency,
                     )
                   : '****'}
               </StatNumber>
               <StatHelpText>
-                Período de {monthlycontributionData?.date} meses
+                Período de {monthlycontributionData?.date || 0} meses
               </StatHelpText>
             </Stat>
             <Stat>
@@ -57,8 +57,8 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      Number(monthlycontributionData?.value) *
-                        Number(monthlycontributionData?.date),
+                      Number(monthlycontributionData?.value || 0) *
+                        Number(monthlycontributionData?.date || 0),
                       userData?.primary_currency,
                     )
                   : '****'}
@@ -93,7 +93,7 @@ const Cards = ({
                 {isVisibilityData
                   ? calculatePercentageReachedToGoal(
                       1000,
-                      investmentsAllGoalsData?.goal,
+                      investmentsAllGoalsData?.goal || 0,
                     )
                   : '****'}
               </StatHelpText>
