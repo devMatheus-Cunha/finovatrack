@@ -5,6 +5,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Archive,
+  ChartLineUp,
   ClipboardText,
   Eye,
   EyeSlash,
@@ -60,6 +61,14 @@ export default function AppLayout({ children }: SideBarProps) {
       disabled: false,
       icon: <Archive size={21} />,
       action: () => router.push(`/reports/${id}`),
+    },
+    {
+      id: 'investments',
+      label: 'Investimentos',
+      route: '/investments',
+      disabled: false,
+      icon: <ChartLineUp size={21} />,
+      action: () => router.push(`/investments/${id}`),
     },
     {
       id: 'myProfile',

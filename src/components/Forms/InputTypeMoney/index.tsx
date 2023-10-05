@@ -16,6 +16,7 @@ type InputTypeMoneyProps<T extends FieldValues> = {
   label: string
   errors?: ReactNode
   required?: boolean
+  defaultValue?: any
 }
 
 function InputTypeMoney<T extends FieldValues>({
@@ -25,6 +26,7 @@ function InputTypeMoney<T extends FieldValues>({
   label,
   errors,
   required,
+  defaultValue,
 }: InputTypeMoneyProps<T>) {
   return (
     <div className="w-[100%]">
@@ -47,6 +49,7 @@ function InputTypeMoney<T extends FieldValues>({
             allowNegative={false}
             decimalScale={2}
             {...field}
+            defaultValue={defaultValue}
           />
         )}
       />
