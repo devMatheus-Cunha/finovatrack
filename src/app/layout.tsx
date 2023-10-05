@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import Providers from '@/utils/reactQuery/provider'
 import React, { useEffect } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, ThemeConfig, extendTheme } from '@chakra-ui/react'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -21,6 +21,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const config: ThemeConfig = {
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
+  }
+
+  const theme = extendTheme({ config })
+
   useEffect(() => {
     import('preline')
   }, [])
@@ -44,7 +51,7 @@ export default function RootLayout({
       />
       <body suppressHydrationWarning>
         <Providers>
-          <ChakraProvider>
+          <ChakraProvider theme={theme}>
             <ThemeProvider attribute="class">
               <div>{children}</div>
               <ToastContainer theme="dark" />
