@@ -34,10 +34,18 @@ const Cards = ({
   }
 
   return (
-    <>
-      <Card minW="sm" display="flex" flexDirection="row">
+    <Box
+      display="flex"
+      gap={5}
+      flexFlow="wrap"
+      justifyContent={['center', 'initial']}
+      mt={[2, 0]}
+      w="full"
+      px={2}
+    >
+      <Card minW={['xs', 'sm']} display="flex" flexDirection="row">
         <CardBody flex={1}>
-          <StatGroup display="flex" gap={8}>
+          <StatGroup display="flex" gap={4}>
             <Stat>
               <StatLabel>Aporte Mensal</StatLabel>
               <StatNumber>
@@ -79,7 +87,7 @@ const Cards = ({
           />
         </Box>
       </Card>
-      <Card minW="sm" display="flex" flexDirection="row">
+      <Card minW={['xs', 'sm']} display="flex" flexDirection="row">
         <CardBody flex={1}>
           <StatGroup display="flex" gap={8}>
             <Stat>
@@ -124,7 +132,7 @@ const Cards = ({
           />
         </Box>
       </Card>
-    </>
+    </Box>
   )
 }
 
