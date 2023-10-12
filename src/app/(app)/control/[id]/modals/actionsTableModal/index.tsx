@@ -17,6 +17,7 @@ import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpenseData } from '@/service/expenses/getExpenses'
 import { Trash } from '@phosphor-icons/react'
+import { formatToCustomFormat } from '@/utils/formatNumber'
 
 interface IContentModal {
   onSubmit: (data: ExpenseData) => Promise<void>
@@ -43,7 +44,6 @@ function ContentActionsTableModal({
         ? z.string().nonempty()
         : z.string().optional(),
     value: z.string().nonempty(),
-    type: z.string().nonempty(),
     category: z.string().nonempty(),
     payment: z.string().nonempty(),
   })
@@ -60,10 +60,10 @@ function ContentActionsTableModal({
             ...initialData,
             value:
               userData.typeAccount === 'oneCurrency'
-                ? String(initialData?.value_primary_currency)
+                ? formatToCustomFormat(initialData?.value_primary_currency)
                 : initialData?.typeMoney === userData.primary_currency
-                ? String(initialData?.value_primary_currency)
-                : String(initialData?.value_secondary_currency),
+                ? formatToCustomFormat(initialData?.value_primary_currency)
+                : formatToCustomFormat(initialData?.value_secondary_currency),
           }
         : undefined,
     resolver: zodResolver(schema),
@@ -108,32 +108,6 @@ function ContentActionsTableModal({
           />
 
           <div className="flex gap-4 flex-wrap">
-            <Select
-              label="Selecione o tipo"
-              name="type"
-              required
-              options={[
-                {
-                  label: `Ex: Essencial`,
-                  value: '',
-                  disabled: true,
-                  selected: true,
-                },
-                { label: 'Essencial', value: 'Essencial' },
-                { label: 'Não essencial', value: 'Não essencial' },
-                { label: 'Gasto Livre', value: 'Gasto Livre' },
-              ]}
-              register={register}
-              errors={
-                <>
-                  {errors.type && (
-                    <span className="text-red-500 text-sm">
-                      Este campo é obrigatório
-                    </span>
-                  )}
-                </>
-              }
-            />
             <Select
               label="Selecione a categoria"
               name="category"
@@ -186,7 +160,7 @@ function ContentActionsTableModal({
               register={register}
               errors={
                 <>
-                  {errors.type && (
+                  {errors.payment && (
                     <span className="text-red-500 text-sm">
                       Este campo é obrigatório
                     </span>

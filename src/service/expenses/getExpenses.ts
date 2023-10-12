@@ -2,12 +2,10 @@
 /* eslint-disable default-param-last */
 /* eslint-disable import/prefer-default-export */
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
-import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { db } from '../firebase'
 
 export interface ExpenseData {
   id: string
-  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
   category?: string
   description: string
   value_primary_currency?: number
@@ -20,9 +18,6 @@ export async function getExpenses(idUser: string, filter: any) {
   const docsArray: ExpenseData[] = []
   let queryRef = collection(db, 'users', idUser, 'expenses') as any
   if (filter.value !== '') {
-    if (filter.type === 'type') {
-      queryRef = query(queryRef, where('type', '==', filter.value))
-    }
     if (filter.type === 'category') {
       queryRef = query(queryRef, where('category', '==', filter.value))
     }

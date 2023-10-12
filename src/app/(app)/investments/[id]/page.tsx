@@ -38,11 +38,6 @@ const Investments = () => {
     investmentsAllGoals: false,
   })
 
-  const [selectedPeriod, setSelectedPeriod] = useState(new Date())
-  function onChangeDate(date: Date) {
-    setSelectedPeriod(date)
-  }
-
   const {
     handleSubmit: handleSubmitGoals,
     control: controlGoals,
@@ -60,8 +55,6 @@ const Investments = () => {
     defaultValues: monthlycontributionData,
     resolver: zodResolver(schemaContributions),
   })
-
-  console.log(investmentsAllGoalsData)
 
   return (
     <>

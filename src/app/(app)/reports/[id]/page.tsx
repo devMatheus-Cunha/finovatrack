@@ -51,12 +51,9 @@ function Reports() {
             : formatCurrencyMoney(value, userData?.primary_currency),
       },
       {
-        header: 'Tipo',
-        field: 'type',
-      },
-      {
         header: 'Categoria',
         field: 'category',
+        modifier: (value: string) => value ?? '-',
       },
       {
         header: 'Status Pagamento',
@@ -184,7 +181,6 @@ function Reports() {
                                 >
                                   {item?.payment}
                                 </p>
-                                <p className="text-ms">{item.type}</p>
                               </div>
                             </div>
                           )}

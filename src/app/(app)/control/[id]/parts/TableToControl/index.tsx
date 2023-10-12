@@ -46,10 +46,6 @@ function TableToControl({
             : formatCurrencyMoney(value, userData?.primary_currency),
       },
       {
-        header: 'Tipo',
-        field: 'type',
-      },
-      {
         header: 'Categoria',
         field: 'category',
       },

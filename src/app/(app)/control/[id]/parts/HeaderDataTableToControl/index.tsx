@@ -19,7 +19,6 @@ import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory, optionsFilterType } from '../../utils'
 import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
-import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 
 interface IHeaderDataTableToControl {
   userData: UserData
@@ -136,12 +135,6 @@ function HeaderDataTableToControl({
             </div>
           </div>
         </div>
-        <DropdownFilter
-          value={filter}
-          options={optionsFilterType}
-          onFilter={onFilter}
-          label="Filtrar Tipo"
-        />
         <DropdownFilter
           value={filter}
           options={optionsFilterCategory}

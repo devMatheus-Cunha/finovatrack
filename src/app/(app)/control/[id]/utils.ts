@@ -9,7 +9,10 @@ import { TableColumn } from '@/components/Table'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
+import {
+  formatCurrencyMoney,
+  formatToJavaScriptNumber,
+} from '@/utils/formatNumber'
 import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
@@ -36,12 +39,12 @@ export const formattedValuesSubmitExpense = (
     value_primary_currency:
       userData.typeAccount === 'oneCurrency' ||
       data.typeMoney === userData.primary_currency
-        ? Number(data.value)
+        ? formatToJavaScriptNumber(data.value)
         : 0,
     value_secondary_currency:
       userData.typeAccount !== 'oneCurrency' &&
       data.typeMoney === userData.secondary_currency
-        ? Number(data.value)
+        ? formatToJavaScriptNumber(data.value)
         : 0,
   }
   return formattedValues
@@ -107,7 +110,6 @@ export const columsHeadProps = (
 
 export const initialDataSelectedData: ExpenseData = {
   id: '',
-  type: '',
   category: '',
   description: '',
   value: '',
@@ -133,7 +135,6 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
       },
       {
         id: '',
-        type: '',
         category: '',
         description: 'Totais',
         value: '',

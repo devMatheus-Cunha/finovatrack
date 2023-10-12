@@ -27,7 +27,11 @@ import { useSaveReport } from '@/hooks/reports'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
-import { convertEurToReal, formatCurrencyMoney } from '@/utils/formatNumber'
+import {
+  convertEurToReal,
+  formatCurrencyMoney,
+  formatToJavaScriptNumber,
+} from '@/utils/formatNumber'
 import { Button, Modal } from '@/components'
 import {
   formattedValuesSubmitExpense,
@@ -157,7 +161,7 @@ export default function Control() {
   }
 
   const onAddEntrys: SubmitHandler<{ value: string }> = async ({ value }) => {
-    addEntry({ value: Number(value) })
+    addEntry({ value: formatToJavaScriptNumber(value) })
     setConfigModal({
       open: !configModal.open,
       type: '',
@@ -252,7 +256,7 @@ export default function Control() {
                   >
                     {item.payment}
                   </p>
-                  <p className="text-ms">{item.type}</p>
+                  <p className="text-ms">{item.category}</p>
                 </div>
               </div>
             </>

@@ -2,7 +2,7 @@
 
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import {
   Archive,
   ChartLineUp,
@@ -26,7 +26,10 @@ export default function AppLayout({ children }: SideBarProps) {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
   const router = useRouter()
+  const { id: idRoute } = useParams()
   const pathname = usePathname()
+
+  console.log(idRoute)
 
   const { onLogout } = useLogout()
   const {
@@ -66,7 +69,9 @@ export default function AppLayout({ children }: SideBarProps) {
       id: 'investments',
       label: 'Investimentos',
       route: '/investments',
-      disabled: false,
+      disabled:
+        idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
+        idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/investments/${id}`),
     },
