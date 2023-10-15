@@ -30,6 +30,7 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import {
   convertEurToReal,
   formatCurrencyMoney,
+  formatToCustomFormat,
   formatToJavaScriptNumber,
 } from '@/utils/formatNumber'
 import { Button, Modal } from '@/components'
@@ -238,7 +239,7 @@ export default function Control() {
                   <p className="-mt-1 font-sans text-m font-semibold">
                     {isVisibilityData
                       ? formatCurrencyMoney(
-                          Number(item.value),
+                          formatToJavaScriptNumber(item?.value),
                           userData.typeAccount === 'oneCurrency'
                             ? userData.primary_currency
                             : item.typeMoney,
