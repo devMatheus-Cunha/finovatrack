@@ -1,4 +1,7 @@
-import { formatCurrencyMoney } from '@/utils/formatNumber'
+import {
+  formatCurrencyMoney,
+  formatToJavaScriptNumber,
+} from '@/utils/formatNumber'
 import {
   CardBody,
   StatGroup,
@@ -24,11 +27,11 @@ const Cards = ({
     currentValue: number,
     goalValue: number,
   ): string {
-    if (goalValue <= Number(currentValue)) {
+    if (currentValue > goalValue) {
       return 'O saldo esta maior que a meta.'
     }
 
-    const percentage = (currentValue / Number(goalValue)) * 100
+    const percentage = (currentValue / goalValue) * 100
     const formattedPercentage = percentage.toFixed()
     return `Alcançou ${formattedPercentage}%`
   }
@@ -91,17 +94,22 @@ const Cards = ({
         <CardBody flex={1}>
           <StatGroup display="flex" gap={8}>
             <Stat>
-              <StatLabel>Saldo Aual</StatLabel>
+              <StatLabel>Saldo Atual</StatLabel>
               <StatNumber>
                 {isVisibilityData
-                  ? formatCurrencyMoney(1000, userData?.primary_currency)
+                  ? formatCurrencyMoney(
+                      formatToJavaScriptNumber('6.639,51' || '0'),
+                      userData?.primary_currency,
+                    )
                   : '****'}
               </StatNumber>
               <StatHelpText>
                 {isVisibilityData
                   ? calculatePercentageReachedToGoal(
-                      1000,
-                      investmentsAllGoalsData?.goal || 0,
+                      formatToJavaScriptNumber('6.639,51' || '0'),
+                      formatToJavaScriptNumber(
+                        investmentsAllGoalsData?.goal || '0',
+                      ),
                     )
                   : '****'}
               </StatHelpText>
@@ -111,7 +119,9 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      investmentsAllGoalsData?.goal,
+                      formatToJavaScriptNumber(
+                        investmentsAllGoalsData?.goal || '0',
+                      ),
                       userData?.primary_currency,
                     )
                   : '****'}

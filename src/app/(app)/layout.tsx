@@ -29,8 +29,6 @@ export default function AppLayout({ children }: SideBarProps) {
   const { id: idRoute } = useParams()
   const pathname = usePathname()
 
-  console.log(idRoute)
-
   const { onLogout } = useLogout()
   const {
     userData: { id },
