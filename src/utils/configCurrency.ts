@@ -4,7 +4,7 @@ export const optionsCurrencyKeyAndValue: any = {
   EUR: 'Valor Euro',
   CHF: 'Valor Franco Suíço',
   GBP: 'Valor Libra',
-  BRL: 'Valor Real',
+  BRL: 'Valor Real'
 }
 
 export const optionsLabelCurrencyKeyAndValue: any = {
@@ -13,5 +13,5 @@ export const optionsLabelCurrencyKeyAndValue: any = {
   EUR: '€',
   CHF: 'CHF',
   GBP: '£',
-  BRL: 'R$',
+  BRL: 'R$'
 }

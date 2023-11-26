@@ -20,7 +20,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   options,
   value,
   onFilter,
-  label,
+  label
 }) => {
   return (
     <div className="hs-dropdown relative inline-flex [--strategy:absolute]">

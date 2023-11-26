@@ -10,19 +10,19 @@ export const useFetchMonthlycontribution = () => {
     data: monthlycontributionData,
     isLoading: isLoadingMonthlycontribution,
     status: statusMonthlycontribution,
-    refetch: refetchMonthlycontribution,
+    refetch: refetchMonthlycontribution
   } = useQuery({
     queryKey: ['monthly_contribution_data', router.id],
     queryFn: async () => await getMonthlycontributionService(router.id),
     keepPreviousData: true,
-    enabled: !!router.id,
+    enabled: !!router.id
   })
 
   return {
     monthlycontributionData,
     isLoadingMonthlycontribution,
     statusMonthlycontribution,
-    refetchMonthlycontribution,
+    refetchMonthlycontribution
   }
 }
 

@@ -20,12 +20,12 @@ const useUpadtedExpense = () => {
       },
       onError: () => {
         toast.error('Erro ao editar gasto')
-      },
-    },
+      }
+    }
   )
 
   return {
-    upadtedExpense,
+    upadtedExpense
   }
 }
 

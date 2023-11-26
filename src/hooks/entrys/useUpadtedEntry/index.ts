@@ -18,12 +18,12 @@ const useUpadtedEntry = () => {
       },
       onError: () => {
         toast.error('Erro ao editar entrada')
-      },
-    },
+      }
+    }
   )
 
   return {
-    upadtedEntry,
+    upadtedEntry
   }
 }
 

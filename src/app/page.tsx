@@ -16,12 +16,12 @@ export const metadata: Metadata = {
     'controle financeiro',
     'gastos',
     'entradas',
-    'saldo',
+    'saldo'
   ],
   authors: {
     name: 'Matheus Cunha',
-    url: 'https://www.linkedin.com/in/devmatheusgr/',
-  },
+    url: 'https://www.linkedin.com/in/devmatheusgr/'
+  }
 }
 
 function LandingPage() {
@@ -139,7 +139,7 @@ function LandingPage() {
             alt="Exemplo do sistema em um laptop"
             style={{
               width: 500,
-              height: 'auto',
+              height: 'auto'
             }}
           />
         </section>

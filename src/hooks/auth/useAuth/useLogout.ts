@@ -9,11 +9,11 @@ const useLogout = () => {
   const { mutateAsync: onLogout } = useMutation(logout, {
     onSuccess: () => {
       router.push('/login')
-    },
+    }
   })
 
   return {
-    onLogout,
+    onLogout
   }
 }
 

@@ -31,7 +31,7 @@ function Button({
     link: `text-white bg-gray-800 focus:outline-none underline`,
     primary: `text-white bg-cyan-600 hover:bg-cyan-700`,
     default: `bg-gray-800 hover:bg-gray-700 border-gray-700`,
-    default700: `w-full bg-gray-700 hover:bg-gray-700 border-gray-700`,
+    default700: `w-full bg-gray-700 hover:bg-gray-700 border-gray-700`
   }
 
   return variant === 'link' ? (
@@ -46,7 +46,7 @@ function Button({
       {...props}
       className={twMerge(
         `px-5 py-2.5 text-sm font-medium rounded-lg ${validateStyles[variant]} `,
-        props.className,
+        props.className
       )}
     >
       {props.children}

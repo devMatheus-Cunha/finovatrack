@@ -30,7 +30,7 @@ function Reports() {
   const onSubmit = (date: Date) => {
     const formattedDate = new Date(date).toLocaleDateString('pt-BR', {
       month: '2-digit',
-      year: 'numeric',
+      year: 'numeric'
     })
 
     setPeriod(formattedDate)
@@ -40,7 +40,7 @@ function Reports() {
     const columns = [
       {
         header: 'Descrição',
-        field: 'description',
+        field: 'description'
       },
       {
         header: optionsCurrencyKeyAndValue[userData.primary_currency],
@@ -48,20 +48,20 @@ function Reports() {
         modifier: (value: number) =>
           !isVisibilityData || !value
             ? '-'
-            : formatCurrencyMoney(value, userData?.primary_currency),
+            : formatCurrencyMoney(value, userData?.primary_currency)
       },
       {
         header: 'Categoria',
         field: 'category',
-        modifier: (value: string) => value ?? '-',
+        modifier: (value: string) => value ?? '-'
       },
       {
         header: 'Status Pagamento',
         field: 'payment',
         styles: (value: string) => ({
-          color: value === 'A Pagar' ? 'red' : 'green',
-        }),
-      },
+          color: value === 'A Pagar' ? 'red' : 'green'
+        })
+      }
     ]
 
     if (userData.typeAccount === 'hybrid') {
@@ -71,11 +71,11 @@ function Reports() {
         modifier: (value: number) =>
           !isVisibilityData || !value
             ? '-'
-            : formatCurrencyMoney(value, userData.secondary_currency),
+            : formatCurrencyMoney(value, userData.secondary_currency)
       })
       columns.splice(3, 0, {
         header: 'Moeda',
-        field: 'typeMoney',
+        field: 'typeMoney'
       })
     }
 
@@ -166,7 +166,7 @@ function Reports() {
                                         Number(item?.value),
                                         userData.typeAccount === 'oneCurrency'
                                           ? userData.primary_currency
-                                          : item?.typeMoney,
+                                          : item?.typeMoney
                                       )
                                     : '-'}
                                 </p>

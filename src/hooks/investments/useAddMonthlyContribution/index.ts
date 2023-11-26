@@ -11,7 +11,7 @@ const useAddMonthlyContribution = () => {
   const {
     mutateAsync: addMonthlyContribution,
     isLoading: isLoadingAddMonthlyContribution,
-    status: statusAddMonthlyContribution,
+    status: statusAddMonthlyContribution
   } = useMutation(
     (values: any) => addMonthlyContributionService(values, router.id),
     {
@@ -21,14 +21,14 @@ const useAddMonthlyContribution = () => {
       },
       onError: () => {
         toast.error('Erro ao adicionar Aportes Mensais')
-      },
-    },
+      }
+    }
   )
 
   return {
     addMonthlyContribution,
     isLoadingAddMonthlyContribution,
-    statusAddMonthlyContribution,
+    statusAddMonthlyContribution
   }
 }
 

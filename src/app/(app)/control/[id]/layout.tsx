@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Controle Financeiro',
+  title: 'Controle Financeiro'
 }
 
 export default function ControlLayout({ children }: SideBarProps) {

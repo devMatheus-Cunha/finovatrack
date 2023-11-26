@@ -7,7 +7,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
   useMutation,
-  useQuery,
+  useQuery
 } from '@tanstack/react-query'
 import React from 'react'
 import { toast } from 'react-toastify'
@@ -18,7 +18,7 @@ import { getLastQuotationData } from '@/service/quatation/getLastQuotationData'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 export type RefetchQuationDataType = <TPageData>(
-  options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
 ) => Promise<
   QueryObserverResult<
     {
@@ -39,14 +39,14 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
     useQuery(
       ['last_quotation_data', router.id],
       async () => await getLastQuotationData(router.id),
-      { enabled: !!router.id },
+      { enabled: !!router.id }
     )
 
   const { mutateAsync: addLastQuotation } = useMutation(
     (data: Record<string, any>) => updateQuotationData(router.id, data),
     {
-      onSuccess: async () => await refetchLastQuotationData(),
-    },
+      onSuccess: async () => await refetchLastQuotationData()
+    }
   )
 
   const { refetch: refetchQuationData } = useQuery({
@@ -57,7 +57,7 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
       }
       return await getQuatationRateFromAPI(amount === 0 ? 1 : amount, {
         primary_currency: userData.primary_currency,
-        secondary_currency: userData.secondary_currency,
+        secondary_currency: userData.secondary_currency
       })
     },
     enabled: false,
@@ -68,7 +68,7 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
         type: 'success',
         render: 'Sucesso ao atualizar cotação',
         className: 'rotateY animated',
-        autoClose: 5000,
+        autoClose: 5000
       })
       toastId.current = null
     },
@@ -76,10 +76,10 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
       toast.update(toastId.current, {
         type: 'error',
         render: 'Erro ao atualizar cotação',
-        autoClose: 5000,
+        autoClose: 5000
       })
       toastId.current = null
-    },
+    }
   })
   return { lastQuatationData, refetchQuationData }
 }

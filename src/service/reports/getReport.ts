@@ -22,7 +22,7 @@ export async function getReport(idUser: string, period: string) {
   if (period) {
     querySnapshot = query(
       collection(db, 'users', String(idUser), 'reports'),
-      where('period', '==', period),
+      where('period', '==', period)
     )
     const get = await getDocs(querySnapshot)
     get.forEach((doc) => {

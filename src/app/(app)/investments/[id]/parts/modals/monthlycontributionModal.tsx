@@ -9,7 +9,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
+  ModalOverlay
 } from '@chakra-ui/react'
 import React from 'react'
 
@@ -21,7 +21,7 @@ const MonthlyContributionModal = ({
   handleSubmitContribution,
   controlContribution,
   errorsContribution,
-  addMonthlyContribution,
+  addMonthlyContribution
 }: any) => {
   return (
     <Modal
@@ -29,7 +29,7 @@ const MonthlyContributionModal = ({
       onClose={() => {
         setOpenModal({
           ...openModal,
-          monthlycontribution: false,
+          monthlycontribution: false
         })
       }}
       isCentered
@@ -43,7 +43,7 @@ const MonthlyContributionModal = ({
           onSubmit={handleSubmitContribution((value: any) => {
             setOpenModal({
               ...openModal,
-              monthlycontribution: false,
+              monthlycontribution: false
             })
             addMonthlyContribution(value)
           })}

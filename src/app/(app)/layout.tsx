@@ -10,7 +10,7 @@ import {
   Eye,
   EyeSlash,
   SignOut,
-  User,
+  User
 } from '@phosphor-icons/react'
 import React, { ReactNode } from 'react'
 import ReactLoading from 'react-loading'
@@ -31,7 +31,7 @@ export default function AppLayout({ children }: SideBarProps) {
 
   const { onLogout } = useLogout()
   const {
-    userData: { id },
+    userData: { id }
   } = useUserData()
 
   const sidebarItems = [
@@ -45,7 +45,7 @@ export default function AppLayout({ children }: SideBarProps) {
       ) : (
         <EyeSlash size={21} color="#eee2e2" />
       ),
-      action: () => handleToggleVisibilityData(),
+      action: () => handleToggleVisibilityData()
     },
     {
       id: 'control',
@@ -53,7 +53,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/control',
       disabled: false,
       icon: <ClipboardText size={21} />,
-      action: () => router.push(`/control/${id}`),
+      action: () => router.push(`/control/${id}`)
     },
     {
       id: 'reports',
@@ -61,7 +61,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/reports',
       disabled: false,
       icon: <Archive size={21} />,
-      action: () => router.push(`/reports/${id}`),
+      action: () => router.push(`/reports/${id}`)
     },
     {
       id: 'investments',
@@ -71,7 +71,7 @@ export default function AppLayout({ children }: SideBarProps) {
         idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
         idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
       icon: <ChartLineUp size={21} />,
-      action: () => router.push(`/investments/${id}`),
+      action: () => router.push(`/investments/${id}`)
     },
     {
       id: 'myProfile',
@@ -79,7 +79,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/myProfile',
       disabled: false,
       icon: <User size={21} />,
-      action: () => router.push(`/myProfile/${id}`),
+      action: () => router.push(`/myProfile/${id}`)
     },
     {
       id: 'logout',
@@ -87,8 +87,8 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/logout',
       disabled: false,
       icon: <SignOut size={21} />,
-      action: () => onLogout(),
-    },
+      action: () => onLogout()
+    }
   ]
 
   return (

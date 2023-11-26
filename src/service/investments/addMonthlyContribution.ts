@@ -9,7 +9,7 @@ export type MonthlyContribution = {
 
 export async function addMonthlyContributionService(
   data: MonthlyContribution,
-  idUser: string,
+  idUser: string
 ) {
   try {
     const allGoalsDocRef = doc(
@@ -17,7 +17,7 @@ export async function addMonthlyContributionService(
       'users',
       idUser,
       'investments',
-      'monthly_contribution',
+      'monthly_contribution'
     )
     const allGoalsDocSnap = await getDoc(allGoalsDocRef)
 
@@ -30,7 +30,7 @@ export async function addMonthlyContributionService(
     return 'Monthly contribution added/updated successfully'
   } catch (error: any) {
     throw new Error(
-      'Failed to add/update goal monthly contribution: ' + error.message,
+      'Failed to add/update goal monthly contribution: ' + error.message
     )
   }
 }

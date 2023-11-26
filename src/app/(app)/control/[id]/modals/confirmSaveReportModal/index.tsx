@@ -18,7 +18,7 @@ interface IConfirmSaveReportModal {
 function ConfirmSaveReportModal({
   onSubmit,
   onCancel,
-  initialData,
+  initialData
 }: IConfirmSaveReportModal) {
   const [selectedPeriod, setSelectedPeriod] = useState(new Date())
   function onChangeDate(date: Date) {
@@ -67,12 +67,12 @@ function ConfirmSaveReportModal({
                 'pt-BR',
                 {
                   month: '2-digit',
-                  year: 'numeric',
-                },
+                  year: 'numeric'
+                }
               )
               onSubmit({
                 data: initialData,
-                period: formattedDate,
+                period: formattedDate
               })
             }}
           >

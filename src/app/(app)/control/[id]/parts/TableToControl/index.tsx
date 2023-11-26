@@ -29,13 +29,13 @@ function TableToControl({
   handleOpenModal,
   isVisibilityData,
   filter,
-  userData,
+  userData
 }: ITableToControl) {
   const columsHeadProps = (): TableColumn[] => {
     const columns = [
       {
         header: 'Descrição',
-        field: 'description',
+        field: 'description'
       },
       {
         header: optionsCurrencyKeyAndValue[userData.primary_currency],
@@ -43,18 +43,18 @@ function TableToControl({
         modifier: (value: number) =>
           !isVisibilityData || !value
             ? '-'
-            : formatCurrencyMoney(value, userData?.primary_currency),
+            : formatCurrencyMoney(value, userData?.primary_currency)
       },
       {
         header: 'Categoria',
-        field: 'category',
+        field: 'category'
       },
       {
         header: 'Status Pagamento',
         field: 'payment',
         styles: (value: string) => ({
-          color: value === 'A Pagar' ? 'red' : 'green',
-        }),
+          color: value === 'A Pagar' ? 'red' : 'green'
+        })
       },
       {
         header: 'Ação',
@@ -69,21 +69,21 @@ function TableToControl({
                       onClick: () => {
                         handleOpenModal('edit', obj)
                       },
-                      content: <PencilSimpleLine color="#eee2e2" />,
+                      content: <PencilSimpleLine color="#eee2e2" />
                     },
                     {
                       onClick: () => {
                         handleOpenModal('delete', obj)
                       },
-                      content: <Trash color="#eee2e2" />,
-                    },
+                      content: <Trash color="#eee2e2" />
+                    }
                   ]}
                 />
               )}
             </>
           )
-        },
-      },
+        }
+      }
     ]
 
     if (userData.typeAccount === 'hybrid') {
@@ -93,11 +93,11 @@ function TableToControl({
         modifier: (value: number) =>
           !isVisibilityData || !value
             ? '-'
-            : formatCurrencyMoney(value, userData.secondary_currency),
+            : formatCurrencyMoney(value, userData.secondary_currency)
       })
       columns.splice(3, 0, {
         header: 'Moeda',
-        field: 'typeMoney',
+        field: 'typeMoney'
       })
     }
 

@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Meu Perfil',
+  title: 'Meu Perfil'
 }
 
 export default function MyProfileLayout({ children }: SideBarProps) {

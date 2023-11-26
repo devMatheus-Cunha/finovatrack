@@ -4,7 +4,7 @@ import React from 'react'
 
 const SideMenu = ({
   sidebarItems,
-  pathname,
+  pathname
 }: {
   pathname: string
   sidebarItems: {

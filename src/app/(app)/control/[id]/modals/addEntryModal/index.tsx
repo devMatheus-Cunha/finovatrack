@@ -27,19 +27,19 @@ interface IContentModal {
 }
 
 const schema = z.object({
-  value: z.string().nonempty(),
+  value: z.string().nonempty()
 })
 
 function ContentAddEntryModal({
   onSubmit,
   handleOpenModal,
   isLoadingAddExpense,
-  userData,
+  userData
 }: IContentModal) {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors }
   } = useForm<FormData>({
     resolver: async (data) => {
       try {
@@ -51,7 +51,7 @@ function ContentAddEntryModal({
         }
         return { values: {}, errors: { [error.path[0]]: error.message } }
       }
-    },
+    }
   })
 
   return (

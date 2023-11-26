@@ -14,7 +14,7 @@ export const initialState: UserData = {
   name: '',
   primary_currency: '',
   secondary_currency: '',
-  typeAccount: 'hybrid',
+  typeAccount: 'hybrid'
 }
 
 const useUserData = () => {
@@ -30,14 +30,14 @@ const useUserData = () => {
     queryKey: ['user_data', router.id],
     queryFn: checkAuthState,
     staleTime: Infinity,
-    enabled: !!router.id,
+    enabled: !!router.id
   })
 
   const userData = data ?? initialState
 
   return {
     userData,
-    refetchUserData,
+    refetchUserData
   }
 }
 

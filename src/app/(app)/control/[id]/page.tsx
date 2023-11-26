@@ -12,14 +12,14 @@ import { SubmitHandler } from 'react-hook-form'
 import {
   useAddEntrys,
   useDeletedEntry,
-  useFetchEntrysData,
+  useFetchEntrysData
 } from '@/hooks/entrys'
 import {
   useAddExpense,
   useFetchExpensesData,
   useDeletedExpense,
   useUpadtedExpense,
-  useClearExpenses,
+  useClearExpenses
 } from '@/hooks/expenses'
 import { useFetchQuatationEur } from '@/hooks/quatation'
 
@@ -31,14 +31,14 @@ import {
   convertEurToReal,
   formatCurrencyMoney,
   formatToCustomFormat,
-  formatToJavaScriptNumber,
+  formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import { Button, Modal } from '@/components'
 import {
   formattedValuesSubmitExpense,
   initialDataSelectedData,
   useCalculationSumValues,
-  useGetTotalsFree,
+  useGetTotalsFree
 } from './utils'
 
 import { ITypeModal } from './types'
@@ -75,18 +75,18 @@ export default function Control() {
   const { getTotals } = useGetTotalsFree(calculationSumValues)
   const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
     userData,
-    getTotals?.value_secondary_currency,
+    getTotals?.value_secondary_currency
   )
 
   const calculationTotalExpensesEurSumRealToReal =
     convertEurToReal(
       lastQuatationData?.current_quotation,
-      Number(getTotals?.value_secondary_currency),
+      Number(getTotals?.value_secondary_currency)
     ) + (getTotals?.value_primary_currency || 0)
 
   const calculationTotalExpensesEurToReal = convertEurToReal(
     lastQuatationData?.current_quotation,
-    Number(getTotals?.value_secondary_currency),
+    Number(getTotals?.value_secondary_currency)
   )
 
   const [configModal, setConfigModal] = useState<{
@@ -96,14 +96,14 @@ export default function Control() {
   }>({
     open: false,
     type: '',
-    selectedData: initialDataSelectedData,
+    selectedData: initialDataSelectedData
   })
   const [openModalReport, setOpenModalReport] = useState<{
     open: boolean
     data: ExpenseData[]
   }>({
     open: false,
-    data: [],
+    data: []
   })
 
   const [openModalInfoCard, setOpenModalInfoCard] = useState(false)
@@ -114,7 +114,7 @@ export default function Control() {
         array.reduce((accumulator, item) => {
           return accumulator + Number(item.value)
         }, 0),
-      [array],
+      [array]
     )
 
     return total
@@ -122,7 +122,7 @@ export default function Control() {
 
   const validateExpenseData = {
     hybrid: calculationTotalExpensesEurSumRealToReal,
-    oneCurrency: getTotals?.value_primary_currency,
+    oneCurrency: getTotals?.value_primary_currency
   }
 
   const totalEntrys = SumValues(entrysData)
@@ -131,14 +131,14 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: type || '',
-      selectedData: data || initialDataSelectedData,
+      selectedData: data || initialDataSelectedData
     })
   }
 
   const handleOpenModalSaveReport = (data: ExpenseData[] = []) => {
     setOpenModalReport({
       open: !openModalReport.open,
-      data,
+      data
     })
   }
 
@@ -148,7 +148,7 @@ export default function Control() {
       setConfigModal({
         open: !configModal.open,
         type: '',
-        selectedData: initialDataSelectedData,
+        selectedData: initialDataSelectedData
       })
       return
     }
@@ -157,7 +157,7 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
@@ -166,7 +166,7 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
@@ -176,7 +176,7 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
@@ -242,7 +242,7 @@ export default function Control() {
                           formatToJavaScriptNumber(item?.value),
                           userData.typeAccount === 'oneCurrency'
                             ? userData.primary_currency
-                            : item.typeMoney,
+                            : item.typeMoney
                         )
                       : '-'}
                   </p>
@@ -306,24 +306,24 @@ export default function Control() {
                   period,
                   totalInvested: formatCurrencyMoney(
                     totalEntrys - (validateExpenseData[typeAccount] || 0),
-                    userData.primary_currency,
+                    userData.primary_currency
                   ),
                   totalEntrys: formatCurrencyMoney(
                     totalEntrys,
-                    userData.primary_currency,
+                    userData.primary_currency
                   ),
                   totalExpenses: formatCurrencyMoney(
                     validateExpenseData[typeAccount],
-                    userData.primary_currency,
+                    userData.primary_currency
                   ),
                   totalExpenseEurToReal: formatCurrencyMoney(
                     calculationTotalExpensesEurToReal,
-                    userData.primary_currency,
+                    userData.primary_currency
                   ),
                   quatation: formatCurrencyMoney(
                     lastQuatationData?.current_quotation,
-                    userData.primary_currency,
-                  ),
+                    userData.primary_currency
+                  )
                 })
                 handleOpenModalSaveReport()
               }}

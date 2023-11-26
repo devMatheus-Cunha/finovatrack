@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Investimentos',
+  title: 'Investimentos'
 }
 
 export default function InvestmentsLayout({ children }: SideBarProps) {

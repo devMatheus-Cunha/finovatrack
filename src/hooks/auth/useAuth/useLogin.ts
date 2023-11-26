@@ -18,31 +18,31 @@ const useLogin = () => {
         updatedDocumentForUser({
           id: user.uid,
           expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
-          token: (await user.getIdTokenResult()).token,
+          token: (await user.getIdTokenResult()).token
         } as any)
         router.push(`/control/${user.uid}`)
       },
       onError: ({ message }: { message: string }) => {
         if (message === 'Firebase: Error (auth/user-not-found).') {
           toast.error('Conta não encontrada.', {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.TOP_RIGHT
           })
         } else if (message === 'Firebase: Error (auth/wrong-password).') {
           toast.error('Senha incorreta', {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.TOP_RIGHT
           })
         } else {
           toast.error('Erro no Servidor. Tente mais tarde!', {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.TOP_RIGHT
           })
         }
-      },
-    },
+      }
+    }
   )
 
   return {
     loginWithEmail,
-    isLoading,
+    isLoading
   }
 }
 

@@ -15,10 +15,10 @@ function Providers({ children }: React.PropsWithChildren) {
           // refetchInterval: 1000 * 60 * 15, // refetch data every 15 minutes
           refetchOnMount: true, // refetch data when component first mounts
           retry: false, // Disable automatic refetch attempts
-          keepPreviousData: true,
-        },
-      },
-    }),
+          keepPreviousData: true
+        }
+      }
+    })
   )
 
   return (

@@ -30,7 +30,7 @@ function InfoCardsToControl({
   entrysData,
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
-  infoAction,
+  infoAction
 }: IInfoCardsToControl) {
   return (
     <div className="flex flex-wrap lg:flex-nowrap	justify-center gap-6">
@@ -55,7 +55,7 @@ function InfoCardsToControl({
         <InfoCardMoney
           infoData={formatCurrencyMoney(
             totalExpensesEurToReal,
-            userData.primary_currency,
+            userData.primary_currency
           )}
           infoAction={infoAction}
           title={`Total Gastos ${userData.secondary_currency}`}
@@ -64,14 +64,14 @@ function InfoCardsToControl({
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalExpensesEurSumRealToReal,
-          userData.primary_currency,
+          userData.primary_currency
         )}
         title="Total Gastos"
       />
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalEntrys - totalExpensesEurSumRealToReal,
-          userData.primary_currency,
+          userData.primary_currency
         )}
         title="Total Livre"
       />

@@ -26,7 +26,7 @@ function InputTypeMoney<T extends FieldValues>({
   label,
   errors,
   required,
-  defaultValue,
+  defaultValue
 }: InputTypeMoneyProps<T>) {
   return (
     <div className="w-[100%]">

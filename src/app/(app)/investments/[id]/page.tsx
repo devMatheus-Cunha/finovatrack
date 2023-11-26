@@ -16,11 +16,11 @@ import InvestmentsAllGoalsModal from './parts/modals/investmentsAllGoalsModal'
 
 const schemaContributions = z.object({
   value: z.string().nonempty(),
-  date: z.string().nonempty(),
+  date: z.string().nonempty()
 })
 
 const schemaGoals = z.object({
-  goal: z.string().nonempty(),
+  goal: z.string().nonempty()
 })
 
 const Investments = () => {
@@ -35,25 +35,25 @@ const Investments = () => {
 
   const [openModal, setOpenModal] = useState({
     monthlycontribution: false,
-    investmentsAllGoals: false,
+    investmentsAllGoals: false
   })
 
   const {
     handleSubmit: handleSubmitGoals,
     control: controlGoals,
-    formState: { errors: errorsGoals },
+    formState: { errors: errorsGoals }
   } = useForm({
     defaultValues: investmentsAllGoalsData,
-    resolver: zodResolver(schemaGoals),
+    resolver: zodResolver(schemaGoals)
   })
 
   const {
     handleSubmit: handleSubmitContribution,
     control: controlContribution,
-    formState: { errors: errorsContribution },
+    formState: { errors: errorsContribution }
   } = useForm({
     defaultValues: monthlycontributionData,
-    resolver: zodResolver(schemaContributions),
+    resolver: zodResolver(schemaContributions)
   })
 
   return (

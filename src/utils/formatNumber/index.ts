@@ -9,7 +9,7 @@ export function formatCurrencyMoney(value = 0, currency?: string) {
     style: 'currency',
     currency: currency || 'BRL',
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(value)
 
   return formattedValue
@@ -45,6 +45,6 @@ export function formatToCustomFormat(number = 0): string | undefined {
   return number.toLocaleString('pt-BR', {
     style: 'decimal',
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   })
 }

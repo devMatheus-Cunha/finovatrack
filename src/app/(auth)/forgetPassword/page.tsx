@@ -12,7 +12,7 @@ import { LogoutProps } from '@/service/auth/forgetPassword'
 import { Button, Input } from '../../../components'
 
 const schema = z.object({
-  email: z.string().email('Formato de'),
+  email: z.string().email('Formato de')
 })
 
 export default function ForgetPassword() {
@@ -20,7 +20,7 @@ export default function ForgetPassword() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<LogoutProps>({
     resolver: async (data) => {
       try {
@@ -32,7 +32,7 @@ export default function ForgetPassword() {
         }
         return { values: {}, errors: { [error.path[0]]: error.message } }
       }
-    },
+    }
   })
 
   return (

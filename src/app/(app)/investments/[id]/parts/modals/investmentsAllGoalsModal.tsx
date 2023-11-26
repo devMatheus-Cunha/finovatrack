@@ -1,7 +1,6 @@
 import { InputTypeMoney } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import {
-  Box,
   Button,
   Modal,
   ModalBody,
@@ -9,7 +8,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
+  ModalOverlay
 } from '@chakra-ui/react'
 import React from 'react'
 
@@ -21,7 +20,7 @@ const InvestmentsAllGoalsModal = ({
   handleSubmitGoals,
   controlGoals,
   errorsGoals,
-  addGoalinvestment,
+  addGoalinvestment
 }: any) => {
   return (
     <Modal
@@ -29,7 +28,7 @@ const InvestmentsAllGoalsModal = ({
       onClose={() => {
         setOpenModal({
           ...openModal,
-          investmentsAllGoals: false,
+          investmentsAllGoals: false
         })
       }}
       isCentered
@@ -42,7 +41,7 @@ const InvestmentsAllGoalsModal = ({
           onSubmit={handleSubmitGoals((value: any) => {
             setOpenModal({
               ...openModal,
-              investmentsAllGoals: false,
+              investmentsAllGoals: false
             })
             addGoalinvestment(value)
           })}

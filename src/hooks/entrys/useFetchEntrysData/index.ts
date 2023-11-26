@@ -16,20 +16,20 @@ export const useFetchEntrysData = () => {
     data: entrysData,
     isLoading: isLoadingEntrysData,
     status: statusEntrysData,
-    refetch: refetchEntrysData,
+    refetch: refetchEntrysData
   } = useQuery(
     ['entrys_data', router.id],
     async () => await getEntrys(router.id),
     {
-      enabled: !!router.id,
-    },
+      enabled: !!router.id
+    }
   )
 
   return {
     entrysData,
     isLoadingEntrysData,
     statusEntrysData,
-    refetchEntrysData,
+    refetchEntrysData
   }
 }
 

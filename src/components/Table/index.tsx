@@ -7,7 +7,7 @@ import {
   Tr,
   Th,
   Td,
-  TableContainer,
+  TableContainer
 } from '@chakra-ui/react'
 
 export interface TableColumn {

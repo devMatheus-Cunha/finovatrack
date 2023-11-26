@@ -1,6 +1,6 @@
 import {
   formatCurrencyMoney,
-  formatToJavaScriptNumber,
+  formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import {
   CardBody,
@@ -10,7 +10,7 @@ import {
   StatNumber,
   StatHelpText,
   Box,
-  Card,
+  Card
 } from '@chakra-ui/react'
 import { GearSix } from '@phosphor-icons/react'
 import React from 'react'
@@ -21,11 +21,11 @@ const Cards = ({
   setOpenModal,
   investmentsAllGoalsData,
   openModal,
-  monthlycontributionData,
+  monthlycontributionData
 }: any) => {
   function calculatePercentageReachedToGoal(
     currentValue: number,
-    goalValue: number,
+    goalValue: number
   ): string {
     if (currentValue > goalValue) {
       return 'O saldo esta maior que a meta.'
@@ -55,7 +55,7 @@ const Cards = ({
                 {isVisibilityData
                   ? formatCurrencyMoney(
                       Number(monthlycontributionData?.value || 0),
-                      userData?.primary_currency,
+                      userData?.primary_currency
                     )
                   : '****'}
               </StatNumber>
@@ -70,7 +70,7 @@ const Cards = ({
                   ? formatCurrencyMoney(
                       Number(monthlycontributionData?.value || 0) *
                         Number(monthlycontributionData?.date || 0),
-                      userData?.primary_currency,
+                      userData?.primary_currency
                     )
                   : '****'}
               </StatNumber>
@@ -84,7 +84,7 @@ const Cards = ({
             onClick={() => {
               setOpenModal({
                 ...openModal,
-                monthlycontribution: true,
+                monthlycontribution: true
               })
             }}
           />
@@ -98,18 +98,18 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      formatToJavaScriptNumber('6.639,51' || '0'),
-                      userData?.primary_currency,
+                      formatToJavaScriptNumber('3.489' || '0'),
+                      userData?.primary_currency
                     )
                   : '****'}
               </StatNumber>
               <StatHelpText>
                 {isVisibilityData
                   ? calculatePercentageReachedToGoal(
-                      formatToJavaScriptNumber('6.639,51' || '0'),
+                      formatToJavaScriptNumber('3.489' || '0'),
                       formatToJavaScriptNumber(
-                        investmentsAllGoalsData?.goal || '0',
-                      ),
+                        investmentsAllGoalsData?.goal || '0'
+                      )
                     )
                   : '****'}
               </StatHelpText>
@@ -120,9 +120,9 @@ const Cards = ({
                 {isVisibilityData
                   ? formatCurrencyMoney(
                       formatToJavaScriptNumber(
-                        investmentsAllGoalsData?.goal || '0',
+                        investmentsAllGoalsData?.goal || '0'
                       ),
-                      userData?.primary_currency,
+                      userData?.primary_currency
                     )
                   : '****'}
               </StatNumber>
@@ -136,7 +136,7 @@ const Cards = ({
             onClick={() => {
               setOpenModal({
                 ...openModal,
-                investmentsAllGoals: true,
+                investmentsAllGoals: true
               })
             }}
           />

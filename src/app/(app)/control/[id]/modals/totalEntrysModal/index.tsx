@@ -22,19 +22,19 @@ interface IContentModal {
 export const columsHeadProps = [
   {
     header: 'Entradas',
-    field: 'value',
+    field: 'value'
   },
   {
     header: 'Ação',
-    field: 'actions',
-  },
+    field: 'actions'
+  }
 ]
 
 function ContentTotalEntrys({
   handleOpenModal,
   data,
   onDelete,
-  userData,
+  userData
 }: IContentModal) {
   const { isVisibilityData } = useIsVisibilityDatas()
 
@@ -78,8 +78,8 @@ function ContentTotalEntrys({
                         onClick: () => {
                           onDelete(item?.id)
                         },
-                        content: <Trash color="#eee2e2" />,
-                      },
+                        content: <Trash color="#eee2e2" />
+                      }
                     ]}
                   />
                 </th>

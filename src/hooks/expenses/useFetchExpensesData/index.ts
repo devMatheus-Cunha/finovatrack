@@ -19,12 +19,12 @@ export const useFetchExpensesData = () => {
     data: expensesData,
     isLoading: isLoadingExpensesData,
     status: statusExpensesData,
-    refetch: refetchExpensesData,
+    refetch: refetchExpensesData
   } = useQuery({
     queryKey: ['expenses_data', filter, router.id],
     queryFn: async () => await getExpenses(router.id, filter),
     keepPreviousData: true,
-    enabled: !!router.id,
+    enabled: !!router.id
   })
 
   return {
@@ -33,7 +33,7 @@ export const useFetchExpensesData = () => {
     statusExpensesData,
     refetchExpensesData,
     setFilter,
-    filter,
+    filter
   }
 }
 

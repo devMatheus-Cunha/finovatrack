@@ -11,7 +11,7 @@ const useIsVisibilityDatas = () => {
   }
 
   const { data: isVisibilityData } = useQuery(['is_visibility_data'], {
-    initialData,
+    initialData
   })
 
   const handleToggleVisibilityData = () => {

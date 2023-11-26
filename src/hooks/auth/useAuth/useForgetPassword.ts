@@ -10,7 +10,7 @@ const useForgetPassword = () => {
     {
       onSuccess: async () => {
         toast.success('E-mail de recupeção enviado!', {
-          position: toast.POSITION.TOP_RIGHT,
+          position: toast.POSITION.TOP_RIGHT
         })
         router.push('/login')
       },
@@ -22,21 +22,21 @@ const useForgetPassword = () => {
           toast.error(
             'E-mail inválido. Por favor, insira um endereço de e-mail válido.',
             {
-              position: toast.POSITION.TOP_RIGHT,
-            },
+              position: toast.POSITION.TOP_RIGHT
+            }
           )
         } else {
           toast.error('Erro no Servidor. Tente mais tarde!', {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.TOP_RIGHT
           })
         }
-      },
-    },
+      }
+    }
   )
 
   return {
     onForgetPassword,
-    isLoading,
+    isLoading
   }
 }
 

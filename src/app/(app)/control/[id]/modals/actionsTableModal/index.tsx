@@ -35,7 +35,7 @@ function ContentActionsTableModal({
   initialData,
   type,
   userData,
-  onDelete,
+  onDelete
 }: IContentModal) {
   const schema = z.object({
     description: z.string().nonempty(),
@@ -45,14 +45,14 @@ function ContentActionsTableModal({
         : z.string().optional(),
     value: z.string().nonempty(),
     category: z.string().nonempty(),
-    payment: z.string().nonempty(),
+    payment: z.string().nonempty()
   })
   const {
     register,
     handleSubmit,
     watch,
     control,
-    formState: { errors },
+    formState: { errors }
   } = useForm<ExpenseData>({
     defaultValues:
       type !== 'addExpense'
@@ -62,11 +62,11 @@ function ContentActionsTableModal({
               userData.typeAccount === 'oneCurrency'
                 ? formatToCustomFormat(initialData?.value_primary_currency)
                 : initialData?.typeMoney === userData.primary_currency
-                ? formatToCustomFormat(initialData?.value_primary_currency)
-                : formatToCustomFormat(initialData?.value_secondary_currency),
+                  ? formatToCustomFormat(initialData?.value_primary_currency)
+                  : formatToCustomFormat(initialData?.value_secondary_currency)
           }
         : undefined,
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema)
   })
 
   const handleActionsModal = (type: 'cancel' | 'delete') => {
@@ -78,7 +78,7 @@ function ContentActionsTableModal({
   return (
     <form
       onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, id: initialData?.id ?? '' }),
+        onSubmit({ ...data, id: initialData?.id ?? '' })
       )}
     >
       <div className="rounded-lg shadow bg-gray-800">
@@ -117,7 +117,7 @@ function ContentActionsTableModal({
                   label: 'Ex: Alimentação',
                   value: '',
                   disabled: true,
-                  selected: true,
+                  selected: true
                 },
                 { label: 'Alimentação', value: 'Alimentação' },
                 { label: 'Contas', value: 'Contas' },
@@ -130,7 +130,7 @@ function ContentActionsTableModal({
                 { label: 'Saúde', value: 'Saúde' },
                 { label: 'Seguro', value: 'Seguro' },
                 { label: 'Transporte', value: 'Transporte' },
-                { label: 'Viagens', value: 'Viagens' },
+                { label: 'Viagens', value: 'Viagens' }
               ]}
               register={register}
               errors={
@@ -152,10 +152,10 @@ function ContentActionsTableModal({
                   label: `Ex: A Pagar`,
                   value: '',
                   disabled: true,
-                  selected: true,
+                  selected: true
                 },
                 { label: 'A Pagar', value: 'A Pagar' },
-                { label: 'Pago', value: 'Pago' },
+                { label: 'Pago', value: 'Pago' }
               ]}
               register={register}
               errors={
@@ -181,16 +181,16 @@ function ContentActionsTableModal({
                     label: `Ex: ${userData.primary_currency}`,
                     value: '',
                     disabled: true,
-                    selected: true,
+                    selected: true
                   },
                   {
                     label: userData.primary_currency,
-                    value: userData.primary_currency,
+                    value: userData.primary_currency
                   },
                   {
                     label: userData.secondary_currency,
-                    value: userData.secondary_currency,
-                  },
+                    value: userData.secondary_currency
+                  }
                 ]}
                 register={register}
                 errors={

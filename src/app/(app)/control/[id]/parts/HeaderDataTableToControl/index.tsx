@@ -10,13 +10,13 @@ import {
   Broom,
   FolderOpen,
   ArrowsCounterClockwise,
-  CaretDown,
+  CaretDown
 } from '@phosphor-icons/react'
 import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
-import { optionsFilterCategory, optionsFilterType } from '../../utils'
+import { optionsFilterCategory } from '../../utils'
 import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/service/expenses/getExpenses'
 
@@ -37,29 +37,29 @@ function HeaderDataTableToControl({
   filter,
   onFilter,
   handleOpenModalSaveReport,
-  refetchQuationData,
+  refetchQuationData
 }: IHeaderDataTableToControl) {
   const buttonData = [
     {
       label: 'Add Gastos',
       icon: <Coins size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('addExpense'),
+      onClick: () => handleOpenModal('addExpense')
     },
     {
       label: 'Add Entrada',
       icon: <HandCoins size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('addEntry'),
+      onClick: () => handleOpenModal('addEntry')
     },
     {
       label: 'Salvar Relatório',
       icon: <FolderOpen size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModalSaveReport(),
+      onClick: () => handleOpenModalSaveReport()
     },
     {
       label: 'Limpar Gastos',
       icon: <Broom size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('deleteAllExpenses'),
-    },
+      onClick: () => handleOpenModal('deleteAllExpenses')
+    }
   ]
 
   return (
@@ -149,7 +149,7 @@ function HeaderDataTableToControl({
             <h3 className="italic text-[14px] md:text-md">
               {`${userData.secondary_currency}: ${formatCurrencyMoney(
                 currentQuotation ?? 0,
-                userData.primary_currency,
+                userData.primary_currency
               )} `}
             </h3>
             <button

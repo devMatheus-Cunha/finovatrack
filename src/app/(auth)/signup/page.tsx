@@ -17,7 +17,7 @@ import { Button, Input, InputPassword } from '../../../components'
 import {
   dropdownOptionsCurrency,
   dropdownOptionsCurrencyHybrid,
-  schema,
+  schema
 } from './utils'
 
 export default function Signup() {
@@ -27,15 +27,15 @@ export default function Signup() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useForm<SigingProps>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema)
   })
 
   return (
     <form
       onSubmit={handleSubmit((values: SigingProps) =>
-        createAccountUser(values),
+        createAccountUser(values)
       )}
     >
       <div
@@ -143,7 +143,7 @@ export default function Signup() {
                 >
                   {label}
                 </option>
-              ),
+              )
             )}
           </select>
           {errors.typeAccount && (
@@ -177,7 +177,7 @@ export default function Signup() {
                       >
                         {label}
                       </option>
-                    ),
+                    )
                   )}
                 </select>
                 {errors.primary_currency && (
@@ -208,7 +208,7 @@ export default function Signup() {
                       >
                         {label}
                       </option>
-                    ),
+                    )
                   )}
                 </select>
                 {errors.secondary_currency && (

@@ -19,7 +19,7 @@ function InfoCardMoney({
   infoData,
   title,
   contentAction,
-  infoAction,
+  infoAction
 }: InfoCardProps) {
   const { isVisibilityData } = useIsVisibilityDatas()
 

@@ -20,12 +20,12 @@ const useDeletedEntry = () => {
       },
       onError: () => {
         toast.error('Erro ao deletar entrada')
-      },
-    },
+      }
+    }
   )
 
   return {
-    deletedEntry,
+    deletedEntry
   }
 }
 

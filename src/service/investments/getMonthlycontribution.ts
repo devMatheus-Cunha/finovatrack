@@ -10,7 +10,7 @@ export async function getMonthlycontributionService(idUser: string) {
     'users',
     idUser,
     'investments',
-    'monthly_contribution',
+    'monthly_contribution'
   )
   const allGoalsDocSnap = await getDoc(allGoalsDocRef)
 

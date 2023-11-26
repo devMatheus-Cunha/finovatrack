@@ -18,12 +18,12 @@ const useDeletedExpense = () => {
       },
       onError: () => {
         toast.error('Erro ao deletar gasto')
-      },
-    },
+      }
+    }
   )
 
   return {
-    deletedExpense,
+    deletedExpense
   }
 }
 

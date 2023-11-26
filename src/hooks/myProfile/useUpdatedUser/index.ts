@@ -25,27 +25,27 @@ const useUpdatedUser = () => {
       await updatedEmailUser(values.email)
       await updatedDocumentForUser({
         id: router.id,
-        ...values,
+        ...values
       } as any)
     },
     {
       onSuccess: async () => {
         await refetchUserData()
         toast.success('Usuario atualizado com sucesso!', {
-          position: toast.POSITION.TOP_RIGHT,
+          position: toast.POSITION.TOP_RIGHT
         })
       },
       onError: () => {
         toast.error('Erro ao atualizar usuario.', {
-          position: toast.POSITION.TOP_RIGHT,
+          position: toast.POSITION.TOP_RIGHT
         })
-      },
-    },
+      }
+    }
   )
 
   return {
     updatedUserData,
-    isLoading,
+    isLoading
   }
 }
 

@@ -11,7 +11,7 @@ const useAddTotalGoalInvestments = () => {
   const {
     mutateAsync: addGoalinvestment,
     isLoading: isLoadingAddGoalinvestment,
-    status: statusAddGoalinvestment,
+    status: statusAddGoalinvestment
   } = useMutation((values: any) => addTotalGoalInvestments(values, router.id), {
     onSuccess: () => {
       refetchInvestmentsAllGoalsData()
@@ -19,13 +19,13 @@ const useAddTotalGoalInvestments = () => {
     },
     onError: () => {
       toast.error('Erro ao adicionar Meta')
-    },
+    }
   })
 
   return {
     addGoalinvestment,
     isLoadingAddGoalinvestment,
-    statusAddGoalinvestment,
+    statusAddGoalinvestment
   }
 }
 

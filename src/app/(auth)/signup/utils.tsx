@@ -7,7 +7,7 @@ export const dropdownOptionsCurrency = [
     label: 'Escolher Moeda',
     value: '',
     disabled: true,
-    selected: true,
+    selected: true
   },
   { label: 'Hibrida', value: 'hybrid' },
   { label: 'Dólar dos Estados Unidos', value: 'USD' },
@@ -15,7 +15,7 @@ export const dropdownOptionsCurrency = [
   { label: 'Euro', value: 'EUR' },
   { label: 'Franco suíço', value: 'CHF' },
   { label: 'Libra esterlina', value: 'GBP' },
-  { label: 'Real', value: 'BRL' },
+  { label: 'Real', value: 'BRL' }
 ]
 
 export const dropdownOptionsCurrencyHybrid: OptionsType = [
@@ -23,14 +23,14 @@ export const dropdownOptionsCurrencyHybrid: OptionsType = [
     label: 'Escolher Moeda',
     value: '',
     disabled: true,
-    selected: true,
+    selected: true
   },
   { label: 'Dólar dos Estados Unidos', value: 'USD' },
   { label: 'Dólar canadense', value: 'CAD' },
   { label: 'Euro', value: 'EUR' },
   { label: 'Franco suíço', value: 'CHF' },
   { label: 'Libra esterlina', value: 'GBP' },
-  { label: 'Real', value: 'BRL' },
+  { label: 'Real', value: 'BRL' }
 ]
 
 export const schema = z
@@ -47,11 +47,11 @@ export const schema = z
       .min(8, 'Deve conter no mínimo 8 caracteres'),
     typeAccount: z.string().nonempty('Campo obrigatório'),
     primary_currency: z.string().optional(),
-    secondary_currency: z.string().optional(),
+    secondary_currency: z.string().optional()
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não correspondem',
-    path: ['confirmPassword'],
+    path: ['confirmPassword']
   })
   .refine(
     (data) => {
@@ -62,8 +62,8 @@ export const schema = z
     },
     {
       message: 'A moeda primária e a secundária não podem ter a mesma seleção',
-      path: ['secondary_currency'],
-    },
+      path: ['secondary_currency']
+    }
   )
   .refine(
     (data) => {
@@ -74,8 +74,8 @@ export const schema = z
     },
     {
       message: 'Campo obrigatório',
-      path: ['primary_currency'],
-    },
+      path: ['primary_currency']
+    }
   )
   .refine(
     (data) => {
@@ -86,6 +86,6 @@ export const schema = z
     },
     {
       message: 'Campo obrigatório',
-      path: ['secondary_currency'],
-    },
+      path: ['secondary_currency']
+    }
   )

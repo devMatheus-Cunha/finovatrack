@@ -13,8 +13,9 @@ export type ExpenseFormData = {
 }
 
 export async function addExpenseService(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { id, ...rest }: ExpenseData,
-  idUser: string,
+  idUser: string
 ) {
   const myCollection = collection(db, 'users', idUser, 'expenses')
   const docRef = await addDoc(myCollection, rest)

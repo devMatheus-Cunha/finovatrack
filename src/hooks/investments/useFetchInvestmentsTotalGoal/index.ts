@@ -10,19 +10,19 @@ export const useFetchInvestmentsTotalGoal = () => {
     data: investmentsAllGoalsData,
     isLoading: isLoadingInvestmentsAllGoalsData,
     status: statusInvestmentsAllGoalsData,
-    refetch: refetchInvestmentsAllGoalsData,
+    refetch: refetchInvestmentsAllGoalsData
   } = useQuery({
     queryKey: ['investments_data', router.id],
     queryFn: async () => await getInvestmentsTotalGoal(router.id),
     keepPreviousData: true,
-    enabled: !!router.id,
+    enabled: !!router.id
   })
 
   return {
     investmentsAllGoalsData,
     isLoadingInvestmentsAllGoalsData,
     statusInvestmentsAllGoalsData,
-    refetchInvestmentsAllGoalsData,
+    refetchInvestmentsAllGoalsData
   }
 }
 

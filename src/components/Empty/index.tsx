@@ -8,7 +8,7 @@ interface IEmptyProps<T> {
 
 function Empty<T>({ filter }: IEmptyProps<T>) {
   return (
-    <div className="flex flex-col items-center gap-6 items-center justify-center h-full">
+    <div className="flex flex-col gap-6 items-center justify-center h-full">
       <svg
         fillRule="evenodd"
         width="231"

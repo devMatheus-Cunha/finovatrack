@@ -17,13 +17,13 @@ import { ToastContainer } from 'react-toastify'
 import Script from 'next/script'
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
   const config: ThemeConfig = {
     initialColorMode: 'dark',
-    useSystemColorMode: false,
+    useSystemColorMode: false
   }
 
   const theme = extendTheme({ config })
@@ -46,7 +46,7 @@ export default function RootLayout({
                 gtag('js', new Date());
 
                 gtag('config', 'G-L8G3KWJZDF')
-              `,
+              `
         }}
       />
       <body suppressHydrationWarning>

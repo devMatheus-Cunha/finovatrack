@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: 'Login'
 }
 
 export default function LoginLayout({ children }: SideBarProps) {

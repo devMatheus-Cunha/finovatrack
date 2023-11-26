@@ -13,7 +13,7 @@ const useAddExpense = () => {
   const {
     mutateAsync: addExpense,
     isLoading: isLoadingAddExpense,
-    status: statusAddExpense,
+    status: statusAddExpense
   } = useMutation(
     (values: ExpenseData) => addExpenseService(values, router.id),
     {
@@ -23,8 +23,8 @@ const useAddExpense = () => {
       },
       onError: () => {
         toast.error('Erro ao adicionar gasto')
-      },
-    },
+      }
+    }
   )
 
   return { addExpense, isLoadingAddExpense, statusAddExpense }

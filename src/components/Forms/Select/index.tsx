@@ -9,7 +9,7 @@ import {
   FieldValues,
   Path,
   RegisterOptions,
-  UseFormRegister,
+  UseFormRegister
 } from 'react-hook-form'
 
 export type OptionsType = {
@@ -40,7 +40,7 @@ export default function Select<T extends FieldValues>({
   rules,
   className,
   disabledSelect,
-  required,
+  required
 }: SelectFieldProps<T>) {
   return (
     <div className="w-[100%]">

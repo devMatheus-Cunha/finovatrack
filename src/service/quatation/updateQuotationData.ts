@@ -6,7 +6,7 @@ import { db } from '../firebase'
 
 export async function updateQuotationData(
   idUser: string,
-  data: Record<string, any>,
+  data: Record<string, any>
 ) {
   if (!idUser) {
     throw new Error('User not logged in')

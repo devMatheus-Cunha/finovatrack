@@ -2,7 +2,7 @@ import React from 'react'
 import { Logo } from '@/components'
 
 export default function LayoutAuth({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
