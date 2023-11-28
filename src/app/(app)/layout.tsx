@@ -103,7 +103,6 @@ export default function AppLayout({ children }: SideBarProps) {
       <div className="flex-auto w-full p-0 md:p-4">
         {!id ? (
           <div className="flex h-screen w-full items-center justify-center">
-            {/* @ts-expect-error Async Server Component */}
             <ReactLoading
               type="spinningBubbles"
               color="#13C1ED"
