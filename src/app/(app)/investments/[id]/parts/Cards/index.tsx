@@ -98,7 +98,7 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      formatToJavaScriptNumber('3.489' || '0'),
+                      formatToJavaScriptNumber('3.400' || '0'),
                       userData?.primary_currency
                     )
                   : '****'}
@@ -106,7 +106,7 @@ const Cards = ({
               <StatHelpText>
                 {isVisibilityData
                   ? calculatePercentageReachedToGoal(
-                      formatToJavaScriptNumber('3.489' || '0'),
+                      formatToJavaScriptNumber('3.400' || '0'),
                       formatToJavaScriptNumber(
                         investmentsAllGoalsData?.goal || '0'
                       )
