@@ -15,6 +15,8 @@ type InputTypeMoneyProps<T extends FieldValues> = {
   placeholder: string
   label: string
   errors?: ReactNode
+  required?: boolean
+  defaultValue?: any
 }
 
 function InputTypeMoney<T extends FieldValues>({
@@ -23,14 +25,16 @@ function InputTypeMoney<T extends FieldValues>({
   placeholder,
   label,
   errors,
+  required,
+  defaultValue
 }: InputTypeMoneyProps<T>) {
   return (
-    <div>
+    <div className="w-[100%]">
       <label
         htmlFor={name}
         className="block mb-2 text-sm font-medium  text-white"
       >
-        {`${label} *`}
+        {required ? `${label} *` : label}
       </label>
       <Controller
         control={control}
@@ -41,10 +45,13 @@ function InputTypeMoney<T extends FieldValues>({
             allowLeadingZeros
             displayType="input"
             type="text"
-            className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+            className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
             allowNegative={false}
             decimalScale={2}
+            thousandSeparator="."
+            decimalSeparator=","
             {...field}
+            defaultValue={defaultValue}
           />
         )}
       />

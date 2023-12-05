@@ -37,7 +37,7 @@ export async function siging({
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password,
+      password
     )
 
     const { user } = userCredential
@@ -49,7 +49,7 @@ export async function siging({
       secondary_currency: typeAccount === 'hybrid' ? secondary_currency : '',
       typeAccount: typeAccount !== 'hybrid' ? 'oneCurrency' : 'hybrid',
       id: user.uid,
-      ...rest,
+      ...rest
     }
 
     await createDocumentForUser(data)

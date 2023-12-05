@@ -9,7 +9,7 @@ import {
   FieldValues,
   Path,
   RegisterOptions,
-  UseFormRegister,
+  UseFormRegister
 } from 'react-hook-form'
 
 export type OptionsType = {
@@ -28,6 +28,7 @@ interface SelectFieldProps<T extends FieldValues> {
   errors?: ReactNode
   className?: string
   disabledSelect?: boolean
+  required?: boolean
 }
 
 export default function Select<T extends FieldValues>({
@@ -39,14 +40,15 @@ export default function Select<T extends FieldValues>({
   rules,
   className,
   disabledSelect,
+  required
 }: SelectFieldProps<T>) {
   return (
-    <div className="mb-4">
+    <div className="w-[100%]">
       <label
         htmlFor={name}
         className="block mb-2 text-sm font-medium  text-white"
       >
-        {rules?.required ? `${label} *` : label}
+        {required ? `${label} *` : label}
       </label>
       <select
         id={name as string}
@@ -54,7 +56,7 @@ export default function Select<T extends FieldValues>({
         disabled={disabledSelect}
         className={
           className ||
-          'border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500'
+          'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500'
         }
       >
         {options.map(({ value, disabled, label, selected }) => (

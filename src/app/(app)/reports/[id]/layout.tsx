@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Relatórios',
+  title: 'Relatórios'
 }
 
 export default function ReportLayout({ children }: SideBarProps) {

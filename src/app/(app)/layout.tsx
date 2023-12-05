@@ -2,19 +2,21 @@
 
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import {
   Archive,
+  ChartLineUp,
   ClipboardText,
   Eye,
   EyeSlash,
   SignOut,
-  User,
+  User
 } from '@phosphor-icons/react'
 import React, { ReactNode } from 'react'
 import ReactLoading from 'react-loading'
 import { useIsVisibilityDatas, useUserData } from '../../hooks/globalStates'
 import { useLogout } from '../../hooks/auth'
+import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
 
 interface SideBarProps {
   children: ReactNode
@@ -24,11 +26,12 @@ export default function AppLayout({ children }: SideBarProps) {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
   const router = useRouter()
+  const { id: idRoute } = useParams()
   const pathname = usePathname()
 
   const { onLogout } = useLogout()
   const {
-    userData: { id },
+    userData: { id }
   } = useUserData()
 
   const sidebarItems = [
@@ -42,7 +45,7 @@ export default function AppLayout({ children }: SideBarProps) {
       ) : (
         <EyeSlash size={21} color="#eee2e2" />
       ),
-      action: () => handleToggleVisibilityData(),
+      action: () => handleToggleVisibilityData()
     },
     {
       id: 'control',
@@ -50,7 +53,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/control',
       disabled: false,
       icon: <ClipboardText size={21} />,
-      action: () => router.push(`/control/${id}`),
+      action: () => router.push(`/control/${id}`)
     },
     {
       id: 'reports',
@@ -58,7 +61,17 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/reports',
       disabled: false,
       icon: <Archive size={21} />,
-      action: () => router.push(`/reports/${id}`),
+      action: () => router.push(`/reports/${id}`)
+    },
+    {
+      id: 'investments',
+      label: 'Investimentos',
+      route: '/investments',
+      disabled:
+        idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
+        idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
+      icon: <ChartLineUp size={21} />,
+      action: () => router.push(`/investments/${id}`)
     },
     {
       id: 'myProfile',
@@ -66,7 +79,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/myProfile',
       disabled: false,
       icon: <User size={21} />,
-      action: () => router.push(`/myProfile/${id}`),
+      action: () => router.push(`/myProfile/${id}`)
     },
     {
       id: 'logout',
@@ -74,47 +87,22 @@ export default function AppLayout({ children }: SideBarProps) {
       route: '/logout',
       disabled: false,
       icon: <SignOut size={21} />,
-      action: () => onLogout(),
-    },
+      action: () => onLogout()
+    }
   ]
 
   return (
-    <div className="h-[100vh] flex">
-      <aside className="hidden md:block transition-opacity duration-300">
-        <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
-          <div className="flex flex-col gap-6">
-            {sidebarItems.map((item) => (
-              <React.Fragment key={item.id}>
-                <button
-                  data-tooltip-target="tooltip-default"
-                  className={`focus:outline-none font-medium rounded-lg text-md transparent focus:ring-gray-600 border-gray-600 w-[100%] flex items-center justify-center ${
-                    item.disabled
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer'
-                  }`}
-                  onClick={item.action}
-                  disabled={item.disabled}
-                >
-                  <div
-                    className={`flex gap-0.5 flex-col justify-center items-center ${
-                      pathname?.startsWith(item?.route)
-                        ? 'text-cyan-600'
-                        : '#eee2e2'
-                    } hover:opacity-75`}
-                  >
-                    {item.icon}
-                    <p className="text-[11px]">{item.label}</p>
-                  </div>
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </aside>
+    <div className="h-[100vh] flex flex-col lg:flex-row">
+      <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
+
+      <HeaderMobile>
+        <Logo className="text-xl md:text-lg" />
+        <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
+      </HeaderMobile>
+
       <div className="flex-auto w-full p-0 md:p-4">
         {!id ? (
           <div className="flex h-screen w-full items-center justify-center">
-            {/* @ts-expect-error Async Server Component */}
             <ReactLoading
               type="spinningBubbles"
               color="#13C1ED"

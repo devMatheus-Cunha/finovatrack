@@ -8,9 +8,10 @@ import { InfoCardMoney } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
+
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { ITypeModal } from '../../types'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 interface IInfoCardsToControl {
   userData: UserData
@@ -18,6 +19,7 @@ interface IInfoCardsToControl {
   entrysData: IEntrysData[]
   totalExpensesEurToReal: number
   totalExpensesEurSumRealToReal: number
+  infoAction?: () => void
   handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
 }
 
@@ -28,9 +30,10 @@ function InfoCardsToControl({
   entrysData,
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
+  infoAction
 }: IInfoCardsToControl) {
   return (
-    <div className="flex w-[88%] text-center items-center justify-center h-[20vh] spac e-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+    <div className="flex flex-wrap lg:flex-nowrap	justify-center gap-6">
       <InfoCardMoney
         infoData={formatCurrencyMoney(totalEntrys, userData.primary_currency)}
         title="Total Entradas"
@@ -52,22 +55,23 @@ function InfoCardsToControl({
         <InfoCardMoney
           infoData={formatCurrencyMoney(
             totalExpensesEurToReal,
-            userData.primary_currency,
+            userData.primary_currency
           )}
-          title={`Total Gastos em ${userData.secondary_currency}`}
+          infoAction={infoAction}
+          title={`Total Gastos ${userData.secondary_currency}`}
         />
       )}
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalExpensesEurSumRealToReal,
-          userData.primary_currency,
+          userData.primary_currency
         )}
         title="Total Gastos"
       />
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalEntrys - totalExpensesEurSumRealToReal,
-          userData.primary_currency,
+          userData.primary_currency
         )}
         title="Total Livre"
       />

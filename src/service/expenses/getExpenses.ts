@@ -1,37 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */
 /* eslint-disable import/prefer-default-export */
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { Filter } from '@/hooks/expenses/useFetchExpensesData'
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../firebase'
 
 export interface ExpenseData {
   id: string
-  type: 'Essencial' | 'Não essencial' | 'Gasto Livre' | ''
+  category?: string
   description: string
   value_primary_currency?: number
   value_secondary_currency?: number
   typeMoney?: string
   value: string
+  payment: 'Pago' | 'A Pagar' | ''
 }
-
-export async function getExpenses(idUser: string, filter: Filter) {
+export async function getExpenses(idUser: string, filter: any) {
   const docsArray: ExpenseData[] = []
-  let querySnapshot
-
-  if (filter) {
-    querySnapshot = query(
-      collection(db, 'users', idUser, 'expenses'),
-      where('type', '==', filter),
-    )
-  } else {
-    querySnapshot = collection(db, 'users', idUser, 'expenses')
+  let queryRef = collection(db, 'users', idUser, 'expenses') as any
+  if (filter.value !== '') {
+    if (filter.type === 'category') {
+      queryRef = query(queryRef, where('category', '==', filter.value))
+    }
   }
 
-  const get = await getDocs(querySnapshot)
+  queryRef = query(queryRef, orderBy(filter.type || 'category'))
 
-  get.forEach((doc) => {
-    docsArray.push({ id: doc.id, ...doc.data() } as any)
+  const querySnapshot = await getDocs(queryRef)
+
+  querySnapshot.forEach((doc) => {
+    docsArray.push({ id: doc.id, ...(doc.data() as any) } as any)
   })
 
   return docsArray

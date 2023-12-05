@@ -19,7 +19,7 @@ export async function login({ email, password }: LoginProps) {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
-      password,
+      password
     )
     const { user } = userCredential
     return user
@@ -32,7 +32,7 @@ export async function updatedDocumentForUser({ id, ...props }: UserData) {
   try {
     const myCollection = doc(db, 'users', id)
     await updateDoc(myCollection, {
-      ...props,
+      ...props
     })
   } catch (error) {
     throw new Error('Erro no servidor')

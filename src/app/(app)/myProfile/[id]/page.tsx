@@ -21,17 +21,17 @@ type FormValuesCurrencys = {
 }
 
 const schemaName = z.object({
-  name: z.string().optional(),
+  name: z.string().optional()
 })
 
 const schemaEmail = z.object({
-  email: z.string().email('Email inválido'),
+  email: z.string().email('Email inválido')
 })
 
 const schemaTypeAccount = z
   .object({
     primary_currency: z.string().optional(),
-    secondary_currency: z.string().optional(),
+    secondary_currency: z.string().optional()
   })
   .refine(
     (data) => {
@@ -39,8 +39,8 @@ const schemaTypeAccount = z
     },
     {
       message: 'A moeda primária e a secundária não podem ter a mesma seleção',
-      path: ['secondary_currency'],
-    },
+      path: ['secondary_currency']
+    }
   )
 
 function MyProfile() {
@@ -53,35 +53,35 @@ function MyProfile() {
     register: registerName,
     handleSubmit: onSubmitName,
     reset: resetName,
-    formState: { errors: errorsName },
+    formState: { errors: errorsName }
   } = useForm({
     defaultValues: { name: userData.name },
-    resolver: zodResolver(schemaName),
+    resolver: zodResolver(schemaName)
   })
 
   const {
     register: registerEmail,
     handleSubmit: onSubmitEmail,
     reset: resetEmail,
-    formState: { errors: errorsEmail },
+    formState: { errors: errorsEmail }
   } = useForm<{ email: string | undefined }>({
     defaultValues: {
-      email: userData.email,
+      email: userData.email
     },
-    resolver: zodResolver(schemaEmail),
+    resolver: zodResolver(schemaEmail)
   })
 
   const {
     register: registerCurrencys,
     handleSubmit: onSubmitCurrencys,
     reset: resetTypeAccount,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     defaultValues: {
       primary_currency: userData.primary_currency,
-      secondary_currency: userData.secondary_currency,
+      secondary_currency: userData.secondary_currency
     },
-    resolver: zodResolver(schemaTypeAccount),
+    resolver: zodResolver(schemaTypeAccount)
   })
 
   const handleOptionsCurrencyEnabled = () => {
@@ -206,7 +206,7 @@ function MyProfile() {
           )}
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-4">
           {optionsCurrencyEnabled && (
             <Button
               type="button"

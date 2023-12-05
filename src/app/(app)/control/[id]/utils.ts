@@ -5,43 +5,47 @@
 
 'use client'
 
+import { TableColumn } from '@/components/Table'
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
+import {
+  formatCurrencyMoney,
+  formatToJavaScriptNumber
+} from '@/utils/formatNumber'
 import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
   addExpense: {
     title: 'Adicionar Gasto',
-    description: 'Add a new Expense',
+    description: 'Add a new Expense'
   },
   edit: {
     title: 'Editar Gasto',
-    description: 'edit data',
+    description: 'edit data'
   },
   delete: {
     title: 'Deletar Gasto',
-    description: 'delete data',
-  },
+    description: 'delete data'
+  }
 }
 
 export const formattedValuesSubmitExpense = (
-  data: IAddExpenseData,
-  userData: UserData,
+  data: ExpenseData,
+  userData: UserData
 ) => {
   const formattedValues = {
     ...data,
     value_primary_currency:
       userData.typeAccount === 'oneCurrency' ||
       data.typeMoney === userData.primary_currency
-        ? Number(data.value)
+        ? formatToJavaScriptNumber(data.value)
         : 0,
     value_secondary_currency:
       userData.typeAccount !== 'oneCurrency' &&
       data.typeMoney === userData.secondary_currency
-        ? Number(data.value)
-        : 0,
+        ? formatToJavaScriptNumber(data.value)
+        : 0
   }
   return formattedValues
 }
@@ -50,53 +54,69 @@ export const columsHeadProps = (
   primaryCurrency: string,
   secondaryCurrency: string,
   typeAccount: string,
-) => {
+  isVisibilityData: boolean
+): TableColumn[] => {
   const columns = [
     {
       header: 'Descrição',
-      field: 'description',
+      field: 'description'
     },
     {
       header: optionsCurrencyKeyAndValue[primaryCurrency],
-      field: 'primary_currency',
+      field: 'value_primary_currency',
+      modifier: (value: number) =>
+        !isVisibilityData || !value
+          ? '-'
+          : formatCurrencyMoney(value, primaryCurrency)
     },
     {
       header: 'Tipo',
-      field: 'type',
+      field: 'type'
+    },
+    {
+      header: 'Categoria',
+      field: 'category'
+    },
+    {
+      header: 'Status Pagamento',
+      field: 'payment',
+      styles: (value: any) => ({
+        color: value === 'A Pagar' ? 'red' : 'blue'
+      })
     },
     {
       header: 'Ação',
-      field: 'actions',
-    },
+      field: 'actions'
+    }
   ]
 
   if (typeAccount === 'hybrid') {
     columns.splice(2, 0, {
       header: optionsCurrencyKeyAndValue[secondaryCurrency],
-      field: 'secondary_currency',
+      field: 'value_secondary_currency',
+      modifier: (value: number) =>
+        !isVisibilityData || !value
+          ? '-'
+          : formatCurrencyMoney(value, secondaryCurrency)
     })
     columns.splice(3, 0, {
       header: 'Moeda',
-      field: 'typeMoney',
+      field: 'typeMoney'
     })
   }
 
   return columns
 }
 
-export const validateColumsHeadProps: any = {
-  hybrid: columsHeadProps,
-  oneCurrency: columsHeadProps,
-}
-
 export const initialDataSelectedData: ExpenseData = {
   id: '',
-  type: '',
+  category: '',
   description: '',
   value: '',
   value_primary_currency: 0,
   value_secondary_currency: 0,
   typeMoney: '',
+  payment: ''
 }
 
 export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
@@ -115,26 +135,27 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
       },
       {
         id: '',
-        type: '',
+        category: '',
         description: 'Totais',
         value: '',
         value_primary_currency: 0,
         value_secondary_currency: 0,
         typeMoney: '',
-      },
+        payment: ''
+      }
     )
     return [...expensesData, calculation]
   }, [expensesData])
 
   return {
-    calculationSumValues,
+    calculationSumValues
   }
 }
 
 export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
   const getTotals: ExpenseData = useMemo(() => {
     const result = calculationSumValues.find(
-      (item) => item.description === 'Totais',
+      (item) => item.description === 'Totais'
     )
 
     if (result) return result
@@ -143,15 +164,30 @@ export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
   }, [calculationSumValues])
 
   return {
-    getTotals,
+    getTotals
   }
 }
 
-export const optionsFilter = [
-  { label: 'Limpar', value: '' },
-  { label: 'Essencial', value: 'Essencial' },
-  { label: 'Não essencial', value: 'Não essencial' },
-  { label: 'Gasto Livre', value: 'Gasto Livre' },
+export const optionsFilterType = [
+  { text: 'Limpar', value: '', type: 'type' },
+  { text: 'Essencial', value: 'Essencial', type: 'type' },
+  { text: 'Gasto Livre', value: 'Gasto Livre', type: 'type' },
+  { text: 'Não essencial', value: 'Não essencial', type: 'type' }
+]
+export const optionsFilterCategory = [
+  { text: 'Limpar', value: '', type: 'category' },
+  { text: 'Alimentação', value: 'Alimentação', type: 'category' },
+  { text: 'Contas', value: 'Contas', type: 'category' },
+  { text: 'Economias', value: 'Economias', type: 'category' },
+  { text: 'Educação', value: 'Educação', type: 'category' },
+  { text: 'Entretenimento', value: 'Entretenimento', type: 'category' },
+  { text: 'Lazer', value: 'Lazer', type: 'category' },
+  { text: 'Moradia', value: 'Moradia', type: 'category' },
+  { text: 'Roupas', value: 'Roupas', type: 'category' },
+  { text: 'Saúde', value: 'Saúde', type: 'category' },
+  { text: 'Seguro', value: 'Seguro', type: 'category' },
+  { text: 'Transporte', value: 'Transporte', type: 'category' },
+  { text: 'Viagens', value: 'Viagens', type: 'category' }
 ]
 
 function FixErroBuild() {

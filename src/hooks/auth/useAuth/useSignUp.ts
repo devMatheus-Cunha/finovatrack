@@ -14,14 +14,14 @@ const useSignUp = () => {
     },
     onError: ({ message }: { message: string }) => {
       toast.error(message, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: toast.POSITION.TOP_RIGHT
       })
-    },
+    }
   })
 
   return {
     createAccountUser,
-    isLoading,
+    isLoading
   }
 }
 

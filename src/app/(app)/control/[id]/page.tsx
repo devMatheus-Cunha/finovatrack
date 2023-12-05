@@ -1,39 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable no-unsafe-optional-chaining */
 
 'use client'
 
-import { ChangeEvent, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { SubmitHandler } from 'react-hook-form'
 
 import {
   useAddEntrys,
   useDeletedEntry,
-  useFetchEntrysData,
+  useFetchEntrysData
 } from '@/hooks/entrys'
 import {
   useAddExpense,
   useFetchExpensesData,
   useDeletedExpense,
   useUpadtedExpense,
-  useClearExpenses,
+  useClearExpenses
 } from '@/hooks/expenses'
-import { ExpenseData, Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { useFetchQuatationEur } from '@/hooks/quatation'
 
 import { useSaveReport } from '@/hooks/reports'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
-import { convertEurToReal, formatCurrencyMoney } from '@/utils/formatNumber'
-import { Modal } from '@/components'
+import {
+  convertEurToReal,
+  formatCurrencyMoney,
+  formatToCustomFormat,
+  formatToJavaScriptNumber
+} from '@/utils/formatNumber'
+import { Button, Modal } from '@/components'
 import {
   formattedValuesSubmitExpense,
   initialDataSelectedData,
   useCalculationSumValues,
-  useGetTotalsFree,
+  useGetTotalsFree
 } from './utils'
 
 import { ITypeModal } from './types'
@@ -46,7 +51,7 @@ import ContentAddEntryModal from './modals/addEntryModal'
 import DeleteModalContent from './modals/deleteModal'
 import ContentTotalEntrys from './modals/totalEntrysModal'
 import ConfirmSaveReportModal from './modals/confirmSaveReportModal'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -70,17 +75,18 @@ export default function Control() {
   const { getTotals } = useGetTotalsFree(calculationSumValues)
   const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
     userData,
-    getTotals?.value_secondary_currency,
+    getTotals?.value_secondary_currency
   )
 
   const calculationTotalExpensesEurSumRealToReal =
     convertEurToReal(
       lastQuatationData?.current_quotation,
-      Number(getTotals?.value_secondary_currency),
+      Number(getTotals?.value_secondary_currency)
     ) + (getTotals?.value_primary_currency || 0)
+
   const calculationTotalExpensesEurToReal = convertEurToReal(
     lastQuatationData?.current_quotation,
-    Number(getTotals?.value_secondary_currency),
+    Number(getTotals?.value_secondary_currency)
   )
 
   const [configModal, setConfigModal] = useState<{
@@ -90,23 +96,25 @@ export default function Control() {
   }>({
     open: false,
     type: '',
-    selectedData: initialDataSelectedData,
+    selectedData: initialDataSelectedData
   })
   const [openModalReport, setOpenModalReport] = useState<{
     open: boolean
     data: ExpenseData[]
   }>({
     open: false,
-    data: [],
+    data: []
   })
+
+  const [openModalInfoCard, setOpenModalInfoCard] = useState(false)
 
   function SumValues(array: IEntrysData[]) {
     const total = useMemo(
       () =>
         array.reduce((accumulator, item) => {
-          return accumulator + item.value
+          return accumulator + Number(item.value)
         }, 0),
-      [array],
+      [array]
     )
 
     return total
@@ -114,7 +122,7 @@ export default function Control() {
 
   const validateExpenseData = {
     hybrid: calculationTotalExpensesEurSumRealToReal,
-    oneCurrency: getTotals?.value_primary_currency,
+    oneCurrency: getTotals?.value_primary_currency
   }
 
   const totalEntrys = SumValues(entrysData)
@@ -123,23 +131,24 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: type || '',
-      selectedData: data || initialDataSelectedData,
-    })
-  }
-  const handleOpenModalSaveReport = (data: ExpenseData[] = []) => {
-    setOpenModalReport({
-      open: !openModalReport.open,
-      data,
+      selectedData: data || initialDataSelectedData
     })
   }
 
-  const onAddExpense = async (data: IAddExpenseData) => {
+  const handleOpenModalSaveReport = (data: ExpenseData[] = []) => {
+    setOpenModalReport({
+      open: !openModalReport.open,
+      data
+    })
+  }
+
+  const onAddExpense = async (data: ExpenseData) => {
     if (configModal.type === 'edit') {
       await upadtedExpense(formattedValuesSubmitExpense(data, userData))
       setConfigModal({
         open: !configModal.open,
         type: '',
-        selectedData: initialDataSelectedData,
+        selectedData: initialDataSelectedData
       })
       return
     }
@@ -148,16 +157,16 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
   const onAddEntrys: SubmitHandler<{ value: string }> = async ({ value }) => {
-    addEntry({ value: Number(value) })
+    addEntry({ value: formatToJavaScriptNumber(value) })
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
@@ -167,19 +176,23 @@ export default function Control() {
     setConfigModal({
       open: !configModal.open,
       type: '',
-      selectedData: initialDataSelectedData,
+      selectedData: initialDataSelectedData
     })
   }
 
-  const onFilter = (event: ChangeEvent<HTMLSelectElement>) => {
-    event.preventDefault()
-    setFilter(event.target.value as Filter)
+  const onFilter = (value: any) => {
+    setFilter(value)
+  }
+
+  const handleInfoAction = () => {
+    setOpenModalInfoCard(!openModalInfoCard)
   }
 
   return (
-    <main>
-      <div className="flex flex-col items-center h-[100vh] w-[100%]">
+    <main className="flex flex-col gap-10 items-center w-[100%] px-2 py-4">
+      <div className="w-[100%]">
         <InfoCardsToControl
+          infoAction={handleInfoAction}
           totalEntrys={totalEntrys}
           entrysData={entrysData}
           totalExpensesEurSumRealToReal={
@@ -189,112 +202,199 @@ export default function Control() {
           handleOpenModal={handleOpenModal}
           userData={userData}
         />
+      </div>
 
-        <div className="flex w-[100%] flex-1 justify-center items-center">
-          <div className="flex flex-col gap-4 w-[100%] p-6 justify-center">
-            <HeaderDataTableToControl
-              userData={userData}
-              currentQuotation={lastQuatationData?.current_quotation}
-              handleOpenModal={handleOpenModal}
-              filter={filter}
-              onFilter={onFilter}
-              handleOpenModalSaveReport={handleOpenModalSaveReport}
-              refetchQuationData={refetchQuationData}
-            />
-            <TableToControl
-              calculationSumValues={
-                typeAccount === 'hybrid' ? calculationSumValues : expensesData
-              }
-              userData={userData}
-              handleOpenModal={handleOpenModal}
-              isVisibilityData={isVisibilityData}
-              filter={filter}
-            />
-            {configModal.open &&
-              (configModal.type === 'edit' ||
-                configModal.type === 'addExpense') && (
-                <Modal>
-                  <ContentActionsTableModal
-                    type={configModal?.type}
-                    initialData={configModal?.selectedData}
-                    handleOpenModal={handleOpenModal}
-                    onSubmit={onAddExpense}
-                    isLoadingAddExpense={isLoadingAddExpense}
-                    userData={userData}
-                  />
-                </Modal>
-              )}
-            {configModal.open &&
-              (configModal.type === 'delete' ||
-                configModal.type === 'deleteAllExpenses') && (
-                <Modal width="27%">
-                  <DeleteModalContent
-                    onCancel={handleOpenModal}
-                    onSubmit={
-                      configModal.type === 'deleteAllExpenses'
-                        ? clearExpensesData
-                        : onDelete
-                    }
-                  />
-                </Modal>
-              )}
-            {openModalReport.open && (
-              <Modal width="41%">
-                <ConfirmSaveReportModal
-                  initialData={calculationSumValues}
-                  onCancel={handleOpenModalSaveReport}
-                  onSubmit={({ data, period }: any) => {
-                    saveReport({
-                      data,
-                      period,
-                      totalInvested: formatCurrencyMoney(
-                        totalEntrys - (validateExpenseData[typeAccount] || 0),
-                        userData.primary_currency,
-                      ),
-                      totalEntrys: formatCurrencyMoney(
-                        totalEntrys,
-                        userData.primary_currency,
-                      ),
-                      totalExpenses: formatCurrencyMoney(
-                        validateExpenseData[typeAccount],
-                        userData.primary_currency,
-                      ),
-                      totalExpenseEurToReal: formatCurrencyMoney(
-                        calculationTotalExpensesEurToReal,
-                        userData.primary_currency,
-                      ),
-                      quatation: formatCurrencyMoney(
-                        lastQuatationData?.current_quotation,
-                        userData.primary_currency,
-                      ),
-                    })
-                    handleOpenModalSaveReport()
-                  }}
-                />
-              </Modal>
-            )}
-            {configModal.open && configModal.type === 'addEntry' && (
-              <Modal width="37%">
-                <ContentAddEntryModal
-                  handleOpenModal={handleOpenModal}
-                  onSubmit={onAddEntrys}
-                  userData={userData}
-                />
-              </Modal>
-            )}
-            {configModal.open && configModal.type === 'totalsEntrys' && (
-              <Modal>
-                <ContentTotalEntrys
-                  handleOpenModal={handleOpenModal}
-                  data={entrysData}
-                  onDelete={deletedEntry}
-                  userData={userData}
-                />
-              </Modal>
-            )}
-          </div>
+      <div className="w-[100%] flex flex-col gap-4">
+        <HeaderDataTableToControl
+          userData={userData}
+          currentQuotation={lastQuatationData?.current_quotation}
+          handleOpenModal={handleOpenModal}
+          filter={filter}
+          onFilter={onFilter}
+          handleOpenModalSaveReport={handleOpenModalSaveReport}
+          refetchQuationData={refetchQuationData}
+        />
+
+        <div className="hidden lg:block">
+          <TableToControl
+            calculationSumValues={
+              typeAccount === 'hybrid' ? calculationSumValues : expensesData
+            }
+            userData={userData}
+            handleOpenModal={handleOpenModal}
+            isVisibilityData={isVisibilityData}
+            filter={filter}
+          />
+        </div>
+
+        <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
+          {expensesData.map((item) => (
+            <>
+              <div
+                onClick={() => handleOpenModal('edit', item)}
+                className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
+              >
+                <div className="flex flex-col gap-4 ">
+                  <p className="text-ms">{item.description}</p>
+                  <p className="-mt-1 font-sans text-m font-semibold">
+                    {isVisibilityData
+                      ? formatCurrencyMoney(
+                          formatToJavaScriptNumber(item?.value),
+                          userData.typeAccount === 'oneCurrency'
+                            ? userData.primary_currency
+                            : item.typeMoney
+                        )
+                      : '-'}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 text-left w-[33%]">
+                  <p
+                    className={`font-medium text-ms ${
+                      item.payment === 'A Pagar'
+                        ? ' text-red-500'
+                        : 'text-green-500'
+                    }`}
+                  >
+                    {item.payment}
+                  </p>
+                  <p className="text-ms">{item.category}</p>
+                </div>
+              </div>
+            </>
+          ))}
         </div>
       </div>
+
+      <>
+        {configModal.open &&
+          (configModal.type === 'edit' ||
+            configModal.type === 'addExpense') && (
+            <Modal className="w-[95%] lg:w-[50%]">
+              <ContentActionsTableModal
+                type={configModal?.type}
+                initialData={configModal?.selectedData}
+                handleOpenModal={handleOpenModal}
+                onSubmit={onAddExpense}
+                isLoadingAddExpense={isLoadingAddExpense}
+                userData={userData}
+                onDelete={onDelete}
+              />
+            </Modal>
+          )}
+        {configModal.open &&
+          (configModal.type === 'delete' ||
+            configModal.type === 'deleteAllExpenses') && (
+            <Modal className="w-[95%] lg:w-[27%]">
+              <DeleteModalContent
+                onCancel={handleOpenModal}
+                onSubmit={
+                  configModal.type === 'deleteAllExpenses'
+                    ? clearExpensesData
+                    : onDelete
+                }
+              />
+            </Modal>
+          )}
+        {openModalReport.open && (
+          <Modal className="w-[95%] lg:w-[41%]">
+            <ConfirmSaveReportModal
+              initialData={calculationSumValues}
+              onCancel={handleOpenModalSaveReport}
+              onSubmit={({ data, period }: any) => {
+                saveReport({
+                  data,
+                  period,
+                  totalInvested: formatCurrencyMoney(
+                    totalEntrys - (validateExpenseData[typeAccount] || 0),
+                    userData.primary_currency
+                  ),
+                  totalEntrys: formatCurrencyMoney(
+                    totalEntrys,
+                    userData.primary_currency
+                  ),
+                  totalExpenses: formatCurrencyMoney(
+                    validateExpenseData[typeAccount],
+                    userData.primary_currency
+                  ),
+                  totalExpenseEurToReal: formatCurrencyMoney(
+                    calculationTotalExpensesEurToReal,
+                    userData.primary_currency
+                  ),
+                  quatation: formatCurrencyMoney(
+                    lastQuatationData?.current_quotation,
+                    userData.primary_currency
+                  )
+                })
+                handleOpenModalSaveReport()
+              }}
+            />
+          </Modal>
+        )}
+        {configModal.open && configModal.type === 'addEntry' && (
+          <Modal className="w-[95%] lg:w-[37%]">
+            <ContentAddEntryModal
+              handleOpenModal={handleOpenModal}
+              onSubmit={onAddEntrys}
+              userData={userData}
+            />
+          </Modal>
+        )}
+        {configModal.open && configModal.type === 'totalsEntrys' && (
+          <Modal className="w-[95%] lg:w-[50%]">
+            <ContentTotalEntrys
+              handleOpenModal={handleOpenModal}
+              data={entrysData}
+              onDelete={deletedEntry}
+              userData={userData}
+            />
+          </Modal>
+        )}
+        {openModalInfoCard && (
+          <Modal className="w-[95%] lg:w-[30%]">
+            <div className="bg-gray-800 rounded-lg shadow">
+              <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
+                <h3 className="text-xl font-semibold text-white">
+                  Saiba como calculamos o valor total de gastos!
+                </h3>
+              </div>
+              <div className="flex flex-col gap-2 px-3 py-4">
+                <p className="text-gray-300">
+                  Utilizamos a cotação atual da moeda secundária da conta,
+                  combinada com a taxa aproximada da plataforma Wise. Com a
+                  Wise, você terá cálculos precisos e próximos à realidade, além
+                  de contar com as menores taxas do mercado para suas conversões
+                  em multi-moedas.
+                </p>
+                <p className="text-gray-300">
+                  Descubra a Wise agora mesmo e aproveite uma vantagem
+                  exclusiva! Através da nossa plataforma, sua primeira
+                  transferência terá taxa 0.
+                </p>
+              </div>
+
+              <div className="flex justify-center px-4 py-6 gap-3 border-t rounded-b border-gray-600">
+                <Button
+                  onClick={handleInfoAction}
+                  type="button"
+                  variant="cancel"
+                >
+                  Fechar
+                </Button>
+                <Button
+                  onClick={() => {
+                    const linkWise = 'https://wise.com/invite/dic/matheusc1004'
+                    window.open(linkWise, '_blank')
+                  }}
+                  type="button"
+                  variant="confirm"
+                >
+                  Conhecer a Wise
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </>
     </main>
   )
 }

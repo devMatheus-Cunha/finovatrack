@@ -16,12 +16,12 @@ export const metadata: Metadata = {
     'controle financeiro',
     'gastos',
     'entradas',
-    'saldo',
+    'saldo'
   ],
   authors: {
     name: 'Matheus Cunha',
-    url: 'https://www.linkedin.com/in/devmatheusgr/',
-  },
+    url: 'https://www.linkedin.com/in/devmatheusgr/'
+  }
 }
 
 function LandingPage() {
@@ -29,12 +29,12 @@ function LandingPage() {
     <div className=" text-white h-screen flex flex-col">
       <Header />
 
-      <main className="flex mt-10 gap-12 flex-col p-8 flex-grow">
+      <main className="flex mt-2 md:mt-10 gap-12 flex-col p-[3%] md:p-8 flex-grow">
         <section className="flex items-center flex-col justify-center text-center gap-2">
-          <h2 className="text-5xl font-bold text-white">
+          <h2 className="text-3xl md:text-5xl font-bold text-white">
             Domine suas finanças em qualquer moeda
           </h2>
-          <p className="text-lg text-gray-200 max-w-[66%]">
+          <p className="text-md md:text-lg text-gray-200 md:max-w-[66%]">
             Domine suas finanças em várias moedas. Registre, edite e acompanhe
             suas informações financeiras de forma simples e eficiente, mantendo
             o controle total sobre seus gastos e entradas em diferentes moedas.
@@ -54,8 +54,8 @@ function LandingPage() {
             </Link>
           </div>
         </section>
-        <section className="flex justify-between p-8 rounded-lg">
-          <div className="w-[60%]">
+        <section className="flex justify-center flex-col md:justify-between md:flex-row md:p-8 rounded-lg">
+          <div className="w-full md:w-[60%] mb-6 md:mb-0">
             <h2 className="text-2xl font-semibold text-white mb-4">
               Recursos em destaque:
             </h2>
@@ -139,15 +139,15 @@ function LandingPage() {
             alt="Exemplo do sistema em um laptop"
             style={{
               width: 500,
-              height: 'auto',
+              height: 'auto'
             }}
           />
         </section>
-        <section className="flex flex-col gap-4 p-8 rounded-lg">
-          <h2 className="text-4xl font-semibold text-white mb-4 text-center italic">
+        <section className="flex flex-col md:gap-4 md:p-8 rounded-lg mb-5 md:mb-0">
+          <h2 className="text-2xl md:text-4xl font-semibold text-white mb-4 text-center italic">
             Melhorias Futuras
           </h2>
-          <div className="flex gap-10">
+          <div className="flex ">
             <div className="bg-gray-800 p-4 rounded-lg flex-grow">
               <h2 className="text-2xl font-semibold text-cyan-500 mb-2">
                 Estatísticas de Gastos
@@ -157,17 +157,6 @@ function LandingPage() {
                 oferecer ainda mais recursos. Em breve, você poderá desfrutar de
                 estatísticas detalhadas dos gastos e receber dicas
                 personalizadas para economizar.
-              </p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg flex-grow">
-              <h2 className="text-2xl font-semibold mb-2 text-cyan-500">
-                Versão Mobile:
-              </h2>
-              <p className="text-gray-200">
-                Em breve, estaremos lançando uma versão mobile do nosso sistema
-                para que você possa acessá-lo facilmente do seu smartphone e
-                desfrutar de todas as funcionalidades enquanto estiver em
-                movimento.
               </p>
             </div>
           </div>

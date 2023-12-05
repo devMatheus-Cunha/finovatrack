@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
 import {
   IAddEntryServiceProps,
-  addEntryService,
+  addEntryService
 } from '@/service/entrys/addEntry'
 import { useFetchEntrysData } from '../useFetchEntrysData'
 
@@ -14,7 +14,7 @@ export default function useAddEntrys() {
   const {
     mutateAsync: addEntry,
     isLoading: isLoadingAddEntrys,
-    status: statusAddEntrys,
+    status: statusAddEntrys
   } = useMutation(
     (values: IAddEntryServiceProps) => addEntryService(values, router.id),
     {
@@ -24,8 +24,8 @@ export default function useAddEntrys() {
       },
       onError: () => {
         toast.error('Erro ao adicionar entrada')
-      },
-    },
+      }
+    }
   )
 
   return { addEntry, isLoadingAddEntrys, statusAddEntrys }

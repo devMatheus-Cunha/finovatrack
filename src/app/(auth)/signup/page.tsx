@@ -17,7 +17,7 @@ import { Button, Input, InputPassword } from '../../../components'
 import {
   dropdownOptionsCurrency,
   dropdownOptionsCurrencyHybrid,
-  schema,
+  schema
 } from './utils'
 
 export default function Signup() {
@@ -27,15 +27,15 @@ export default function Signup() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useForm<SigingProps>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema)
   })
 
   return (
     <form
       onSubmit={handleSubmit((values: SigingProps) =>
-        createAccountUser(values),
+        createAccountUser(values)
       )}
     >
       <div
@@ -124,7 +124,7 @@ export default function Signup() {
         <div className="w-full">
           <label
             htmlFor="typeAccount"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-white"
           >
             Selecione moeda da conta *
           </label>
@@ -143,7 +143,7 @@ export default function Signup() {
                 >
                   {label}
                 </option>
-              ),
+              )
             )}
           </select>
           {errors.typeAccount && (
@@ -158,7 +158,7 @@ export default function Signup() {
               <div className="w-full">
                 <label
                   htmlFor="primary_currency"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Selecione moeda primária *
                 </label>
@@ -177,7 +177,7 @@ export default function Signup() {
                       >
                         {label}
                       </option>
-                    ),
+                    )
                   )}
                 </select>
                 {errors.primary_currency && (
@@ -189,7 +189,7 @@ export default function Signup() {
               <div className="w-full">
                 <label
                   htmlFor="secondary_currency"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Selecione moeda secundária *
                 </label>
@@ -208,7 +208,7 @@ export default function Signup() {
                       >
                         {label}
                       </option>
-                    ),
+                    )
                   )}
                 </select>
                 {errors.secondary_currency && (

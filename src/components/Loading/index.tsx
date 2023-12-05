@@ -18,7 +18,6 @@ function Loading({ children, loading }: LoadingProps) {
     <>
       {loading ? (
         <div className="flex h-screen w-full items-center justify-center">
-          {/* @ts-expect-error Async Server Component */}
           <ReactLoading
             type="spinningBubbles"
             color="#13C1ED"

@@ -5,15 +5,14 @@ import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
 import { updatedExpenseService } from '@/service/expenses/updatedExpense'
 import { useFetchExpensesData } from '../useFetchExpensesData'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 const useUpadtedExpense = () => {
   const router = useParams()
   const { refetchExpensesData } = useFetchExpensesData()
 
   const { mutateAsync: upadtedExpense } = useMutation(
-    async (data: IAddExpenseData) =>
-      await updatedExpenseService(data, router.id),
+    async (data: ExpenseData) => await updatedExpenseService(data, router.id),
     {
       onSuccess: () => {
         refetchExpensesData()
@@ -21,12 +20,12 @@ const useUpadtedExpense = () => {
       },
       onError: () => {
         toast.error('Erro ao editar gasto')
-      },
-    },
+      }
+    }
   )
 
   return {
-    upadtedExpense,
+    upadtedExpense
   }
 }
 

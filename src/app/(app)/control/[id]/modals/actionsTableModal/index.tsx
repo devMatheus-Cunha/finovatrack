@@ -10,31 +10,32 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { Button, Input, InputTypeMoney, Select } from '@/components'
-import { ExpenseFormData } from '@/hooks/expenses/useAddExpense'
 import { ITypeModal } from '../../types'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IAddExpenseData } from '@/service/expenses/addExpense'
+import { ExpenseData } from '@/service/expenses/getExpenses'
+import { Trash } from '@phosphor-icons/react'
+import { formatToCustomFormat } from '@/utils/formatNumber'
 
 interface IContentModal {
-  onSubmit: (data: IAddExpenseData) => Promise<void>
+  onSubmit: (data: ExpenseData) => Promise<void>
   handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   type: ITypeModal
   userData: UserData
+  onDelete: () => void
 }
 
 function ContentActionsTableModal({
   onSubmit,
   handleOpenModal,
-  isLoadingAddExpense,
   initialData,
   type,
   userData,
+  onDelete
 }: IContentModal) {
   const schema = z.object({
     description: z.string().nonempty(),
@@ -43,80 +44,98 @@ function ContentActionsTableModal({
         ? z.string().nonempty()
         : z.string().optional(),
     value: z.string().nonempty(),
-    type: z.string().nonempty(),
+    category: z.string().nonempty(),
+    payment: z.string().nonempty()
   })
   const {
     register,
     handleSubmit,
     watch,
     control,
-    formState: { errors },
-  } = useForm<ExpenseFormData>({
+    formState: { errors }
+  } = useForm<ExpenseData>({
     defaultValues:
       type !== 'addExpense'
         ? {
             ...initialData,
             value:
               userData.typeAccount === 'oneCurrency'
-                ? String(initialData?.value_primary_currency)
+                ? formatToCustomFormat(initialData?.value_primary_currency)
                 : initialData?.typeMoney === userData.primary_currency
-                ? String(initialData?.value_primary_currency)
-                : String(initialData?.value_secondary_currency),
+                  ? formatToCustomFormat(initialData?.value_primary_currency)
+                  : formatToCustomFormat(initialData?.value_secondary_currency)
           }
         : undefined,
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema)
   })
+
+  const handleActionsModal = (type: 'cancel' | 'delete') => {
+    if (type === 'cancel') handleOpenModal()
+    handleOpenModal()
+    handleOpenModal('delete', initialData)
+  }
 
   return (
     <form
       onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, id: initialData?.id ?? '' }),
+        onSubmit({ ...data, id: initialData?.id ?? '' })
       )}
     >
-      <div className="rounded-lg shadow">
-        <div className="rounded-lg shadow bg-gray-800">
-          <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
-            <h3 className="text-xl font-semibold text-white">
-              {validateTextToModal[type || '']?.title}
-            </h3>
-          </div>
-          <div className="grid gap-6 mb-6 md:grid-cols-2 p-4">
-            <Input
-              label="Descrição"
-              name="description"
-              placeholder="Ex: Compra carro"
-              type="text"
-              register={register}
-              required
-              errors={
-                <>
-                  {errors.description && (
-                    <span className="text-red-500 text-sm">
-                      Este campo é obrigatório
-                    </span>
-                  )}
-                </>
-              }
-            />
+      <div className="rounded-lg shadow bg-gray-800">
+        <div className="p-4 border-b border-gray-600">
+          <h3 className="text-xl font-semibold text-white">
+            {validateTextToModal[type || '']?.title}
+          </h3>
+        </div>
 
+        <div className="flex flex-col flex-wrap gap-6 p-4">
+          <Input
+            label="Descrição"
+            name="description"
+            placeholder="Ex: Compra carro"
+            type="text"
+            register={register}
+            required
+            errors={
+              <>
+                {errors.description && (
+                  <span className="text-red-500 text-sm">
+                    Este campo é obrigatório
+                  </span>
+                )}
+              </>
+            }
+          />
+
+          <div className="flex gap-4 flex-wrap">
             <Select
-              label="Selecione o tipo"
-              name="type"
+              label="Selecione a categoria"
+              name="category"
+              required
               options={[
                 {
-                  label: `Ex: Essencial`,
+                  label: 'Ex: Alimentação',
                   value: '',
                   disabled: true,
-                  selected: true,
+                  selected: true
                 },
-                { label: 'Essencial', value: 'Essencial' },
-                { label: 'Não essencial', value: 'Não essencial' },
-                { label: 'Gasto Livre', value: 'Gasto Livre' },
+                { label: 'Alimentação', value: 'Alimentação' },
+                { label: 'Contas', value: 'Contas' },
+                { label: 'Economias', value: 'Economias' },
+                { label: 'Educação', value: 'Educação' },
+                { label: 'Entretenimento', value: 'Entretenimento' },
+                { label: 'Lazer', value: 'Lazer' },
+                { label: 'Moradia', value: 'Moradia' },
+                { label: 'Roupas', value: 'Roupas' },
+                { label: 'Saúde', value: 'Saúde' },
+                { label: 'Seguro', value: 'Seguro' },
+                { label: 'Transporte', value: 'Transporte' },
+                { label: 'Viagens', value: 'Viagens' }
               ]}
               register={register}
               errors={
                 <>
-                  {errors.type && (
+                  {errors.category && (
                     <span className="text-red-500 text-sm">
                       Este campo é obrigatório
                     </span>
@@ -124,25 +143,54 @@ function ContentActionsTableModal({
                 </>
               }
             />
+            <Select
+              label="Status de Pagamento"
+              name="payment"
+              required
+              options={[
+                {
+                  label: `Ex: A Pagar`,
+                  value: '',
+                  disabled: true,
+                  selected: true
+                },
+                { label: 'A Pagar', value: 'A Pagar' },
+                { label: 'Pago', value: 'Pago' }
+              ]}
+              register={register}
+              errors={
+                <>
+                  {errors.payment && (
+                    <span className="text-red-500 text-sm">
+                      Este campo é obrigatório
+                    </span>
+                  )}
+                </>
+              }
+            />
+          </div>
+
+          <div className="flex gap-4 flex-wrap">
             {userData.typeAccount === 'hybrid' && (
               <Select
                 label="Selecione Moeda"
                 name="typeMoney"
+                required
                 options={[
                   {
                     label: `Ex: ${userData.primary_currency}`,
                     value: '',
                     disabled: true,
-                    selected: true,
+                    selected: true
                   },
                   {
                     label: userData.primary_currency,
-                    value: userData.primary_currency,
+                    value: userData.primary_currency
                   },
                   {
                     label: userData.secondary_currency,
-                    value: userData.secondary_currency,
-                  },
+                    value: userData.secondary_currency
+                  }
                 ]}
                 register={register}
                 errors={
@@ -159,6 +207,7 @@ function ContentActionsTableModal({
             <InputTypeMoney
               control={control}
               name="value"
+              required
               label={`Valor (${
                 optionsLabelCurrencyKeyAndValue[
                   watch()?.typeMoney || userData.primary_currency
@@ -181,17 +230,27 @@ function ContentActionsTableModal({
               }
             />
           </div>
+        </div>
 
-          <div className="flex items-center p-6 space-x-2 border-t rounded-b border-gray-600">
-            <Button variant="confirm" type="submit">
-              {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-            </Button>
+        <div className="flex justify-between md:justify-end items-center px-4 py-6  border-t border-gray-600">
+          <Button
+            onClick={() => onDelete()}
+            type="button"
+            className="md:hidden flex justify-center items-center gap-1 text-red-500 p-0"
+          >
+            Deletar
+            <Trash color="#ef4444" />
+          </Button>
+          <div className="flex gap-3">
             <Button
-              onClick={() => handleOpenModal()}
+              onClick={() => handleActionsModal('cancel')}
               type="button"
               variant="cancel"
             >
               Cancelar
+            </Button>
+            <Button variant="confirm" type="submit">
+              {type === 'addExpense' ? 'Adicionar' : 'Editar'}
             </Button>
           </div>
         </div>

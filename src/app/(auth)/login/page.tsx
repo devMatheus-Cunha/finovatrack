@@ -15,7 +15,7 @@ import Link from 'next/link'
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(6)
 })
 
 export default function Login() {
@@ -25,7 +25,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<LoginProps>({
     resolver: async (data) => {
       try {
@@ -37,7 +37,7 @@ export default function Login() {
         }
         return { values: {}, errors: { [error.path[0]]: error.message } }
       }
-    },
+    }
   })
 
   return (

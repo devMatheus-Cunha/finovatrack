@@ -12,7 +12,7 @@ export default function useSaveReport() {
   const {
     mutateAsync: saveReport,
     isLoading: isLoadingSaveReport,
-    status: statusSaveReport,
+    status: statusSaveReport
   } = useMutation(
     async (data: IReportData) => {
       await saveReportService(data, router.id)
@@ -23,13 +23,13 @@ export default function useSaveReport() {
       },
       onError: () => {
         toast.error('Erro ao salvar relatório')
-      },
-    },
+      }
+    }
   )
 
   return {
     saveReport,
     isLoadingSaveReport,
-    statusSaveReport,
+    statusSaveReport
   }
 }

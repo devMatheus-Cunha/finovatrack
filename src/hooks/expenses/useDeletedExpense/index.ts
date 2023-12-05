@@ -2,7 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
 import { deleteExpense } from '@/service/expenses/deleteExpense'
-import useFetchExpensesData, { ExpenseData } from '../useFetchExpensesData'
+import useFetchExpensesData from '../useFetchExpensesData'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 const useDeletedExpense = () => {
   const router = useParams()
@@ -17,12 +18,12 @@ const useDeletedExpense = () => {
       },
       onError: () => {
         toast.error('Erro ao deletar gasto')
-      },
-    },
+      }
+    }
   )
 
   return {
-    deletedExpense,
+    deletedExpense
   }
 }
 

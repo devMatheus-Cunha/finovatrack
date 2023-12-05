@@ -19,11 +19,11 @@ const useClearExpenses = () => {
       },
       onError: () => {
         toast.error('Erro ao limpar gastos')
-      },
-    },
+      }
+    }
   )
   return {
-    clearExpensesData,
+    clearExpensesData
   }
 }
 

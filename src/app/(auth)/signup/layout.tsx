@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Criar Conta',
+  title: 'Criar Conta'
 }
 
 export default function SigingLayout({ children }: SideBarProps) {

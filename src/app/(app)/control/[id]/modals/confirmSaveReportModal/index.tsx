@@ -5,9 +5,9 @@
 import React, { useState } from 'react'
 
 import { FolderPlus } from '@phosphor-icons/react'
-import { ExpenseData } from '@/hooks/expenses/useFetchExpensesData'
 import { Button } from '@/components'
 import DatePicker from 'react-datepicker'
+import { ExpenseData } from '@/service/expenses/getExpenses'
 
 interface IConfirmSaveReportModal {
   onSubmit: (data: any) => void
@@ -18,7 +18,7 @@ interface IConfirmSaveReportModal {
 function ConfirmSaveReportModal({
   onSubmit,
   onCancel,
-  initialData,
+  initialData
 }: IConfirmSaveReportModal) {
   const [selectedPeriod, setSelectedPeriod] = useState(new Date())
   function onChangeDate(date: Date) {
@@ -67,12 +67,12 @@ function ConfirmSaveReportModal({
                 'pt-BR',
                 {
                   month: '2-digit',
-                  year: 'numeric',
-                },
+                  year: 'numeric'
+                }
               )
               onSubmit({
                 data: initialData,
-                period: formattedDate,
+                period: formattedDate
               })
             }}
           >

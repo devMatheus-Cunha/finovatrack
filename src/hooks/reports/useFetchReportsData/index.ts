@@ -13,11 +13,11 @@ export default function useFetchReportsData() {
     queryKey: ['report_data', period, router.id],
     queryFn: () => getReport(router.id, period),
     keepPreviousData: true,
-    enabled: !!period && !!router.id,
+    enabled: !!period && !!router.id
   })
 
   return {
     reportData,
-    setPeriod,
+    setPeriod
   }
 }

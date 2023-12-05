@@ -9,7 +9,7 @@ interface SideBarProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Recuperar Senha',
+  title: 'Recuperar Senha'
 }
 
 export default function ForgetPasswordLayout({ children }: SideBarProps) {
