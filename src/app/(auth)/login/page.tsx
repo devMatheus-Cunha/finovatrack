@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
 import React from 'react'
@@ -111,7 +108,7 @@ export default function Login() {
           <div className="flex gap-7">
             <Link
               href="/"
-              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
+              className="text-white focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
             >
               Home
             </Link>
