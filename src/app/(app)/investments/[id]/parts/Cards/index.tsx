@@ -98,7 +98,7 @@ const Cards = ({
               <StatNumber>
                 {isVisibilityData
                   ? formatCurrencyMoney(
-                      formatToJavaScriptNumber('3.400' || '0'),
+                      formatToJavaScriptNumber('3.850' || '0'),
                       userData?.primary_currency
                     )
                   : '****'}

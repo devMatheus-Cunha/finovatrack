@@ -23,8 +23,14 @@ export async function login({ email, password }: LoginProps) {
     )
     const { user } = userCredential
     return user
-  } catch (error) {
-    throw new Error('Erro no servidor')
+  } catch (error: any) {
+    if (error.message === 'Firebase: Error (auth/user-not-found).') {
+      throw new Error('Conta não encontrada')
+    } else if (error.message === 'Firebase: Error (auth/wrong-password).') {
+      throw new Error('Senha incorreta')
+    } else {
+      throw new Error('Erro no Servidor. Tente mais tarde!')
+    }
   }
 }
 
@@ -34,8 +40,8 @@ export async function updatedDocumentForUser({ id, ...props }: UserData) {
     await updateDoc(myCollection, {
       ...props
     })
-  } catch (error) {
-    throw new Error('Erro no servidor')
+  } catch (error: any) {
+    throw new Error(error?.message)
   }
 }
 

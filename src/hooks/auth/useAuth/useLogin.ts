@@ -23,19 +23,9 @@ const useLogin = () => {
         router.push(`/control/${user.uid}`)
       },
       onError: ({ message }: { message: string }) => {
-        if (message === 'Firebase: Error (auth/user-not-found).') {
-          toast.error('Conta não encontrada.', {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        } else if (message === 'Firebase: Error (auth/wrong-password).') {
-          toast.error('Senha incorreta', {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        } else {
-          toast.error('Erro no Servidor. Tente mais tarde!', {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        }
+        toast.error(message, {
+          position: toast.POSITION.TOP_RIGHT
+        })
       }
     }
   )
