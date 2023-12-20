@@ -54,7 +54,7 @@ export const columsHeadProps = (
       field: 'category'
     },
     {
-      header: 'Status Pagamento',
+      header: 'Status',
       field: 'payment'
     }
   ]

@@ -73,7 +73,7 @@ export const columsHeadProps = (
       field: 'category'
     },
     {
-      header: 'Status Pagamento',
+      header: 'Status',
       field: 'payment',
       styles: (value: any) => ({
         color: value === 'A Pagar' ? 'red' : 'blue'

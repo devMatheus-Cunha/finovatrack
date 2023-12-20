@@ -45,7 +45,7 @@ function TableToControl({
         field: 'category'
       },
       {
-        header: 'Status Pagamento',
+        header: 'Status',
         field: 'payment',
         styles: (value: string) => ({
           color: value === 'A Pagar' ? 'red' : 'green'

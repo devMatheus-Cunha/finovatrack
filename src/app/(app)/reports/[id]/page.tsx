@@ -52,7 +52,7 @@ function Reports() {
         modifier: (value: string) => value ?? '-'
       },
       {
-        header: 'Status Pagamento',
+        header: 'Status',
         field: 'payment',
         styles: (value: string) => ({
           color: value === 'A Pagar' ? 'red' : 'green'
