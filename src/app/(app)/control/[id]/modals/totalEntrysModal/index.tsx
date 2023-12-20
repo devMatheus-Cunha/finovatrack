@@ -1,7 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 'use client'
 
 import React, { Fragment } from 'react'

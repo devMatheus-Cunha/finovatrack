@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useParams } from 'next/navigation'

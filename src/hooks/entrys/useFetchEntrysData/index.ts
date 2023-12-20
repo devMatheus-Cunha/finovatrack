@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-return-await */
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { getEntrys } from '@/service/entrys/getEntrys'

@@ -1,7 +1,3 @@
-/* eslint-disable no-return-await */
-/* eslint-disable no-useless-catch */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-len */
 import {
   QueryObserverResult,
   RefetchOptions,

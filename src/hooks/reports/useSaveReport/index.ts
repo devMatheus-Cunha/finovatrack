@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-catch */
-
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { IReportData } from '@/service/reports/getReport'

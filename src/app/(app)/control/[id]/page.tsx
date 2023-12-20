@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable no-unsafe-optional-chaining */
-
 'use client'
 
 import { useMemo, useState } from 'react'
@@ -30,7 +25,6 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import {
   convertEurToReal,
   formatCurrencyMoney,
-  formatToCustomFormat,
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import { Button, Modal } from '@/components'

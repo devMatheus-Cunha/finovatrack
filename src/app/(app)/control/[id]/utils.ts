@@ -1,8 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-
 'use client'
 
 import { TableColumn } from '@/components/Table'

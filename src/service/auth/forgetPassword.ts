@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../firebase'
 

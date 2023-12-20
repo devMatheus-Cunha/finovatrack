@@ -1,9 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
 import React from 'react'

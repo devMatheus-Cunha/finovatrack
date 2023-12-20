@@ -1,5 +1,3 @@
-/* eslint-disable react/button-has-type */
-
 'use client'
 
 import { useParams, usePathname, useRouter } from 'next/navigation'

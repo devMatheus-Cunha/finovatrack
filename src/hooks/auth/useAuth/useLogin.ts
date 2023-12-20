@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-len */
-/* eslint-disable no-useless-catch */
-/* eslint-disable camelcase */
-
 import { LoginProps, login, updatedDocumentForUser } from '@/service/auth/login'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'

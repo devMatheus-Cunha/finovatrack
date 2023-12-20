@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
 import React from 'react'

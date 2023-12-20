@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-array-index-key */
-
 'use client'
 
 import { FolderOpen } from '@phosphor-icons/react'
