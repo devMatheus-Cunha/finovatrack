@@ -64,10 +64,6 @@ export const columsHeadProps = (
       header: optionsCurrencyKeyAndValue[secondaryCurrency],
       field: 'secondary_currency'
     })
-    columns.splice(3, 0, {
-      header: 'Moeda',
-      field: 'typeMoney'
-    })
   }
 
   return columns

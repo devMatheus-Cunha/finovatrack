@@ -94,10 +94,6 @@ export const columsHeadProps = (
           ? '-'
           : formatCurrencyMoney(value, secondaryCurrency)
     })
-    columns.splice(3, 0, {
-      header: 'Moeda',
-      field: 'typeMoney'
-    })
   }
 
   return columns

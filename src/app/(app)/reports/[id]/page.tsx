@@ -69,10 +69,6 @@ function Reports() {
             ? '-'
             : formatCurrencyMoney(value, userData.secondary_currency)
       })
-      columns.splice(3, 0, {
-        header: 'Moeda',
-        field: 'typeMoney'
-      })
     }
 
     return columns
