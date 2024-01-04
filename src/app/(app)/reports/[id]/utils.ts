@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 'use client'
 
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
@@ -56,7 +54,7 @@ export const columsHeadProps = (
       field: 'category'
     },
     {
-      header: 'Status Pagamento',
+      header: 'Status',
       field: 'payment'
     }
   ]
@@ -65,10 +63,6 @@ export const columsHeadProps = (
     columns.splice(2, 0, {
       header: optionsCurrencyKeyAndValue[secondaryCurrency],
       field: 'secondary_currency'
-    })
-    columns.splice(3, 0, {
-      header: 'Moeda',
-      field: 'typeMoney'
     })
   }
 

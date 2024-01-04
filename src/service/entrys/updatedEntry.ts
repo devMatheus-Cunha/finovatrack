@@ -1,5 +1,3 @@
-/* eslint-disable default-param-last */
-/* eslint-disable import/prefer-default-export */
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'

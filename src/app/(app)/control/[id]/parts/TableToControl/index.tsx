@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-len */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 'use client'
 
 import { UserData } from '@/hooks/auth/useAuth/types'
@@ -50,7 +45,7 @@ function TableToControl({
         field: 'category'
       },
       {
-        header: 'Status Pagamento',
+        header: 'Status',
         field: 'payment',
         styles: (value: string) => ({
           color: value === 'A Pagar' ? 'red' : 'green'
@@ -94,10 +89,6 @@ function TableToControl({
           !isVisibilityData || !value
             ? '-'
             : formatCurrencyMoney(value, userData.secondary_currency)
-      })
-      columns.splice(3, 0, {
-        header: 'Moeda',
-        field: 'typeMoney'
       })
     }
 

@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/jsx-props-no-multi-spaces */
-
 'use client'
 
 import { InfoCardMoney } from '@/components'

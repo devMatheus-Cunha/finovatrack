@@ -1,5 +1,3 @@
-/* eslint-disable no-tabs */
-
 'use client'
 
 import { Button, DropdownFilter } from '@/components'

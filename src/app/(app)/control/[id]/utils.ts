@@ -1,8 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-
 'use client'
 
 import { TableColumn } from '@/components/Table'
@@ -78,7 +73,7 @@ export const columsHeadProps = (
       field: 'category'
     },
     {
-      header: 'Status Pagamento',
+      header: 'Status',
       field: 'payment',
       styles: (value: any) => ({
         color: value === 'A Pagar' ? 'red' : 'blue'
@@ -98,10 +93,6 @@ export const columsHeadProps = (
         !isVisibilityData || !value
           ? '-'
           : formatCurrencyMoney(value, secondaryCurrency)
-    })
-    columns.splice(3, 0, {
-      header: 'Moeda',
-      field: 'typeMoney'
     })
   }
 

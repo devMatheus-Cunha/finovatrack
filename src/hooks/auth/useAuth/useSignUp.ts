@@ -1,7 +1,8 @@
-/* eslint-disable no-useless-catch */
+'use client'
+
+import { SigingProps, siging } from '@/service/auth/siging'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { SigingProps, siging } from '@/service/auth/siging'
 import { toast } from 'react-toastify'
 
 const useSignUp = () => {

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable default-param-last */
-/* eslint-disable import/prefer-default-export */
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../firebase'
 

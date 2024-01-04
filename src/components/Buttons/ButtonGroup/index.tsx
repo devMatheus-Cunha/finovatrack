@@ -1,6 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable react/no-array-index-key */
-
 'use client'
 
 import React, { ReactNode } from 'react'

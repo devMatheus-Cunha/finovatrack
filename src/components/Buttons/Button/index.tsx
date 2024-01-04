@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/button-has-type */
-
 import Link from 'next/link'
 import React, { ButtonHTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'

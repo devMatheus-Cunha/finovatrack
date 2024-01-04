@@ -1,5 +1,3 @@
-/* eslint-disable default-param-last */
-/* eslint-disable import/prefer-default-export */
 import { doc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase'
 import { ExpenseData } from './getExpenses'

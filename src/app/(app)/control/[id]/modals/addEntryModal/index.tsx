@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/require-default-props */
-/* eslint-disable indent */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
 import React from 'react'

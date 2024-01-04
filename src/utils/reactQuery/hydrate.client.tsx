@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 'use client'
 
 import { Hydrate as RQHydrate, HydrateProps } from '@tanstack/react-query'

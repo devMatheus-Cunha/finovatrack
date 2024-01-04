@@ -1,7 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/require-default-props */
-
 'use client'
 
 import { InputHTMLAttributes, ReactNode, useState } from 'react'

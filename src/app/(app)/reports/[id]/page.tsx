@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-array-index-key */
-
 'use client'
 
 import { FolderOpen } from '@phosphor-icons/react'
@@ -56,7 +52,7 @@ function Reports() {
         modifier: (value: string) => value ?? '-'
       },
       {
-        header: 'Status Pagamento',
+        header: 'Status',
         field: 'payment',
         styles: (value: string) => ({
           color: value === 'A Pagar' ? 'red' : 'green'
@@ -72,10 +68,6 @@ function Reports() {
           !isVisibilityData || !value
             ? '-'
             : formatCurrencyMoney(value, userData.secondary_currency)
-      })
-      columns.splice(3, 0, {
-        header: 'Moeda',
-        field: 'typeMoney'
       })
     }
 

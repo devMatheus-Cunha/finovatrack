@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
 import { UserData } from '@/hooks/auth/useAuth/types'

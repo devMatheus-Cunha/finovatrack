@@ -1,7 +1,3 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
-/* eslint-disable react/require-default-props */
-
 'use client'
 
 import React, { ReactNode } from 'react'

@@ -1,9 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/jsx-no-useless-fragment */
-
 'use client'
 
 import React from 'react'
@@ -243,7 +237,7 @@ export default function Signup() {
           <div className="flex gap-7">
             <Link
               href="/"
-              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
+              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm underline"
             >
               Home
             </Link>
