@@ -237,7 +237,7 @@ export default function Signup() {
           <div className="flex gap-7">
             <Link
               href="/"
-              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
+              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm underline"
             >
               Home
             </Link>
