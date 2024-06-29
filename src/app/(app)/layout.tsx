@@ -62,14 +62,14 @@ export default function AppLayout({ children }: SideBarProps) {
       action: () => router.push(`/reports/${id}`)
     },
     {
-      id: 'investments',
-      label: 'Investimentos',
-      route: '/investments',
+      id: 'finance',
+      label: 'Finanças',
+      route: '/finance',
       disabled:
         idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
         idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
       icon: <ChartLineUp size={21} />,
-      action: () => router.push(`/investments/${id}`)
+      action: () => router.push(`/finance/${id}`)
     },
     {
       id: 'myProfile',
