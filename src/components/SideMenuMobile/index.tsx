@@ -49,7 +49,6 @@ const SideMenuMobile = ({
         <div className="px-3 mb-3">
           <a
             className="flex-none text-xl font-semibold text-white"
-            href="javascript:;"
             aria-label="Brand"
           >
             Menu

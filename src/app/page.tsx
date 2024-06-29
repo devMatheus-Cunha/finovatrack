@@ -1,4 +1,3 @@
-// Importe as dependências necessárias
 import Header from '@/components/Header'
 import { Metadata } from 'next'
 import Link from 'next/link'

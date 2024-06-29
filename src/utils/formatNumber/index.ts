@@ -13,11 +13,15 @@ export function formatCurrencyMoney(value = 0, currency?: string) {
   return formattedValue
 }
 
-export const convertEurToReal = (quatationEur?: number, valueEur?: number) => {
-  if (!quatationEur || !valueEur) return 0
+export const convertEurToReal = (
+  quatation?: number,
+  valueSecondaryCurrency?: number
+) => {
+  if (!quatation || !valueSecondaryCurrency) return 0
   const tax = 1.964 / 100
-  const valorEmReais = valueEur * quatationEur
-  const valorTotalComTaxa = valorEmReais + valueEur * quatationEur * tax
+  const valuePrimaryCurrency = valueSecondaryCurrency * quatation
+  const valorTotalComTaxa =
+    valuePrimaryCurrency + valueSecondaryCurrency * quatation * tax
   return valorTotalComTaxa ?? 0
 }
 
