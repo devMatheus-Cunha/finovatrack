@@ -52,6 +52,7 @@ const ModalContent: React.FC<ModalProps> = ({
     defaultValues: {
       id: initialValues?.id,
       year: initialValues?.year,
+      periodContributions: initialValues?.periodContributions,
       investments: formatToCustomFormat(Number(initialValues?.investments)),
       receivables: formatToCustomFormat(Number(initialValues?.receivables)),
       reserve: initialValues?.totoalReserveLastYear
