@@ -6,7 +6,6 @@ import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/service/finance/getFinancialPlanningYear'
 import { formatToJavaScriptNumber } from '@/utils/formatNumber'
-import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlaningYear'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
@@ -14,13 +13,14 @@ interface IFinanceYearProps {
   investimentsData?: IInvestmentsProps
   userData: UserData
   isVisibilityData?: boolean
+  financialPlanningYear?: IFinancialPlanningProps[]
 }
 
 const FinanceYear: React.FC<IFinanceYearProps> = ({
   userData,
-  isVisibilityData
+  isVisibilityData,
+  financialPlanningYear
 }) => {
-  const { financialPlanningYear } = useFetchFinancialPlaningYear()
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
