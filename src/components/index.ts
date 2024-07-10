@@ -1,3 +1,5 @@
+'use client'
+
 export { default as InfoCardMoney } from './InfoCardMoney'
 export { default as Button } from './Buttons/Button'
 export { default as ButtonGroup } from './Buttons/ButtonGroup'
