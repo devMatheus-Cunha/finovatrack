@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
-import { IReportData, getReport } from '@/service/reports/getReport'
+import { IReportData, getReport } from '@/services/reports/getReport'
 
 export default function useFetchReportsData() {
   const [period, setPeriod] = useState('')

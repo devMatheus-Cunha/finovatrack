@@ -45,7 +45,7 @@ import ContentAddEntryModal from './modals/addEntryModal'
 import DeleteModalContent from './modals/deleteModal'
 import ContentTotalEntrys from './modals/totalEntrysModal'
 import ConfirmSaveReportModal from './modals/confirmSaveReportModal'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()

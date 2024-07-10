@@ -5,7 +5,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { useForgetPassword } from '@/hooks/auth'
-import { LogoutProps } from '@/service/auth/forgetPassword'
+import { LogoutProps } from '@/services/auth/forgetPassword'
 import { Button, Input } from '../../../components'
 
 const schema = z.object({

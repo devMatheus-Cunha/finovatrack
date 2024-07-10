@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { IReportData } from '@/service/reports/getReport'
+import { IReportData } from '@/services/reports/getReport'
 import { saveReportService } from '@/services/reports/saveReport'
 import { useParams } from 'next/navigation'
 

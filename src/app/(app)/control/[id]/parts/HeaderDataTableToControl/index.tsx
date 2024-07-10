@@ -16,7 +16,7 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 
 interface IHeaderDataTableToControl {
   userData: UserData

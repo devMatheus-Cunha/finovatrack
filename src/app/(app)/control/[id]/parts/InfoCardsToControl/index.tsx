@@ -7,7 +7,7 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 
 interface IInfoCardsToControl {

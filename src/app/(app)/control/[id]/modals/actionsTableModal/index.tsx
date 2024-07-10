@@ -10,7 +10,7 @@ import { Button, Input, InputTypeMoney, Select } from '@/components'
 import { ITypeModal } from '../../types'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 import { Trash } from '@phosphor-icons/react'
 import { formatToCustomFormat } from '@/utils/formatNumber'
 

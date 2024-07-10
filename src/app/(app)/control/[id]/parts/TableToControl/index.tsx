@@ -6,7 +6,7 @@ import { ButtonGroup, Empty } from '@/components'
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 

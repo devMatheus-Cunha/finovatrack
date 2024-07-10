@@ -8,9 +8,9 @@ import {
 import React from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { getQuatationRateFromAPI } from '@/service/quatation/getQuatationRateFromAPI'
-import { updateQuotationData } from '@/service/quatation/updateQuotationData'
-import { getLastQuotationData } from '@/service/quatation/getLastQuotationData'
+import { getQuatationRateFromAPI } from '@/services/quatation/getQuatationRateFromAPI'
+import { updateQuotationData } from '@/services/quatation/updateQuotationData'
+import { getLastQuotationData } from '@/services/quatation/getLastQuotationData'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 export type RefetchQuationDataType = <TPageData>(

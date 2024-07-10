@@ -1,4 +1,8 @@
-import { LoginProps, login, updatedDocumentForUser } from '@/service/auth/login'
+import {
+  LoginProps,
+  login,
+  updatedDocumentForUser
+} from '@/services/auth/login'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'

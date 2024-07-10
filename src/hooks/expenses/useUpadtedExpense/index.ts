@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { updatedExpenseService } from '@/service/expenses/updatedExpense'
+import { updatedExpenseService } from '@/services/expenses/updatedExpense'
 import { useFetchExpensesData } from '../useFetchExpensesData'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 
 const useUpadtedExpense = () => {
   const router = useParams()

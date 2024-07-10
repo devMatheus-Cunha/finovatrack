@@ -11,7 +11,7 @@ import {
 import { Info, PencilSimpleLine } from '@phosphor-icons/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { IFinancialPlanningProps } from '@/service/finance/getFinancialPlanningYear'
+import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 
 interface AccordionPanelProps {
   data: IFinancialPlanningProps

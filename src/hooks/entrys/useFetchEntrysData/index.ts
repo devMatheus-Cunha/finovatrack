@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import { getEntrys } from '@/service/entrys/getEntrys'
+import { getEntrys } from '@/services/entrys/getEntrys'
 
 export interface IEntrysData {
   value: number
