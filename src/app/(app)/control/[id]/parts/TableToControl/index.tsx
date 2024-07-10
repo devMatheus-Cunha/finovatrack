@@ -2,7 +2,6 @@
 
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Fragment } from 'react'
 import { ButtonGroup, Empty } from '@/components'
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
@@ -36,9 +35,11 @@ function TableToControl({
         header: optionsCurrencyKeyAndValue[userData.primary_currency],
         field: 'value_primary_currency',
         modifier: (value: number) =>
-          !isVisibilityData || !value
-            ? '-'
-            : formatCurrencyMoney(value, userData?.primary_currency)
+          formatCurrencyMoney(
+            value,
+            userData?.primary_currency,
+            isVisibilityData
+          )
       },
       {
         header: 'Categoria',

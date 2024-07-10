@@ -1,7 +1,4 @@
-'use client'
-
 import React, { ReactNode } from 'react'
-import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { Info } from '@phosphor-icons/react'
 
 interface InfoCardProps {
@@ -17,8 +14,6 @@ function InfoCardMoney({
   contentAction,
   infoAction
 }: InfoCardProps) {
-  const { isVisibilityData } = useIsVisibilityDatas()
-
   return (
     <>
       <div className="h-[80px] md:h-[99px] w-[45%] lg:w-[100%] flex pl-4 justify-center flex-col text-white bg-gray-800 rounded-lg">
@@ -36,7 +31,7 @@ function InfoCardMoney({
           )}
         </div>
         <div className="-mt-1 font-sans text-md md:text-2xl font-semibold">
-          {infoData && isVisibilityData ? infoData : '****'}
+          {infoData}
         </div>
         <div className="text-[12px] md:text-ms">
           {contentAction && contentAction}

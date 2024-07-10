@@ -1,7 +1,7 @@
 'use client'
 
 import { FolderOpen } from '@phosphor-icons/react'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { Button } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
@@ -42,9 +42,11 @@ function Reports() {
         header: optionsCurrencyKeyAndValue[userData.primary_currency],
         field: 'value_primary_currency',
         modifier: (value: number) =>
-          !isVisibilityData || !value
-            ? '-'
-            : formatCurrencyMoney(value, userData?.primary_currency)
+          formatCurrencyMoney(
+            value,
+            userData?.primary_currency,
+            isVisibilityData
+          )
       },
       {
         header: 'Categoria',
@@ -65,9 +67,11 @@ function Reports() {
         header: optionsCurrencyKeyAndValue[userData.secondary_currency],
         field: 'value_secondary_currency',
         modifier: (value: number) =>
-          !isVisibilityData || !value
-            ? '-'
-            : formatCurrencyMoney(value, userData.secondary_currency)
+          formatCurrencyMoney(
+            value,
+            userData.secondary_currency,
+            isVisibilityData
+          )
       })
     }
 
@@ -158,7 +162,8 @@ function Reports() {
                                         Number(item?.value),
                                         userData.typeAccount === 'oneCurrency'
                                           ? userData.primary_currency
-                                          : item?.typeMoney
+                                          : item?.typeMoney,
+                                        isVisibilityData
                                       )
                                     : '-'}
                                 </p>

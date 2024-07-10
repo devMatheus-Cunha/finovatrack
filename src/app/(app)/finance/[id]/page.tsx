@@ -15,10 +15,11 @@ import FinanceYear from './parts/FinanceYaer'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import useFetchDividends from '@/hooks/finance/useFetchDividends'
 import useFetchInvestiments from '@/hooks/finance/useFetchInvestiments'
-import { useUserData } from '@/hooks/globalStates'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 const Finance = () => {
   const { userData } = useUserData()
+  const { isVisibilityData } = useIsVisibilityDatas()
   const { dividendsData, isLoadingDividendsData, totalsDividendsData } =
     useFetchDividends()
   const { investimentsData, isLoadingInvestimentsData } = useFetchInvestiments()
@@ -32,7 +33,11 @@ const Finance = () => {
       p={[2, 2, 0]}
     >
       <Box w="100%">
-        <FinanceYear investimentsData={investimentsData} userData={userData} />
+        <FinanceYear
+          investimentsData={investimentsData}
+          userData={userData}
+          isVisibilityData={isVisibilityData}
+        />
       </Box>
 
       <Box
@@ -70,7 +75,8 @@ const Finance = () => {
                     >
                       {formatCurrencyMoney(
                         Number(investimentsData?.total),
-                        userData.primary_currency
+                        userData.primary_currency,
+                        isVisibilityData
                       )}
                     </Text>
                   </Box>
@@ -85,7 +91,8 @@ const Finance = () => {
                     >
                       {formatCurrencyMoney(
                         Number(investimentsData?.free),
-                        userData.primary_currency
+                        userData.primary_currency,
+                        isVisibilityData
                       )}
                     </Text>
                   </Box>
@@ -100,7 +107,8 @@ const Finance = () => {
                     >
                       {formatCurrencyMoney(
                         Number(investimentsData?.invested),
-                        userData.primary_currency
+                        userData.primary_currency,
+                        isVisibilityData
                       )}
                     </Text>
                   </Box>
@@ -115,7 +123,8 @@ const Finance = () => {
                     >
                       {formatCurrencyMoney(
                         Number(totalsDividendsData),
-                        userData.primary_currency
+                        userData.primary_currency,
+                        isVisibilityData
                       )}
                     </Text>
                   </Box>
@@ -165,7 +174,8 @@ const Finance = () => {
                         >
                           {formatCurrencyMoney(
                             Number(amountInEuro),
-                            userData.primary_currency
+                            userData.primary_currency,
+                            isVisibilityData
                           )}
                         </Text>
                       </Box>

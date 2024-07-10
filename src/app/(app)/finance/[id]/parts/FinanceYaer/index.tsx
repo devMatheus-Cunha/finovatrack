@@ -13,9 +13,13 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 interface IFinanceYearProps {
   investimentsData?: IInvestmentsProps
   userData: UserData
+  isVisibilityData?: boolean
 }
 
-const FinanceYear: React.FC<IFinanceYearProps> = ({ userData }) => {
+const FinanceYear: React.FC<IFinanceYearProps> = ({
+  userData,
+  isVisibilityData
+}) => {
   const { financialPlanningYear } = useFetchFinancialPlaningYear()
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
 
@@ -89,6 +93,7 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({ userData }) => {
                   data={item}
                   onOpen={() => onOpenModal(item)}
                   userData={userData}
+                  isVisibilityData={isVisibilityData}
                 />
               </AccordionFinanceYear.Root>
             </React.Fragment>
