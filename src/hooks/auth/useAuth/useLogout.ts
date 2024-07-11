@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
-import { logout } from '@/service/auth/logout'
+import { logout } from '@/services/auth/logout'
 
 const useLogout = () => {
   const router = useRouter()

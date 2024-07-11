@@ -4,7 +4,7 @@ import React from 'react'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SigingProps } from '@/service/auth/siging'
+import { SigingProps } from '@/services/auth/siging'
 import Link from 'next/link'
 import { useSignUp } from '../../../hooks/auth'
 import { Button, Input, InputPassword } from '../../../components'

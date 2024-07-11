@@ -3,7 +3,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { deleteEntry } from '@/service/entrys/deleteEntry'
+import { deleteEntry } from '@/services/entrys/deleteEntry'
 import useFetchEntrysData from '../useFetchEntrysData'
 
 const useDeletedEntry = () => {

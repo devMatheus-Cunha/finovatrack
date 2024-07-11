@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { IReportData } from '@/service/reports/getReport'
-import { saveReportService } from '@/service/reports/saveReport'
+import { IReportData } from '@/services/reports/getReport'
+import { saveReportService } from '@/services/reports/saveReport'
 import { useParams } from 'next/navigation'
 
 export default function useSaveReport() {

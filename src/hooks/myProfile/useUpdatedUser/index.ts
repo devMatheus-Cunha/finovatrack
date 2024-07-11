@@ -1,5 +1,5 @@
 import { useUserData } from '@/hooks/globalStates'
-import { updatedDocumentForUser, updatedEmailUser } from '@/service/auth/login'
+import { updatedDocumentForUser, updatedEmailUser } from '@/services/auth/login'
 import { useMutation } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'

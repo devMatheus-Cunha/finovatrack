@@ -25,7 +25,7 @@ export const useFetchDividends = () => {
 
   const {
     data: dividendsData,
-    isLoading: isLoadingDividendsData,
+    isFetching: isLoadingDividendsData,
     status: statusDividendsData,
     refetch: refetchDividendsData
   } = useQuery(

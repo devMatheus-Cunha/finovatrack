@@ -1,4 +1,8 @@
-export function formatCurrencyMoney(value = 0, currency?: string) {
+export function formatCurrencyMoney(
+  value = 0,
+  currency?: string,
+  isVisibility?: boolean
+) {
   if (currency === 'hybrid') {
     return value.toLocaleString()
   }
@@ -10,7 +14,7 @@ export function formatCurrencyMoney(value = 0, currency?: string) {
     maximumFractionDigits: 2
   }).format(value)
 
-  return formattedValue
+  return isVisibility ? formattedValue : '****'
 }
 
 export const convertEurToReal = (

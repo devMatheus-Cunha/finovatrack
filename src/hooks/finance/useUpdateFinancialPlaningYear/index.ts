@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { updateFinancialPlanningYearData } from '@/service/finance/updateFinancialPlanningYearData'
+import { updateFinancialPlanningYearData } from '@/services/finance/updateFinancialPlanningYearData'
 import { useFetchFinancialPlaningYear } from '../useFetchFinancialPlaningYear'
 
 const useUpdateFinancialPlaningYear = () => {

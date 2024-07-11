@@ -11,12 +11,13 @@ import {
 import { Info, PencilSimpleLine } from '@phosphor-icons/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { IFinancialPlanningProps } from '@/service/finance/getFinancialPlanningYear'
+import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 
 interface AccordionPanelProps {
   data: IFinancialPlanningProps
   userData: UserData
   onOpen: () => void
+  isVisibilityData?: boolean
 }
 
 export function monthsLeftUntilEndOfYear() {
@@ -29,7 +30,8 @@ export function monthsLeftUntilEndOfYear() {
 const AccordionPanel: React.FC<AccordionPanelProps> = ({
   data,
   onOpen,
-  userData
+  userData,
+  isVisibilityData
 }) => {
   return (
     <AccordionPanelChakra
@@ -43,7 +45,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.investments),
-            userData?.primary_currency
+            userData?.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>
@@ -52,7 +55,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.totoalReserveLastYear ?? data.reserve),
-            userData?.primary_currency
+            userData?.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>
@@ -71,7 +75,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.monthlyContributions),
-            userData?.primary_currency
+            userData?.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>
@@ -80,7 +85,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.receivables),
-            userData?.primary_currency
+            userData?.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>
@@ -89,7 +95,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.deduction),
-            userData?.primary_currency
+            userData?.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>
@@ -103,7 +110,8 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
                 Number(data.periodContributions) +
               Number(data.receivables) -
               Number(data.deduction),
-            userData.primary_currency
+            userData.primary_currency,
+            isVisibilityData
           )}
         </Text>
       </Stack>

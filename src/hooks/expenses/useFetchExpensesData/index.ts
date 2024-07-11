@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import { getExpenses } from '@/service/expenses/getExpenses'
+import { getExpenses } from '@/services/expenses/getExpenses'
 
 export type Filter =
   | 'Essencial'

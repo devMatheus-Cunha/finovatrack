@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { forgetPassword } from '@/service/auth/forgetPassword'
+import { forgetPassword } from '@/services/auth/forgetPassword'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 

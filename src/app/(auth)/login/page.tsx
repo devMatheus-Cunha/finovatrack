@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { Button, Input, InputPassword } from '@/components'
 import { useLogin } from '@/hooks/auth'
-import { LoginProps } from '@/service/auth/login'
+import { LoginProps } from '@/services/auth/login'
 import Link from 'next/link'
 
 const schema = z.object({

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { updatedEntry } from '@/service/entrys/updatedEntry'
+import { updatedEntry } from '@/services/entrys/updatedEntry'
 import { IEntrysData, useFetchEntrysData } from '../useFetchEntrysData'
 
 const useUpadtedEntry = () => {

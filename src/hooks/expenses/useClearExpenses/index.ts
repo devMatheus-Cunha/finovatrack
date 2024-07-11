@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useParams } from 'next/navigation'
-import { clearExpenses } from '@/service/expenses/clearExpenses'
+import { clearExpenses } from '@/services/expenses/clearExpenses'
 import { useFetchExpensesData } from '../useFetchExpensesData'
 
 const useClearExpenses = () => {

@@ -7,7 +7,8 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
+import { useIsVisibilityDatas } from '@/hooks/globalStates'
 
 interface IInfoCardsToControl {
   userData: UserData
@@ -28,10 +29,15 @@ function InfoCardsToControl({
   totalExpensesEurSumRealToReal,
   infoAction
 }: IInfoCardsToControl) {
+  const { isVisibilityData } = useIsVisibilityDatas()
   return (
     <div className="flex flex-wrap lg:flex-nowrap	justify-center gap-6">
       <InfoCardMoney
-        infoData={formatCurrencyMoney(totalEntrys, userData.primary_currency)}
+        infoData={formatCurrencyMoney(
+          totalEntrys,
+          userData.primary_currency,
+          isVisibilityData
+        )}
         title="Total Entradas"
         contentAction={
           <button
@@ -51,7 +57,8 @@ function InfoCardsToControl({
         <InfoCardMoney
           infoData={formatCurrencyMoney(
             totalExpensesEurToReal,
-            userData.primary_currency
+            userData.primary_currency,
+            isVisibilityData
           )}
           infoAction={infoAction}
           title={`Total Gastos ${userData.secondary_currency}`}
@@ -60,14 +67,16 @@ function InfoCardsToControl({
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalExpensesEurSumRealToReal,
-          userData.primary_currency
+          userData.primary_currency,
+          isVisibilityData
         )}
         title="Total Gastos"
       />
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalEntrys - totalExpensesEurSumRealToReal,
-          userData.primary_currency
+          userData.primary_currency,
+          isVisibilityData
         )}
         title="Total Livre"
       />

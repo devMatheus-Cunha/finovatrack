@@ -7,7 +7,7 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 import { Button, InputTypeMoney } from '@/components'
 import { ITypeModal } from '../../types'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { ExpenseData } from '@/service/expenses/getExpenses'
+import { ExpenseData } from '@/services/expenses/getExpenses'
 
 type FormData = {
   value: string

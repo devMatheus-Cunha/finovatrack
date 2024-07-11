@@ -4,19 +4,23 @@ import { AccordionFinanceYear } from '../AccordionFinanceYear'
 import { Modal } from '@/components'
 import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
-import { IFinancialPlanningProps } from '@/service/finance/getFinancialPlanningYear'
+import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import { formatToJavaScriptNumber } from '@/utils/formatNumber'
-import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlaningYear'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 interface IFinanceYearProps {
   investimentsData?: IInvestmentsProps
   userData: UserData
+  isVisibilityData?: boolean
+  financialPlanningYear?: IFinancialPlanningProps[]
 }
 
-const FinanceYear: React.FC<IFinanceYearProps> = ({ userData }) => {
-  const { financialPlanningYear } = useFetchFinancialPlaningYear()
+const FinanceYear: React.FC<IFinanceYearProps> = ({
+  userData,
+  isVisibilityData,
+  financialPlanningYear
+}) => {
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -89,6 +93,7 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({ userData }) => {
                   data={item}
                   onOpen={() => onOpenModal(item)}
                   userData={userData}
+                  isVisibilityData={isVisibilityData}
                 />
               </AccordionFinanceYear.Root>
             </React.Fragment>

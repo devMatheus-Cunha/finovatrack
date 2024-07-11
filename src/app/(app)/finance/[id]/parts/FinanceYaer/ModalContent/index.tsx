@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, InputTypeMoney, NumberInput } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { formatToCustomFormat } from '@/utils/formatNumber'
-import { IFinancialPlanningProps } from '@/service/finance/getFinancialPlanningYear'
+import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import { SimpleGrid } from '@chakra-ui/react'
 
 const schemaContributions = z.object({

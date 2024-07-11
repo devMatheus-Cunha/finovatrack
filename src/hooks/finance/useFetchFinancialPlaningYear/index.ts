@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import { getFinancialPlanningYear } from '@/service/finance/getFinancialPlanningYear'
+import { getFinancialPlanningYear } from '@/services/finance/getFinancialPlanningYear'
 
 export const useFetchFinancialPlaningYear = () => {
   const router = useParams()

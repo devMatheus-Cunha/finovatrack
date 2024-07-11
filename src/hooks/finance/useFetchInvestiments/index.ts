@@ -16,7 +16,7 @@ export const useFetchInvestiments = () => {
 
   const {
     data: investimentsData,
-    isLoading: isLoadingInvestimentsData,
+    isFetching: isLoadingInvestimentsData,
     status: statusInvestimentsData,
     refetch: refetchInvestimentsData
   } = useQuery(

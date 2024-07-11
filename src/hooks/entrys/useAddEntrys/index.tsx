@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import {
   IAddEntryServiceProps,
   addEntryService
-} from '@/service/entrys/addEntry'
+} from '@/services/entrys/addEntry'
 import { useFetchEntrysData } from '../useFetchEntrysData'
 
 export default function useAddEntrys() {
