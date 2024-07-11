@@ -64,7 +64,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Heading size="sm" display="flex" gap={1}>
           Aporte Mensal
           <Tooltip
-            label={`O cálculo é baseado nos campos Aporte Mensal x Período Aporte em Meses `}
+            label={`O cálculo é baseado nos campos Aporte Mensal x Período do Aporte.`}
             fontSize="sm"
             hasArrow
             placement="top"
@@ -79,6 +79,10 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
             isVisibilityData
           )}
         </Text>
+      </Stack>
+      <Stack w="max-content">
+        <Heading size="sm">Período do Aporte</Heading>
+        <Text fontSize="md">{data.periodContributions} Meses</Text>
       </Stack>
       <Stack w="max-content">
         <Heading size="sm">A Receber</Heading>
