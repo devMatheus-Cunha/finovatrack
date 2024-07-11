@@ -129,7 +129,7 @@ const ModalContent: React.FC<ModalProps> = ({
               }
             />
             <NumberInput
-              label="Período Aporte em Meses"
+              label="Período do Aporte"
               name="periodContributions"
               placeholder="12"
               type="number"
