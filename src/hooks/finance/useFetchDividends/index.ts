@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 
-type IDividendsProps = {
+export interface IDividendProps {
   ticker: string
   reference: string
   quantity: number
@@ -10,7 +10,9 @@ type IDividendsProps = {
   amountInEuro: number
   paidOn: string
   type: string
-}[]
+}
+
+type IDividendsProps = IDividendProps[]
 
 function sumTotalsDividends(array: IDividendsProps = []) {
   let total = 0
@@ -32,7 +34,7 @@ export const useFetchDividends = () => {
     ['dividends_data', router.id],
     async () => {
       const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends`,
+        `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
         {
           method: 'GET',
           headers: {
@@ -42,6 +44,13 @@ export const useFetchDividends = () => {
       )
 
       const data = await resp.json()
+
+      if (data?.items) {
+        data.items.sort((a: IDividendProps, b: IDividendProps) =>
+          b.paidOn.localeCompare(a.paidOn)
+        )
+      }
+
       return data?.items as IDividendsProps
     },
     {
