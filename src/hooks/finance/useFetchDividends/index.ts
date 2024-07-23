@@ -12,7 +12,7 @@ export interface IDividendProps {
   type: string
 }
 
-type IDividendsProps = IDividendProps[]
+export type IDividendsProps = IDividendProps[]
 
 function sumTotalsDividends(array: IDividendsProps = []) {
   let total = 0
@@ -22,6 +22,24 @@ function sumTotalsDividends(array: IDividendsProps = []) {
   return total
 }
 
+const fetchDividends = async (routerId: string | undefined) => {
+  if (!routerId) return [] // Lidar com o caso em que routerId é undefined
+
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: process.env.NEXT_PUBLIC_KEY_API_TRANDING_212 || ''
+      }
+    }
+  )
+
+  const data = await resp.json()
+  return data?.items.sort((a: IDividendProps, b: IDividendProps) =>
+    b.paidOn.localeCompare(a.paidOn)
+  ) as IDividendProps[]
+}
 export const useFetchDividends = () => {
   const router = useParams()
 
@@ -30,33 +48,11 @@ export const useFetchDividends = () => {
     isFetching: isLoadingDividendsData,
     status: statusDividendsData,
     refetch: refetchDividendsData
-  } = useQuery(
-    ['dividends_data', router.id],
-    async () => {
-      const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: process.env.NEXT_PUBLIC_KEY_API_TRANDING_212 || ''
-          }
-        }
-      )
-
-      const data = await resp.json()
-
-      if (data?.items) {
-        data.items.sort((a: IDividendProps, b: IDividendProps) =>
-          b.paidOn.localeCompare(a.paidOn)
-        )
-      }
-
-      return data?.items as IDividendsProps
-    },
-    {
-      enabled: !!router.id
-    }
-  )
+  } = useQuery({
+    queryKey: ['dividends_data', router.id],
+    queryFn: () => fetchDividends(router.id),
+    enabled: !!router.id
+  })
 
   return {
     dividendsData,
