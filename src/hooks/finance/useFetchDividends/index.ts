@@ -1,4 +1,5 @@
 import { useUserId } from '@/hooks/globalStates'
+import { fetchDividends } from '@/services/finance/getDividends'
 import { useQuery } from '@tanstack/react-query'
 
 export interface IDividendProps {
@@ -22,24 +23,6 @@ function sumTotalsDividends(array: IDividendsProps = []) {
   return total
 }
 
-const fetchDividends = async (routerId: string | undefined) => {
-  if (!routerId) return [] // Lidar com o caso em que routerId é undefined
-
-  const resp = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: process.env.NEXT_PUBLIC_KEY_API_TRANDING_212 || ''
-      }
-    }
-  )
-
-  const data = await resp.json()
-  return data?.items.sort((a: IDividendProps, b: IDividendProps) =>
-    b.paidOn.localeCompare(a.paidOn)
-  ) as IDividendProps[]
-}
 export const useFetchDividends = () => {
   const { userId } = useUserId() as any
 
@@ -50,7 +33,7 @@ export const useFetchDividends = () => {
     refetch: refetchDividendsData
   } = useQuery({
     queryKey: ['dividends_data', userId],
-    queryFn: () => fetchDividends(userId),
+    queryFn: () => fetchDividends(),
     enabled: !!userId
   })
 

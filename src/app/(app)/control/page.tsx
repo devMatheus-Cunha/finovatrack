@@ -53,7 +53,12 @@ export default function Control() {
   const { typeAccount } = userData
 
   const { addExpense, isLoadingAddExpense } = useAddExpense()
-  const { expensesData = [], setFilter, filter } = useFetchExpensesData()
+  const {
+    expensesData = [],
+    setFilter,
+    filter,
+    isLoadingExpensesData
+  } = useFetchExpensesData()
   const { deletedExpense } = useDeletedExpense()
   const { upadtedExpense } = useUpadtedExpense()
 
@@ -218,6 +223,7 @@ export default function Control() {
             handleOpenModal={handleOpenModal}
             isVisibilityData={isVisibilityData}
             filter={filter}
+            isLoadingExpensesData={isLoadingExpensesData}
           />
         </div>
 

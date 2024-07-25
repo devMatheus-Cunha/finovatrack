@@ -33,8 +33,6 @@ const useUserData = () => {
     enabled: !!userId
   })
 
-  console.log({ data, userId })
-
   const userData = data ?? initialState
 
   return {
