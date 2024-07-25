@@ -36,6 +36,7 @@
     "react-loading": "^2.0.3",
     "react-number-format": "^5.1.4",
     "react-toastify": "^9.1.2",
+    "sharp": "^0.33.4",
     "tailwind-merge": "^1.13.2",
     "zod": "^3.21.4"
   },
