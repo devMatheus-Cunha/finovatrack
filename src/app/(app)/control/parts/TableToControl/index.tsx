@@ -9,6 +9,7 @@ import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
+import ReactLoading from 'react-loading'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -16,6 +17,7 @@ interface ITableToControl {
   handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
   filter: Filter
   userData: UserData
+  isLoadingExpensesData?: boolean
 }
 
 function TableToControl({
@@ -23,7 +25,8 @@ function TableToControl({
   handleOpenModal,
   isVisibilityData,
   filter,
-  userData
+  userData,
+  isLoadingExpensesData
 }: ITableToControl) {
   const columsHeadProps = (): TableColumn[] => {
     const columns = [
@@ -95,12 +98,26 @@ function TableToControl({
 
     return columns
   }
+
   return (
     <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] bg-gray-800">
-      {calculationSumValues?.length > 0 ? (
-        <Table columns={columsHeadProps()} data={calculationSumValues} />
+      {isLoadingExpensesData ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <ReactLoading
+            type="spinningBubbles"
+            color="#13C1ED"
+            height={100}
+            width={100}
+          />
+        </div>
       ) : (
-        <Empty<Filter> filter={filter} />
+        <>
+          {calculationSumValues?.length > 0 ? (
+            <Table columns={columsHeadProps()} data={calculationSumValues} />
+          ) : (
+            <Empty<Filter> filter={filter} />
+          )}
+        </>
       )}
     </div>
   )
