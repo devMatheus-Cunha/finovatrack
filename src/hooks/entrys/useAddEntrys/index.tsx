@@ -1,14 +1,14 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import {
   IAddEntryServiceProps,
   addEntryService
 } from '@/services/entrys/addEntry'
 import { useFetchEntrysData } from '../useFetchEntrysData'
+import { useUserId } from '@/hooks/globalStates'
 
 export default function useAddEntrys() {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const { refetchEntrysData } = useFetchEntrysData()
 
   const {
@@ -16,7 +16,7 @@ export default function useAddEntrys() {
     isLoading: isLoadingAddEntrys,
     status: statusAddEntrys
   } = useMutation(
-    (values: IAddEntryServiceProps) => addEntryService(values, router.id),
+    (values: IAddEntryServiceProps) => addEntryService(values, userId),
     {
       onSuccess: () => {
         refetchEntrysData()

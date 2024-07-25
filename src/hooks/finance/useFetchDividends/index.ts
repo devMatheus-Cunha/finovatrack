@@ -1,5 +1,5 @@
+import { useUserId } from '@/hooks/globalStates'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 
 export interface IDividendProps {
   ticker: string
@@ -41,7 +41,7 @@ const fetchDividends = async (routerId: string | undefined) => {
   ) as IDividendProps[]
 }
 export const useFetchDividends = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const {
     data: dividendsData,
@@ -49,9 +49,9 @@ export const useFetchDividends = () => {
     status: statusDividendsData,
     refetch: refetchDividendsData
   } = useQuery({
-    queryKey: ['dividends_data', router.id],
-    queryFn: () => fetchDividends(router.id),
-    enabled: !!router.id
+    queryKey: ['dividends_data', userId],
+    queryFn: () => fetchDividends(userId),
+    enabled: !!userId
   })
 
   return {

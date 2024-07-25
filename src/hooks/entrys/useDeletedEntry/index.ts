@@ -2,17 +2,17 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import { deleteEntry } from '@/services/entrys/deleteEntry'
 import useFetchEntrysData from '../useFetchEntrysData'
+import { useUserId } from '@/hooks/globalStates'
 
 const useDeletedEntry = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const { refetchEntrysData } = useFetchEntrysData()
 
   const { mutateAsync: deletedEntry } = useMutation(
-    async (itemId?: string) => deleteEntry(itemId, router.id),
+    async (itemId?: string) => deleteEntry(itemId, userId),
     {
       onSuccess: () => {
         refetchEntrysData()

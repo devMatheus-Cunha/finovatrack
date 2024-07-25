@@ -1,7 +1,6 @@
-import { useUserData } from '@/hooks/globalStates'
+import { useUserData, useUserId } from '@/hooks/globalStates'
 import { updatedDocumentForUser, updatedEmailUser } from '@/services/auth/login'
 import { useMutation } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 interface IUpadtedUserProps {
@@ -12,14 +11,14 @@ interface IUpadtedUserProps {
 }
 
 const useUpdatedUser = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const { refetchUserData } = useUserData()
 
   const { mutateAsync: updatedUserData, isLoading } = useMutation(
     async (values: IUpadtedUserProps) => {
       await updatedEmailUser(values.email)
       await updatedDocumentForUser({
-        id: router.id,
+        id: userId,
         ...values
       } as any)
     },

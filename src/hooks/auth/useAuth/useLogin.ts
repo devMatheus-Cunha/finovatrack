@@ -1,3 +1,4 @@
+import { useUserId } from '@/hooks/globalStates'
 import {
   LoginProps,
   login,
@@ -9,17 +10,19 @@ import { toast } from 'react-toastify'
 
 const useLogin = () => {
   const router = useRouter()
+  const { setUserId } = useUserId()
 
   const { mutateAsync: loginWithEmail, isLoading } = useMutation(
     (values: LoginProps) => login(values),
     {
       onSuccess: async (user) => {
+        setUserId(user.uid)
         updatedDocumentForUser({
           id: user.uid,
           expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
           token: (await user.getIdTokenResult()).token
         } as any)
-        router.push(`/${user.uid}/control`)
+        router.push(`/control`)
       },
       onError: ({ message }: { message: string }) => {
         toast.error(message, {

@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import { updatedEntry } from '@/services/entrys/updatedEntry'
 import { IEntrysData, useFetchEntrysData } from '../useFetchEntrysData'
+import { useUserId } from '@/hooks/globalStates'
 
 const useUpadtedEntry = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const { refetchEntrysData } = useFetchEntrysData()
 
   const { mutateAsync: upadtedEntry } = useMutation(
-    (data: IEntrysData) => updatedEntry(router.id, data),
+    (data: IEntrysData) => updatedEntry(userId, data),
     {
       onSuccess: () => {
         refetchEntrysData()

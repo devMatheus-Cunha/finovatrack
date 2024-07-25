@@ -1,5 +1,5 @@
+import { useUserId } from '@/hooks/globalStates'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 
 export interface IInvestmentsProps {
   blocked: number
@@ -12,7 +12,7 @@ export interface IInvestmentsProps {
 }
 
 export const useFetchInvestiments = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const {
     data: investimentsData,
@@ -20,7 +20,7 @@ export const useFetchInvestiments = () => {
     status: statusInvestimentsData,
     refetch: refetchInvestimentsData
   } = useQuery(
-    ['investiments_data', router.id],
+    ['investiments_data', userId],
     async () => {
       const resp = await fetch(
         `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/equity/account/cash`,
@@ -36,7 +36,7 @@ export const useFetchInvestiments = () => {
       return data as IInvestmentsProps
     },
     {
-      enabled: !!router.id
+      enabled: !!userId
     }
   )
 
