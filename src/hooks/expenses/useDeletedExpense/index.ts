@@ -6,7 +6,7 @@ import useFetchExpensesData from '../useFetchExpensesData'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 
 const useDeletedExpense = () => {
-  const router = useParams()
+  const router = useParams<any>()
   const { refetchExpensesData } = useFetchExpensesData()
 
   const { mutateAsync: deletedExpense } = useMutation(

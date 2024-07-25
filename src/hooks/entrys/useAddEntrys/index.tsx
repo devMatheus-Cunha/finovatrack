@@ -8,7 +8,7 @@ import {
 import { useFetchEntrysData } from '../useFetchEntrysData'
 
 export default function useAddEntrys() {
-  const router = useParams()
+  const router = useParams<any>()
   const { refetchEntrysData } = useFetchEntrysData()
 
   const {

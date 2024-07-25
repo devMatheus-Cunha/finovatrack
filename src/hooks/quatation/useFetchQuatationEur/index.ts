@@ -28,7 +28,7 @@ export type RefetchQuationDataType = <TPageData>(
 >
 
 const useFetchQuatationEur = (userData: UserData, amount = 0) => {
-  const router = useParams()
+  const router = useParams<any>()
   const toastId: any = React.useRef(null)
 
   const { data: lastQuatationData, refetch: refetchLastQuotationData } =

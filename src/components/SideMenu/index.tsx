@@ -34,7 +34,7 @@ const SideMenu = ({
               >
                 <div
                   className={`flex gap-0.5 flex-col justify-center items-center ${
-                    pathname?.startsWith(item?.route)
+                    pathname?.includes(item?.route)
                       ? 'text-cyan-600'
                       : '#eee2e2'
                   } hover:opacity-75`}

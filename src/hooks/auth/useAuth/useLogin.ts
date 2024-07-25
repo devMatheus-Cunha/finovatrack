@@ -19,7 +19,7 @@ const useLogin = () => {
           expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
           token: (await user.getIdTokenResult()).token
         } as any)
-        router.push(`/control/${user.uid}`)
+        router.push(`/${user.uid}/control`)
       },
       onError: ({ message }: { message: string }) => {
         toast.error(message, {

@@ -5,7 +5,7 @@ import { saveReportService } from '@/services/reports/saveReport'
 import { useParams } from 'next/navigation'
 
 export default function useSaveReport() {
-  const router = useParams()
+  const router = useParams<any>()
 
   const {
     mutateAsync: saveReport,

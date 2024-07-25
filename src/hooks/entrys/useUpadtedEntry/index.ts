@@ -5,7 +5,7 @@ import { updatedEntry } from '@/services/entrys/updatedEntry'
 import { IEntrysData, useFetchEntrysData } from '../useFetchEntrysData'
 
 const useUpadtedEntry = () => {
-  const router = useParams()
+  const router = useParams<any>()
   const { refetchEntrysData } = useFetchEntrysData()
 
   const { mutateAsync: upadtedEntry } = useMutation(
