@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 import { getExpenses } from '@/services/expenses/getExpenses'
+import { useUserId } from '@/hooks/globalStates'
 
 export type Filter =
   | 'Essencial'
@@ -11,7 +11,7 @@ export type Filter =
   | ''
 
 export const useFetchExpensesData = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const [filter, setFilter] = useState<Filter>('')
 
   const {
@@ -20,10 +20,10 @@ export const useFetchExpensesData = () => {
     status: statusExpensesData,
     refetch: refetchExpensesData
   } = useQuery({
-    queryKey: ['expenses_data', filter, router.id],
-    queryFn: async () => await getExpenses(router.id, filter),
+    queryKey: ['expenses_data', filter, userId],
+    queryFn: async () => await getExpenses(userId, filter),
     keepPreviousData: true,
-    enabled: !!router.id
+    enabled: !!userId
   })
 
   return {

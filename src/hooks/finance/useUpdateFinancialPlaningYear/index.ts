@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import { updateFinancialPlanningYearData } from '@/services/finance/updateFinancialPlanningYearData'
 import { useFetchFinancialPlaningYear } from '../useFetchFinancialPlaningYear'
+import { useUserId } from '@/hooks/globalStates'
 
 const useUpdateFinancialPlaningYear = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const { refetchFinancialPlanningYear } = useFetchFinancialPlaningYear()
 
   const { mutateAsync: updateFinancialPlaningYear } = useMutation(
-    (data: any) => updateFinancialPlanningYearData(data, router.id),
+    (data: any) => updateFinancialPlanningYearData(data, userId),
     {
       onSuccess: () => {
         refetchFinancialPlanningYear()

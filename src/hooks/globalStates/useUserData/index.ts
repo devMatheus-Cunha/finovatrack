@@ -2,9 +2,9 @@
 
 import { doc, getDoc } from '@firebase/firestore'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 import { UserData } from '../../auth/useAuth/types'
 import { db } from '../../../services/firebase'
+import useUserId from '../useUserId'
 
 export const initialState: UserData = {
   id: '',
@@ -18,20 +18,22 @@ export const initialState: UserData = {
 }
 
 const useUserData = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const checkAuthState = async () => {
-    const myDocRef = doc(db, 'users', router.id)
+    const myDocRef = doc(db, 'users', userId)
     const myDocSnapshot = await getDoc(myDocRef)
     return myDocSnapshot.data() as UserData
   }
 
   const { data, refetch: refetchUserData } = useQuery<UserData>({
-    queryKey: ['user_data', router.id],
+    queryKey: ['user_data', userId],
     queryFn: checkAuthState,
     staleTime: Infinity,
-    enabled: !!router.id
+    enabled: !!userId
   })
+
+  console.log({ data, userId })
 
   const userData = data ?? initialState
 

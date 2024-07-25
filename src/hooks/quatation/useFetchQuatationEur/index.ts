@@ -7,11 +7,11 @@ import {
 } from '@tanstack/react-query'
 import React from 'react'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import { getQuatationRateFromAPI } from '@/services/quatation/getQuatationRateFromAPI'
 import { updateQuotationData } from '@/services/quatation/updateQuotationData'
 import { getLastQuotationData } from '@/services/quatation/getLastQuotationData'
 import { UserData } from '@/hooks/auth/useAuth/types'
+import { useUserId } from '@/hooks/globalStates'
 
 export type RefetchQuationDataType = <TPageData>(
   options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
@@ -28,18 +28,18 @@ export type RefetchQuationDataType = <TPageData>(
 >
 
 const useFetchQuatationEur = (userData: UserData, amount = 0) => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
   const toastId: any = React.useRef(null)
 
   const { data: lastQuatationData, refetch: refetchLastQuotationData } =
     useQuery(
-      ['last_quotation_data', router.id],
-      async () => await getLastQuotationData(router.id),
-      { enabled: !!router.id }
+      ['last_quotation_data', userId],
+      async () => await getLastQuotationData(userId),
+      { enabled: !!userId }
     )
 
   const { mutateAsync: addLastQuotation } = useMutation(
-    (data: Record<string, any>) => updateQuotationData(router.id, data),
+    (data: Record<string, any>) => updateQuotationData(userId, data),
     {
       onSuccess: async () => await refetchLastQuotationData()
     }

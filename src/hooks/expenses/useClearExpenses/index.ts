@@ -1,16 +1,16 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useParams } from 'next/navigation'
 import { clearExpenses } from '@/services/expenses/clearExpenses'
 import { useFetchExpensesData } from '../useFetchExpensesData'
+import { useUserId } from '@/hooks/globalStates'
 
 const useClearExpenses = () => {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const { refetchExpensesData } = useFetchExpensesData()
 
   const { mutateAsync: clearExpensesData } = useMutation(
-    () => clearExpenses(router.id),
+    () => clearExpenses(userId),
     {
       onSuccess: () => {
         refetchExpensesData()

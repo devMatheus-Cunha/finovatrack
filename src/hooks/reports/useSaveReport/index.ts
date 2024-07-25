@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { IReportData } from '@/services/reports/getReport'
 import { saveReportService } from '@/services/reports/saveReport'
-import { useParams } from 'next/navigation'
+import { useUserId } from '@/hooks/globalStates'
 
 export default function useSaveReport() {
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const {
     mutateAsync: saveReport,
@@ -13,7 +13,7 @@ export default function useSaveReport() {
     status: statusSaveReport
   } = useMutation(
     async (data: IReportData) => {
-      await saveReportService(data, router.id)
+      await saveReportService(data, userId)
     },
     {
       onSuccess: () => {

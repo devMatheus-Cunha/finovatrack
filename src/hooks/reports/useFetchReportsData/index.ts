@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import { IReportData, getReport } from '@/services/reports/getReport'
+import { useUserId } from '@/hooks/globalStates'
 
 export default function useFetchReportsData() {
   const [period, setPeriod] = useState('')
-  const router = useParams<any>()
+  const { userId } = useUserId() as any
 
   const { data: reportData } = useQuery<IReportData[], unknown>({
-    queryKey: ['report_data', period, router.id],
-    queryFn: () => getReport(router.id, period),
+    queryKey: ['report_data', period, userId],
+    queryFn: () => getReport(userId, period),
     keepPreviousData: true,
-    enabled: !!period && !!router.id
+    enabled: !!period && !!userId
   })
 
   return {

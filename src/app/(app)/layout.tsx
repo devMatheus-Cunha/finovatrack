@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   Archive,
   ChartLineUp,
@@ -13,7 +13,7 @@ import {
 import React, { ReactNode } from 'react'
 import ReactLoading from 'react-loading'
 import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
-import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/auth'
 
 interface SideBarProps {
@@ -24,13 +24,10 @@ export default function AppLayout({ children }: SideBarProps) {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
   const router = useRouter()
-  const { id: idRoute } = useParams()
   const pathname = usePathname()
 
   const { onLogout } = useLogout()
-  const {
-    userData: { id }
-  } = useUserData()
+  const { userId } = useUserId()
 
   const sidebarItems = [
     {
@@ -51,7 +48,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: 'control',
       disabled: false,
       icon: <ClipboardText size={21} />,
-      action: () => router.push(`/${id}/control`)
+      action: () => router.push(`/control`)
     },
     {
       id: 'reports',
@@ -59,17 +56,17 @@ export default function AppLayout({ children }: SideBarProps) {
       route: 'reports',
       disabled: false,
       icon: <Archive size={21} />,
-      action: () => router.push(`/${id}/reports`)
+      action: () => router.push(`/reports`)
     },
     {
       id: 'finance',
       label: 'Finanças',
       route: 'finance',
       disabled:
-        idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
-        idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
+        userId !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
+        userId !== 'phVFFH1yHmXHXSCQuAACgyQxVe33',
       icon: <ChartLineUp size={21} />,
-      action: () => router.push(`/${id}/finance`)
+      action: () => router.push(`/finance`)
     },
     {
       id: 'myProfile',
@@ -77,7 +74,7 @@ export default function AppLayout({ children }: SideBarProps) {
       route: 'myProfile',
       disabled: false,
       icon: <User size={21} />,
-      action: () => router.push(`/${id}/myProfile`)
+      action: () => router.push(`/myProfile`)
     },
     {
       id: 'logout',
@@ -99,7 +96,7 @@ export default function AppLayout({ children }: SideBarProps) {
       </HeaderMobile>
 
       <div className="flex-auto w-full p-0 md:p-4">
-        {!id ? (
+        {!userId ? (
           <div className="flex h-screen w-full items-center justify-center">
             <ReactLoading
               type="spinningBubbles"
