@@ -12,7 +12,7 @@ interface IUpadtedUserProps {
 }
 
 const useUpdatedUser = () => {
-  const router = useParams()
+  const router = useParams<any>()
   const { refetchUserData } = useUserData()
 
   const { mutateAsync: updatedUserData, isLoading } = useMutation(

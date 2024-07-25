@@ -5,7 +5,7 @@ import { IReportData, getReport } from '@/services/reports/getReport'
 
 export default function useFetchReportsData() {
   const [period, setPeriod] = useState('')
-  const router = useParams()
+  const router = useParams<any>()
 
   const { data: reportData } = useQuery<IReportData[], unknown>({
     queryKey: ['report_data', period, router.id],

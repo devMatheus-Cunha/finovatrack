@@ -5,7 +5,7 @@ import { updateFinancialPlanningYearData } from '@/services/finance/updateFinanc
 import { useFetchFinancialPlaningYear } from '../useFetchFinancialPlaningYear'
 
 const useUpdateFinancialPlaningYear = () => {
-  const router = useParams()
+  const router = useParams<any>()
   const { refetchFinancialPlanningYear } = useFetchFinancialPlaningYear()
 
   const { mutateAsync: updateFinancialPlaningYear } = useMutation(

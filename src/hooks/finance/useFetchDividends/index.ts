@@ -41,7 +41,7 @@ const fetchDividends = async (routerId: string | undefined) => {
   ) as IDividendProps[]
 }
 export const useFetchDividends = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const {
     data: dividendsData,

@@ -11,7 +11,7 @@ export type Filter =
   | ''
 
 export const useFetchExpensesData = () => {
-  const router = useParams()
+  const router = useParams<any>()
   const [filter, setFilter] = useState<Filter>('')
 
   const {

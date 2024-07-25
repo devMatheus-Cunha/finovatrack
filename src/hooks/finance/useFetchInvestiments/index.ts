@@ -12,7 +12,7 @@ export interface IInvestmentsProps {
 }
 
 export const useFetchInvestiments = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const {
     data: investimentsData,

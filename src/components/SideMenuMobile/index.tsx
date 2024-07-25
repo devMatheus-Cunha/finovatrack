@@ -66,7 +66,7 @@ const SideMenuMobile = ({
                     onClick={item.action}
                     disabled={item.disabled}
                     className={`${
-                      pathname?.startsWith(item?.route)
+                      pathname?.includes(item?.route)
                         ? 'text-cyan-600'
                         : 'text-white'
                     } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}

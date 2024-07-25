@@ -8,7 +8,7 @@ export interface IEntrysData {
 }
 
 export const useFetchEntrysData = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const {
     data: entrysData,

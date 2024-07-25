@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation'
 import { getFinancialPlanningYear } from '@/services/finance/getFinancialPlanningYear'
 
 export const useFetchFinancialPlaningYear = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const {
     data: financialPlanningYear,

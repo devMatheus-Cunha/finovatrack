@@ -11,7 +11,7 @@ const useSignUp = () => {
   const { mutateAsync: createAccountUser, isLoading } = useMutation({
     mutationFn: async (values: SigingProps) => siging(values),
     onSuccess: (id: string) => {
-      router.push(`/control/${id}`)
+      router.push(`/${id}/control`)
     },
     onError: ({ message }: { message: string }) => {
       toast.error(message, {

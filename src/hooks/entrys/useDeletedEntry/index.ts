@@ -7,7 +7,7 @@ import { deleteEntry } from '@/services/entrys/deleteEntry'
 import useFetchEntrysData from '../useFetchEntrysData'
 
 const useDeletedEntry = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const { refetchEntrysData } = useFetchEntrysData()
 

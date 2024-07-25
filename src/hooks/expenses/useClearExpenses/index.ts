@@ -5,7 +5,7 @@ import { clearExpenses } from '@/services/expenses/clearExpenses'
 import { useFetchExpensesData } from '../useFetchExpensesData'
 
 const useClearExpenses = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const { refetchExpensesData } = useFetchExpensesData()
 

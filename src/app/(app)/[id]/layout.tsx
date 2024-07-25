@@ -12,9 +12,9 @@ import {
 } from '@phosphor-icons/react'
 import React, { ReactNode } from 'react'
 import ReactLoading from 'react-loading'
-import { useIsVisibilityDatas, useUserData } from '../../hooks/globalStates'
-import { useLogout } from '../../hooks/auth'
 import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { useLogout } from '@/hooks/auth'
 
 interface SideBarProps {
   children: ReactNode
@@ -36,7 +36,7 @@ export default function AppLayout({ children }: SideBarProps) {
     {
       id: 'eye',
       label: 'Visualizar',
-      route: '/eye',
+      route: 'eye',
       disabled: false,
       icon: isVisibilityData ? (
         <Eye size={21} color="#eee2e2" />
@@ -48,41 +48,41 @@ export default function AppLayout({ children }: SideBarProps) {
     {
       id: 'control',
       label: 'Controle',
-      route: '/control',
+      route: 'control',
       disabled: false,
       icon: <ClipboardText size={21} />,
-      action: () => router.push(`/control/${id}`)
+      action: () => router.push(`/${id}/control`)
     },
     {
       id: 'reports',
       label: 'Relatórios',
-      route: '/reports',
+      route: 'reports',
       disabled: false,
       icon: <Archive size={21} />,
-      action: () => router.push(`/reports/${id}`)
+      action: () => router.push(`/${id}/reports`)
     },
     {
       id: 'finance',
       label: 'Finanças',
-      route: '/finance',
+      route: 'finance',
       disabled:
         idRoute !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
         idRoute !== 'lgR9vIxkzLU4cs62fqiBDGVUVen2',
       icon: <ChartLineUp size={21} />,
-      action: () => router.push(`/finance/${id}`)
+      action: () => router.push(`/${id}/finance`)
     },
     {
       id: 'myProfile',
       label: 'Perfil',
-      route: '/myProfile',
+      route: 'myProfile',
       disabled: false,
       icon: <User size={21} />,
-      action: () => router.push(`/myProfile/${id}`)
+      action: () => router.push(`/${id}/myProfile`)
     },
     {
       id: 'logout',
       label: 'Logout',
-      route: '/logout',
+      route: 'logout',
       disabled: false,
       icon: <SignOut size={21} />,
       action: () => onLogout()
