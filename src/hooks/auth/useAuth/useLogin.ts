@@ -1,3 +1,5 @@
+'use client'
+
 import { useUserId } from '@/hooks/globalStates'
 import {
   LoginProps,
@@ -22,7 +24,8 @@ const useLogin = () => {
           expirationTimeToken: (await user.getIdTokenResult()).expirationTime,
           token: (await user.getIdTokenResult()).token
         } as any)
-        router.push(`/control`)
+        router.prefetch('/control')
+        router.push('/control')
       },
       onError: ({ message }: { message: string }) => {
         toast.error(message, {

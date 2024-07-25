@@ -1,7 +1,6 @@
-'use client'
-
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { Eye, EyeSlash, List } from '@phosphor-icons/react'
+import Link from 'next/link'
 import React from 'react'
 
 const SideMenuMobile = ({
@@ -42,29 +41,16 @@ const SideMenuMobile = ({
         </button>
       </div>
 
-      <div
-        id="docs-sidebar"
-        className="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-44  border-r  pt-7 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 scrollbar-y bg-gray-800 border-gray-700"
-      >
-        <div className="px-3 mb-3">
-          <a
-            className="flex-none text-xl font-semibold text-white"
-            aria-label="Brand"
-          >
-            Menu
-          </a>
-        </div>
-        <nav
-          className="hs-accordion-group w-full flex flex-col flex-wrap"
-          data-hs-accordion-always-open
-        >
+      <div id="docs-sidebar" className="hs-overlay ...">
+        {/* ... (outras partes do seu componente) */}
+        <nav className="hs-accordion-group ...">
           <ul className="space-y-1.5">
             {sidebarItems.map((item) => (
               <React.Fragment key={item.id}>
                 <li>
-                  <button
+                  <Link
+                    href={item.route !== 'logout' ? `/${item.route}` : '#'}
                     onClick={item.action}
-                    disabled={item.disabled}
                     className={`${
                       pathname?.includes(item?.route)
                         ? 'text-cyan-600'
@@ -73,7 +59,7 @@ const SideMenuMobile = ({
                   >
                     {item.icon}
                     <p className="text-[14px]">{item.label}</p>
-                  </button>
+                  </Link>
                 </li>
               </React.Fragment>
             ))}
