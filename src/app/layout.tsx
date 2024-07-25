@@ -3,7 +3,6 @@
 'use client'
 
 import '../styles/globals.css'
-import '@mantine/core/styles.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Providers from '@/utils/reactQuery/provider'
@@ -14,7 +13,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ThemeProvider } from 'next-themes'
 import { ToastContainer } from 'react-toastify'
-import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import Script from 'next/script'
 
 export default function RootLayout({
@@ -35,7 +33,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript defaultColorScheme="dark" />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-L8G3KWJZDF"
@@ -56,15 +53,13 @@ export default function RootLayout({
 
       <body suppressHydrationWarning>
         <Providers>
-          <MantineProvider forceColorScheme="dark">
-            <ChakraProvider theme={theme}>
-              <ThemeProvider attribute="class">
-                <div>{children}</div>
-                <ToastContainer theme="dark" />
-              </ThemeProvider>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </ChakraProvider>
-          </MantineProvider>
+          <ChakraProvider theme={theme}>
+            <ThemeProvider attribute="class">
+              <div>{children}</div>
+              <ToastContainer theme="dark" />
+            </ThemeProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ChakraProvider>
         </Providers>
       </body>
     </html>

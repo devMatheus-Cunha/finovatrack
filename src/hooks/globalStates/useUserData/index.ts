@@ -18,7 +18,7 @@ export const initialState: UserData = {
 }
 
 const useUserData = () => {
-  const router = useParams()
+  const router = useParams<any>()
 
   const checkAuthState = async () => {
     const myDocRef = doc(db, 'users', router.id)
