@@ -1,35 +1,30 @@
-/* eslint-disable @next/next/inline-script-id */
-
-'use client'
-
-import '../styles/globals.css'
-import 'react-toastify/dist/ReactToastify.css'
-
 import Providers from '@/utils/reactQuery/provider'
-import React, { useEffect } from 'react'
-import { ChakraProvider, ThemeConfig, extendTheme } from '@chakra-ui/react'
-
-import 'react-datepicker/dist/react-datepicker.css'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ThemeProvider } from 'next-themes'
-import { ToastContainer } from 'react-toastify'
+import { Metadata } from 'next'
 import Script from 'next/script'
+
+export const metadata: Metadata = {
+  title: 'FinovaTrack - Home',
+  description:
+    'Domine suas finanças em várias moedas. Registre, edite e acompanhe suas informações financeiras de forma simples e eficiente. Adicione e edite seus gastos facilmente. Cálculo automático de entradas, gastos e saldo. Registre suas entradas de valor. Salve relatórios completos dos seus gastos. Controle de múltiplas moedas: Defina a moeda principal da sua conta para a conversão automática de valores.',
+  keywords: [
+    'finanças',
+    'moedas',
+    'controle financeiro',
+    'gastos',
+    'entradas',
+    'saldo'
+  ],
+  authors: {
+    name: 'Matheus Cunha',
+    url: 'https://www.linkedin.com/in/devmatheusgr/'
+  }
+}
 
 export default function RootLayout({
   children
 }: {
   children: React.ReactNode
 }) {
-  const config: ThemeConfig = {
-    initialColorMode: 'dark',
-    useSystemColorMode: false
-  }
-
-  const theme = extendTheme({ config })
-
-  useEffect(() => {
-    import('preline')
-  }, [])
   return (
     <html lang="en">
       <head>
@@ -45,7 +40,7 @@ export default function RootLayout({
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
 
-                gtag('config', 'G-L8G3KWJZDF')
+                gtag('config', ${process.env.NEXT_PUBLIC_GOOGLE_CODE})
               `
           }}
         />
@@ -53,13 +48,7 @@ export default function RootLayout({
 
       <body suppressHydrationWarning>
         <Providers>
-          <ChakraProvider theme={theme}>
-            <ThemeProvider attribute="class">
-              <div>{children}</div>
-              <ToastContainer theme="dark" />
-            </ThemeProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </ChakraProvider>
+          <div>{children}</div>
         </Providers>
       </body>
     </html>
