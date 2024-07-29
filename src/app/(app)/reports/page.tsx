@@ -9,6 +9,7 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import Table, { TableColumn } from '@/components/Table'
+import { Show } from '@chakra-ui/react'
 
 function Reports() {
   const { userData } = useUserData()
@@ -148,42 +149,46 @@ function Reports() {
               <div className="relative md:overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
                 {data?.data?.length > 0 ? (
                   <>
-                    <Table columns={columsHeadProps()} data={data?.data} />
-                    <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
-                      {data?.data.map((item) => (
-                        <>
-                          {item.value && (
-                            <div className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4">
-                              <div className="flex flex-col gap-4 ">
-                                <p className="text-ms">{item?.description}</p>
-                                <p className="-mt-1 font-sans text-m font-semibold">
-                                  {isVisibilityData
-                                    ? formatCurrencyMoney(
-                                        Number(item?.value),
-                                        userData.typeAccount === 'oneCurrency'
-                                          ? userData.primary_currency
-                                          : item?.typeMoney,
-                                        isVisibilityData
-                                      )
-                                    : '-'}
-                                </p>
+                    <Show above="lg">
+                      <Table columns={columsHeadProps()} data={data?.data} />
+                    </Show>
+                    <Show below="lg">
+                      <div className="flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
+                        {data?.data.map((item) => (
+                          <>
+                            {item.value && (
+                              <div className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4">
+                                <div className="flex flex-col gap-4 ">
+                                  <p className="text-ms">{item?.description}</p>
+                                  <p className="-mt-1 font-sans text-m font-semibold">
+                                    {isVisibilityData
+                                      ? formatCurrencyMoney(
+                                          Number(item?.value),
+                                          userData.typeAccount === 'oneCurrency'
+                                            ? userData.primary_currency
+                                            : item?.typeMoney,
+                                          isVisibilityData
+                                        )
+                                      : '-'}
+                                  </p>
+                                </div>
+                                <div className="flex flex-col gap-4 text-left w-[33%]">
+                                  <p
+                                    className={`font-medium text-ms ${
+                                      item?.payment === 'A Pagar'
+                                        ? ' text-red-500'
+                                        : 'text-green-500'
+                                    }`}
+                                  >
+                                    {item?.payment}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="flex flex-col gap-4 text-left w-[33%]">
-                                <p
-                                  className={`font-medium text-ms ${
-                                    item?.payment === 'A Pagar'
-                                      ? ' text-red-500'
-                                      : 'text-green-500'
-                                  }`}
-                                >
-                                  {item?.payment}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      ))}
-                    </div>
+                            )}
+                          </>
+                        ))}
+                      </div>
+                    </Show>
                   </>
                 ) : (
                   <div className="flex justify-center items-center h-full">

@@ -15,6 +15,7 @@ import ReactLoading from 'react-loading'
 import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
 import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/auth'
+import { Show } from '@chakra-ui/react'
 
 interface SideBarProps {
   children: ReactNode
@@ -88,12 +89,16 @@ export default function AppLayout({ children }: SideBarProps) {
 
   return (
     <div className="h-[100vh] flex flex-col lg:flex-row">
-      <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
+      <Show above="lg">
+        <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
+      </Show>
 
-      <HeaderMobile>
-        <Logo className="text-xl md:text-lg" />
-        <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
-      </HeaderMobile>
+      <Show below="lg">
+        <HeaderMobile>
+          <Logo className="text-xl md:text-lg" />
+          <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
+        </HeaderMobile>
+      </Show>
 
       <div className="flex-auto w-full p-0 md:p-4">
         {!userId ? (
