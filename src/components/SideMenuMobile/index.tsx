@@ -63,18 +63,33 @@ const SideMenuMobile = ({
             {sidebarItems.map((item) => (
               <React.Fragment key={item.id}>
                 <li>
-                  <Link
-                    href={item.route !== 'logout' ? `/${item.route}` : '#'}
-                    onClick={item.action}
-                    className={`${
-                      pathname?.includes(item?.route)
-                        ? 'text-cyan-600'
-                        : 'text-white'
-                    } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
-                  >
-                    {item.icon}
-                    <p className="text-[14px]">{item.label}</p>
-                  </Link>
+                  {item.id === 'eye' ? (
+                    <>
+                      <button
+                        onClick={item.action}
+                        className={`${
+                          pathname?.includes(item?.route)
+                            ? 'text-cyan-600'
+                            : 'text-white'
+                        } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
+                      >
+                        {item.icon}
+                        <p className="text-[14px]">{item.label}</p>
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.route !== 'logout' ? `/${item.route}` : '#'}
+                      className={`${
+                        pathname?.includes(item?.route)
+                          ? 'text-cyan-600'
+                          : 'text-white'
+                      } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
+                    >
+                      {item.icon}
+                      <p className="text-[14px]">{item.label}</p>
+                    </Link>
+                  )}
                 </li>
               </React.Fragment>
             ))}
