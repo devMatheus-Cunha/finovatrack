@@ -156,20 +156,18 @@ function Reports() {
                       <div className="flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
                         {data?.data.map((item) => (
                           <>
-                            {item.value && (
+                            {item.value_primary_currency && (
                               <div className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4">
                                 <div className="flex flex-col gap-4 ">
                                   <p className="text-ms">{item?.description}</p>
                                   <p className="-mt-1 font-sans text-m font-semibold">
-                                    {isVisibilityData
-                                      ? formatCurrencyMoney(
-                                          Number(item?.value),
-                                          userData.typeAccount === 'oneCurrency'
-                                            ? userData.primary_currency
-                                            : item?.typeMoney,
-                                          isVisibilityData
-                                        )
-                                      : '-'}
+                                    {formatCurrencyMoney(
+                                      Number(item?.value_primary_currency),
+                                      userData.typeAccount === 'oneCurrency'
+                                        ? userData.primary_currency
+                                        : item?.typeMoney,
+                                      isVisibilityData
+                                    )}
                                   </p>
                                 </div>
                                 <div className="flex flex-col gap-4 text-left w-[33%]">
