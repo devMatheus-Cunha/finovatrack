@@ -1,27 +1,8 @@
 import Header from '@/components/Header'
-import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
 import imageNot from '../public/home-not.png'
-
-export const metadata: Metadata = {
-  title: 'FinovaTrack - Home',
-  description:
-    'Domine suas finanças em várias moedas. Registre, edite e acompanhe suas informações financeiras de forma simples e eficiente. Adicione e edite seus gastos facilmente. Cálculo automático de entradas, gastos e saldo. Registre suas entradas de valor. Salve relatórios completos dos seus gastos. Controle de múltiplas moedas: Defina a moeda principal da sua conta para a conversão automática de valores.',
-  keywords: [
-    'finanças',
-    'moedas',
-    'controle financeiro',
-    'gastos',
-    'entradas',
-    'saldo'
-  ],
-  authors: {
-    name: 'Matheus Cunha',
-    url: 'https://www.linkedin.com/in/devmatheusgr/'
-  }
-}
 
 function LandingPage() {
   return (

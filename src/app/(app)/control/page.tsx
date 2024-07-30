@@ -237,14 +237,13 @@ export default function Control() {
                 <div className="flex flex-col gap-4 ">
                   <p className="text-ms">{item.description}</p>
                   <p className="-mt-1 font-sans text-m font-semibold">
-                    {isVisibilityData
-                      ? formatCurrencyMoney(
-                          formatToJavaScriptNumber(item?.value),
-                          userData.typeAccount === 'oneCurrency'
-                            ? userData.primary_currency
-                            : item.typeMoney
-                        )
-                      : '-'}
+                    {formatCurrencyMoney(
+                      formatToJavaScriptNumber(item?.value),
+                      userData.typeAccount === 'oneCurrency'
+                        ? userData.primary_currency
+                        : item.typeMoney,
+                      isVisibilityData
+                    )}
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 text-left w-[33%]">

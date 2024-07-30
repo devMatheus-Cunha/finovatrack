@@ -1,8 +1,16 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css'
+import '../../styles/globals.css'
+
+import { ThemeProvider } from 'next-themes'
+import { ToastContainer } from 'react-toastify'
+import { ChakraProvider, extendTheme, ThemeConfig } from '@chakra-ui/react'
 
 function Providers({ children }: React.PropsWithChildren) {
   const [client] = React.useState(
@@ -12,7 +20,6 @@ function Providers({ children }: React.PropsWithChildren) {
           refetchOnWindowFocus: false,
           cacheTime: 1000 * 60 * 10, // cache data for 10 minutes
           staleTime: 1000 * 60 * 5, // consider data stale after 5 minutes
-          // refetchInterval: 1000 * 60 * 15, // refetch data every 15 minutes
           refetchOnMount: true, // refetch data when component first mounts
           retry: false, // Disable automatic refetch attempts
           keepPreviousData: true
@@ -21,9 +28,26 @@ function Providers({ children }: React.PropsWithChildren) {
     })
   )
 
+  const config: ThemeConfig = {
+    initialColorMode: 'dark',
+    useSystemColorMode: false
+  }
+
+  const theme = extendTheme({ config })
+
+  useEffect(() => {
+    import('preline')
+  }, [])
+
   return (
     <QueryClientProvider client={client}>
-      {children}
+      <ChakraProvider theme={theme}>
+        <ThemeProvider attribute="class">
+          {children}
+          <ToastContainer theme="dark" />
+        </ThemeProvider>
+      </ChakraProvider>
+
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
