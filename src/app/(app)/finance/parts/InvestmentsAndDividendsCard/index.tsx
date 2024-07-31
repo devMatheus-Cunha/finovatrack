@@ -15,6 +15,7 @@ import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 import ReactLoading from 'react-loading'
+import { tickerToCompanyName } from '@/utils/namesCompanyByTicker'
 
 interface InvestmentsAndDividendsCardProps {
   userData: UserData
@@ -184,7 +185,7 @@ const InvestmentsAndDividendsCard: React.FC<
                 dividendsData?.map(({ amountInEuro, ticker }) => (
                   <>
                     <Heading size="xs" textTransform="uppercase">
-                      {ticker}
+                      {tickerToCompanyName[ticker]}
                     </Heading>
                     <Box display="flex" alignItems="center" gap={1}>
                       <Text pt="2" fontSize="sm">
