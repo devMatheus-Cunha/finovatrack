@@ -15,48 +15,51 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
-import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/services/expenses/getExpenses'
+import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
 
 interface IHeaderDataTableToControl {
   userData: UserData
   currentQuotation: number | undefined
   filter: string
+  onOpenAddEntry: any
+  onOpenDeleteExpenses: any
+  onOpenSaveReport: any
+  handleControlModalExpense: IHandleControlModalExpenseFunction
   onFilter: (filter: any) => void
-  handleOpenModal: (type?: ITypeModal | undefined, data?: ExpenseData) => void
-  handleOpenModalSaveReport: (data?: ExpenseData[]) => void
   refetchQuationData: RefetchQuationDataType
 }
 
 function HeaderDataTableToControl({
   userData,
   currentQuotation,
-  handleOpenModal,
   filter,
   onFilter,
-  handleOpenModalSaveReport,
-  refetchQuationData
+  refetchQuationData,
+  onOpenAddEntry,
+  onOpenSaveReport,
+  onOpenDeleteExpenses,
+  handleControlModalExpense
 }: IHeaderDataTableToControl) {
   const buttonData = [
     {
       label: 'Add Gastos',
       icon: <Coins size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('addExpense')
+      onClick: () => handleControlModalExpense('add')
     },
     {
       label: 'Add Entrada',
       icon: <HandCoins size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('addEntry')
+      onClick: () => onOpenAddEntry()
     },
     {
       label: 'Salvar Relatório',
       icon: <FolderOpen size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModalSaveReport()
+      onClick: () => onOpenSaveReport()
     },
     {
       label: 'Limpar Gastos',
       icon: <Broom size={20} color="#eee2e2" />,
-      onClick: () => handleOpenModal('deleteAllExpenses')
+      onClick: () => onOpenDeleteExpenses()
     }
   ]
 
@@ -66,7 +69,7 @@ function HeaderDataTableToControl({
         <Button
           type="button"
           className="hidden lg:block"
-          onClick={() => handleOpenModal('addExpense')}
+          onClick={() => handleControlModalExpense('add')}
         >
           <div className="flex gap-2 justify-center items-center">
             <Coins size={20} color="#eee2e2" />
@@ -76,7 +79,7 @@ function HeaderDataTableToControl({
         <Button
           className="hidden lg:block"
           type="button"
-          onClick={() => handleOpenModal('addEntry')}
+          onClick={() => onOpenAddEntry()}
         >
           <div className="flex gap-2 justify-center items-center">
             <HandCoins size={20} color="#eee2e2" />
@@ -86,7 +89,7 @@ function HeaderDataTableToControl({
         <Button
           className="hidden lg:block"
           type="button"
-          onClick={() => handleOpenModalSaveReport()}
+          onClick={() => onOpenSaveReport()}
         >
           <div className="flex gap-2 justify-center items-center">
             <FolderOpen size={20} color="#eee2e2" />
@@ -96,7 +99,7 @@ function HeaderDataTableToControl({
         <Button
           type="button"
           className="hidden lg:block"
-          onClick={() => handleOpenModal('deleteAllExpenses')}
+          onClick={() => onOpenDeleteExpenses()}
         >
           <div className="flex gap-2 justify-center items-center">
             <Broom size={20} color="#eee2e2" />

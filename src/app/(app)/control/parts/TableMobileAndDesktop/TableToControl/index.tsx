@@ -5,16 +5,16 @@ import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { ButtonGroup, Empty } from '@/components'
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
-import { ITypeModal } from '../../types'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import ReactLoading from 'react-loading'
+import { ITypeModalExpense } from '../../hooks/useControlModal'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
   isVisibilityData: boolean
-  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
+  handleOpenModal: (type?: ITypeModalExpense, data?: ExpenseData) => void
   filter: Filter
   userData: UserData
   isLoadingExpensesData?: boolean

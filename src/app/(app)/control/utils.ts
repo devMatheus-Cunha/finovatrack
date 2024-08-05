@@ -11,7 +11,7 @@ import {
 import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
-  addExpense: {
+  add: {
     title: 'Adicionar Gasto',
     description: 'Add a new Expense'
   },
