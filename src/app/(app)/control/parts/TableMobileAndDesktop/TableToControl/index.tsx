@@ -9,7 +9,7 @@ import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import ReactLoading from 'react-loading'
-import { ITypeModalExpense } from '../../hooks/useControlModal'
+import { ITypeModalExpense } from '../../../hooks/useControlModal'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]

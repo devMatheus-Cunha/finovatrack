@@ -5,7 +5,7 @@ import {
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import React from 'react'
-import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
+import { IHandleControlModalExpenseFunction } from '../../../hooks/useControlModal'
 
 interface IMobileTableProps {
   expensesData: ExpenseData[]
