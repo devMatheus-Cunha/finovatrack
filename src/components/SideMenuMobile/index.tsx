@@ -1,101 +1,108 @@
 'use client'
 
+import {
+  HStack,
+  IconButton,
+  VStack,
+  Link,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerBody,
+  useColorModeValue,
+  Text
+} from '@chakra-ui/react'
+import { List, Eye, EyeSlash } from '@phosphor-icons/react'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
-import { Eye, EyeSlash, List } from '@phosphor-icons/react'
-import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/navigation'
 
-const SideMenuMobile = ({
-  sidebarItems,
-  pathname
-}: {
+interface SidebarItem {
+  id: string
+  label: string
+  route: string
+  disabled: boolean
+  icon: React.JSX.Element
+  action?: () => void
+}
+
+const SideMenuMobile: React.FC<{
+  sidebarItems: SidebarItem[]
   pathname: string
-  sidebarItems: {
-    id: string
-    label: string
-    route: string
-    disabled: boolean
-    icon: React.JSX.Element
-    action: () => void
-  }[]
-}) => {
+}> = ({ sidebarItems, pathname }) => {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
+  const linkColor = useColorModeValue('blue.500', 'cyan.500')
+
+  const handleNavigation = (route: string, action?: () => void) => {
+    if (action) {
+      action()
+    } else {
+      router.push(route !== 'logout' ? `/${route}` : '#')
+    }
+    onClose()
+  }
 
   return (
     <>
-      <div className="flex gap-3 item-center">
-        <button type="button" onClick={() => handleToggleVisibilityData()}>
-          {isVisibilityData ? (
-            <Eye size={21} color="#eee2e2" />
-          ) : (
-            <EyeSlash size={21} color="#eee2e2" />
-          )}
-        </button>
-        <button
-          type="button"
-          className="text-gray-500 hover:text-gray-600"
-          data-hs-overlay="#docs-sidebar"
-          aria-controls="docs-sidebar"
-          aria-label="Toggle navigation"
-        >
-          <List size={22} color="#eee2e2" />
-        </button>
-      </div>
-
-      <div
-        id="docs-sidebar"
-        className="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-44  border-r  pt-7 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 scrollbar-y bg-gray-800 border-gray-700"
-      >
-        <div className="px-3 mb-3">
-          <a
-            className="flex-none text-xl font-semibold text-white"
-            aria-label="Brand"
-          >
-            Menu
-          </a>
-        </div>
-        <nav
-          className="hs-accordion-group w-full flex flex-col flex-wrap"
-          data-hs-accordion-always-open
-        >
-          <ul className="space-y-1.5">
-            {sidebarItems.map((item) => (
-              <React.Fragment key={item.id}>
-                <li>
-                  {item.id === 'eye' ? (
-                    <>
-                      <button
-                        onClick={item.action}
-                        className={`${
-                          pathname?.includes(item?.route)
-                            ? 'text-cyan-600'
-                            : 'text-white'
-                        } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
-                      >
-                        {item.icon}
-                        <p className="text-[14px]">{item.label}</p>
-                      </button>
-                    </>
-                  ) : (
-                    <Link
-                      href={item.route !== 'logout' ? `/${item.route}` : '#'}
-                      className={`${
-                        pathname?.includes(item?.route)
-                          ? 'text-cyan-600'
-                          : 'text-white'
-                      } hover:opacity-75 flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-md  bg-gray-800  w-full`}
-                    >
-                      {item.icon}
-                      <p className="text-[14px]">{item.label}</p>
-                    </Link>
-                  )}
-                </li>
-              </React.Fragment>
-            ))}
-          </ul>
-        </nav>
-      </div>
+      <HStack spacing={3}>
+        <IconButton
+          aria-label={isVisibilityData ? 'Hide Data' : 'Show Data'}
+          icon={isVisibilityData ? <Eye size={21} /> : <EyeSlash size={21} />}
+          onClick={handleToggleVisibilityData}
+          color="white"
+        />
+        <IconButton
+          aria-label="Open Menu"
+          icon={<List size={22} />}
+          onClick={onOpen}
+          color="white"
+        />
+      </HStack>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent bg="gray.800" borderRight="1px" borderColor="gray.700">
+          <DrawerCloseButton color="white" />
+          <DrawerBody pt={7} pb={10} overflowY="auto" className="scrollbar-y">
+            <VStack alignItems="flex-start" px={3} mb={3} spacing={1.5}>
+              <Link
+                href="/"
+                fontSize="xl"
+                fontWeight="semibold"
+                color="white"
+                _hover={{ textDecoration: 'none' }}
+              >
+                Menu
+              </Link>
+            </VStack>
+            <VStack alignItems="flex-start" w="full" spacing={1.5}>
+              {sidebarItems.map((item) => (
+                <Link
+                  key={item.id}
+                  onClick={() => handleNavigation(item.route, item.action)}
+                  w="full"
+                  display="flex"
+                  alignItems="center"
+                  px={2.5}
+                  py={2}
+                  borderRadius="md"
+                  bg="gray.800"
+                  color={pathname?.includes(item?.route) ? linkColor : 'white'}
+                  _hover={{ opacity: '0.75', textDecoration: 'none' }}
+                >
+                  {item.icon}
+                  <Text fontSize="14px" ml={3.5}>
+                    {item.label}
+                  </Text>
+                </Link>
+              ))}
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </>
   )
 }

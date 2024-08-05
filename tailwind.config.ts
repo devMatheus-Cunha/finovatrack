@@ -5,14 +5,13 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    'node_modules/preline/dist/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/preline/dist/*.{js,ts,jsx,tsx,mdx}'
   ],
   purge: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
-  darkMode: 'dark',
   theme: {
     extend: {
       colors: {
@@ -32,13 +31,13 @@ module.exports = {
           600: '#4B5563',
           700: '#374151',
           800: '#1F2937',
-          900: '#111827',
-        },
-      },
-    },
+          900: '#111827'
+        }
+      }
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [require('preline/plugin'), require('@tailwindcss/forms')],
+  plugins: [require('preline/plugin'), require('@tailwindcss/forms')]
 }

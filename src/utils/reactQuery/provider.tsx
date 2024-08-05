@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -35,18 +35,14 @@ function Providers({ children }: React.PropsWithChildren) {
 
   const theme = extendTheme({ config })
 
-  useEffect(() => {
-    import('preline')
-  }, [])
-
   return (
     <QueryClientProvider client={client}>
-      <ChakraProvider theme={theme}>
-        <ThemeProvider attribute="class">
+      <ThemeProvider>
+        <ChakraProvider theme={theme}>
           {children}
           <ToastContainer theme="dark" />
-        </ThemeProvider>
-      </ChakraProvider>
+        </ChakraProvider>
+      </ThemeProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

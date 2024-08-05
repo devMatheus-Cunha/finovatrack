@@ -8,8 +8,8 @@ import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
-import ReactLoading from 'react-loading'
 import { ITypeModalExpense } from '../../../hooks/useControlModal'
+import { Spinner } from '@chakra-ui/react'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -103,11 +103,12 @@ function TableToControl({
     <div className="relative overflow-y-auto sm:rounded-lg h-[63vh] bg-gray-800">
       {isLoadingExpensesData ? (
         <div className="flex h-full w-full items-center justify-center">
-          <ReactLoading
-            type="spinningBubbles"
-            color="#13C1ED"
-            height={100}
-            width={100}
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="cyan.500"
+            size="xl"
           />
         </div>
       ) : (

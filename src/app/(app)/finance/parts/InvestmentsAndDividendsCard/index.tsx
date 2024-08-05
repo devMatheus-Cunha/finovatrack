@@ -7,14 +7,14 @@ import {
   Heading,
   Text,
   Stack,
-  StackDivider
+  StackDivider,
+  Spinner
 } from '@chakra-ui/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
-import ReactLoading from 'react-loading'
 import { tickerToCompanyName } from '@/utils/namesCompanyByTicker'
 
 interface InvestmentsAndDividendsCardProps {
@@ -67,11 +67,12 @@ const InvestmentsAndDividendsCard: React.FC<
 
         {isLoadingInvestimentsData ? (
           <div className="flex h-screen w-full items-center justify-center">
-            <ReactLoading
-              type="spinningBubbles"
-              color="#13C1ED"
-              height={50}
-              width={50}
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="cyan.500"
+              size="xl"
             />
           </div>
         ) : (
@@ -171,11 +172,12 @@ const InvestmentsAndDividendsCard: React.FC<
 
         {isLoadingDividendsData ? (
           <div className="flex h-screen w-full items-center justify-center">
-            <ReactLoading
-              type="spinningBubbles"
-              color="#13C1ED"
-              height={50}
-              width={50}
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="cyan.500"
+              size="xl"
             />
           </div>
         ) : (

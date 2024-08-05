@@ -6631,7 +6631,6 @@ __metadata:
     react-datepicker: "npm:^4.11.0"
     react-dom: "npm:^18.3.1"
     react-hook-form: "npm:^7.43.9"
-    react-loading: "npm:^2.0.3"
     react-number-format: "npm:^5.1.4"
     react-toastify: "npm:^9.1.2"
     sharp: "npm:^0.33.4"
@@ -7350,16 +7349,6 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
-  languageName: node
-  linkType: hard
-
-"react-loading@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "react-loading@npm:2.0.3"
-  peerDependencies:
-    prop-types: ^15.6.0
-    react: ">=0.14.0"
-  checksum: f2bd5c5189db49194fb66a5120b4040af01811b80d111abf0f33b658bf4da48aefc45f72381e062606b899c3f93366954cad09c06ba0491bcab6c0538897cfe4
   languageName: node
   linkType: hard
 

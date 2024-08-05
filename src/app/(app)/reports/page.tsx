@@ -9,7 +9,16 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import Table, { TableColumn } from '@/components/Table'
-import { Show } from '@chakra-ui/react'
+import {
+  Box,
+  Show,
+  VStack,
+  Text,
+  SimpleGrid,
+  Heading,
+  WrapItem,
+  Wrap
+} from '@chakra-ui/react'
 
 function Reports() {
   const { userData } = useUserData()
@@ -78,6 +87,16 @@ function Reports() {
 
     return columns
   }
+  const renderSummaryItem = (label: string, value: string) => (
+    <WrapItem>
+      <Text color="gray.300">
+        {label}:{' '}
+        <Text as="span" color="white" fontStyle="italic">
+          {isVisibilityData ? value : '****'}
+        </Text>
+      </Text>
+    </WrapItem>
+  )
 
   return (
     <div className=" w-[100%]">
@@ -94,73 +113,76 @@ function Reports() {
             />
 
             <Button
-              type="button"
               onClick={() => onSubmit(selectedPeriod)}
-              className="font-medium rounded-lg text-[13px] md:text-sm p-2 bg-gray-700 hover:bg-gray-600 focus:ring-gray-600 border-gray-700 w-full"
+              leftIcon={<FolderOpen size={20} color="white" />}
+              size="md"
+              fontSize="md"
+              variant="default700"
             >
-              <div className="flex gap-1 md:gap-2 justify-center items-center">
-                <FolderOpen size={20} color="#eee2e2" />
-                Solicitar Relatório
-              </div>
+              Solicitar Relatório
             </Button>
           </div>
         </div>
         <div className="w-[95%]">
           {data ? (
             <div className="flex flex-col gap-4">
-              <h1 className="text-lg md:text-xl">
-                Relatório referente ao período{' '}
-                <span className="italic">{data?.period}</span>
-              </h1>
-              <div className="flex flex-wrap gap-2 md:gap-4">
-                <h1 className="text-gray-300">
-                  Total Entradas:{' '}
-                  <span className="italic text-white">
-                    {isVisibilityData ? data.totalEntrys : '****'}
-                  </span>
-                </h1>
-                {userData.typeAccount === 'hybrid' && (
-                  <h1 className="text-gray-300">
-                    {`Total gastos em ${userData.secondary_currency}:`}{' '}
-                    <span className="italic text-white">
-                      {isVisibilityData ? data.totalExpenseEurToReal : '****'}
-                    </span>
-                  </h1>
-                )}
-                <h1 className="text-gray-300">
-                  Total Gastos:{' '}
-                  <span className="italic text-white">
-                    {isVisibilityData ? data.totalExpenses : '****'}
-                  </span>
-                </h1>
-                <h1 className="text-gray-300">
-                  Total Livre{' '}
-                  <span className="italic text-white">
-                    {isVisibilityData ? data.totalInvested : '****'}
-                  </span>
-                </h1>
-                {userData.typeAccount === 'hybrid' && (
-                  <h1 className="text-gray-300">
-                    Cotação Usada:{' '}
-                    <span className="italic text-white">{data.quatation}</span>
-                  </h1>
-                )}
-              </div>
-              <div className="relative md:overflow-y-auto sm:rounded-lg h-[62vh] w-[100%] lg:bg-gray-800">
+              {data && (
+                <VStack align="stretch" spacing={4}>
+                  <Heading size="md">
+                    Relatório referente ao período{' '}
+                    <Text as="span" fontStyle="italic">
+                      {data.period}
+                    </Text>
+                  </Heading>
+                  <Wrap spacing={2} spacingY={4}>
+                    {renderSummaryItem('Total Entradas', data.totalEntrys)}
+
+                    {userData.typeAccount === 'hybrid' &&
+                      renderSummaryItem(
+                        `Total gastos em ${userData.secondary_currency}`,
+                        data.totalExpenseEurToReal
+                      )}
+
+                    {renderSummaryItem('Total Gastos', data.totalExpenses)}
+                    {renderSummaryItem('Total Livre', data.totalInvested)}
+
+                    {userData.typeAccount === 'hybrid' &&
+                      renderSummaryItem('Cotação Usada', data.quatation)}
+                  </Wrap>
+                </VStack>
+              )}
+
+              <Box
+                overflowY="auto"
+                maxH="62vh"
+                borderRadius={{ sm: 'lg' }}
+                w="100%"
+                bg={{ lg: 'gray.800' }}
+              >
                 {data?.data?.length > 0 ? (
                   <>
                     <Show above="lg">
                       <Table columns={columsHeadProps()} data={data?.data} />
                     </Show>
                     <Show below="lg">
-                      <div className="flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
+                      <SimpleGrid columns={1} spacing={4}>
                         {data?.data.map((item) => (
                           <>
                             {item.value_primary_currency && (
-                              <div className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4">
-                                <div className="flex flex-col gap-4 ">
-                                  <p className="text-ms">{item?.description}</p>
-                                  <p className="-mt-1 font-sans text-m font-semibold">
+                              <Box
+                                key={item.id}
+                                bg="gray.700"
+                                borderRadius="lg"
+                                p={4}
+                                h="85px"
+                                w="full"
+                                justifyContent="space-between"
+                                display="flex"
+                                alignItems="center"
+                              >
+                                <VStack spacing={4} align="start">
+                                  <Text fontSize="ms">{item?.description}</Text>
+                                  <Text fontSize="m" fontWeight="semibold">
                                     {formatCurrencyMoney(
                                       Number(item?.value_primary_currency),
                                       userData.typeAccount === 'oneCurrency'
@@ -168,42 +190,49 @@ function Reports() {
                                         : item?.typeMoney,
                                       isVisibilityData
                                     )}
-                                  </p>
-                                </div>
-                                <div className="flex flex-col gap-4 text-left w-[33%]">
-                                  <p
-                                    className={`font-medium text-ms ${
+                                  </Text>
+                                </VStack>
+                                <VStack spacing={4} align="start" w="33%">
+                                  <Text
+                                    fontSize="ms"
+                                    fontWeight="medium"
+                                    color={
                                       item?.payment === 'A Pagar'
-                                        ? ' text-red-500'
-                                        : 'text-green-500'
-                                    }`}
+                                        ? 'red.500'
+                                        : 'green.500'
+                                    }
                                   >
                                     {item?.payment}
-                                  </p>
-                                </div>
-                              </div>
+                                  </Text>
+                                </VStack>
+                              </Box>
                             )}
                           </>
                         ))}
-                      </div>
+                      </SimpleGrid>
                     </Show>
                   </>
                 ) : (
-                  <div className="flex justify-center items-center h-full">
-                    <h1 className="text-2xl">Não a nenhum dado na tabela!</h1>
-                  </div>
+                  <Text align="center" fontSize="2xl">
+                    Não há nenhum dado na tabela!
+                  </Text>
                 )}
-              </div>
+              </Box>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full">
-              <h1 className="mt-4 text-2xl md:text-3xl font-bold text-white">
+            <VStack h="full" alignItems="center" justifyContent="center">
+              <Heading
+                mt={4}
+                size={{ base: 'md', md: 'xl' }}
+                fontWeight="bold"
+                color="white"
+              >
                 Nenhum relatório gerado
-              </h1>
-              <p className="mt-2 text-md text-gray-300">
+              </Heading>
+              <Text mt={2} fontSize="md" color="gray.300">
                 Não há dados disponíveis para este período.
-              </p>
-            </div>
+              </Text>
+            </VStack>
           )}
         </div>
       </div>

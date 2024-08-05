@@ -11,11 +11,10 @@ import {
   User
 } from '@phosphor-icons/react'
 import React, { ReactNode } from 'react'
-import ReactLoading from 'react-loading'
 import { HeaderMobile, Logo, SideMenu, SideMenuMobile } from '@/components'
 import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/auth'
-import { Show } from '@chakra-ui/react'
+import { Box, Show } from '@chakra-ui/react'
 
 interface SideBarProps {
   children: ReactNode
@@ -26,9 +25,8 @@ export default function AppLayout({ children }: SideBarProps) {
     useIsVisibilityDatas()
   const router = useRouter()
   const pathname = usePathname()
-
-  const { onLogout } = useLogout()
   const { userId } = useUserId()
+  const { onLogout } = useLogout()
 
   const sidebarItems = [
     {
@@ -88,7 +86,7 @@ export default function AppLayout({ children }: SideBarProps) {
   ]
 
   return (
-    <div className="h-[100vh] flex flex-col lg:flex-row">
+    <Box h="100vh" display="flex" flexDirection={{ base: 'column', lg: 'row' }}>
       <Show above="lg">
         <SideMenu pathname={pathname} sidebarItems={sidebarItems} />
       </Show>
@@ -100,20 +98,9 @@ export default function AppLayout({ children }: SideBarProps) {
         </HeaderMobile>
       </Show>
 
-      <div className="flex-auto w-full p-0 md:p-4">
-        {!userId ? (
-          <div className="flex h-screen w-full items-center justify-center">
-            <ReactLoading
-              type="spinningBubbles"
-              color="#13C1ED"
-              height={100}
-              width={100}
-            />
-          </div>
-        ) : (
-          children
-        )}
-      </div>
-    </div>
+      <Box flex="1" w="full" p={{ base: 0, md: 4 }}>
+        {children}
+      </Box>
+    </Box>
   )
 }

@@ -1,29 +1,39 @@
 'use client'
 
-import { Button, DropdownFilter } from '@/components'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
+import {
+  HStack,
+  Text,
+  IconButton,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Icon,
+  Button,
+  Menu,
+  Show
+} from '@chakra-ui/react'
 import {
   Coins,
   HandCoins,
   Broom,
   FolderOpen,
   ArrowsCounterClockwise,
-  CaretDown
+  Plus
 } from '@phosphor-icons/react'
-import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
-
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { DropdownFilter } from '@/components'
 
 interface IHeaderDataTableToControl {
   userData: UserData
   currentQuotation: number | undefined
   filter: string
-  onOpenAddEntry: any
-  onOpenDeleteExpenses: any
-  onOpenSaveReport: any
+  onOpenAddEntry: () => void
+  onOpenDeleteExpenses: () => void
+  onOpenSaveReport: () => void
   handleControlModalExpense: IHandleControlModalExpenseFunction
   onFilter: (filter: any) => void
   refetchQuationData: RefetchQuationDataType
@@ -43,131 +53,92 @@ function HeaderDataTableToControl({
   const buttonData = [
     {
       label: 'Add Gastos',
-      icon: <Coins size={20} color="#eee2e2" />,
+      icon: Coins,
       onClick: () => handleControlModalExpense('add')
     },
     {
       label: 'Add Entrada',
-      icon: <HandCoins size={20} color="#eee2e2" />,
-      onClick: () => onOpenAddEntry()
+      icon: HandCoins,
+      onClick: onOpenAddEntry
     },
     {
       label: 'Salvar Relatório',
-      icon: <FolderOpen size={20} color="#eee2e2" />,
-      onClick: () => onOpenSaveReport()
+      icon: FolderOpen,
+      onClick: onOpenSaveReport
     },
     {
       label: 'Limpar Gastos',
-      icon: <Broom size={20} color="#eee2e2" />,
-      onClick: () => onOpenDeleteExpenses()
+      icon: Broom,
+      onClick: onOpenDeleteExpenses
     }
   ]
 
   return (
-    <div className="flex justify-between items-center flex-wrap">
-      <div className="flex gap-3 items-center justify-center flex-wrap">
-        <Button
-          type="button"
-          className="hidden lg:block"
-          onClick={() => handleControlModalExpense('add')}
-        >
-          <div className="flex gap-2 justify-center items-center">
-            <Coins size={20} color="#eee2e2" />
-            <p className="hidden lg:block">Add Gastos</p>
-          </div>
-        </Button>
-        <Button
-          className="hidden lg:block"
-          type="button"
-          onClick={() => onOpenAddEntry()}
-        >
-          <div className="flex gap-2 justify-center items-center">
-            <HandCoins size={20} color="#eee2e2" />
-            <p className="hidden lg:block">Add Entrada</p>
-          </div>
-        </Button>
-        <Button
-          className="hidden lg:block"
-          type="button"
-          onClick={() => onOpenSaveReport()}
-        >
-          <div className="flex gap-2 justify-center items-center">
-            <FolderOpen size={20} color="#eee2e2" />
-            <p className="hidden lg:block">Salvar Relatório</p>
-          </div>
-        </Button>
-        <Button
-          type="button"
-          className="hidden lg:block"
-          onClick={() => onOpenDeleteExpenses()}
-        >
-          <div className="flex gap-2 justify-center items-center">
-            <Broom size={20} color="#eee2e2" />
-            <p className="hidden lg:block">Limpar Gastos</p>
-          </div>
-        </Button>
-        <div className="block lg:hidden">
-          <div className="hs-dropdown relative inline-flex [--strategy:absolute]">
-            <button
-              id="s-dropdown-left-but-right-on-lg"
-              type="button"
-              className="hs-dropdown-toggle inline-flex justify-center items-center gap-2 transition-all px-5 py-2.5 text-sm font-medium rounded-lg bg-gray-800 hover:bg-gray-700"
-            >
-              Ações
-              <CaretDown size={20} color="#eee2e2" />
-            </button>
+    <HStack justifyContent="space-between" alignItems="center" wrap="wrap">
+      <HStack gap={3} justifyContent="center" flexWrap="wrap">
+        {buttonData.map((button, index) => (
+          <Button
+            key={index}
+            leftIcon={<Icon as={button.icon} color="white" boxSize={5} />}
+            onClick={button.onClick}
+            display={{ base: 'none', lg: 'flex' }}
+          >
+            {button.label}
+          </Button>
+        ))}
 
-            <div
-              className="hs-dropdown-menu transition-[opacity,margin] duration text-white hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-[15rem] px-2 py-2.5 text-sm font-medium rounded-lg bg-gray-800 border border-gray-700 shadow"
-              aria-labelledby="hs-dropdown-basic"
-            >
+        <Show below="lg">
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<Icon as={Plus} />}
+              aria-label="Ações"
+            />
+            <MenuList>
               {buttonData.map((button, index) => (
-                <button
-                  className={`flex w-full items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-white hover:bg-gray-700 border-gray-700`}
-                  onClick={button.onClick}
+                <MenuItem
                   key={index}
+                  onClick={button.onClick}
+                  icon={<Icon as={button.icon} mr={2} />}
                 >
-                  <div className="flex gap-2 justify-center items-center">
-                    {button.icon}
-                    {button.label}
-                  </div>
-                </button>
+                  {button.label}
+                </MenuItem>
               ))}
-            </div>
-          </div>
-        </div>
+            </MenuList>
+          </Menu>
+        </Show>
+
         <DropdownFilter
           value={filter}
           options={optionsFilterCategory}
           onFilter={onFilter}
           label="Filtrar Categoria"
         />
-      </div>
+      </HStack>
 
-      <div className="flex gap-2 justify-center items-center">
+      <HStack>
         {userData.typeAccount === 'hybrid' && (
           <>
-            <h3 className="italic text-[14px] md:text-md">
+            <Text
+              fontSize={{ base: 'sm', md: 'md' }}
+              as="h3"
+              fontStyle="italic"
+            >
               {`${userData.secondary_currency}: ${formatCurrencyMoney(
                 currentQuotation ?? 0,
                 userData.primary_currency
-              )} `}
-            </h3>
-            <button
-              type="button"
+              )}`}
+            </Text>
+            <IconButton
+              aria-label="Refresh"
+              icon={<ArrowsCounterClockwise size={20} color="white" />}
               onClick={() => refetchQuationData()}
-              className="hover:text-gray-400"
-            >
-              <ArrowsCounterClockwise
-                size={20}
-                color="#eee2e2"
-                className="hover:opacity-75"
-              />
-            </button>
+              colorScheme="gray"
+            />
           </>
         )}
-      </div>
-    </div>
+      </HStack>
+    </HStack>
   )
 }
 

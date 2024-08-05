@@ -8,7 +8,6 @@ import { ZodError, z } from 'zod'
 import { Button, Input, InputPassword } from '@/components'
 import { useLogin } from '@/hooks/auth'
 import { LoginProps } from '@/services/auth/login'
-import Link from 'next/link'
 
 const schema = z.object({
   email: z.string().email(),
@@ -106,12 +105,9 @@ export default function Login() {
             </div>
           </Button>
           <div className="flex gap-7">
-            <Link
-              href="/"
-              className="text-white focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
-            >
+            <Button variant="link" routeLink="/">
               Home
-            </Link>
+            </Button>
             <Button variant="link" routeLink="/signup">
               Criar Conta
             </Button>

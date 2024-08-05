@@ -6,7 +6,7 @@ import imageNot from '../public/home-not.png'
 
 function LandingPage() {
   return (
-    <div className=" text-white h-screen flex flex-col">
+    <div className="text-white h-screen flex flex-col">
       <Header />
 
       <main className="flex mt-2 md:mt-10 gap-12 flex-col p-[3%] md:p-8 flex-grow">

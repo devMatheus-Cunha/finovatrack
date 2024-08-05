@@ -26,13 +26,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <head>
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-L8G3KWJZDF"
         />
-        <Script src="./node_modules/preline/dist/preline.js" />
         <Script
           dangerouslySetInnerHTML={{
             __html: `
