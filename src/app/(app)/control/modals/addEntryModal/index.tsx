@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { Button, InputTypeMoney } from '@/components'
-import { ITypeModal } from '../../types'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import {
@@ -15,6 +14,7 @@ import {
   ModalHeader,
   ModalOverlay
 } from '@chakra-ui/react'
+import { ITypeModalExpense } from '../../hooks/useControlModal'
 
 type FormData = {
   value: string
@@ -22,7 +22,7 @@ type FormData = {
 
 interface IContentModal {
   onSubmit: (value: FormData) => void
-  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
+  handleOpenModal: (type?: ITypeModalExpense, data?: ExpenseData) => void
   isLoadingAddExpense?: boolean
   userData: UserData
 }
