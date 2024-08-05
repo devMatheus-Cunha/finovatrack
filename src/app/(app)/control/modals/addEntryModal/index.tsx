@@ -8,6 +8,13 @@ import { Button, InputTypeMoney } from '@/components'
 import { ITypeModal } from '../../types'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
+import {
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay
+} from '@chakra-ui/react'
 
 type FormData = {
   value: string
@@ -49,50 +56,55 @@ function ContentAddEntryModal({
   })
 
   return (
-    <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-      <div className="rounded-lg bg-gray-800 shadowbg-gray-800">
-        <div className="p-4 border-b rounded-t border-gray-600">
-          <h3 className="text-xl font-semibold text-white">
-            Adicione uma Entrada
-          </h3>
-        </div>
+    <>
+      <ModalOverlay />
+      <ModalContent>
+        <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+          <div className="rounded-lg bg-gray-800 shadowbg-gray-800">
+            <ModalHeader>
+              <h3 className="text-xl font-semibold text-white">
+                Adicione uma Entrada
+              </h3>
+            </ModalHeader>
 
-        <div className="gap-6 px-4 py-6">
-          <InputTypeMoney
-            control={control}
-            name="value"
-            label={`Valor (${
-              optionsLabelCurrencyKeyAndValue[userData.primary_currency]
-            })`}
-            placeholder={`Ex: ${
-              optionsLabelCurrencyKeyAndValue[userData.primary_currency]
-            } 10.00`}
-            errors={
-              <>
-                {errors.value && (
-                  <span className="text-red-500 text-sm ">
-                    Este campo é obrigatório
-                  </span>
-                )}
-              </>
-            }
-          />
-        </div>
+            <ModalBody>
+              <InputTypeMoney
+                control={control}
+                name="value"
+                label={`Valor (${
+                  optionsLabelCurrencyKeyAndValue[userData.primary_currency]
+                })`}
+                placeholder={`Ex: ${
+                  optionsLabelCurrencyKeyAndValue[userData.primary_currency]
+                } 10.00`}
+                errors={
+                  <>
+                    {errors.value && (
+                      <span className="text-red-500 text-sm ">
+                        Este campo é obrigatório
+                      </span>
+                    )}
+                  </>
+                }
+              />
+            </ModalBody>
 
-        <div className="flex justify-end px-4 py-6 gap-3 border-t rounded-b border-gray-600">
-          <Button
-            onClick={() => handleOpenModal()}
-            type="button"
-            variant="cancel"
-          >
-            Cancelar
-          </Button>
-          <Button variant="confirm" type="submit">
-            {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
-          </Button>
-        </div>
-      </div>
-    </form>
+            <ModalFooter display="flex" alignItems="center" gap={3}>
+              <Button
+                onClick={() => handleOpenModal()}
+                type="button"
+                variant="cancel"
+              >
+                Cancelar
+              </Button>
+              <Button variant="confirm" type="submit">
+                {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
+              </Button>
+            </ModalFooter>
+          </div>
+        </form>
+      </ModalContent>
+    </>
   )
 }
 

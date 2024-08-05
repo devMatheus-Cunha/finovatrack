@@ -6,8 +6,6 @@ import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
-import { ITypeModal } from '../../types'
-import { ExpenseData } from '@/services/expenses/getExpenses'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 
 interface IInfoCardsToControl {
@@ -17,17 +15,17 @@ interface IInfoCardsToControl {
   totalExpensesEurToReal: number
   totalExpensesEurSumRealToReal: number
   infoAction?: () => void
-  handleOpenModal: (type?: ITypeModal, data?: ExpenseData) => void
+  onOpenTotalEntrys: any
 }
 
 function InfoCardsToControl({
   userData,
   totalEntrys,
-  handleOpenModal,
   entrysData,
   totalExpensesEurToReal,
   totalExpensesEurSumRealToReal,
-  infoAction
+  infoAction,
+  onOpenTotalEntrys
 }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
   return (
@@ -40,17 +38,16 @@ function InfoCardsToControl({
         )}
         title="Total Entradas"
         contentAction={
-          <button
-            onClick={() => handleOpenModal('totalsEntrys')}
-            className={`text-xs italic  ${
-              entrysData?.length <= 0
-                ? 'cursor-not-allowed text-gray-400'
-                : 'hover:text-gray-400 text-gray-300'
-            }`}
-            disabled={entrysData?.length <= 0}
-          >
-            Visualizar
-          </button>
+          <>
+            {entrysData?.length > 0 && (
+              <button
+                onClick={() => onOpenTotalEntrys()}
+                className={'text-xs italic  hover:text-gray-400 text-gray-300'}
+              >
+                Visualizar
+              </button>
+            )}
+          </>
         }
       />
       {userData.typeAccount === 'hybrid' && (
