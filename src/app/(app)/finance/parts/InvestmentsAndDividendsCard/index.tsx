@@ -8,7 +8,8 @@ import {
   Text,
   Stack,
   StackDivider,
-  Spinner
+  Spinner,
+  Flex
 } from '@chakra-ui/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
@@ -66,7 +67,7 @@ const InvestmentsAndDividendsCard: React.FC<
         </CardHeader>
 
         {isLoadingInvestimentsData ? (
-          <div className="flex h-screen w-full items-center justify-center">
+          <Flex width="100%" align="center" h="100vh" justify="center">
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -74,7 +75,7 @@ const InvestmentsAndDividendsCard: React.FC<
               color="cyan.500"
               size="xl"
             />
-          </div>
+          </Flex>
         ) : (
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
@@ -171,7 +172,7 @@ const InvestmentsAndDividendsCard: React.FC<
         </CardHeader>
 
         {isLoadingDividendsData ? (
-          <div className="flex h-screen w-full items-center justify-center">
+          <Flex width="100%" align="center" h="100vh" justify="center">
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -179,13 +180,13 @@ const InvestmentsAndDividendsCard: React.FC<
               color="cyan.500"
               size="xl"
             />
-          </div>
+          </Flex>
         ) : (
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
               {dividendsData &&
-                dividendsData?.map(({ amountInEuro, ticker }) => (
-                  <>
+                dividendsData?.map(({ amountInEuro, ticker }, index) => (
+                  <React.Fragment key={index}>
                     <Heading size="xs" textTransform="uppercase">
                       {tickerToCompanyName[ticker]}
                     </Heading>
@@ -208,7 +209,7 @@ const InvestmentsAndDividendsCard: React.FC<
                         )}
                       </Text>
                     </Box>
-                  </>
+                  </React.Fragment>
                 ))}
             </Stack>
           </CardBody>

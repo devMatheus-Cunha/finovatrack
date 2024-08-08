@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import { Box, Flex, Button, Text } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import React from 'react'
 
 const SideMenu = ({
@@ -16,61 +17,47 @@ const SideMenu = ({
   }[]
 }) => {
   return (
-    <aside className="hidden lg:block transition-opacity duration-300">
-      <div className="h-full flex flex-col px-2.5 py-3.5 bg-gray-800">
-        <div className="flex flex-col gap-6">
-          {sidebarItems.map((item) => (
-            <React.Fragment key={item.id}>
-              {item.id === 'eye' ? (
-                <>
-                  <button
-                    onClick={item.action}
-                    className={`focus:outline-none font-medium rounded-lg text-md transparent focus:ring-gray-600 border-gray-600 w-[100%] flex items-center justify-center ${
-                      item.disabled
-                        ? 'cursor-not-allowed opacity-50'
-                        : 'cursor-pointer'
-                    }`}
-                  >
-                    <div
-                      className={`flex gap-0.5 flex-col justify-center items-center ${
-                        pathname?.includes(item?.route)
-                          ? 'text-cyan-600'
-                          : '#eee2e2'
-                      } hover:opacity-75`}
-                    >
-                      {item.icon}
-                      <p className="text-[11px]">{item.label}</p>
-                    </div>
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href={item.route !== 'logout' ? `/${item.route}` : '#'}
-                  data-tooltip-target="tooltip-default"
-                  className={`focus:outline-none font-medium rounded-lg text-md transparent focus:ring-gray-600 border-gray-600 w-[100%] flex items-center justify-center ${
-                    item.disabled
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer'
-                  }`}
-                  onClick={item.action}
+    <Box transition="opacity 0.3s">
+      <Flex height="full" flexDirection="column" px={2.5} py={3} bg="gray.700">
+        <Flex flexDirection="column" gap={6}>
+          {sidebarItems.map((item) => {
+            const isActive = pathname?.includes(item?.route)
+            const itemTextColor = isActive ? 'cyan' : 'white'
+
+            const LinkComponent: any = item.id === 'eye' ? Button : NextLink
+            const linkProps =
+              item.id === 'eye'
+                ? { onClick: item.action }
+                : { href: `/${item.route}` }
+
+            return (
+              <LinkComponent
+                key={item.id}
+                disabled={item.disabled}
+                _hover={{ opacity: 0.75 }}
+                className="chakra-button"
+                variant="ghost"
+                p={0}
+                borderRadius="md"
+                {...linkProps}
+              >
+                <Flex
+                  gap={0.5}
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  color={itemTextColor}
+                  cursor="pointer"
                 >
-                  <div
-                    className={`flex gap-0.5 flex-col justify-center items-center ${
-                      pathname?.includes(item?.route)
-                        ? 'text-cyan-600'
-                        : '#eee2e2'
-                    } hover:opacity-75`}
-                  >
-                    {item.icon}
-                    <p className="text-[11px]">{item.label}</p>
-                  </div>
-                </Link>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-    </aside>
+                  {item.icon}
+                  <Text fontSize="xs">{item.label}</Text>
+                </Flex>
+              </LinkComponent>
+            )
+          })}
+        </Flex>
+      </Flex>
+    </Box>
   )
 }
 

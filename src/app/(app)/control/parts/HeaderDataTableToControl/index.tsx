@@ -79,6 +79,7 @@ function HeaderDataTableToControl({
         {buttonData.map((button, index) => (
           <Button
             key={index}
+            bg="gray.700"
             leftIcon={<Icon as={button.icon} color="white" boxSize={5} />}
             onClick={button.onClick}
             display={{ base: 'none', lg: 'flex' }}
@@ -93,6 +94,7 @@ function HeaderDataTableToControl({
               as={IconButton}
               icon={<Icon as={Plus} />}
               aria-label="Ações"
+              bg="gray.700"
             />
             <MenuList>
               {buttonData.map((button, index) => (

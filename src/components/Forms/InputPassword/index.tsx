@@ -1,20 +1,28 @@
 'use client'
 
-import { InputHTMLAttributes, ReactNode, useState } from 'react'
-import { EyeSlash, Eye } from '@phosphor-icons/react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import {
+  Input as ChakraPasswordInput,
+  FormControl,
+  FormLabel,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  FormErrorMessage,
+  InputProps as InputPropsChakra
+} from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useState } from 'react'
 
-interface PasswordInputProps<T extends FieldValues>
-  extends InputHTMLAttributes<HTMLInputElement> {
+interface PasswordInputProps<T extends FieldValues> extends InputPropsChakra {
   label: string
-  placeholder: string
   name: Path<T>
   register: UseFormRegister<T>
   required?: boolean
-  errors?: ReactNode
+  errors?: string
 }
 
-export default function InputPassword<T extends FieldValues>({
+export default function Input<T extends FieldValues>({
   label,
   name,
   register,
@@ -23,40 +31,40 @@ export default function InputPassword<T extends FieldValues>({
   ...rest
 }: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] = useState(false)
+  const { ref, ...field } = register(name)
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(() => !showPassword)
-  }
+  const handleToggleVisibility = () => setShowPassword(!showPassword)
 
   return (
-    <div className="w-[100%]">
-      <label
-        htmlFor={name}
-        className="block mb-2 text-sm font-medium text-white"
-      >
+    <FormControl isInvalid={!!errors}>
+      <FormLabel htmlFor={name} mb="2" color="white" fontSize="sm">
         {required ? `${label} *` : label}
-      </label>
-      <div className="relative">
-        <input
+      </FormLabel>
+      <InputGroup size="md">
+        <ChakraPasswordInput
           id={name as string}
+          pr="4.5rem"
           type={showPassword ? 'text' : 'password'}
-          className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-          {...register(name)}
+          ref={ref}
+          _placeholder={{ color: 'gray.400' }}
+          {...field}
           {...rest}
         />
-        <button
-          type="button"
-          className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none"
-          onClick={() => togglePasswordVisibility()}
-        >
-          {showPassword ? (
-            <EyeSlash size={20} color="#eee2e2" />
-          ) : (
-            <Eye size={20} color="#eee2e2" />
-          )}
-        </button>
-      </div>
-      {errors && <>{errors}</>}
-    </div>
+        <InputRightElement width="4.5rem">
+          <IconButton
+            h="1.75rem"
+            size="sm"
+            bg="transparent"
+            onClick={handleToggleVisibility}
+            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            _hover={{
+              background: 'transparent'
+            }}
+          />
+        </InputRightElement>
+      </InputGroup>
+      <FormErrorMessage>{errors}</FormErrorMessage>
+    </FormControl>
   )
 }

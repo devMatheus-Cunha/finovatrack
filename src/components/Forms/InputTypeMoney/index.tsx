@@ -1,17 +1,23 @@
 'use client'
 
-import { Box, Tooltip } from '@chakra-ui/react'
-import { Info } from '@phosphor-icons/react'
-import React, { ReactNode } from 'react'
+import {
+  Tooltip,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage
+} from '@chakra-ui/react'
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { Controller, Control, FieldValues, Path } from 'react-hook-form'
-import { NumericFormat } from 'react-number-format'
+import { NumericFormat, NumericFormatProps } from 'react-number-format'
 
-type InputTypeMoneyProps<T extends FieldValues> = {
+interface InputTypeMoneyProps<T extends FieldValues>
+  extends NumericFormatProps {
   control: Control<T>
   name: Path<T>
   placeholder: string
   label: string
-  errors?: ReactNode
+  errors?: string
   required?: boolean
   disabled?: boolean
   labelHint?: string
@@ -30,46 +36,51 @@ function InputTypeMoney<T extends FieldValues>({
   defaultValue
 }: InputTypeMoneyProps<T>) {
   return (
-    <div className="w-[100%]">
-      <label
+    <FormControl isInvalid={!!errors} w="100%">
+      <FormLabel
         htmlFor={name}
-        className="block mb-2 text-sm font-medium  text-white"
+        mb="2"
+        color="white"
+        fontSize="sm"
+        display="flex"
+        gap={0.5}
       >
-        <Box display="flex" gap={0.5}>
-          {required ? `${label} *` : label}
-          {!!labelHint && (
-            <Tooltip label={labelHint} fontSize="sm" hasArrow placement="top">
-              <Info size={16} color="orange" />
-            </Tooltip>
-          )}
-        </Box>
-      </label>
+        {required ? `${label} *` : label}
+        {labelHint && (
+          <Tooltip label={labelHint} fontSize="sm" hasArrow placement="top">
+            <InfoOutlineIcon color="orange" />
+          </Tooltip>
+        )}
+      </FormLabel>
       <Controller
         control={control}
         name={name}
-        disabled={disabled}
+        defaultValue={defaultValue} // Passando defaultValue para o Controller
         render={({ field }) => (
           <NumericFormat
+            {...field}
             disabled={disabled}
             placeholder={placeholder}
             allowLeadingZeros
             displayType="input"
             type="text"
-            className={
-              disabled
-                ? 'border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed'
-                : 'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'
-            }
+            customInput={Input} // Usando o Input do Chakra UI
+            variant={disabled ? 'filled' : 'outline'}
+            _disabled={{
+              bg: 'gray.700',
+              borderColor: 'gray.600',
+              color: 'gray.300',
+              cursor: 'not-allowed'
+            }}
+            _placeholder={{ color: 'gray.400' }}
             allowNegative={false}
             decimalScale={2}
             decimalSeparator=","
-            {...field}
-            defaultValue={defaultValue}
           />
         )}
       />
-      {errors && <>{errors}</>}
-    </div>
+      <FormErrorMessage>{errors}</FormErrorMessage>
+    </FormControl>
   )
 }
 

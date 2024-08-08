@@ -1,24 +1,33 @@
 'use client'
 
-import React from 'react'
+import { Flex, HStack, Button, useColorModeValue } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import { Button, Logo } from '..'
+import Logo from '../Logo'
 
 export default function Header() {
   const router = useRouter()
+  const bgColor = useColorModeValue('gray.800', 'gray.900')
+
   return (
-    <nav className="bg-gray-800 border-gray-200">
-      <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
-        <Logo className="text-lg md:text-2xl" />
-        <div className="flex items-center md:order-2 gap-7">
-          <Button type="button" variant="link" routeLink="/login">
-            Login
-          </Button>
-          <Button onClick={() => router.push('/signup')} variant="primary">
-            Sign up
-          </Button>
-        </div>
-      </div>
-    </nav>
+    <Flex
+      as="nav"
+      bg={bgColor}
+      px={4}
+      py={{ base: 2, md: 4 }}
+      align="center"
+      justify="space-between"
+      w="100%"
+    >
+      <Logo />
+
+      <HStack spacing={7}>
+        <Button as="a" href="/" variant="link" colorScheme="teal">
+          Login
+        </Button>
+        <Button onClick={() => router.push('/signup')} colorScheme="teal">
+          Sign up
+        </Button>
+      </HStack>
+    </Flex>
   )
 }

@@ -62,8 +62,8 @@ export default function AppLayout({ children }: SideBarProps) {
       label: 'Finanças',
       route: 'finance',
       disabled:
-        userId !== 'NgoGdyGlfATkew04ELS3m5MbWht2' &&
-        userId !== 'phVFFH1yHmXHXSCQuAACgyQxVe33',
+        userId !== process.env.NEXT_USER_ID_1 &&
+        userId !== process.env.NEXT_USER_ID_2,
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/finance`)
     },
@@ -78,7 +78,7 @@ export default function AppLayout({ children }: SideBarProps) {
     {
       id: 'logout',
       label: 'Logout',
-      route: 'logout',
+      route: '',
       disabled: false,
       icon: <SignOut size={21} />,
       action: () => onLogout()
@@ -93,7 +93,7 @@ export default function AppLayout({ children }: SideBarProps) {
 
       <Show below="lg">
         <HeaderMobile>
-          <Logo className="text-xl md:text-lg" />
+          <Logo fontSize="lg" />
           <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
         </HeaderMobile>
       </Show>

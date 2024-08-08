@@ -5,14 +5,14 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SigingProps } from '@/services/auth/siging'
-import Link from 'next/link'
 import { useSignUp } from '../../../hooks/auth'
-import { Button, Input, InputPassword } from '../../../components'
+import { Input, InputPassword, Link, Select } from '@/components'
 import {
   dropdownOptionsCurrency,
   dropdownOptionsCurrencyHybrid,
   schema
 } from './utils'
+import { Box, Button } from '@chakra-ui/react'
 
 export default function Signup() {
   const { isLoading, createAccountUser } = useSignUp()
@@ -32,17 +32,15 @@ export default function Signup() {
         createAccountUser(values)
       )}
     >
-      <div
-        className="
-          flex
-          flex-col
-          gap-6
-          w-[100%]
-          bg-gray-800
-          py-5
-          px-5
-          rounded-lg
-        "
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={6}
+        w="100%"
+        bg="gray.700"
+        py={5}
+        px={5}
+        rounded="lg"
       >
         <div className="flex gap-6">
           <Input
@@ -52,15 +50,7 @@ export default function Signup() {
             type="text"
             required
             register={register}
-            errors={
-              <>
-                {errors.name && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.name.message}
-                  </span>
-                )}
-              </>
-            }
+            errors={errors?.name?.message}
           />
           <Input
             label="Email"
@@ -69,15 +59,7 @@ export default function Signup() {
             type="email"
             required
             register={register}
-            errors={
-              <>
-                {errors.email && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.email.message}
-                  </span>
-                )}
-              </>
-            }
+            errors={errors?.email?.message}
           />
         </div>
         <div className="flex gap-6">
@@ -87,15 +69,7 @@ export default function Signup() {
             required
             placeholder="**********"
             register={register}
-            errors={
-              <>
-                {errors.password && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.password.message}
-                  </span>
-                )}
-              </>
-            }
+            errors={errors?.password?.message}
           />
           <InputPassword
             label="Confirmar Password"
@@ -103,114 +77,41 @@ export default function Signup() {
             required
             placeholder="**********"
             register={register}
-            errors={
-              <>
-                {errors.confirmPassword && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.confirmPassword.message}
-                  </span>
-                )}
-              </>
-            }
+            errors={errors?.confirmPassword?.message}
           />
         </div>
 
-        <div className="w-full">
-          <label
-            htmlFor="typeAccount"
-            className="block mb-2 text-sm font-medium text-white"
-          >
-            Selecione moeda da conta *
-          </label>
-          <select
-            id="typeAccount"
-            {...register('typeAccount')}
-            className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
-          >
-            {dropdownOptionsCurrency.map(
-              ({ value, disabled, label, selected }) => (
-                <option
-                  key={value}
-                  value={value}
-                  disabled={disabled}
-                  selected={selected}
-                >
-                  {label}
-                </option>
-              )
-            )}
-          </select>
-          {errors.typeAccount && (
-            <span className="text-red-500 text-sm">
-              {errors.typeAccount.message}
-            </span>
-          )}
-        </div>
+        <Select
+          label="Selecione moeda da conta *"
+          name="typeAccount"
+          register={register}
+          isRequired
+          options={dropdownOptionsCurrency}
+          placeholder="Selecione uma moeda"
+          errors={errors.typeAccount?.message}
+          isDisabled={watch().typeAccount === 'hybrid'}
+        />
+
         {watch().typeAccount === 'hybrid' && (
           <div className="flex flex-col gap-4">
             <div className="flex gap-6">
-              <div className="w-full">
-                <label
-                  htmlFor="primary_currency"
-                  className="block mb-2 text-sm font-medium text-white"
-                >
-                  Selecione moeda primária *
-                </label>
-                <select
-                  id="primary_currency"
-                  {...register('primary_currency')}
-                  className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
-                >
-                  {dropdownOptionsCurrencyHybrid.map(
-                    ({ value, disabled, label, selected }) => (
-                      <option
-                        key={value}
-                        value={value}
-                        disabled={disabled}
-                        selected={selected}
-                      >
-                        {label}
-                      </option>
-                    )
-                  )}
-                </select>
-                {errors.primary_currency && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.primary_currency.message}
-                  </span>
-                )}
-              </div>
-              <div className="w-full">
-                <label
-                  htmlFor="secondary_currency"
-                  className="block mb-2 text-sm font-medium text-white"
-                >
-                  Selecione moeda secundária *
-                </label>
-                <select
-                  id="secondary_currency"
-                  {...register('secondary_currency')}
-                  className="border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white"
-                >
-                  {dropdownOptionsCurrencyHybrid.map(
-                    ({ value, disabled, label, selected }) => (
-                      <option
-                        key={value}
-                        value={value}
-                        disabled={disabled}
-                        selected={selected}
-                      >
-                        {label}
-                      </option>
-                    )
-                  )}
-                </select>
-                {errors.secondary_currency && (
-                  <span className="text-red-500 text-sm ">
-                    {errors.secondary_currency.message}
-                  </span>
-                )}
-              </div>
+              <Select
+                label="Selecione moeda primária *"
+                name="secondary_currency"
+                register={register}
+                isRequired
+                options={dropdownOptionsCurrencyHybrid}
+                placeholder="Selecione uma moeda"
+                errors={errors.primary_currency?.message}
+              />
+              <Select
+                label="Selecione moeda secundária"
+                name="secondary_currency"
+                register={register}
+                options={dropdownOptionsCurrencyHybrid}
+                placeholder="Selecione uma moeda"
+                errors={errors.secondary_currency?.message}
+              />
             </div>
             <div className="p-4 text-sm bg-yellow-300 bg-opacity-75 text-gray-900 rounded-lg">
               <strong>
@@ -228,25 +129,33 @@ export default function Signup() {
           </div>
         )}
 
-        <div className="flex flex-col gap-7 justify-center items-center">
-          <Button type="submit" variant="default700">
-            <div className="flex gap-2 justify-center items-center">
-              {isLoading ? 'Criando...' : 'Criar'}
-            </div>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={10}
+        >
+          <Button
+            isLoading={isLoading}
+            loadingText="Criando"
+            type="submit"
+            color="gray.600"
+            textColor="white"
+            w="full"
+          >
+            Criar
           </Button>
-          <div className="flex gap-7">
-            <Link
-              href="/"
-              className="text-white bg-gray-800 focus:outline-none font-medium rounded-lg text-sm underline"
-            >
+          <Box display="flex" gap={7}>
+            <Link href="/" textDecor="underline">
               Home
             </Link>
-            <Button variant="link" routeLink="/login">
+            <Link href="/" textDecor="underline">
               Login
-            </Button>
-          </div>
-        </div>
-      </div>
+            </Link>
+          </Box>
+        </Box>
+      </Box>
     </form>
   )
 }

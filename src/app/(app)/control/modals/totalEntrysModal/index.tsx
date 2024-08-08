@@ -1,36 +1,37 @@
 'use client'
 
 import React, { Fragment } from 'react'
-import { Button, ButtonGroup } from '@/components'
+import {
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  Heading
+} from '@chakra-ui/react'
 import { Trash } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
-import {
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay
-} from '@chakra-ui/react'
 
 interface IContentModal {
-  handleOpenModal: any
+  handleOpenModal: () => void // Alterado para função sem parâmetro
   data: IEntrysData[]
   onDelete: (itemId?: string) => void
   userData: UserData
 }
 
-export const columsHeadProps = [
-  {
-    header: 'Entradas',
-    field: 'value'
-  },
-  {
-    header: 'Ação',
-    field: 'actions'
-  }
+const columsHeadProps = [
+  { header: 'Entradas', field: 'value' },
+  { header: 'Ação', field: 'actions' }
 ]
 
 function ContentTotalEntrys({
@@ -46,59 +47,56 @@ function ContentTotalEntrys({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <h3 className="text-xl font-semibold text-white">
+          <Heading as="h3" size="xl" fontWeight="semibold" color="white">
             Veja todas entradas
-          </h3>
+          </Heading>
         </ModalHeader>
-
         <ModalBody>
-          <table className="w-full text-sm text-left">
-            <thead className="text-md uppercase border-b border-gray-600 text-gray-300">
-              <tr>
-                {columsHeadProps?.map((item: any) => (
-                  <th scope="col" className="px-6 py-3" key={item.field}>
-                    {item.header}
-                  </th>
+          <Table variant="simple" colorScheme="teal">
+            <Thead>
+              <Tr>
+                {columsHeadProps.map((item) => (
+                  <Th key={item.field}>{item.header}</Th>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data?.map((item, index) => (
-                <Fragment key={index}>
-                  <tr className="border-b bg-gray-800 border-gray-600">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium whitespace-nowrap text-white"
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data?.map((item) => (
+                <Tr key={item.id} bg="gray.700">
+                  <Td color="white">
+                    {formatCurrencyMoney(
+                      item.value,
+                      userData.primary_currency,
+                      isVisibilityData
+                    )}
+                  </Td>
+                  <Td>
+                    <Button
+                      leftIcon={<Trash />}
+                      colorScheme="red"
+                      variant="ghost"
+                      p={0}
+                      _hover={{
+                        background: 'transparent'
+                      }}
+                      onClick={() => onDelete(item.id)}
                     >
-                      {formatCurrencyMoney(
-                        item.value,
-                        userData.primary_currency,
-                        isVisibilityData
-                      )}
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                    >
-                      <ButtonGroup
-                        buttonOptions={[
-                          {
-                            onClick: () => {
-                              onDelete(item?.id)
-                            },
-                            content: <Trash color="#eee2e2" />
-                          }
-                        ]}
-                      />
-                    </th>
-                  </tr>
-                </Fragment>
+                      Excluir
+                    </Button>
+                  </Td>
+                </Tr>
               ))}
-            </tbody>
-          </table>
+            </Tbody>
+          </Table>
         </ModalBody>
-        <ModalFooter>
-          <Button onClick={handleOpenModal} type="button" variant="cancel">
+        <ModalFooter
+          mt={8}
+          px={4}
+          py={6}
+          borderTop="1px"
+          borderColor="gray.600"
+        >
+          <Button variant="outline" onClick={handleOpenModal}>
             Cancelar
           </Button>
         </ModalFooter>

@@ -1,7 +1,7 @@
 'use client'
-
 import React from 'react'
 import { Logo } from '@/components'
+import { Flex, Box } from '@chakra-ui/react'
 
 export default function LayoutAuth({
   children
@@ -9,9 +9,16 @@ export default function LayoutAuth({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-[100vh] justify-center items-center flex-col gap-6 w-[100%]">
-      <Logo className="text-3xl" />
-      <div className="w-[95%] lg:w-[55%] xl:w-[36%]">{children}</div>
-    </div>
+    <Flex
+      height="100vh"
+      justify="center"
+      align="center"
+      direction="column"
+      w="100%"
+      gap={6}
+    >
+      <Logo fontSize="2xl" />
+      <Box width={{ base: '95%', lg: '55%', xl: '36%' }}>{children}</Box>
+    </Flex>
   )
 }

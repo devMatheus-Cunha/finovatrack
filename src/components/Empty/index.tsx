@@ -1,5 +1,6 @@
 'use client'
 
+import { Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
 
 interface IEmptyProps<T> {
@@ -8,7 +9,13 @@ interface IEmptyProps<T> {
 
 function Empty<T>({ filter }: IEmptyProps<T>) {
   return (
-    <div className="flex flex-col gap-6 items-center justify-center h-full">
+    <Flex
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      gap={6}
+      height="100%"
+    >
       <svg
         fillRule="evenodd"
         width="231"
@@ -1035,15 +1042,15 @@ function Empty<T>({ filter }: IEmptyProps<T>) {
         />
       </svg>
       {filter ? (
-        <h1 className="text-gray-400 text-2xl">
+        <Heading size="2xl" color="gray.400">
           Não foi encontrado nenhuma informação de acordo com seu filtro
-        </h1>
+        </Heading>
       ) : (
-        <h1 className="text-gray-400 text-2xl">
+        <Heading size="2xl" color="gray.400">
           Não foi adicionado nenhum informação ainda
-        </h1>
+        </Heading>
       )}
-    </div>
+    </Flex>
   )
 }
 

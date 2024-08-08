@@ -36,7 +36,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
         as={IconButton}
         aria-label="Options"
         icon={<Funnel />}
-        colorScheme="gray"
+        bg="gray.700"
       />
       <MenuList>
         <MenuDivider display={{ base: 'block', lg: 'none' }} />

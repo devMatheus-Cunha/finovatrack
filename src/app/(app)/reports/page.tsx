@@ -3,7 +3,6 @@
 import { FolderOpen } from '@phosphor-icons/react'
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
-import { Button } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
@@ -17,7 +16,11 @@ import {
   SimpleGrid,
   Heading,
   WrapItem,
-  Wrap
+  Wrap,
+  FormControl,
+  Button,
+  Icon,
+  Input
 } from '@chakra-ui/react'
 
 function Reports() {
@@ -99,33 +102,51 @@ function Reports() {
   )
 
   return (
-    <div className=" w-[100%]">
-      <div className="flex items-center flex-col w-[100%] gap-4 md:gap-10 p-3">
-        <div className="p-4 flex h-auto gap-4 bg-gray-800 rounded-lg flex-col md:w-[40%]">
-          <h2>Escolha um período para solicitar um relatório:</h2>
-          <div className="flex gap-2 md:gap-4 bg-gray-800 rounded-lg justify-center items-center">
-            <DatePicker
-              selected={selectedPeriod}
-              onChange={(date: Date) => onChangeDate(date)}
-              dateFormat="MM/yyyy"
-              showMonthYearPicker
-              className="border text-sm rounded-lg w-full p-1.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-            />
+    <Box width="100%">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        width="100%"
+        p="3"
+        gap={{ base: '4', md: '10' }}
+      >
+        <Box
+          p={6}
+          bg="gray.700"
+          borderRadius="lg"
+          flexDirection="column"
+          maxW={{ base: 'full', md: '40%' }}
+        >
+          <Heading size="sm" mb="2">
+            Escolha um período para solicitar um relatório:
+          </Heading>
+
+          <Box display="flex" p={2} gap={2}>
+            <FormControl flex={2}>
+              <DatePicker
+                selected={selectedPeriod}
+                onChange={(date: Date) => onChangeDate(date)}
+                dateFormat="MM/yyyy"
+                showMonthYearPicker
+                customInput={
+                  <Input variant="filled" _focus={{ boxShadow: 'none' }} />
+                }
+              />
+            </FormControl>
 
             <Button
               onClick={() => onSubmit(selectedPeriod)}
-              leftIcon={<FolderOpen size={20} color="white" />}
-              size="md"
-              fontSize="md"
-              variant="default700"
+              leftIcon={<Icon as={FolderOpen} />}
+              flex={1}
             >
-              Solicitar Relatório
+              Solicitar
             </Button>
-          </div>
-        </div>
-        <div className="w-[95%]">
+          </Box>
+        </Box>
+        <Box w="95%">
           {data ? (
-            <div className="flex flex-col gap-4">
+            <Box className="flex flex-col gap-4">
               {data && (
                 <VStack align="stretch" spacing={4}>
                   <Heading size="md">
@@ -155,9 +176,10 @@ function Reports() {
               <Box
                 overflowY="auto"
                 maxH="62vh"
+                minH={{ base: 'auto', md: '62vh' }}
                 borderRadius={{ sm: 'lg' }}
                 w="100%"
-                bg={{ lg: 'gray.800' }}
+                bg={{ lg: 'gray.700' }}
               >
                 {data?.data?.length > 0 ? (
                   <>
@@ -218,7 +240,7 @@ function Reports() {
                   </Text>
                 )}
               </Box>
-            </div>
+            </Box>
           ) : (
             <VStack h="full" alignItems="center" justifyContent="center">
               <Heading
@@ -234,9 +256,9 @@ function Reports() {
               </Text>
             </VStack>
           )}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

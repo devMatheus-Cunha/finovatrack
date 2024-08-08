@@ -6,23 +6,29 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { Button, Input, InputTypeMoney, Select } from '@/components'
+import { Input, InputTypeMoney, Select } from '@/components'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { Trash } from '@phosphor-icons/react'
 import { formatToCustomFormat } from '@/utils/formatNumber'
 import {
+  Heading,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  Button,
+  HStack,
+  Icon,
+  Show,
+  Flex
 } from '@chakra-ui/react'
 import {
   IHandleControlModalExpenseFunction,
   ITypeModalExpense
 } from '../../hooks/useControlModal'
+import { DeleteIcon } from '@chakra-ui/icons'
 
 interface IContentModal {
   onSubmit: (data: ExpenseData) => Promise<void>
@@ -43,14 +49,22 @@ function ContentActionsTableModal({
   onDelete
 }: IContentModal) {
   const schema = z.object({
-    description: z.string().nonempty(),
+    description: z.string({
+      required_error: 'Campo obrigatorio'
+    }),
     typeMoney:
       userData.typeAccount === 'hybrid'
-        ? z.string().nonempty()
+        ? z.string({
+            required_error: 'Campo obrigatorio'
+          })
         : z.string().optional(),
-    value: z.string().nonempty(),
-    category: z.string().nonempty(),
-    payment: z.string().nonempty()
+    value: z
+      .string({
+        required_error: 'Campo obrigatorio'
+      })
+      .min(0.01, 'O valor deve ser maior que zero'),
+    category: z.string().min(1, 'A categoria é obrigatória'),
+    payment: z.string().min(1, 'A forma de pagamento é obrigatória')
   })
   const {
     register,
@@ -87,10 +101,10 @@ function ContentActionsTableModal({
             onSubmit({ ...data, id: initialData?.id ?? '' })
           )}
         >
-          <ModalHeader>
-            <h3 className="text-xl font-semibold text-white">
+          <ModalHeader borderBottom="1px" borderColor="gray.600">
+            <Heading as="h3" size="md" fontWeight="semibold" color="white">
               {validateTextToModal[typeModal || '']?.title}
-            </h3>
+            </Heading>
           </ModalHeader>
           <ModalBody
             display="flex"
@@ -106,22 +120,14 @@ function ContentActionsTableModal({
               type="text"
               register={register}
               required
-              errors={
-                <>
-                  {errors.description && (
-                    <span className="text-red-500 text-sm">
-                      Este campo é obrigatório
-                    </span>
-                  )}
-                </>
-              }
+              errors={errors.description?.message}
             />
 
-            <div className="flex gap-4 flex-wrap">
+            <Flex gap={4} wrap="wrap">
               <Select
                 label="Selecione a categoria"
                 name="category"
-                required
+                isRequired
                 options={[
                   {
                     label: 'Ex: Alimentação',
@@ -143,20 +149,12 @@ function ContentActionsTableModal({
                   { label: 'Viagens', value: 'Viagens' }
                 ]}
                 register={register}
-                errors={
-                  <>
-                    {errors.category && (
-                      <span className="text-red-500 text-sm">
-                        Este campo é obrigatório
-                      </span>
-                    )}
-                  </>
-                }
+                errors={errors.category?.message}
               />
               <Select
                 label="Status de Pagamento"
                 name="payment"
-                required
+                isRequired
                 options={[
                   {
                     label: `Ex: A Pagar`,
@@ -168,24 +166,16 @@ function ContentActionsTableModal({
                   { label: 'Pago', value: 'Pago' }
                 ]}
                 register={register}
-                errors={
-                  <>
-                    {errors.payment && (
-                      <span className="text-red-500 text-sm">
-                        Este campo é obrigatório
-                      </span>
-                    )}
-                  </>
-                }
+                errors={errors.payment?.message}
               />
-            </div>
+            </Flex>
 
-            <div className="flex gap-4 flex-wrap">
+            <Flex gap={4} wrap="wrap">
               {userData.typeAccount === 'hybrid' && (
                 <Select
                   label="Selecione Moeda"
                   name="typeMoney"
-                  required
+                  isRequired
                   options={[
                     {
                       label: `Ex: ${userData.primary_currency}`,
@@ -203,15 +193,7 @@ function ContentActionsTableModal({
                     }
                   ]}
                   register={register}
-                  errors={
-                    <>
-                      {errors.typeMoney && (
-                        <span className="text-red-500 text-sm">
-                          Este campo é obrigatório
-                        </span>
-                      )}
-                    </>
-                  }
+                  errors={errors.typeMoney?.message}
                 />
               )}
               <InputTypeMoney
@@ -228,18 +210,9 @@ function ContentActionsTableModal({
                     watch()?.typeMoney || userData.primary_currency
                   ]
                 } 10.00`}
-                errors={
-                  <>
-                    {errors.value && (
-                      <span className="text-red-500 text-sm ">
-                        Este campo é obrigatório e deve ser um valor numérico
-                        válido
-                      </span>
-                    )}
-                  </>
-                }
+                errors={errors.value?.message}
               />
-            </div>
+            </Flex>
           </ModalBody>
 
           <ModalFooter
@@ -247,30 +220,32 @@ function ContentActionsTableModal({
             alignItems="center"
             gap={3}
             justifyContent="right"
+            borderTop="1px"
+            borderColor="gray.600"
           >
             {typeModal === 'edit' && (
-              <Button
-                onClick={() => onDelete()}
-                type="button"
-                className="md:hidden flex justify-center items-center gap-1 text-red-500 p-0 bg-transparent"
-              >
-                Deletar
-                <Trash color="#ef4444" />
-              </Button>
+              <Show below="lg">
+                <Button
+                  onClick={onDelete}
+                  variant="ghost"
+                  colorScheme="red"
+                  leftIcon={<Icon as={DeleteIcon} />}
+                >
+                  Deletar
+                </Button>
+              </Show>
             )}
-
-            <div className="flex gap-3">
+            <HStack spacing={3}>
               <Button
                 onClick={() => handleActionsModal('cancel')}
                 type="button"
-                variant="cancel"
               >
                 Cancelar
               </Button>
-              <Button variant="confirm" type="submit">
+              <Button type="submit" colorScheme="green">
                 {typeModal === 'add' ? 'Adicionar' : 'Editar'}
               </Button>
-            </div>
+            </HStack>
           </ModalFooter>
         </form>
       </ModalContent>

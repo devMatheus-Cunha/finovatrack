@@ -1,6 +1,12 @@
 'use client'
 
-import { ReactNode } from 'react'
+import {
+  Select as ChakraSelect,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  SelectProps as ChakraSelectProps
+} from '@chakra-ui/react'
 import {
   FieldValues,
   Path,
@@ -15,16 +21,16 @@ export type OptionsType = {
   disabled?: boolean
 }[]
 
-interface SelectFieldProps<T extends FieldValues> {
+interface SelectFieldProps<T extends FieldValues> extends ChakraSelectProps {
   label: string
   name: Path<T>
   rules?: RegisterOptions<T>
   options: OptionsType
   register: UseFormRegister<T>
-  errors?: ReactNode
+  errors?: any
   className?: string
   disabledSelect?: boolean
-  required?: boolean
+  placeholder?: string
 }
 
 export default function Select<T extends FieldValues>({
@@ -34,26 +40,37 @@ export default function Select<T extends FieldValues>({
   register,
   errors,
   rules,
-  className,
   disabledSelect,
-  required
+  placeholder,
+  ...props
 }: SelectFieldProps<T>) {
   return (
-    <div className="w-[100%]">
-      <label
-        htmlFor={name}
-        className="block mb-2 text-sm font-medium  text-white"
+    <FormControl isInvalid={!!errors} w="100%">
+      <FormLabel
+        htmlFor={name as string}
+        fontSize="sm"
+        fontWeight="medium"
+        color="white"
       >
-        {required ? `${label} *` : label}
-      </label>
-      <select
+        {props.isRequired ? `${label} *` : label}
+      </FormLabel>
+      <ChakraSelect
         id={name as string}
+        placeholder={placeholder}
+        isDisabled={disabledSelect}
+        {...props}
+        color="white"
+        bg="gray.700"
+        borderColor="gray.600"
+        _hover={{ borderColor: 'blue.500' }}
+        _focus={{ borderColor: 'blue.500' }}
+        _disabled={{
+          bg: 'gray.700',
+          borderColor: 'gray.600',
+          color: 'gray.300',
+          cursor: 'not-allowed'
+        }}
         {...register(name, rules)}
-        disabled={disabledSelect}
-        className={
-          className ||
-          'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500'
-        }
       >
         {options.map(({ value, disabled, label, selected }) => (
           <option
@@ -65,8 +82,8 @@ export default function Select<T extends FieldValues>({
             {label}
           </option>
         ))}
-      </select>
-      {errors && <>{errors}</>}
-    </div>
+      </ChakraSelect>
+      <FormErrorMessage>{errors}</FormErrorMessage>
+    </FormControl>
   )
 }

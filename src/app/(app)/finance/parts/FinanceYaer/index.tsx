@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Accordion, useDisclosure } from '@chakra-ui/react'
+import { Accordion, Modal, useDisclosure } from '@chakra-ui/react'
 import { AccordionFinanceYear } from '../AccordionFinanceYear'
-import { Modal } from '@/components'
 import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
@@ -98,16 +97,14 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
               </AccordionFinanceYear.Root>
             </React.Fragment>
           ))}
-        {isOpen && (
-          <Modal className="w-[95%] lg:w-[50%]">
-            <ModalContent
-              onClose={onCloseModal}
-              onSubmit={handleSubmit}
-              initialValues={selectedData}
-              currency={userData.primary_currency}
-            />
-          </Modal>
-        )}
+        <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
+          <ModalContent
+            onClose={onCloseModal}
+            onSubmit={handleSubmit}
+            initialValues={selectedData}
+            currency={userData.primary_currency}
+          />
+        </Modal>
       </Accordion>
     </>
   )

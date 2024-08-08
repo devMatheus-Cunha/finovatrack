@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
-import { Button, Select } from '@/components'
+import { Select } from '@/components'
 import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
 import EditableField from './parts/EditableField'
+import { Box, Container, Heading, VStack, Text, Button } from '@chakra-ui/react'
 
 type FormValues = {
   email?: string
@@ -107,17 +108,26 @@ function MyProfile() {
   }
 
   return (
-    <main className="flex flex-col gap-4 sm:gap-6 w-full max-w-[600px] p-6 bg-gray-800 rounded-lg shadow-lg">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-[23px] sm:text-3xl font-bold ">
+    <Container
+      bg="gray.700"
+      display="flex"
+      flexDirection="column"
+      gap={{ base: 4, sm: 6 }}
+      w="full"
+      maxW="600px"
+      p={6}
+      borderRadius="lg"
+      boxShadow="lg"
+    >
+      <VStack spacing={1} align="stretch">
+        <Heading fontSize={{ base: '23px', sm: '3xl' }} fontWeight="bold">
           Olá {userData.name}
-        </h1>
-        <p className="text-gray-300 text-[14px] sm:md">
+        </Heading>
+        <Text color="gray.300" fontSize={{ base: '14px', sm: 'md' }}>
           Aqui você pode visualizar e alterar as informações do seu perfil de
           forma simples e fácil.
-        </p>
-      </div>
-
+        </Text>
+      </VStack>
       <EditableField
         label="Nome"
         name="name"
@@ -127,17 +137,8 @@ function MyProfile() {
         onSubmit={onSubmitName((value) => handleSubmit('name', value))}
         register={registerName as any}
         required
-        errors={
-          <>
-            {errorsName.name && (
-              <span className="text-red-500 text-sm">
-                Este campo é obrigatório
-              </span>
-            )}
-          </>
-        }
+        errors={errorsName.name?.message}
       />
-
       <EditableField
         label="Email"
         name="email"
@@ -147,80 +148,51 @@ function MyProfile() {
         onSubmit={onSubmitEmail((value) => handleSubmit('email', value))}
         register={registerEmail as any}
         required
-        errors={
-          <>
-            {errorsEmail.email && (
-              <span className="text-red-500 text-sm">
-                Este campo é obrigatório
-              </span>
-            )}
-          </>
-        }
+        errors={errorsEmail.email?.message}
       />
-
-      <form className="flex flex-col w-full">
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <div className="w-full">
+      <Box as="form" w="full" display="flex" flexDir="column">
+        <Box
+          display="flex"
+          flexDirection={{ base: 'column', sm: 'row' }}
+          gap={2}
+        >
+          <Select
+            label={
+              userData.typeAccount === 'oneCurrency'
+                ? 'Moeda Selecionada'
+                : 'Moeda Principal Selecionada'
+            }
+            disabledSelect={!optionsCurrencyEnabled}
+            name="primary_currency"
+            options={dropdownOptionsCurrencyHybrid}
+            register={registerCurrencys}
+            errors={errors.primary_currency?.message}
+          />
+          {userData.typeAccount === 'hybrid' && (
             <Select
-              label={
-                userData.typeAccount === 'oneCurrency'
-                  ? 'Moeda Selecionada'
-                  : 'Moeda Principal Selecionada'
-              }
+              label="Moeda Secundária Selecionada"
+              name="secondary_currency"
               disabledSelect={!optionsCurrencyEnabled}
-              name="primary_currency"
-              className={`border text-sm rounded-lg block p-2.5 w-full placeholder-gray-400 ${
-                !optionsCurrencyEnabled
-                  ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
-                  : 'bg-gray-800 border-gray-700 text-white'
-              }`}
               options={dropdownOptionsCurrencyHybrid}
               register={registerCurrencys}
+              errors={errors.secondary_currency?.message}
             />
-          </div>
-
-          {userData.typeAccount === 'hybrid' && (
-            <div className="w-full">
-              <Select
-                label="Moeda Secundária Selecionada"
-                name="secondary_currency"
-                disabledSelect={!optionsCurrencyEnabled}
-                className={`border text-sm rounded-lg block w-full p-2.5 placeholder-gray-400 ${
-                  !optionsCurrencyEnabled
-                    ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
-                    : 'bg-gray-800 border-gray-700 text-white'
-                }`}
-                options={dropdownOptionsCurrencyHybrid}
-                register={registerCurrencys}
-                errors={
-                  <>
-                    {errors.secondary_currency && (
-                      <span className="text-red-500 text-sm">
-                        {errors.secondary_currency.message}
-                      </span>
-                    )}
-                  </>
-                }
-              />
-            </div>
           )}
-        </div>
-
-        <div className="flex gap-2 mt-4">
+        </Box>
+        <Box display="flex" gap={2} mt={4} className="flex gap-2 mt-4">
           {optionsCurrencyEnabled && (
             <Button
               type="button"
               onClick={() => handleOptionsCurrencyEnabled()}
-              variant="cancel"
-              className="w-[100%]"
+              w="100%"
             >
               Cancelar
             </Button>
           )}
           <Button
-            variant={!optionsCurrencyEnabled ? 'default700' : 'confirm'}
+            colorScheme={!optionsCurrencyEnabled ? 'gray' : 'green'}
             type={!optionsCurrencyEnabled ? 'submit' : 'button'}
-            className="w-[100%]"
+            w="100%"
             onClick={
               !optionsCurrencyEnabled
                 ? () => setOptionsCurrencyEnabled(true)
@@ -229,9 +201,9 @@ function MyProfile() {
           >
             {!optionsCurrencyEnabled ? 'Alterar' : 'Salvar'}
           </Button>
-        </div>
-      </form>
-    </main>
+        </Box>
+      </Box>
+    </Container>
   )
 }
 

@@ -1,3 +1,4 @@
+import { Center, VStack } from '@chakra-ui/react'
 import { Metadata } from 'next'
 import { ReactNode } from 'react'
 
@@ -11,8 +12,12 @@ export const metadata: Metadata = {
 
 export default function MyProfileLayout({ children }: SideBarProps) {
   return (
-    <div className="flex flex-col items-center justify-center md:h-[90vh] p-[2%]">
-      {children}
-    </div>
+    <Center h={{ base: 'auto', md: '90vh' }} w="100%" p={2}>
+      <VStack spacing={4} align="center">
+        {' '}
+        {/* Add vertical spacing for better layout */}
+        {children}
+      </VStack>
+    </Center>
   )
 }

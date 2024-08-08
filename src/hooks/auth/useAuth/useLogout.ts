@@ -11,7 +11,7 @@ const useLogout = () => {
   const { mutateAsync: onLogout } = useMutation(logout, {
     onSuccess: () => {
       clearUserId()
-      router.push('/login')
+      router.push('/')
     }
   })
 

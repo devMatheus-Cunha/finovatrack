@@ -1,6 +1,4 @@
-'use client'
-
-import { Spinner } from '@chakra-ui/react'
+import { Flex, Spinner } from '@chakra-ui/react'
 import React from 'react'
 
 export type StatusRequestProps = 'idle' | 'error' | 'loading' | 'success'
@@ -14,7 +12,7 @@ function Loading({ children, loading }: LoadingProps) {
   return (
     <>
       {loading ? (
-        <div className="flex h-screen w-full items-center justify-center">
+        <Flex height="100vh" width="100%" align="center" justify="center">
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -22,7 +20,7 @@ function Loading({ children, loading }: LoadingProps) {
             color="cyan.500"
             size="xl"
           />
-        </div>
+        </Flex>
       ) : (
         { children }
       )}

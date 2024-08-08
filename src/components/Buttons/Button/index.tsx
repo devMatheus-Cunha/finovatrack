@@ -1,5 +1,4 @@
 import { Button as ButtonChakra, ButtonProps, Link } from '@chakra-ui/react'
-import { twMerge } from 'tailwind-merge'
 
 export interface IButtonProps extends ButtonProps {
   variant?:
@@ -74,7 +73,7 @@ const Button = ({
     isDisabled,
     leftIcon,
     rightIcon,
-    className: twMerge('rounded-md', props.className)
+    className: 'rounded-md'
   }
 
   return variant === 'link' ? (
