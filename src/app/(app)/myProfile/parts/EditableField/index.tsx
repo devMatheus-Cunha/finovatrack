@@ -1,5 +1,6 @@
-import { Button, Input } from '@/components'
+import { Input } from '@/components'
 import { InputProps } from '@/components/Forms/Input'
+import { Box, Button } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
@@ -26,28 +27,28 @@ export default function EditableField({
   }
 
   return (
-    <form className="flex gap-2 flex-col sm:flex-row">
+    <Box
+      as="form"
+      display="flex"
+      alignItems="end"
+      flexDir={{ base: 'column', sm: 'row' }}
+      gap={2}
+    >
       <Input disabled={!isEditing} {...rest} />
-      <div className="flex gap-2 sm:self-end">
+      <Box display="flex" gap={2}>
         {isEditing && (
-          <Button
-            type="button"
-            onClick={handleCancel}
-            className="w-[100%]"
-            variant="cancel"
-          >
+          <Button type="button" onClick={handleCancel}>
             Cancelar
           </Button>
         )}
         <Button
-          variant={!isEditing ? 'default700' : 'confirm'}
           type="button"
-          className="w-[100%]"
           onClick={!isEditing ? () => setIsEditing(true) : () => handleSubmit()}
+          colorScheme={!isEditing ? 'gray' : 'green'}
         >
           {!isEditing ? 'Alterar' : 'Salvar'}
         </Button>
-      </div>
-    </form>
+      </Box>
+    </Box>
   )
 }

@@ -2,19 +2,22 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { ZodError, z } from 'zod'
+import { z } from 'zod'
 import { UserData } from '@/hooks/auth/useAuth/types'
-import { Button, InputTypeMoney } from '@/components'
+import { InputTypeMoney } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import {
+  Box,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  Button
 } from '@chakra-ui/react'
 import { ITypeModalExpense } from '../../hooks/useControlModal'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 type FormData = {
   value: string
@@ -28,7 +31,9 @@ interface IContentModal {
 }
 
 const schema = z.object({
-  value: z.string().nonempty()
+  value: z.string({
+    required_error: 'Campo obrigatório'
+  })
 })
 
 function ContentAddEntryModal({
@@ -42,17 +47,7 @@ function ContentAddEntryModal({
     control,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: async (data) => {
-      try {
-        schema.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    }
+    resolver: zodResolver(schema)
   })
 
   return (
@@ -60,14 +55,14 @@ function ContentAddEntryModal({
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-          <div className="rounded-lg bg-gray-800 shadowbg-gray-800">
-            <ModalHeader>
+          <Box bg="gray.700" borderRadius="md">
+            <ModalHeader p={4} borderBottom="1px" borderColor="gray.600">
               <h3 className="text-xl font-semibold text-white">
                 Adicione uma Entrada
               </h3>
             </ModalHeader>
 
-            <ModalBody>
+            <ModalBody p={4}>
               <InputTypeMoney
                 control={control}
                 name="value"
@@ -77,31 +72,32 @@ function ContentAddEntryModal({
                 placeholder={`Ex: ${
                   optionsLabelCurrencyKeyAndValue[userData.primary_currency]
                 } 10.00`}
-                errors={
-                  <>
-                    {errors.value && (
-                      <span className="text-red-500 text-sm ">
-                        Este campo é obrigatório
-                      </span>
-                    )}
-                  </>
-                }
+                errors={errors.value?.message}
               />
             </ModalBody>
 
-            <ModalFooter display="flex" alignItems="center" gap={3}>
-              <Button
-                onClick={() => handleOpenModal()}
-                type="button"
-                variant="cancel"
-              >
+            <ModalFooter
+              px={4}
+              py={6}
+              borderTop="1px"
+              borderColor="gray.600"
+              display="flex"
+              alignItems="center"
+              gap={3}
+            >
+              <Button onClick={() => handleOpenModal()} type="button">
                 Cancelar
               </Button>
-              <Button variant="confirm" type="submit">
-                {!isLoadingAddExpense ? 'Salvar' : 'Salvando...'}
+              <Button
+                isLoading={isLoadingAddExpense}
+                loadingText="Salvando..."
+                colorScheme="green"
+                type="submit"
+              >
+                Salvar
               </Button>
             </ModalFooter>
-          </div>
+          </Box>
         </form>
       </ModalContent>
     </>

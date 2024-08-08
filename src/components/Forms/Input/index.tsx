@@ -1,15 +1,19 @@
-'use client'
-
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
-import React, { InputHTMLAttributes, ReactNode } from 'react'
+import {
+  Input as ChakraInput,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  InputProps as InputPropsChakra
+} from '@chakra-ui/react'
 
-export interface InputProps<T extends FieldValues>
-  extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps<T extends FieldValues> extends InputPropsChakra {
   label: string
   name: Path<T>
   register: UseFormRegister<T>
   required?: boolean
-  errors?: ReactNode
+  errors?: string
+  disabled?: boolean
 }
 
 export default function Input<T extends FieldValues>({
@@ -21,26 +25,30 @@ export default function Input<T extends FieldValues>({
   disabled,
   ...rest
 }: InputProps<T>) {
+  const { ref, ...field } = register(name)
+
   return (
-    <div className="w-full">
-      <label
-        htmlFor={name}
-        className="block mb-2 text-sm font-medium text-white"
-      >
+    <FormControl isInvalid={!!errors}>
+      <FormLabel htmlFor={name} mb="2" color="white" fontSize="sm">
         {required ? `${label} *` : label}
-      </label>
-      <input
+      </FormLabel>
+      <ChakraInput
         id={name as string}
+        ref={ref}
         disabled={disabled}
-        className={
-          disabled
-            ? 'border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-300 cursor-not-allowed'
-            : 'border text-sm rounded-lg block w-full p-2.5 bg-gray-800 border-gray-700 placeholder-gray-400 text-white'
-        }
-        {...register(name)}
+        variant={disabled ? 'filled' : 'outline'}
+        placeholder={disabled ? 'Disabled' : undefined}
+        _disabled={{
+          bg: 'gray.700',
+          borderColor: 'gray.600',
+          color: 'gray.300',
+          cursor: 'not-allowed'
+        }}
+        _placeholder={{ color: 'gray.400' }}
+        {...field}
         {...rest}
       />
-      {errors && <>{errors}</>}
-    </div>
+      <FormErrorMessage>{errors}</FormErrorMessage>
+    </FormControl>
   )
 }

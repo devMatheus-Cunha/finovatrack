@@ -1,153 +1,126 @@
-import Header from '@/components/Header'
-import Link from 'next/link'
+'use client'
+
 import React from 'react'
-import Image from 'next/image'
-import imageNot from '../public/home-not.png'
 
-function LandingPage() {
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Input, InputPassword, Link, Logo } from '@/components'
+import { useLogin } from '@/hooks/auth'
+import { LoginProps } from '@/services/auth/login'
+import { Box, Button, Flex } from '@chakra-ui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const schema = z.object({
+  email: z
+    .string({
+      required_error: 'Campo obrigatório'
+    })
+    .email({
+      message: 'E-mail invalido'
+    }),
+  password: z
+    .string({
+      required_error: 'Campo obrigatório'
+    })
+    .min(6, 'Minimo de 6 caracteres')
+})
+
+export default function Login() {
+  const { loginWithEmail, isLoading } = useLogin()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginProps>({
+    resolver: zodResolver(schema)
+  })
+
   return (
-    <div className=" text-white h-screen flex flex-col">
-      <Header />
+    <Flex
+      height="100vh"
+      justify="center"
+      align="center"
+      direction="column"
+      w="100%"
+      gap={6}
+    >
+      <Logo fontSize="2xl" />
+      <Box width={{ base: '95%', lg: '55%', xl: '36%' }}>
+        <form
+          onSubmit={handleSubmit((values: LoginProps) =>
+            loginWithEmail(values)
+          )}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap={6}
+            width="100%"
+            bg="gray.700"
+            py={7}
+            px={5}
+            rounded="lg"
+          >
+            <Input
+              label="Email"
+              name="email"
+              placeholder="exemplo@gmail.com"
+              type="email"
+              register={register}
+              required
+              errors={errors.email?.message}
+            />
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={3}
+            >
+              <InputPassword
+                label="Password"
+                name="password"
+                placeholder="**********"
+                register={register}
+                required
+                errors={errors?.password?.message}
+              />
+              <Flex alignSelf="flex-end">
+                <Link textDecor="underline" href="/forgetPassword">
+                  Esqueceu a senha?
+                </Link>
+              </Flex>
+            </Box>
 
-      <main className="flex mt-2 md:mt-10 gap-12 flex-col p-[3%] md:p-8 flex-grow">
-        <section className="flex items-center flex-col justify-center text-center gap-2">
-          <h2 className="text-3xl md:text-5xl font-bold text-white">
-            Domine suas finanças em qualquer moeda
-          </h2>
-          <p className="text-md md:text-lg text-gray-200 md:max-w-[66%]">
-            Domine suas finanças em várias moedas. Registre, edite e acompanhe
-            suas informações financeiras de forma simples e eficiente, mantendo
-            o controle total sobre seus gastos e entradas em diferentes moedas.
-          </p>
-          <div className="flex mt-4 gap-4">
-            <Link
-              href="/signup"
-              className="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-md"
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              gap={10}
             >
-              Abra sua conta!
-            </Link>
-            <Link
-              href="/login"
-              className="text-white py-2 px-4 rounded-md bg-transparent border border-cyan-600 hover:border-cyan-700"
-            >
-              Entrar
-            </Link>
-          </div>
-        </section>
-        <section className="flex justify-center flex-col md:justify-between md:flex-row md:p-8 rounded-lg">
-          <div className="w-full md:w-[60%] mb-6 md:mb-0">
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              Recursos em destaque:
-            </h2>
-            <ul className="grid gap-2">
-              <li className="flex items-center text-gray-200">
-                <svg
-                  className="w-4 h-4 mr-2 text-cyan-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16l4-4-4-4M8 12h8" />
-                </svg>
-                Adicione e edite seus gastos facilmente
-              </li>
-              <li className="flex items-center text-gray-200">
-                <svg
-                  className="w-4 h-4 mr-2 text-cyan-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16l4-4-4-4M8 12h8" />
-                </svg>
-                Cálculo automático de entradas, gastos e saldo
-              </li>
-              <li className="flex items-center text-gray-200">
-                <svg
-                  className="w-4 h-4 mr-2 text-cyan-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16l4-4-4-4M8 12h8" />
-                </svg>
-                Registre suas entradas de valor
-              </li>
-              <li className="flex items-center text-gray-200">
-                <svg
-                  className="w-4 h-4 mr-2 text-cyan-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16l4-4-4-4M8 12h8" />
-                </svg>
-                Salve relatórios completos dos seus gastos
-              </li>
-              <li className="text-gray-200">
-                <strong className="text-cyan-600">
-                  Controle de múltiplas moedas:
-                </strong>{' '}
-                Defina a moeda principal da sua conta para a conversão
-                automática de valores. Por exemplo, se sua moeda principal é o
-                Real (BRL) e você fez uma entrada de 10.000 BRL e teve gastos de
-                300 BRL e 1.000 EUR, nossa plataforma converterá automaticamente
-                os valores de EUR para BRL com base na cotação atual. Você
-                poderá visualizar o total de gastos em EUR convertido para BRL e
-                o total de gastos somando BRL e EUR.
-              </li>
-            </ul>
-          </div>
-          <Image
-            src={imageNot}
-            alt="Exemplo do sistema em um laptop"
-            style={{
-              width: 500,
-              height: 'auto'
-            }}
-          />
-        </section>
-        <section className="flex flex-col md:gap-4 md:p-8 rounded-lg mb-5 md:mb-0">
-          <h2 className="text-2xl md:text-4xl font-semibold text-white mb-4 text-center italic">
-            Melhorias Futuras
-          </h2>
-          <div className="flex ">
-            <div className="bg-gray-800 p-4 rounded-lg flex-grow">
-              <h2 className="text-2xl font-semibold text-cyan-500 mb-2">
-                Estatísticas de Gastos
-              </h2>
-              <p className="text-gray-200 mb-4">
-                Estamos constantemente aprimorando nossa plataforma para
-                oferecer ainda mais recursos. Em breve, você poderá desfrutar de
-                estatísticas detalhadas dos gastos e receber dicas
-                personalizadas para economizar.
-              </p>
-            </div>
-          </div>
-        </section>
-      </main>
-      <footer className="p-4 bg-gray-800 text-gray-300 text-center">
-        &copy; {new Date().getFullYear()} FinovaTrack. Todos os direitos
-        reservados.
-      </footer>
-    </div>
+              <Button
+                isLoading={isLoading}
+                loadingText="Entrando"
+                type="submit"
+                color="gray.600"
+                textColor="white"
+                w="full"
+              >
+                Entrar
+              </Button>
+              <Box display="flex" gap={7}>
+                <Link href="/" textDecor="underline">
+                  Home
+                </Link>
+                <Link href="/signup" textDecor="underline">
+                  Criar Conta
+                </Link>
+              </Box>
+            </Box>
+          </Box>
+        </form>
+      </Box>
+    </Flex>
   )
 }
-
-export default LandingPage

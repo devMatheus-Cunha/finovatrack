@@ -7,6 +7,7 @@ import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
+import { Box } from '@chakra-ui/react'
 
 interface IInfoCardsToControl {
   userData: UserData
@@ -29,7 +30,17 @@ function InfoCardsToControl({
 }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
   return (
-    <div className="flex flex-wrap lg:flex-nowrap	justify-center gap-6">
+    <Box
+      display="flex"
+      flexWrap="wrap"
+      justifyContent="center"
+      gap={6}
+      sx={{
+        '@media (min-width: 1024px)': {
+          flexWrap: 'nowrap'
+        }
+      }}
+    >
       <InfoCardMoney
         infoData={formatCurrencyMoney(
           totalEntrys,
@@ -77,7 +88,7 @@ function InfoCardsToControl({
         )}
         title="Total Livre"
       />
-    </div>
+    </Box>
   )
 }
 

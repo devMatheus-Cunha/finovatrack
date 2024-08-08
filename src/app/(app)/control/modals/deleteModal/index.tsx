@@ -1,13 +1,11 @@
-'use client'
-
-import { Button } from '@/components'
 import React from 'react'
 
 import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalOverlay
+  ModalOverlay,
+  Button
 } from '@chakra-ui/react'
 
 function DeleteModalContent({ onSubmit, onCancel }: any) {
@@ -37,20 +35,10 @@ function DeleteModalContent({ onSubmit, onCancel }: any) {
         </ModalBody>
 
         <ModalFooter display="flex" gap={3} pt={0}>
-          <Button
-            onClick={onCancel}
-            data-modal-hide="popup-modal"
-            type="button"
-            variant="cancel"
-          >
+          <Button onClick={onCancel} type="button">
             Cancelar
           </Button>
-          <Button
-            data-modal-hide="popup-modal"
-            variant="delete"
-            type="submit"
-            onClick={onSubmit}
-          >
+          <Button type="submit" colorScheme="red" onClick={onSubmit}>
             Deletar
           </Button>
         </ModalFooter>

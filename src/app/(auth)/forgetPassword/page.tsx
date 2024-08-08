@@ -1,12 +1,13 @@
 'use client'
 
 import React from 'react'
-
 import { useForm } from 'react-hook-form'
-import { ZodError, z } from 'zod'
+import { z } from 'zod'
 import { useForgetPassword } from '@/hooks/auth'
 import { LogoutProps } from '@/services/auth/forgetPassword'
-import { Button, Input } from '../../../components'
+import { Input, Link } from '../../../components'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Box, VStack, Text, useColorModeValue, Button } from '@chakra-ui/react'
 
 const schema = z.object({
   email: z.string().email('Formato de')
@@ -19,42 +20,35 @@ export default function ForgetPassword() {
     handleSubmit,
     formState: { errors }
   } = useForm<LogoutProps>({
-    resolver: async (data) => {
-      try {
-        schema.parse(data)
-        return { values: data, errors: {} }
-      } catch (error: any) {
-        if (error instanceof ZodError) {
-          return { values: {}, errors: error.formErrors.fieldErrors }
-        }
-        return { values: {}, errors: { [error.path[0]]: error.message } }
-      }
-    }
+    resolver: zodResolver(schema)
   })
+
+  const textColor = useColorModeValue('gray.800', 'white')
+  const secondaryTextColor = useColorModeValue('slate.300', 'gray.400')
 
   return (
     <form
       onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}
     >
-      <div
-        className="
-          flex
-          flex-col
-          gap-6
-          w-[100%]
-          bg-gray-800
-          py-7
-          px-5
-          rounded-lg
-        "
+      <Box
+        display="flex"
+        flexDir="column"
+        gap={6}
+        w="100%"
+        bg="gray.700"
+        py={7}
+        px={5}
+        borderRadius="lg"
       >
-        <div className="flex flex-col gap-3 text-center">
-          <p className="text-2xl  font-bold">Esqueceu sua senha?</p>
-          <p className="text-slate-300">
+        <VStack spacing={3} textAlign="center">
+          <Text fontSize="2xl" fontWeight="bold" color={textColor}>
+            Esqueceu sua senha?
+          </Text>
+          <Text color={secondaryTextColor}>
             Não se preocupe! Insira o seu e-mail de cadastro e enviaremos
             instruções para você.
-          </p>
-        </div>
+          </Text>
+        </VStack>
         <Input
           label="Email"
           name="email"
@@ -62,28 +56,32 @@ export default function ForgetPassword() {
           type="email"
           register={register}
           required
-          errors={
-            <>
-              {errors.email && (
-                <span className="text-red-500 text-sm ">
-                  Este campo é obrigatório
-                </span>
-              )}
-            </>
-          }
+          errors={errors.email?.message}
         />
-
-        <div className="flex flex-col gap-10 justify-center items-center">
-          <Button type="submit" variant="default700">
-            <div className="flex gap-2 justify-center items-center">
-              {isLoading ? 'Enviar...' : 'Enviar'}
-            </div>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          gap={10}
+        >
+          <Button
+            isLoading={isLoading}
+            loadingText="Enviando"
+            type="submit"
+            color="gray.600"
+            textColor="white"
+            w="full"
+          >
+            Criar
           </Button>
-          <Button variant="link" routeLink="/login">
-            Voltar
-          </Button>
-        </div>
-      </div>
+          <Box display="flex" gap={7}>
+            <Link href="/" textDecor="underline">
+              Login
+            </Link>
+          </Box>
+        </Box>
+      </Box>
     </form>
   )
 }

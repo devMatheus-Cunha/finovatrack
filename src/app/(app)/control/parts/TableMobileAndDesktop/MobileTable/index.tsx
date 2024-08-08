@@ -6,6 +6,7 @@ import {
 } from '@/utils/formatNumber'
 import React from 'react'
 import { IHandleControlModalExpenseFunction } from '../../../hooks/useControlModal'
+import { Box, Text, Flex, Show, VStack } from '@chakra-ui/react' // Importe os componentes necessários do Chakra UI
 
 interface IMobileTableProps {
   expensesData: ExpenseData[]
@@ -21,16 +22,25 @@ const MobileTable: React.FC<IMobileTableProps> = ({
   isVisibilityData
 }) => {
   return (
-    <div className="lg:hidden flex flex-nowrap flex-col md:flex-wrap md:flex-row gap-4">
-      {expensesData.map((item) => (
-        <>
-          <div
+    <Show breakpoint="(max-width: 1023px)">
+      <Flex flexWrap="wrap" gap={4}>
+        {expensesData.map((item) => (
+          <Box
+            key={item.id}
             onClick={() => handleOpenModal('edit', item)}
-            className="flex h-[85px] w-[100%] md:w-[45%] text-white bg-gray-800 rounded-lg justify-between items-center p-4"
+            height="85px"
+            width={{ base: '100%', md: '45%' }}
+            bg="gray.700"
+            rounded="lg"
+            p={4}
+            color="white"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <div className="flex flex-col gap-4 ">
-              <p className="text-ms">{item.description}</p>
-              <p className="-mt-1 font-sans text-m font-semibold">
+            <VStack alignItems="flex-start" spacing={4}>
+              <Text fontSize="ms">{item.description}</Text>
+              <Text fontSize="md" fontWeight="semibold" marginTop="-1">
                 {formatCurrencyMoney(
                   formatToJavaScriptNumber(item?.value),
                   userData.typeAccount === 'oneCurrency'
@@ -38,24 +48,22 @@ const MobileTable: React.FC<IMobileTableProps> = ({
                     : item.typeMoney,
                   isVisibilityData
                 )}
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 text-left w-[33%]">
-              <p
-                className={`font-medium text-ms ${
-                  item.payment === 'A Pagar'
-                    ? ' text-red-500'
-                    : 'text-green-500'
-                }`}
+              </Text>
+            </VStack>
+            <VStack alignItems="flex-start" spacing={4} width="33%">
+              <Text
+                fontSize="ms"
+                fontWeight="medium"
+                color={item.payment === 'A Pagar' ? 'red.500' : 'green.500'}
               >
                 {item.payment}
-              </p>
-              <p className="text-ms">{item.category}</p>
-            </div>
-          </div>
-        </>
-      ))}
-    </div>
+              </Text>
+              <Text fontSize="ms">{item.category}</Text>
+            </VStack>
+          </Box>
+        ))}
+      </Flex>
+    </Show>
   )
 }
 

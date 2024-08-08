@@ -12,7 +12,7 @@ const useForgetPassword = () => {
         toast.success('E-mail de recupeção enviado!', {
           position: toast.POSITION.TOP_RIGHT
         })
-        router.push('/login')
+        router.push('/')
       },
       onError: ({ message }: { message: string }) => {
         if (

@@ -1,7 +1,7 @@
 export function formatCurrencyMoney(
   value = 0,
   currency?: string,
-  isVisibility?: boolean
+  isVisibility = true
 ) {
   if (currency === 'hybrid') {
     return value.toLocaleString()

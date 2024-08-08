@@ -28,7 +28,7 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
     <TableContainer>
-      <TableChakra variant="simple">
+      <TableChakra variant="simple" colorScheme="teal">
         <Thead>
           <Tr>
             {columns.map((column) => (

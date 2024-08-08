@@ -1,8 +1,6 @@
-import Link from 'next/link'
-import React, { ButtonHTMLAttributes } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { Button as ButtonChakra, ButtonProps, Link } from '@chakra-ui/react'
 
-interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonProps extends ButtonProps {
   variant?:
     | 'cancel'
     | 'confirm'
@@ -11,41 +9,79 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | 'link'
     | 'default700'
     | 'primary'
+    | 'outline'
+    | 'ghost' // Added more variants
   routeLink?: string
+  isLoading?: boolean // Added isLoading prop
+  loadingText?: string
+  spinnerPlacement?: 'start' | 'end'
+  isDisabled?: boolean // Added isDisabled prop
+  leftIcon?: React.ReactElement
+  rightIcon?: React.ReactElement
 }
 
-function Button({
+const Button = ({
   variant = 'default',
   routeLink = '',
+  isLoading = false,
+  loadingText = 'Loading...',
+  spinnerPlacement = 'start',
+  isDisabled = false,
+  leftIcon,
+  rightIcon,
   ...props
-}: IButtonProps) {
-  const validateStyles: any = {
-    cancel: `border focus:z-10 bg-gray-800 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600`,
-    confirm: `text-white bg-green-600 hover:bg-green-700`,
-    delete: `bg-red-600 hover:bg-red-800`,
-    link: `text-white bg-gray-800 focus:outline-none underline`,
-    primary: `text-white bg-cyan-600 hover:bg-cyan-700`,
-    default: `bg-gray-800 hover:bg-gray-700 border-gray-700`,
-    default700: `w-full bg-gray-700 hover:bg-gray-700 border-gray-700`
+}: IButtonProps) => {
+  const styles = {
+    cancel: {
+      bg: 'gray.800',
+      color: 'gray.300',
+      borderColor: 'gray.500',
+      _hover: { bg: 'gray.600', color: 'white' }
+    },
+    confirm: { bg: 'green.600', color: 'white', _hover: { bg: 'green.700' } },
+    delete: { bg: 'red.600', _hover: { bg: 'red.800' } },
+    link: {
+      color: 'blue.500',
+      textDecoration: 'underline',
+      _hover: { color: 'blue.700' }
+    },
+    primary: { bg: 'blue.500', color: 'white', _hover: { bg: 'blue.600' } },
+    outline: {
+      borderColor: 'blue.500',
+      color: 'blue.500',
+      _hover: { bg: 'blue.50' }
+    },
+    ghost: { color: 'blue.500', _hover: { bg: 'blue.50' } },
+    default: { bg: 'gray.200', color: 'gray.800', _hover: { bg: 'gray.300' } },
+    default700: {
+      bg: 'gray.700',
+      borderColor: 'gray.700',
+      width: 'full',
+      _hover: { bg: 'gray.600' }
+    }
+  }
+
+  const buttonProps: ButtonProps = {
+    ...props,
+    ...styles[variant],
+    size: 'md',
+    fontSize: 'md',
+    fontWeight: 'medium',
+    isLoading,
+    loadingText,
+    spinnerPlacement,
+    isDisabled,
+    leftIcon,
+    rightIcon,
+    className: 'rounded-md'
   }
 
   return variant === 'link' ? (
-    <Link
-      className="text-white focus:outline-none font-medium rounded-lg text-sm bg-gray-800 underline"
-      href={routeLink}
-    >
+    <Link as={Link} href={routeLink}>
       {props.children}
     </Link>
   ) : (
-    <button
-      {...props}
-      className={twMerge(
-        `px-5 py-2.5 text-sm font-medium rounded-lg ${validateStyles[variant]} `,
-        props.className
-      )}
-    >
-      {props.children}
-    </button>
+    <ButtonChakra {...buttonProps}>{props.children}</ButtonChakra>
   )
 }
 

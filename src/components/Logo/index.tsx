@@ -1,10 +1,13 @@
 import React from 'react'
-import { twMerge } from 'tailwind-merge'
+import { Box, Heading } from '@chakra-ui/react'
 
-export default function Logo({ className }: { className?: string }) {
+export default function Logo({ fontSize = 'lg' }: { fontSize?: string }) {
   return (
-    <h1 className={twMerge('text-2xl font-bold', className)}>
-      Finova<strong className="text-cyan-600">Tranck</strong>
-    </h1>
+    <Heading as="h1" size={fontSize} fontWeight="bold">
+      Finova
+      <Box as="span" color="cyan.600">
+        Tranck
+      </Box>
+    </Heading>
   )
 }

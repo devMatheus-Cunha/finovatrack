@@ -2,7 +2,7 @@
 
 **This project is currently under development.**
 
-Manage your finances effortlessly with Personal Management Control, a web application built using modern technologies such as React, Next.js, TypeScript, Firebase, Tailwind CSS, React Query, Zod, and React Hook Form.
+Manage your finances effortlessly with Personal Management Control, a web application built using modern technologies such as React, Next.js, TypeScript, Firebase, React Query, Zod, and React Hook Form.
 
 ## Features
 
@@ -24,7 +24,6 @@ We are continuously working on improving the platform and adding new features. H
 - Next.js
 - TypeScript
 - Firebase
-- Tailwind CSS
 - React Query
 - Zod
 - React Hook Form
