@@ -78,7 +78,7 @@ export default function AppLayout({ children }: SideBarProps) {
     {
       id: 'logout',
       label: 'Logout',
-      route: '',
+      route: 'logout',
       disabled: false,
       icon: <SignOut size={21} />,
       action: () => onLogout()
