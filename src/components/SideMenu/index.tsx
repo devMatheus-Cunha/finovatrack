@@ -24,9 +24,10 @@ const SideMenu = ({
             const isActive = pathname?.includes(item?.route)
             const itemTextColor = isActive ? 'cyan' : 'white'
 
-            const LinkComponent: any = item.id === 'eye' ? Button : NextLink
+            const LinkComponent: any =
+              item.id === 'eye' || item.id === 'logout' ? Button : NextLink
             const linkProps =
-              item.id === 'eye'
+              item.id === 'eye' || item.id === 'logout'
                 ? { onClick: item.action }
                 : { href: `/${item.route}` }
 
