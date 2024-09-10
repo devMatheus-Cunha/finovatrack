@@ -140,6 +140,7 @@ function ContentActionsTableModal({
                   { label: 'Economias', value: 'Economias' },
                   { label: 'Educação', value: 'Educação' },
                   { label: 'Entretenimento', value: 'Entretenimento' },
+                  { label: 'Investimentos', value: 'Investimentos' },
                   { label: 'Lazer', value: 'Lazer' },
                   { label: 'Moradia', value: 'Moradia' },
                   { label: 'Roupas', value: 'Roupas' },

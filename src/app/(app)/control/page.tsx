@@ -147,6 +147,56 @@ export default function Control() {
     setFilter(value)
   }
 
+  function calculateInvestmentMetrics(
+    transactions: any[],
+    totalIncome: number
+  ) {
+    const totalInvestments = transactions.reduce((acc, transaction) => {
+      if (transaction.category === 'Investimentos') {
+        return acc + transaction.value_primary_currency
+      } else {
+        return acc
+      }
+    }, 0)
+
+    const investmentPercentage = (
+      (totalInvestments / totalIncome) *
+      100
+    ).toFixed(2)
+
+    return {
+      totalInvestments,
+      investmentPercentageFormat: `${investmentPercentage}%`,
+      investmentPercentage: investmentPercentage
+    }
+  }
+
+  const onSaveReport = ({ data, period }: { data: any[]; period: string }) => {
+    saveReport({
+      data,
+      period,
+      totalFree: formatCurrencyMoney(
+        totalEntrys - (validateExpenseData[typeAccount] || 0),
+        userData.primary_currency
+      ),
+      investments: calculateInvestmentMetrics(data, totalEntrys),
+      totalEntrys: formatCurrencyMoney(totalEntrys, userData.primary_currency),
+      totalExpenses: formatCurrencyMoney(
+        validateExpenseData[typeAccount],
+        userData.primary_currency
+      ),
+      totalExpenseEurToReal: formatCurrencyMoney(
+        calculationTotalExpensesEurToReal,
+        userData.primary_currency
+      ),
+      quatation: formatCurrencyMoney(
+        lastQuatationData?.current_quotation,
+        userData.primary_currency
+      )
+    })
+    controlModalSaveReport.onClose()
+  }
+
   return (
     <Box display="flex" flexDir="column" w="100%" gap={10} py={4} px={2}>
       <Box>
@@ -228,33 +278,7 @@ export default function Control() {
         <ConfirmSaveReportModal
           initialData={calculationSumValues}
           onCancel={controlModalSaveReport.onClose}
-          onSubmit={({ data, period }: any) => {
-            saveReport({
-              data,
-              period,
-              totalInvested: formatCurrencyMoney(
-                totalEntrys - (validateExpenseData[typeAccount] || 0),
-                userData.primary_currency
-              ),
-              totalEntrys: formatCurrencyMoney(
-                totalEntrys,
-                userData.primary_currency
-              ),
-              totalExpenses: formatCurrencyMoney(
-                validateExpenseData[typeAccount],
-                userData.primary_currency
-              ),
-              totalExpenseEurToReal: formatCurrencyMoney(
-                calculationTotalExpensesEurToReal,
-                userData.primary_currency
-              ),
-              quatation: formatCurrencyMoney(
-                lastQuatationData?.current_quotation,
-                userData.primary_currency
-              )
-            })
-            controlModalSaveReport.onClose()
-          }}
+          onSubmit={({ data, period }: any) => onSaveReport({ data, period })}
         />
       </ModalChakra>
 
