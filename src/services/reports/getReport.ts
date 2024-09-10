@@ -4,7 +4,12 @@ import { ExpenseData } from '../expenses/getExpenses'
 
 export interface IReportData {
   data: ExpenseData[]
-  totalInvested: string
+  totalFree: string
+  investments: {
+    totalInvestments: any
+    investmentPercentageFormat: any
+    investmentPercentage: any
+  }
   totalEntrys: string
   totalExpenses: string
   totalExpenseEurToReal: string

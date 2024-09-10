@@ -36,6 +36,7 @@
     "react-hook-form": "^7.43.9",
     "react-number-format": "^5.1.4",
     "react-toastify": "^9.1.2",
+    "recharts": "^2.12.7",
     "sharp": "^0.33.4",
     "zod": "^3.21.4"
   },

@@ -165,7 +165,18 @@ function Reports() {
                       )}
 
                     {renderSummaryItem('Total Gastos', data.totalExpenses)}
-                    {renderSummaryItem('Total Livre', data.totalInvested)}
+                    {renderSummaryItem('Total Livre', data.totalFree)}
+                    {renderSummaryItem(
+                      'Total Investido',
+                      formatCurrencyMoney(
+                        data.investments?.totalInvestments,
+                        userData.primary_currency
+                      )
+                    )}
+                    {renderSummaryItem(
+                      'Foi investido',
+                      `${data.investments?.investmentPercentageFormat}`
+                    )}
 
                     {userData.typeAccount === 'hybrid' &&
                       renderSummaryItem('Cotação Usada', data.quatation)}
