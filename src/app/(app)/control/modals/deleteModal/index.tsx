@@ -5,8 +5,12 @@ import {
   ModalContent,
   ModalFooter,
   ModalOverlay,
-  Button
+  Button,
+  Box,
+  Icon,
+  Text
 } from '@chakra-ui/react'
+import { WarningIcon } from '@chakra-ui/icons'
 
 function DeleteModalContent({ onSubmit, onCancel }: any) {
   return (
@@ -14,24 +18,12 @@ function DeleteModalContent({ onSubmit, onCancel }: any) {
       <ModalOverlay />
       <ModalContent display="flex" alignItems="center" flexDir="column" py={5}>
         <ModalBody>
-          <svg
-            aria-hidden="true"
-            className="mx-auto mb-4 text-gray-400 w-14 h-14"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h3 className="mb-5 text-lg font-normal text-gray-400">
-            Você tem certeza que deseja deletar?
-          </h3>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Icon as={WarningIcon} boxSize={14} color="gray.400" mb={4} />
+            <Text fontSize="lg" fontWeight="normal" color="gray.400" mb={5}>
+              Você tem certeza que deseja deletar?
+            </Text>
+          </Box>
         </ModalBody>
 
         <ModalFooter display="flex" gap={3} pt={0}>
