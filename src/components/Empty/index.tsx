@@ -1042,11 +1042,11 @@ function Empty<T>({ filter }: IEmptyProps<T>) {
         />
       </svg>
       {filter ? (
-        <Heading size="2xl" color="gray.400">
+        <Heading size="xl" color="gray.400">
           Não foi encontrado nenhuma informação de acordo com seu filtro
         </Heading>
       ) : (
-        <Heading size="2xl" color="gray.400">
+        <Heading size="xl" color="gray.400">
           Não foi adicionado nenhum informação ainda
         </Heading>
       )}
