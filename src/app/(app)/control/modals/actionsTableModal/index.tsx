@@ -29,6 +29,7 @@ import {
   ITypeModalExpense
 } from '../../hooks/useControlModal'
 import { DeleteIcon } from '@chakra-ui/icons'
+import { categoryOptions, paymentsOptions } from './utilts'
 
 interface IContentModal {
   onSubmit: (data: ExpenseData) => Promise<void>
@@ -128,27 +129,7 @@ function ContentActionsTableModal({
                 label="Selecione a categoria"
                 name="category"
                 isRequired
-                options={[
-                  {
-                    label: 'Ex: Alimentação',
-                    value: '',
-                    disabled: true,
-                    selected: true
-                  },
-                  { label: 'Alimentação', value: 'Alimentação' },
-                  { label: 'Contas', value: 'Contas' },
-                  { label: 'Economias', value: 'Economias' },
-                  { label: 'Educação', value: 'Educação' },
-                  { label: 'Entretenimento', value: 'Entretenimento' },
-                  { label: 'Investimentos', value: 'Investimentos' },
-                  { label: 'Lazer', value: 'Lazer' },
-                  { label: 'Moradia', value: 'Moradia' },
-                  { label: 'Roupas', value: 'Roupas' },
-                  { label: 'Saúde', value: 'Saúde' },
-                  { label: 'Seguro', value: 'Seguro' },
-                  { label: 'Transporte', value: 'Transporte' },
-                  { label: 'Viagens', value: 'Viagens' }
-                ]}
+                options={categoryOptions}
                 register={register}
                 errors={errors.category?.message}
               />
@@ -156,16 +137,7 @@ function ContentActionsTableModal({
                 label="Status de Pagamento"
                 name="payment"
                 isRequired
-                options={[
-                  {
-                    label: `Ex: A Pagar`,
-                    value: '',
-                    disabled: true,
-                    selected: true
-                  },
-                  { label: 'A Pagar', value: 'A Pagar' },
-                  { label: 'Pago', value: 'Pago' }
-                ]}
+                options={paymentsOptions}
                 register={register}
                 errors={errors.payment?.message}
               />
