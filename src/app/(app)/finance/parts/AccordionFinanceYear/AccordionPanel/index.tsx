@@ -33,6 +33,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
   userData,
   isVisibilityData
 }) => {
+  const yearContributions = 12 * Number(data.monthlyContributions)
   return (
     <AccordionPanelChakra
       display="flex"
@@ -75,6 +76,16 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.monthlyContributions),
+            userData?.primary_currency,
+            isVisibilityData
+          )}
+        </Text>
+      </Stack>
+      <Stack w="max-content">
+        <Heading size="sm">Aporte Anual</Heading>
+        <Text fontSize="md">
+          {formatCurrencyMoney(
+            Number(yearContributions),
             userData?.primary_currency,
             isVisibilityData
           )}
