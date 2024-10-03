@@ -14,7 +14,7 @@ export const initialState: UserData = {
   name: '',
   primary_currency: '',
   secondary_currency: '',
-  typeAccount: 'hybrid'
+  typeAccount: ''
 }
 
 const useUserData = () => {

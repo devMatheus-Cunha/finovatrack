@@ -113,7 +113,7 @@ export default function Control() {
     return total
   }
 
-  const validateExpenseData = {
+  const validateExpenseData: any = {
     hybrid: calculationTotalExpensesEurSumRealToReal,
     oneCurrency: getTotals?.value_primary_currency
   }
