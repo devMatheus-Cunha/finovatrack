@@ -1,6 +1,7 @@
-import Providers from '@/utils/reactQuery/provider'
 import { Metadata } from 'next'
 import Script from 'next/script'
+import Providers from './providers'
+import { ColorModeScript } from '@chakra-ui/react'
 
 export const metadata: Metadata = {
   title: 'FinovaTrack - Home',
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
+        <ColorModeScript initialColorMode="dark" />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-L8G3KWJZDF"
@@ -46,9 +48,7 @@ export default function RootLayout({
       </head>
 
       <body suppressHydrationWarning>
-        <Providers>
-          <div>{children}</div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

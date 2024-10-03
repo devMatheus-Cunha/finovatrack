@@ -6,11 +6,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import '../../styles/globals.css'
 
-import { ThemeProvider } from 'next-themes'
 import { ToastContainer } from 'react-toastify'
 import { ChakraProvider, extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { ThemeProvider } from 'next-themes'
 
 function Providers({ children }: React.PropsWithChildren) {
   const [client] = React.useState(
@@ -43,7 +42,6 @@ function Providers({ children }: React.PropsWithChildren) {
           <ToastContainer theme="dark" />
         </ChakraProvider>
       </ThemeProvider>
-
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
