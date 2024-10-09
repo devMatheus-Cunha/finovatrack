@@ -1,7 +1,7 @@
 import React from 'react'
 import TableToControl from './TableToControl'
 import MobileTable from './MobileTable'
-import { Show } from '@chakra-ui/react'
+import { ShowAndHide } from '@/components'
 
 interface ITableMobileAndDesktopProps {
   calculationSumValues: any
@@ -24,7 +24,7 @@ const TableMobileAndDesktop = ({
 }: ITableMobileAndDesktopProps) => {
   return (
     <>
-      <Show above="lg">
+      <ShowAndHide displayLg="initial" displayBase="none">
         <TableToControl
           calculationSumValues={
             userData.typeAccount === 'hybrid'
@@ -37,16 +37,16 @@ const TableMobileAndDesktop = ({
           filter={filter}
           isLoadingExpensesData={isLoadingExpensesData}
         />
-      </Show>
+      </ShowAndHide>
 
-      <Show below="lg">
+      <ShowAndHide displayLg="none" displayBase="initial">
         <MobileTable
           expensesData={expensesData}
           handleOpenModal={handleControlModalExpense}
           userData={userData}
           isVisibilityData={isVisibilityData}
         />
-      </Show>
+      </ShowAndHide>
     </>
   )
 }

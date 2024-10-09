@@ -17,7 +17,7 @@ const SideMenuDesktop = ({
   }[]
 }) => {
   return (
-    <Box transition="opacity 0.3s">
+    <Box transition="opacity 0.3s" height="full">
       <Flex height="full" flexDirection="column" px={2.5} py={3} bg="gray.700">
         <Flex flexDirection="column" gap={6}>
           {sidebarItems.map((item) => {

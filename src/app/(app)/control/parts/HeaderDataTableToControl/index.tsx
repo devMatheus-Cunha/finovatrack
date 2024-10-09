@@ -9,8 +9,7 @@ import {
   MenuItem,
   Icon,
   Button,
-  Menu,
-  Show
+  Menu
 } from '@chakra-ui/react'
 import {
   Coins,
@@ -25,7 +24,7 @@ import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { DropdownFilter } from '@/components'
+import { DropdownFilter, ShowAndHide } from '@/components'
 
 interface IHeaderDataTableToControl {
   userData: UserData
@@ -88,7 +87,7 @@ function HeaderDataTableToControl({
           </Button>
         ))}
 
-        <Show below="lg">
+        <ShowAndHide displayLg="none" displayBase="initial">
           <Menu>
             <MenuButton
               as={IconButton}
@@ -108,7 +107,7 @@ function HeaderDataTableToControl({
               ))}
             </MenuList>
           </Menu>
-        </Show>
+        </ShowAndHide>
 
         <DropdownFilter
           value={filter}

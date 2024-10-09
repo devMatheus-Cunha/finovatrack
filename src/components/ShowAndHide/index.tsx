@@ -11,8 +11,8 @@ interface ShowAndHideProps {
 
 const ShowAndHide: React.FC<ShowAndHideProps> = ({
   children,
-  displayLg = 'initial', // Valor padrão para telas grandes
-  displayBase = 'none' // Valor padrão para telas pequenas
+  displayLg = 'initial',
+  displayBase = 'none'
 }) => {
   return <Box display={{ base: displayBase, lg: displayLg }}>{children}</Box>
 }
