@@ -11,7 +11,7 @@ const AccordionButton: React.FC<{
   return (
     <AccordionButtonChakra>
       <Text flex="1" textAlign="left" fontWeight="bold" fontSize="larger">
-        {`Finanças ${year}`}
+        {year}
       </Text>
       <AccordionIcon />
     </AccordionButtonChakra>

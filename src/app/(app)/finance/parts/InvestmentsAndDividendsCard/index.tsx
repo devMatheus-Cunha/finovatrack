@@ -90,7 +90,7 @@ const InvestmentsAndDividendsCard: React.FC<
                     textDecorationColor="green"
                   >
                     {formatCurrencyMoney(
-                      Number(investimentsData?.total),
+                      Number(investimentsData?.total) || 0,
                       userData.primary_currency,
                       isVisibilityData
                     )}
@@ -106,7 +106,7 @@ const InvestmentsAndDividendsCard: React.FC<
                     fontSize="sm"
                   >
                     {formatCurrencyMoney(
-                      Number(investimentsData?.free),
+                      Number(investimentsData?.free) || 0,
                       userData.primary_currency,
                       isVisibilityData
                     )}
@@ -122,7 +122,7 @@ const InvestmentsAndDividendsCard: React.FC<
                     fontSize="sm"
                   >
                     {formatCurrencyMoney(
-                      Number(investimentsData?.invested),
+                      Number(investimentsData?.invested) || 0,
                       userData.primary_currency,
                       isVisibilityData
                     )}
@@ -138,7 +138,7 @@ const InvestmentsAndDividendsCard: React.FC<
                     fontSize="sm"
                   >
                     {formatCurrencyMoney(
-                      Number(totalsDividendsData),
+                      Number(totalsDividendsData) || 0,
                       userData.primary_currency,
                       isVisibilityData
                     )}
@@ -149,6 +149,7 @@ const InvestmentsAndDividendsCard: React.FC<
           </CardBody>
         )}
       </Card>
+
       <Card
         width="100%"
         h="max-content"

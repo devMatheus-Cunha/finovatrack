@@ -11,10 +11,9 @@ import {
   User
 } from '@phosphor-icons/react'
 import React from 'react'
-import { HeaderMobile, Logo } from '@/components'
+import { HeaderMobile, Logo, ShowAndHide } from '@/components'
 import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/auth'
-import { Show } from '@chakra-ui/react'
 
 import SideMenuMobile from './SideMenuMobile'
 import SideMenuDesktop from './SideMenuDesktop'
@@ -96,16 +95,16 @@ export const SideMenu = () => {
 
   return (
     <>
-      <Show above="lg">
+      <ShowAndHide displayLg="initial" displayBase="none">
         <SideMenuDesktop pathname={pathname} sidebarItems={sidebarItems} />
-      </Show>
+      </ShowAndHide>
 
-      <Show below="lg">
+      <ShowAndHide displayLg="none" displayBase="initial">
         <HeaderMobile>
           <Logo fontSize="lg" />
           <SideMenuMobile pathname={pathname} sidebarItems={sidebarItems} />
         </HeaderMobile>
-      </Show>
+      </ShowAndHide>
     </>
   )
 }
