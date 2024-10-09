@@ -14,7 +14,6 @@ import React from 'react'
 import { HeaderMobile, Logo, ShowAndHide } from '@/components'
 import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/auth'
-import { Box } from '@chakra-ui/react'
 
 import SideMenuMobile from './SideMenuMobile'
 import SideMenuDesktop from './SideMenuDesktop'
