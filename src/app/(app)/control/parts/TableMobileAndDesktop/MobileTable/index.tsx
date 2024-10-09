@@ -6,7 +6,8 @@ import {
 } from '@/utils/formatNumber'
 import React from 'react'
 import { IHandleControlModalExpenseFunction } from '../../../hooks/useControlModal'
-import { Box, Text, Flex, Show, VStack } from '@chakra-ui/react' // Importe os componentes necessários do Chakra UI
+import { Box, Text, Flex, VStack } from '@chakra-ui/react' // Importe os componentes necessários do Chakra UI
+import { ShowAndHide } from '@/components'
 
 interface IMobileTableProps {
   expensesData: ExpenseData[]
@@ -22,7 +23,7 @@ const MobileTable: React.FC<IMobileTableProps> = ({
   isVisibilityData
 }) => {
   return (
-    <Show breakpoint="(max-width: 1023px)">
+    <ShowAndHide displayLg="none" displayBase="initial">
       <Flex flexWrap="wrap" gap={4}>
         {expensesData.map((item) => (
           <Box
@@ -63,7 +64,7 @@ const MobileTable: React.FC<IMobileTableProps> = ({
           </Box>
         ))}
       </Flex>
-    </Show>
+    </ShowAndHide>
   )
 }
 
