@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { Accordion, Modal, useDisclosure } from '@chakra-ui/react'
+import {
+  Accordion,
+  Card,
+  CardHeader,
+  Heading,
+  Modal,
+  useDisclosure
+} from '@chakra-ui/react'
 import { AccordionFinanceYear } from '../AccordionFinanceYear'
 import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
@@ -82,30 +89,43 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
 
   return (
     <>
-      <Accordion allowMultiple>
-        {calcTotalsLaterYear(financialPlanningYear) &&
-          calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
-            <React.Fragment key={item.year}>
-              <AccordionFinanceYear.Root>
-                <AccordionFinanceYear.Button year={item.year} />
-                <AccordionFinanceYear.Panel
-                  data={item}
-                  onOpen={() => onOpenModal(item)}
-                  userData={userData}
-                  isVisibilityData={isVisibilityData}
-                />
-              </AccordionFinanceYear.Root>
-            </React.Fragment>
-          ))}
-        <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
-          <ModalContent
-            onClose={onCloseModal}
-            onSubmit={handleSubmit}
-            initialValues={selectedData}
-            currency={userData.primary_currency}
-          />
-        </Modal>
-      </Accordion>
+      <Card width="100%" minH="390px">
+        <CardHeader>
+          <Heading
+            size="md"
+            display="flex"
+            alignItems="center"
+            gap={1}
+            alignSelf="end"
+          >
+            Finanças{' '}
+          </Heading>
+          <Accordion allowMultiple>
+            {calcTotalsLaterYear(financialPlanningYear) &&
+              calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
+                <React.Fragment key={item.year}>
+                  <AccordionFinanceYear.Root>
+                    <AccordionFinanceYear.Button year={item.year} />
+                    <AccordionFinanceYear.Panel
+                      data={item}
+                      onOpen={() => onOpenModal(item)}
+                      userData={userData}
+                      isVisibilityData={isVisibilityData}
+                    />
+                  </AccordionFinanceYear.Root>
+                </React.Fragment>
+              ))}
+            <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
+              <ModalContent
+                onClose={onCloseModal}
+                onSubmit={handleSubmit}
+                initialValues={selectedData}
+                currency={userData.primary_currency}
+              />
+            </Modal>
+          </Accordion>
+        </CardHeader>
+      </Card>
     </>
   )
 }
