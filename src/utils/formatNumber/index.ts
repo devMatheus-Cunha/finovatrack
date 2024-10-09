@@ -9,7 +9,7 @@ export function formatCurrencyMoney(
 
   const formattedValue = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: currency || 'BRL',
+    currency: currency || 'EUR',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(value)
