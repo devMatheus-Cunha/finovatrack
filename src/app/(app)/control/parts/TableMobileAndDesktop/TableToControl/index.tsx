@@ -9,7 +9,7 @@ import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ITypeModalExpense } from '../../../hooks/useControlModal'
-import { Box, Flex, Spinner } from '@chakra-ui/react'
+import { Box, Skeleton } from '@chakra-ui/react'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -108,20 +108,7 @@ function TableToControl({
       position="relative"
     >
       {isLoadingExpensesData ? (
-        <Flex
-          height="full"
-          width="full"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="cyan.500"
-            size="xl"
-          />
-        </Flex>
+        <Skeleton height="63vh" rounded="lg" />
       ) : (
         <>
           {calculationSumValues?.length > 0 ? (
