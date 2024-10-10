@@ -15,6 +15,7 @@ function Empty<T>({ filter }: IEmptyProps<T>) {
       alignItems="center"
       gap={6}
       height="100%"
+      marginTop={{ base: '2rem', lg: '0px' }}
     >
       <svg
         fillRule="evenodd"
@@ -1042,11 +1043,21 @@ function Empty<T>({ filter }: IEmptyProps<T>) {
         />
       </svg>
       {filter ? (
-        <Heading size="xl" color="gray.400">
+        <Heading
+          size={{ base: 'md', lg: 'lg' }}
+          color="gray.400"
+          textAlign="center"
+          maxW={{ base: '90%', lg: '100%' }}
+        >
           Não foi encontrado nenhuma informação de acordo com seu filtro
         </Heading>
       ) : (
-        <Heading size="xl" color="gray.400">
+        <Heading
+          size={{ base: 'md', lg: 'lg' }}
+          color="gray.400"
+          textAlign="center"
+          maxW={{ base: '90%', lg: '100%' }}
+        >
           Não foi adicionado nenhum informação ainda
         </Heading>
       )}
