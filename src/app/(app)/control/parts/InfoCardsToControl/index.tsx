@@ -1,7 +1,6 @@
 'use client'
 
 import { InfoCardMoney } from '@/components'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
 import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
@@ -42,12 +41,10 @@ function InfoCardsToControl({
       }}
     >
       <InfoCardMoney
-        infoData={formatCurrencyMoney(
-          totalEntrys,
-          userData.primary_currency,
-          isVisibilityData
-        )}
+        infoData={totalEntrys}
         title="Total Entradas"
+        currency={userData.primary_currency}
+        isVisibilityData={isVisibilityData}
         contentAction={
           <>
             {entrysData?.length > 0 && (
@@ -63,30 +60,24 @@ function InfoCardsToControl({
       />
       {userData.typeAccount === 'hybrid' && (
         <InfoCardMoney
-          infoData={formatCurrencyMoney(
-            totalExpensesEurToReal,
-            userData.primary_currency,
-            isVisibilityData
-          )}
+          infoData={totalExpensesEurToReal}
           infoAction={infoAction}
+          isVisibilityData={isVisibilityData}
+          currency={userData.secondary_currency}
           title={`Total Gastos ${userData.secondary_currency}`}
         />
       )}
       <InfoCardMoney
-        infoData={formatCurrencyMoney(
-          totalExpensesEurSumRealToReal,
-          userData.primary_currency,
-          isVisibilityData
-        )}
+        infoData={totalExpensesEurSumRealToReal}
         title="Total Gastos"
+        isVisibilityData={isVisibilityData}
+        currency={userData.primary_currency}
       />
       <InfoCardMoney
-        infoData={formatCurrencyMoney(
-          totalEntrys - totalExpensesEurSumRealToReal,
-          userData.primary_currency,
-          isVisibilityData
-        )}
+        infoData={totalEntrys - totalExpensesEurSumRealToReal}
+        currency={userData.primary_currency}
         title="Total Livre"
+        isVisibilityData={isVisibilityData}
       />
     </Box>
   )
