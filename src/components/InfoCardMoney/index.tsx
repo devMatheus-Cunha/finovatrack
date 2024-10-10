@@ -20,7 +20,6 @@ function InfoCardMoney({
   isVisibilityData,
   currency
 }: InfoCardProps) {
-  console.log(infoData)
   return (
     <>
       {infoData ? (

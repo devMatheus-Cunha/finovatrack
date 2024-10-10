@@ -41,10 +41,16 @@ const TableMobileAndDesktop = ({
 
       <ShowAndHide displayLg="none" displayBase="initial">
         <MobileTable
-          expensesData={expensesData}
-          handleOpenModal={handleControlModalExpense}
+          calculationSumValues={
+            userData.typeAccount === 'hybrid'
+              ? calculationSumValues
+              : expensesData
+          }
           userData={userData}
+          handleOpenModal={handleControlModalExpense}
           isVisibilityData={isVisibilityData}
+          filter={filter}
+          isLoadingExpensesData={isLoadingExpensesData}
         />
       </ShowAndHide>
     </>
