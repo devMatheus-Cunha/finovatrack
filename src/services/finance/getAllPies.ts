@@ -1,14 +1,15 @@
 'use server'
-import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 
-export async function fetchDividends(): Promise<IDividendProps[]> {
+import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
+
+export async function getAllPies(): Promise<IGetAllPies[]> {
   const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
+    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/equity/pies`,
     {
       headers: {
         Authorization: apiKey,
@@ -28,7 +29,5 @@ export async function fetchDividends(): Promise<IDividendProps[]> {
   }
 
   const data = await response.json()
-  return data?.items.sort((a: IDividendProps, b: IDividendProps) =>
-    b.paidOn.localeCompare(a.paidOn)
-  ) as IDividendProps[]
+  return data as IGetAllPies[]
 }

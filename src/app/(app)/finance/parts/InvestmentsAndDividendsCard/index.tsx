@@ -8,8 +8,7 @@ import {
   Text,
   Stack,
   StackDivider,
-  Spinner,
-  Flex
+  Skeleton
 } from '@chakra-ui/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
@@ -43,6 +42,36 @@ const InvestmentsAndDividendsCard: React.FC<
   totalsDividendsData,
   isVisibilityData
 }) => {
+  const profit =
+    (investimentsData &&
+      investimentsData?.total -
+        investimentsData?.free -
+        investimentsData.invested) ||
+    0
+
+  const investmentPercentage =
+    investimentsData && ((profit / investimentsData?.invested) * 100).toFixed(2)
+
+  const investmentData = [
+    { label: 'Total Conta', value: investimentsData?.total || 0 },
+    { label: 'Disponível', value: investimentsData?.free || 0 },
+    { label: 'Aplicado', value: investimentsData?.invested || 0 },
+    {
+      label: 'Investimento atual',
+      value: (investimentsData && investimentsData?.invested + profit) || 0
+    },
+    {
+      label: 'Lucro',
+      value: profit || 0,
+      percentage: isVisibilityData ? `(${investmentPercentage}%)` : '****'
+    },
+    { label: 'Dividendos', value: totalsDividendsData || 0 },
+    {
+      label: 'Rendimento Total',
+      value: (profit || 0) + totalsDividendsData || 0
+    }
+  ]
+
   return (
     <Box
       display="flex"
@@ -50,139 +79,90 @@ const InvestmentsAndDividendsCard: React.FC<
       gap={6}
       flexDirection={['column', 'column', 'row', 'column', 'row']}
     >
-      <Card width="100%" h="max-content" minHeight="300px" maxHeight="300px">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md">Investimenos Tranding 212</Heading>
-          <button
-            type="button"
-            onClick={() => refetchInvestimentsData()}
-            className="hover:text-gray-400"
-          >
-            <ArrowsCounterClockwise
-              size={20}
-              color="#eee2e2"
-              className="hover:opacity-75"
-            />
-          </button>
-        </CardHeader>
+      {isLoadingInvestimentsData ? (
+        <Skeleton width="100%" h="max-content" minHeight="355px" rounded="md" />
+      ) : (
+        <Card width="100%" h="max-content" minHeight="355px">
+          <CardHeader display="flex" justifyContent="space-between" pb={0}>
+            <Heading size="md">Investimenos Tranding 212</Heading>
+            <button
+              type="button"
+              onClick={() => refetchInvestimentsData()}
+              className="hover:text-gray-400"
+            >
+              <ArrowsCounterClockwise
+                size={20}
+                color="#eee2e2"
+                className="hover:opacity-75"
+              />
+            </button>
+          </CardHeader>
 
-        {isLoadingInvestimentsData ? (
-          <Flex width="100%" align="center" h="100vh" justify="center">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="cyan.500"
-              size="xl"
-            />
-          </Flex>
-        ) : (
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
-              <Box display="flex" flexDir="column" gap={8}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Heading size="sm">Total conta: </Heading>
-                  <Text
-                    fontWeight="bold"
-                    fontStyle="italic"
-                    textDecor="underline"
-                    fontSize="sm"
-                    textDecorationColor="green"
+              <Box display="flex" flexDir="column" gap={5}>
+                {investmentData.map((item) => (
+                  <Box
+                    key={item.label}
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
                   >
-                    {formatCurrencyMoney(
-                      Number(investimentsData?.total) || 0,
-                      userData.primary_currency,
-                      isVisibilityData
-                    )}
-                  </Text>
-                </Box>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Heading size="sm">Capital não investido: </Heading>
-                  <Text
-                    fontWeight="bold"
-                    fontStyle="italic"
-                    textDecor="underline"
-                    textDecorationColor="green"
-                    fontSize="sm"
-                  >
-                    {formatCurrencyMoney(
-                      Number(investimentsData?.free) || 0,
-                      userData.primary_currency,
-                      isVisibilityData
-                    )}
-                  </Text>
-                </Box>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Heading size="sm">Capital investido: </Heading>
-                  <Text
-                    fontWeight="bold"
-                    fontStyle="italic"
-                    textDecor="underline"
-                    textDecorationColor="green"
-                    fontSize="sm"
-                  >
-                    {formatCurrencyMoney(
-                      Number(investimentsData?.invested) || 0,
-                      userData.primary_currency,
-                      isVisibilityData
-                    )}
-                  </Text>
-                </Box>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Heading size="sm">Total Dividendos: </Heading>
-                  <Text
-                    fontWeight="bold"
-                    fontStyle="italic"
-                    textDecor="underline"
-                    textDecorationColor="green"
-                    fontSize="sm"
-                  >
-                    {formatCurrencyMoney(
-                      Number(totalsDividendsData) || 0,
-                      userData.primary_currency,
-                      isVisibilityData
-                    )}
-                  </Text>
-                </Box>
+                    <Heading size="sm">{item.label}: </Heading>
+                    <Text
+                      fontWeight="bold"
+                      fontStyle="italic"
+                      textDecor="underline"
+                      textDecorationColor="green"
+                      fontSize="sm"
+                    >
+                      {formatCurrencyMoney(
+                        Number(item.value),
+                        userData.primary_currency,
+                        isVisibilityData
+                      )}
+                    </Text>
+                    <Text
+                      fontWeight="bold"
+                      fontStyle="italic"
+                      textDecor="underline"
+                      textDecorationColor="green"
+                      fontSize="sm"
+                    >
+                      {item.percentage && item.percentage}
+                    </Text>
+                  </Box>
+                ))}
               </Box>
             </Stack>
           </CardBody>
-        )}
-      </Card>
+        </Card>
+      )}
 
-      <Card
-        width="100%"
-        h="max-content"
-        minHeight="300px"
-        maxHeight="300px"
-        overflowY="auto"
-      >
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md">Dividendos</Heading>
-          <button
-            type="button"
-            onClick={() => refetchDividendsData()}
-            className="hover:text-gray-400"
-          >
-            <ArrowsCounterClockwise
-              size={20}
-              color="#eee2e2"
-              className="hover:opacity-75"
-            />
-          </button>
-        </CardHeader>
-
-        {isLoadingDividendsData ? (
-          <Flex width="100%" align="center" h="100vh" justify="center">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="cyan.500"
-              size="xl"
-            />
-          </Flex>
-        ) : (
+      {isLoadingDividendsData ? (
+        <Skeleton width="100%" h="max-content" minHeight="355px" rounded="md" />
+      ) : (
+        <Card
+          width="100%"
+          h="max-content"
+          minHeight="355px"
+          maxH="355px"
+          overflowY="auto"
+        >
+          <CardHeader display="flex" justifyContent="space-between" pb={0}>
+            <Heading size="md">Dividendos</Heading>
+            <button
+              type="button"
+              onClick={() => refetchDividendsData()}
+              className="hover:text-gray-400"
+            >
+              <ArrowsCounterClockwise
+                size={20}
+                color="#eee2e2"
+                className="hover:opacity-75"
+              />
+            </button>
+          </CardHeader>
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
               {dividendsData &&
@@ -214,8 +194,8 @@ const InvestmentsAndDividendsCard: React.FC<
                 ))}
             </Stack>
           </CardBody>
-        )}
-      </Card>
+        </Card>
+      )}
     </Box>
   )
 }
