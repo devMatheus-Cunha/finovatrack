@@ -9,22 +9,24 @@ import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlani
 import { useFetchDividends, useFetchInvestiments } from '@/hooks/finance'
 import PatrimonioCard from './parts/PatrimonioCardProps'
 import InvestmentsAndDividendsCard from './parts/InvestmentsAndDividendsCard'
+import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
 
 const Finance = () => {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
-  const {
-    dividendsData,
-    isLoadingDividendsData,
-    totalsDividendsData,
-    refetchDividendsData
-  } = useFetchDividends()
+  const { dividendsData, isLoadingDividendsData, refetchDividendsData } =
+    useFetchDividends()
+
   const {
     investimentsData,
     isLoadingInvestimentsData,
     refetchInvestimentsData
   } = useFetchInvestiments()
-  const { financialPlanningYear } = useFetchFinancialPlaningYear()
+
+  const { allPiesData } = useFetchAllPies()
+
+  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
+    useFetchFinancialPlaningYear()
 
   const sumTotalCurrency = useMemo(() => {
     return financialPlanningYear && financialPlanningYear.length > 0
@@ -45,6 +47,7 @@ const Finance = () => {
             sumTotalCurrency={sumTotalCurrency}
             primaryCurrency={userData.primary_currency}
             isVisibilityData={isVisibilityData}
+            isLoadingFinancialPlanningYear={isLoadingFinancialPlanningYear}
           />
           <InvestmentsAndDividendsCard
             userData={userData}
@@ -54,18 +57,17 @@ const Finance = () => {
             isLoadingDividendsData={isLoadingDividendsData}
             refetchInvestimentsData={refetchInvestimentsData}
             refetchDividendsData={refetchDividendsData}
-            totalsDividendsData={totalsDividendsData}
+            totalsDividendsData={allPiesData[0]?.dividendDetails?.gained}
             isVisibilityData={isVisibilityData}
           />
         </Box>
-        <Box w="100%">
-          <FinanceYear
-            investimentsData={investimentsData}
-            userData={userData}
-            isVisibilityData={isVisibilityData}
-            financialPlanningYear={financialPlanningYear}
-          />
-        </Box>
+        <FinanceYear
+          investimentsData={investimentsData}
+          userData={userData}
+          isVisibilityData={isVisibilityData}
+          financialPlanningYear={financialPlanningYear}
+          isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
+        />
       </Box>
     </Box>
   )

@@ -1,4 +1,5 @@
 import { useUserId } from '@/hooks/globalStates'
+import { getInvestments } from '@/services/finance/getInvestiments'
 import { useQuery } from '@tanstack/react-query'
 
 export interface IInvestmentsProps {
@@ -19,26 +20,9 @@ export const useFetchInvestiments = () => {
     isFetching: isLoadingInvestimentsData,
     status: statusInvestimentsData,
     refetch: refetchInvestimentsData
-  } = useQuery(
-    ['investiments_data', userId],
-    async () => {
-      const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/equity/account/cash`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: process.env.NEXT_PUBLIC_KEY_API_TRANDING_212 || ''
-          }
-        }
-      )
-
-      const data = await resp.json()
-      return data as IInvestmentsProps
-    },
-    {
-      enabled: !!userId
-    }
-  )
+  } = useQuery(['investiments_data', userId], async () => getInvestments(), {
+    enabled: !!userId
+  })
 
   return {
     investimentsData,
