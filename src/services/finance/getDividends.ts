@@ -1,14 +1,14 @@
 'use server'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 
-export async function fetchDividends(): Promise<IDividendProps[]> {
+export async function fetchDividends(limit: string): Promise<IDividendProps[]> {
   const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=50`,
+    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=${limit}`,
     {
       headers: {
         Authorization: apiKey,

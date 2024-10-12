@@ -1,6 +1,7 @@
 import { useUserId } from '@/hooks/globalStates'
 import { fetchDividends } from '@/services/finance/getDividends'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 
 export interface IDividendProps {
   ticker: string
@@ -15,16 +16,9 @@ export interface IDividendProps {
 
 export type IDividendsProps = IDividendProps[]
 
-function sumTotalsDividends(array: IDividendsProps = []) {
-  let total = 0
-  for (let i = 0; i < array.length; i++) {
-    total += array[i].amountInEuro
-  }
-  return total
-}
-
 export const useFetchDividends = () => {
   const { userId } = useUserId() as any
+  const [currentPage, setCurrentPage] = useState('10')
 
   const {
     data: dividendsData,
@@ -32,17 +26,18 @@ export const useFetchDividends = () => {
     status: statusDividendsData,
     refetch: refetchDividendsData
   } = useQuery({
-    queryKey: ['dividends_data', userId],
-    queryFn: () => fetchDividends(),
+    queryKey: ['dividends_data', currentPage, userId],
+    queryFn: () => fetchDividends(currentPage),
     enabled: !!userId
   })
 
   return {
-    dividendsData,
-    totalsDividendsData: sumTotalsDividends(dividendsData),
+    dividendsData: dividendsData && dividendsData,
     isLoadingDividendsData,
     statusDividendsData,
-    refetchDividendsData
+    refetchDividendsData,
+    currentPage,
+    setCurrentPage
   }
 }
 

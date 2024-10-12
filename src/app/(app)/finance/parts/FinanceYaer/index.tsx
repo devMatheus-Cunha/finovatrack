@@ -8,7 +8,7 @@ import {
   Skeleton,
   useDisclosure
 } from '@chakra-ui/react'
-import { AccordionFinanceYear } from '../AccordionFinanceYear'
+import { AccordionFinanceYear } from './AccordionFinanceYear'
 import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
@@ -93,9 +93,15 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
   return (
     <>
       {isLoadingInvestimentsData ? (
-        <Skeleton w="100%" minH="390px" rounded="md" />
+        <Skeleton
+          w="100%"
+          minH="425px"
+          maxH="425px"
+          height="100%"
+          rounded="md"
+        />
       ) : (
-        <Card width="100%" minH="390px">
+        <Card width="100%" minH="425px" maxH="425px">
           <CardHeader>
             <Heading size="md" mb={6}>
               Finanças
