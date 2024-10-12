@@ -101,7 +101,7 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
           rounded="md"
         />
       ) : (
-        <Card width="100%" minH="425px" maxH="425px">
+        <Card width="100%" minH="425px">
           <CardHeader>
             <Heading size="md" mb={6}>
               Finanças
