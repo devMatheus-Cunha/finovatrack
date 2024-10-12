@@ -5,16 +5,8 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Heading,
-  Skeleton,
-  Text
-} from '@chakra-ui/react'
+import { Card, CardBody, Heading, Skeleton } from '@chakra-ui/react'
 import { RadialBarChart, PolarRadiusAxis, Label, RadialBar } from 'recharts'
-import { chartConfig } from '../Investments/utils'
 
 interface PatrimonioCardProps {
   primaryCurrency: string
