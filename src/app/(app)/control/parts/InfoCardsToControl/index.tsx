@@ -8,7 +8,7 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import Slider from 'react-slick'
 
-import { Icon, SimpleGrid } from '@chakra-ui/react'
+import { Box, Icon } from '@chakra-ui/react'
 import {
   Wallet,
   Eye,
@@ -48,6 +48,7 @@ function InfoCardsToControl({
       isVisibilityData: isVisibilityData,
       icon: ArrowCircleUp,
       iconColor: 'green',
+      centerPadding: '0px',
       actionCard: onOpenTotalEntrys,
       contentAction:
         entrysData?.length > 0 ? (
@@ -103,7 +104,8 @@ function InfoCardsToControl({
     dots: false,
     infinite: false,
     speed: 500,
-    arrows: false,
+    arrows: true,
+    arrowsPadding: 0,
     slidesToShow: 4,
     slidesToScroll: 1,
     responsive: [
@@ -127,11 +129,11 @@ function InfoCardsToControl({
   }
 
   return (
-    <Slider {...settings}>
+    <Slider {...settings} className="w-full">
       {cardsData.map((card, index) => (
-        <SimpleGrid key={index} columns={1} p={{ base: 2, lg: 4 }} rounded="md">
+        <Box key={index} p={{ base: 2, lg: 4 }} rounded="md">
           <InfoCardMoney {...card} />
-        </SimpleGrid>
+        </Box>
       ))}
     </Slider>
   )
