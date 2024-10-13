@@ -46,7 +46,7 @@ function InfoCardMoney({
           alignItems="center"
           bg={bgColor}
           borderRadius="md"
-          py={4}
+          py={5}
           px={{ base: 2, lg: 4 }}
           onClick={actionCard && actionCard}
           cursor={contentAction ? 'pointer' : ''}
