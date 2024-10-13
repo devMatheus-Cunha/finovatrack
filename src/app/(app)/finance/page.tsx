@@ -41,7 +41,15 @@ const Finance = () => {
   }, [financialPlanningYear, investimentsData?.total])
 
   return (
-    <Box display="flex" flexDirection="column" gap={5} h="95vh" p={[2, 2, 0]}>
+    <Box
+      display="flex"
+      py={2}
+      px={{ base: 2, lg: 3 }}
+      flexDirection="column"
+      gap={5}
+      h="95vh"
+      w="full"
+    >
       <Box
         display="flex"
         flexDirection={['column', 'column', 'column', 'row']}

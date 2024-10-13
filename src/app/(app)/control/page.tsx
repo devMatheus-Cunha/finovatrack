@@ -206,13 +206,13 @@ export default function Control() {
     <Box
       display="flex"
       flexDir="column"
-      w="93%"
+      w="full"
       gap={10}
       py={4}
-      px={2}
+      px={3}
       margin="auto"
     >
-      <Box>
+      <Box w={{ base: '93%', lg: '97%' }} margin="auto">
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
           totalEntrys={totalEntrys}
@@ -227,7 +227,7 @@ export default function Control() {
         />
       </Box>
 
-      <Box w="100%" display="flex" flexDir="column" gap={4}>
+      <Box display="flex" flexDir="column" gap={4} w="100%">
         <HeaderDataTableToControl
           userData={userData}
           currentQuotation={lastQuatationData?.current_quotation}
