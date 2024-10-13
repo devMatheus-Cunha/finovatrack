@@ -27,7 +27,7 @@ const MobileTable: React.FC<IMobileTableProps> = ({
   isLoadingExpensesData,
   filter
 }) => {
-  const skeletons = Array(4).fill(0)
+  const skeletons = Array(5).fill(0)
   return (
     <>
       {isLoadingExpensesData ? (
