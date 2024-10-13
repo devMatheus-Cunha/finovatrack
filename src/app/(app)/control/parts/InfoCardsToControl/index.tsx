@@ -104,7 +104,7 @@ function InfoCardsToControl({
     dots: false,
     infinite: false,
     speed: 500,
-    arrows: true,
+    arrows: false,
     arrowsPadding: 0,
     slidesToShow: 4,
     slidesToScroll: 1,
