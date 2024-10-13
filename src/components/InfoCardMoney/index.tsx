@@ -88,7 +88,7 @@ function InfoCardMoney({
         </Box>
       ) : (
         <Skeleton
-          height={{ base: '80px', md: '84.5px' }}
+          height={{ base: '85px', md: '92.5px' }}
           w="full"
           rounded="lg"
         />
