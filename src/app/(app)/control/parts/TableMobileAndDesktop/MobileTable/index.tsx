@@ -35,7 +35,7 @@ const MobileTable: React.FC<IMobileTableProps> = ({
           {skeletons.map((_, index) => (
             <Skeleton
               key={index}
-              height="85px"
+              height="95px"
               rounded="lg"
               width={{ base: '100%', md: '45%' }}
             />
