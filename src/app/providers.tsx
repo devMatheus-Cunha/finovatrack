@@ -6,6 +6,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 import { ToastContainer } from 'react-toastify'
 import { ChakraProvider, extendTheme, ThemeConfig } from '@chakra-ui/react'

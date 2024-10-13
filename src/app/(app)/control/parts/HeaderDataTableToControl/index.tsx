@@ -108,31 +108,36 @@ function HeaderDataTableToControl({
             </MenuList>
           </Menu>
         </ShowAndHide>
+      </HStack>
 
+      <HStack>
         <DropdownFilter
           value={filter}
           options={optionsFilterCategory}
           onFilter={onFilter}
           label="Filtrar Categoria"
         />
+        {userData.typeAccount === 'hybrid' && (
+          <>
+            <Text
+              fontSize={{ base: 'sm', md: 'md' }}
+              as="h3"
+              fontStyle="italic"
+            >
+              {`${userData.secondary_currency}: ${formatCurrencyMoney(
+                currentQuotation ?? 0,
+                userData.primary_currency
+              )}`}
+            </Text>
+            <IconButton
+              aria-label="Refresh"
+              icon={<ArrowsCounterClockwise size={20} color="white" />}
+              onClick={() => refetchQuationData()}
+              colorScheme="gray"
+            />
+          </>
+        )}
       </HStack>
-
-      {userData.typeAccount === 'hybrid' && (
-        <HStack>
-          <Text fontSize={{ base: 'sm', md: 'md' }} as="h3" fontStyle="italic">
-            {`${userData.secondary_currency}: ${formatCurrencyMoney(
-              currentQuotation ?? 0,
-              userData.primary_currency
-            )}`}
-          </Text>
-          <IconButton
-            aria-label="Refresh"
-            icon={<ArrowsCounterClockwise size={20} color="white" />}
-            onClick={() => refetchQuationData()}
-            colorScheme="gray"
-          />
-        </HStack>
-      )}
     </HStack>
   )
 }
