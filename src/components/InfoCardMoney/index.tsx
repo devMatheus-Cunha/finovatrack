@@ -46,7 +46,7 @@ function InfoCardMoney({
           alignItems="center"
           bg={bgColor}
           borderRadius="md"
-          py={4}
+          py={5}
           px={{ base: 2, lg: 4 }}
           onClick={actionCard && actionCard}
           cursor={contentAction ? 'pointer' : ''}
@@ -72,7 +72,7 @@ function InfoCardMoney({
             </StatLabel>
             <StatNumber display="flex" alignItems="center">
               <Text
-                fontSize={{ base: 'xl', md: 'lg', lg: '23' }}
+                fontSize={{ base: 'lg', lg: '23' }}
                 fontWeight="bold"
                 marginRight={1}
               >
