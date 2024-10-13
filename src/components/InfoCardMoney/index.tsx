@@ -72,7 +72,7 @@ function InfoCardMoney({
             </StatLabel>
             <StatNumber display="flex" alignItems="center">
               <Text
-                fontSize={{ base: 'xl', md: 'lg', lg: '23' }}
+                fontSize={{ base: 'lg', lg: '23' }}
                 fontWeight="bold"
                 marginRight={1}
               >
