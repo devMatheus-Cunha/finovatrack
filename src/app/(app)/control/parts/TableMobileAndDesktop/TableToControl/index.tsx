@@ -103,12 +103,12 @@ function TableToControl({
     <Box
       overflowY="auto"
       borderRadius="md"
-      height="63vh"
+      height="73vh"
       bg="gray.700"
       position="relative"
     >
       {isLoadingExpensesData ? (
-        <Skeleton height="63vh" rounded="lg" />
+        <Skeleton height="73vh" rounded="lg" />
       ) : (
         <>
           {calculationSumValues?.length > 0 ? (

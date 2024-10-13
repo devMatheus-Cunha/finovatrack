@@ -171,6 +171,11 @@ export default function Control() {
     }
   }
 
+  const investments = calculateInvestmentMetrics(
+    calculationSumValues,
+    totalEntrys
+  )
+
   const onSaveReport = ({ data, period }: { data: any[]; period: string }) => {
     saveReport({
       data,
@@ -179,7 +184,7 @@ export default function Control() {
         totalEntrys - (validateExpenseData[typeAccount] || 0),
         userData.primary_currency
       ),
-      investments: calculateInvestmentMetrics(data, totalEntrys),
+      investments: investments,
       totalEntrys: formatCurrencyMoney(totalEntrys, userData.primary_currency),
       totalExpenses: formatCurrencyMoney(
         validateExpenseData[typeAccount],
@@ -198,7 +203,15 @@ export default function Control() {
   }
 
   return (
-    <Box display="flex" flexDir="column" w="100%" gap={10} py={4} px={2}>
+    <Box
+      display="flex"
+      flexDir="column"
+      w="93%"
+      gap={10}
+      py={4}
+      px={2}
+      margin="auto"
+    >
       <Box>
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
@@ -210,6 +223,7 @@ export default function Control() {
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           userData={userData}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
+          investments={investments}
         />
       </Box>
 
