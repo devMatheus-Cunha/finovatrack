@@ -103,7 +103,7 @@ function TableToControl({
     <Box
       overflowY="auto"
       borderRadius="md"
-      height="68vh"
+      height="63vh"
       bg="gray.700"
       position="relative"
     >
