@@ -61,7 +61,8 @@ export const SideMenu = () => {
       route: 'finance',
       disabled:
         userId !== process.env.NEXT_USER_ID_1 &&
-        userId !== process.env.NEXT_USER_ID_2,
+        userId !== process.env.NEXT_USER_ID_2 &&
+        userId !== process.env.NEXT_USER_ID_3,
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/finance`)
     },
