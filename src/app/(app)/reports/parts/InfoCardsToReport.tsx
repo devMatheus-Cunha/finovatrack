@@ -89,7 +89,14 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
                   {card.label}
                 </StatLabel>
                 <StatNumber fontSize={{ base: 'lg', lg: '23' }}>
-                  {isVisibilityData ? card.value : '****'}
+                  {isVisibilityData
+                    ? card.value ||
+                      formatCurrencyMoney(
+                        0,
+                        userData.primary_currency,
+                        isVisibilityData
+                      )
+                    : '****'}
                 </StatNumber>
               </Stat>
             </Box>
