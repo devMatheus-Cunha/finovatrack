@@ -3,9 +3,9 @@ import { db } from '../firebase'
 
 export interface ExpenseData {
   id: string
-  category?: string
+  category: string
   description: string
-  value_primary_currency?: number
+  value_primary_currency: number
   value_secondary_currency?: number
   typeMoney?: string
   value: string
