@@ -4,17 +4,31 @@ import React from 'react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
-import Slider from 'react-slick'
 
-import { Box, Stat, StatLabel, StatNumber } from '@chakra-ui/react'
+import {
+  StatArrow,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
+  Card,
+  CardHeader,
+  CardBody,
+  Stat,
+  Heading,
+  Grid,
+  GridItem,
+  HStack
+} from '@chakra-ui/react'
 
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+
 interface IInfoCardsToControl {
   userData: UserData
   data: any
+  isLoading: boolean
 }
 
-function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
+function InfoCardsToReport({ userData, data, isLoading }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
 
   const summaryItems = [
@@ -26,11 +40,8 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
       value: formatCurrencyMoney(
         data?.investments?.totalInvestments,
         userData?.primary_currency
-      )
-    },
-    {
-      label: 'Foi investido',
-      value: `${data?.investments?.investmentPercentageFormat}`
+      ),
+      investments: `${data?.investments?.investmentPercentageFormat}`
     }
   ]
 
@@ -44,66 +55,44 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
     )
   }
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    arrows: true,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          arrows: true,
-          slidesToShow: 3
-        }
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          arrows: true,
-          dots: true,
-          slidesToShow: 2,
-          slidesToScroll: 2
-        }
-      }
-    ]
-  }
-
   return (
-    <Box w={{ base: '93%', lg: '98%' }} display="flex" margin="auto" gap={3}>
-      <Slider {...settings} className="w-full">
-        {summaryItems.map((card, index) => (
-          <Box key={index} rounded="md" p="2">
-            <Box
-              key={index}
-              bg="gray.700"
-              borderRadius="lg"
-              boxShadow="sm"
-              p={4}
-              textAlign="center"
-            >
-              <Stat>
+    <Card bg="gray.700" rounded="md" boxShadow="sm" w="full">
+      <CardHeader display="flex" justifyContent="space-between" pb={0}>
+        <Heading size="md">Relatorio Total</Heading>
+      </CardHeader>
+
+      <CardBody>
+        <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
+          {summaryItems.map((card, index) => (
+            <GridItem key={card.label}>
+              <Stat key={index}>
                 <StatLabel fontSize="xs" color="gray.500">
                   {card.label}
                 </StatLabel>
-                <StatNumber fontSize={{ base: 'lg', lg: '23' }}>
-                  {isVisibilityData
-                    ? card.value ||
-                      formatCurrencyMoney(
-                        0,
-                        userData.primary_currency,
-                        isVisibilityData
-                      )
-                    : '****'}
-                </StatNumber>
+                <HStack>
+                  <StatNumber fontSize={{ base: 'lg', lg: '23' }}>
+                    {isVisibilityData
+                      ? card.value ||
+                        formatCurrencyMoney(
+                          0,
+                          userData.primary_currency,
+                          isVisibilityData
+                        )
+                      : '****'}
+                  </StatNumber>
+                  {card.investments && (
+                    <StatHelpText display="flex" alignItems="center">
+                      <StatArrow type="increase" />
+                      {card.investments}
+                    </StatHelpText>
+                  )}
+                </HStack>
               </Stat>
-            </Box>
-          </Box>
-        ))}
-      </Slider>
-    </Box>
+            </GridItem>
+          ))}
+        </Grid>
+      </CardBody>
+    </Card>
   )
 }
 

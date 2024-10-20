@@ -12,7 +12,7 @@ export default function useFetchReportsData() {
   const [period, setPeriod] = useState(formattedDate)
   const { userId } = useUserId() as any
 
-  const { data: reportData } = useQuery<IReportData[], unknown>({
+  const { data: reportData, isLoading } = useQuery<IReportData[], unknown>({
     queryKey: ['report_data', period, userId],
     queryFn: () => getReport(userId, period),
     keepPreviousData: true,
@@ -21,6 +21,8 @@ export default function useFetchReportsData() {
 
   return {
     reportData,
-    setPeriod
+    setPeriod,
+    period,
+    isLoading
   }
 }

@@ -1,48 +1,27 @@
 'use client'
 
-import { FolderOpen } from '@phosphor-icons/react'
-import { useState } from 'react'
-import DatePicker from 'react-datepicker'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
-import Table, { TableColumn } from '@/components/Table'
-import {
-  Box,
-  Show,
-  VStack,
-  Text,
-  SimpleGrid,
-  Heading,
-  FormControl,
-  Button,
-  Icon,
-  Input
-} from '@chakra-ui/react'
+import { TableColumn } from '@/components/Table'
+import { Box, Skeleton } from '@chakra-ui/react'
 import InfoCardsToReport from './parts/InfoCardsToReport'
+import EmptyWithoutReport from './parts/EmptyWithoutReport'
+import HeaderFilter from './parts/HeaderFilter'
+import TableDesktopReports from './parts/TableDesktopReports'
+import TableMobileReports from './parts/TableMobileReports'
+import ExpenseToCategory from './parts/ExpenseToCategory'
 
 function Reports() {
   const { userData } = useUserData()
-  const [selectedPeriod, setSelectedPeriod] = useState(new Date())
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  const { reportData, setPeriod } = useFetchReportsData()
+  const { reportData, setPeriod, period, isLoading } = useFetchReportsData()
 
   const [data] = reportData ?? []
 
-  function onChangeDate(date: Date) {
-    setSelectedPeriod(date)
-  }
-
-  const onSubmit = (date: Date) => {
-    const formattedDate = new Date(date).toLocaleDateString('pt-BR', {
-      month: '2-digit',
-      year: 'numeric'
-    })
-
-    setPeriod(formattedDate)
-  }
+  const expensesData = data?.data ?? []
 
   const columsHeadProps = (): TableColumn[] => {
     const columns = [
@@ -61,7 +40,7 @@ function Reports() {
           )
       },
       {
-        header: 'Categoria',
+        header: 'category',
         field: 'category',
         modifier: (value: string) => value ?? '-'
       },
@@ -99,11 +78,8 @@ function Reports() {
       value: formatCurrencyMoney(
         data?.investments?.totalInvestments,
         userData?.primary_currency
-      )
-    },
-    {
-      label: 'Foi investido',
-      value: `${data?.investments?.investmentPercentageFormat}`
+      ),
+      investments: `${data?.investments?.investmentPercentageFormat}`
     }
   ]
 
@@ -118,143 +94,89 @@ function Reports() {
   }
 
   return (
-    <>
-      <Box width="100%">
+    <Box
+      display="flex"
+      flexDirection="column"
+      width="100%"
+      p={2}
+      gap={{ base: '4', md: '5' }}
+    >
+      <HeaderFilter onSubmit={setPeriod} period={period} />
+
+      {/* <StatiscExpense expensesData={[]} /> */}
+
+      <Box
+        display="flex"
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap={{ base: 2, lg: 3 }}
+      >
         <Box
           display="flex"
-          flexDirection="column"
-          alignItems="center"
-          width="100%"
-          p="3"
-          gap={{ base: '4', md: '10' }}
+          w={{ base: '100%', lg: '50%' }}
+          flexDir="column"
+          gap={2}
         >
-          <Box
-            p={6}
-            bg="gray.700"
-            borderRadius="lg"
-            flexDirection="column"
-            maxW={{ base: 'full', md: '40%' }}
-          >
-            <Heading size="sm" mb="2">
-              Escolha um período para solicitar um relatório:
-            </Heading>
-
-            <Box display="flex" p={2} gap={2}>
-              <FormControl flex={2}>
-                <DatePicker
-                  selected={selectedPeriod}
-                  onChange={(date: Date) => onChangeDate(date)}
-                  dateFormat="MM/yyyy"
-                  showMonthYearPicker
-                  customInput={
-                    <Input variant="filled" _focus={{ boxShadow: 'none' }} />
-                  }
-                />
-              </FormControl>
-
-              <Button
-                onClick={() => onSubmit(selectedPeriod)}
-                leftIcon={<Icon as={FolderOpen} />}
-                flex={1}
-              >
-                Solicitar
-              </Button>
+          {isLoading ? (
+            <Skeleton
+              height={{ base: 214, lg: 227 }}
+              w={{ base: 374, lg: 797.03 }}
+              rounded="lg"
+            />
+          ) : (
+            <InfoCardsToReport
+              data={data}
+              userData={userData}
+              isLoading={isLoading}
+            />
+          )}
+          {isLoading ? (
+            <Skeleton
+              height={{ base: 278, lg: 518 }}
+              w={{ base: 374, lg: 797.03 }}
+              rounded="lg"
+            />
+          ) : (
+            <Box>
+              {expensesData && expensesData.length > 0 ? (
+                <>
+                  <TableDesktopReports
+                    data={expensesData}
+                    colums={columsHeadProps()}
+                    userData={userData}
+                    isVisibilityData={isVisibilityData}
+                  />
+                  <TableMobileReports
+                    data={expensesData}
+                    colums={columsHeadProps()}
+                    userData={userData}
+                    isVisibilityData={isVisibilityData}
+                  />
+                </>
+              ) : (
+                <EmptyWithoutReport />
+              )}
             </Box>
-          </Box>
+          )}
+        </Box>
 
-          <Box w="97%">
-            {data ? (
-              <Box className="flex flex-col gap-7">
-                <InfoCardsToReport data={data} userData={userData} />
-                <Box
-                  overflowY="auto"
-                  maxH="62vh"
-                  minH={{ base: 'auto', md: '62vh' }}
-                  borderRadius={{ sm: 'lg' }}
-                  w="100%"
-                  bg={{ lg: 'gray.700' }}
-                >
-                  {data?.data?.length > 0 ? (
-                    <>
-                      <Show above="lg">
-                        <Table columns={columsHeadProps()} data={data?.data} />
-                      </Show>
-                      <Show below="lg">
-                        <SimpleGrid columns={1} spacing={4}>
-                          {data?.data.map((item) => (
-                            <>
-                              {item.value_primary_currency && (
-                                <Box
-                                  key={item.id}
-                                  bg="gray.700"
-                                  borderRadius="lg"
-                                  p={4}
-                                  h="85px"
-                                  w="full"
-                                  justifyContent="space-between"
-                                  display="flex"
-                                  alignItems="center"
-                                >
-                                  <VStack spacing={4} align="start">
-                                    <Text fontSize="ms">
-                                      {item?.description}
-                                    </Text>
-                                    <Text fontSize="m" fontWeight="semibold">
-                                      {formatCurrencyMoney(
-                                        Number(item?.value_primary_currency),
-                                        userData.typeAccount === 'oneCurrency'
-                                          ? userData.primary_currency
-                                          : item?.typeMoney,
-                                        isVisibilityData
-                                      )}
-                                    </Text>
-                                  </VStack>
-                                  <VStack spacing={4} align="start" w="33%">
-                                    <Text
-                                      fontSize="ms"
-                                      fontWeight="medium"
-                                      color={
-                                        item?.payment === 'A Pagar'
-                                          ? 'red.500'
-                                          : 'green.500'
-                                      }
-                                    >
-                                      {item?.payment}
-                                    </Text>
-                                  </VStack>
-                                </Box>
-                              )}
-                            </>
-                          ))}
-                        </SimpleGrid>
-                      </Show>
-                    </>
-                  ) : (
-                    <Text align="center" fontSize="2xl">
-                      Não há nenhum dado na tabela!
-                    </Text>
-                  )}
-                </Box>
-              </Box>
-            ) : (
-              <VStack h="full" alignItems="center" justifyContent="center">
-                <Heading
-                  mt={4}
-                  size={{ base: 'md', md: 'xl' }}
-                  fontWeight="bold"
-                  color="white"
-                >
-                  Nenhum relatório gerado
-                </Heading>
-                <Text mt={2} fontSize="md" color="gray.300">
-                  Não há dados disponíveis para este período.
-                </Text>
-              </VStack>
-            )}
-          </Box>
+        <Box flex={1}>
+          {isLoading ? (
+            <Skeleton
+              w={{ base: 374, lg: 353.25 }}
+              h={{ base: 551, lg: 573.5 }}
+              rounded="md"
+            />
+          ) : (
+            <ExpenseToCategory
+              expensesData={expensesData}
+              userData={userData}
+              isVisibilityData={isVisibilityData}
+              totalExpenses={data?.totalExpenses}
+            />
+          )}
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }
 

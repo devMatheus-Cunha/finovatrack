@@ -27,7 +27,13 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
-    <TableContainer>
+    <TableContainer
+      bg={{ lg: 'gray.700' }}
+      maxH="62vh"
+      rounded="md"
+      overflowY="auto"
+      w="full"
+    >
       <TableChakra variant="simple" colorScheme="teal">
         <Thead>
           <Tr>
