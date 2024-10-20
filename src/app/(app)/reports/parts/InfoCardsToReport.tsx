@@ -28,7 +28,7 @@ interface IInfoCardsToControl {
   isLoading: boolean
 }
 
-function InfoCardsToReport({ userData, data, isLoading }: IInfoCardsToControl) {
+function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
 
   const summaryItems = [

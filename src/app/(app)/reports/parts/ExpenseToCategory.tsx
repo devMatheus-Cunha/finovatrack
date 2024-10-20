@@ -14,9 +14,7 @@ import {
   HStack,
   StatNumber,
   Heading,
-  Grid,
-  Box,
-  Skeleton
+  Grid
 } from '@chakra-ui/react'
 import React from 'react'
 import { PieChart, Pie, Label } from 'recharts'
