@@ -8,7 +8,7 @@ const EmptyWithoutReport: React.FC = () => {
       alignItems="center"
       justifyContent="center"
       overflowY="auto"
-      minH={{ base: 'auto', md: '62vh' }}
+      minH={{ base: 'auto', md: '50vh' }}
       borderRadius={{ sm: 'lg' }}
       w="100%"
       bg={{ lg: 'gray.700' }}

@@ -5,7 +5,7 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { TableColumn } from '@/components/Table'
-import { Box, Skeleton } from '@chakra-ui/react'
+import { Box, Heading, Skeleton, VStack, Text } from '@chakra-ui/react'
 import InfoCardsToReport from './parts/InfoCardsToReport'
 import EmptyWithoutReport from './parts/EmptyWithoutReport'
 import HeaderFilter from './parts/HeaderFilter'
@@ -123,11 +123,33 @@ function Reports() {
               rounded="lg"
             />
           ) : (
-            <InfoCardsToReport
-              data={data}
-              userData={userData}
-              isLoading={isLoading}
-            />
+            <>
+              {expensesData && expensesData.length > 0 ? (
+                <InfoCardsToReport
+                  data={data}
+                  userData={userData}
+                  isLoading={isLoading}
+                />
+              ) : (
+                <VStack
+                  h="full"
+                  alignItems="center"
+                  justifyContent="center"
+                  overflowY="auto"
+                  minH={{ base: 'auto', md: '18.3vh' }}
+                  rounded="md"
+                  w="100%"
+                  bg={{ lg: 'gray.700' }}
+                >
+                  <Text mt={4} fontWeight="bold" fontSize={30} color="white">
+                    Nenhum relatório gerado
+                  </Text>
+                  <Text mt={2} fontSize="md" color="gray.300">
+                    Não há dados disponíveis para este período.
+                  </Text>
+                </VStack>
+              )}
+            </>
           )}
           {isLoading ? (
             <Skeleton
@@ -167,12 +189,33 @@ function Reports() {
               rounded="md"
             />
           ) : (
-            <ExpenseToCategory
-              expensesData={expensesData}
-              userData={userData}
-              isVisibilityData={isVisibilityData}
-              totalExpenses={data?.totalExpenses}
-            />
+            <>
+              {expensesData && expensesData.length > 0 ? (
+                <ExpenseToCategory
+                  expensesData={expensesData}
+                  userData={userData}
+                  isVisibilityData={isVisibilityData}
+                  totalExpenses={data?.totalExpenses}
+                />
+              ) : (
+                <VStack
+                  alignItems="center"
+                  justifyContent="center"
+                  overflowY="auto"
+                  w={{ base: 374, lg: 353.25 }}
+                  h={{ base: 551, lg: 573.5 }}
+                  rounded="md"
+                  bg={{ lg: 'gray.700' }}
+                >
+                  <Text mt={4} fontWeight="bold" fontSize={23} color="white">
+                    Nenhum relatório gerado
+                  </Text>
+                  <Text mt={2} fontSize="sm" color="gray.300">
+                    Não há dados disponíveis para este período.
+                  </Text>
+                </VStack>
+              )}
+            </>
           )}
         </Box>
       </Box>
