@@ -7,7 +7,6 @@ export const categoryOptions = [
   },
   { label: 'Alimentação', value: 'Alimentação' },
   { label: 'Contas Casa', value: 'Contas Casa' },
-  { label: 'Contas Pessoais', value: 'Contas Pessoais' },
   { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
   { label: 'Educação', value: 'Educação' },
   { label: 'Investimentos', value: 'Investimentos' },
