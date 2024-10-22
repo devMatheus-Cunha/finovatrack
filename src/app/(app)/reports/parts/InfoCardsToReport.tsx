@@ -61,7 +61,7 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
         <Heading size="md">Relatorio Total</Heading>
       </CardHeader>
 
-      <CardBody>
+      <CardBody pt={0}>
         <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
           {summaryItems.map((card, index) => (
             <GridItem key={card.label}>

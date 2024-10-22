@@ -10,8 +10,6 @@ interface CardHeader {
 function HeaderFilter({ onSubmit, period }: CardHeader) {
   const [year, setYear] = useState(new Date())
 
-  console.log(year)
-
   const months = [
     { month: 'Janeiro', value: '01/2024' },
     { month: 'Fevereiro', value: '02/2024' },

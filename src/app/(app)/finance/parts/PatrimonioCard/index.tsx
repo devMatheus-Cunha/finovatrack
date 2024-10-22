@@ -111,7 +111,7 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
                 </PolarRadiusAxis>
                 <RadialBar
                   dataKey="investmentValue"
-                  fill="blue"
+                  fill="hsl(var(--chart-1))"
                   stackId="a"
                   cornerRadius={5}
                   className="stroke-transparent stroke-2"
@@ -120,12 +120,12 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
                   dataKey="investmentFree"
                   stackId="a"
                   cornerRadius={5}
-                  fill="orange"
+                  fill="hsl(var(--chart-2))"
                   className="stroke-transparent stroke-2"
                 />
                 <RadialBar
                   dataKey="wise"
-                  fill="green"
+                  fill="hsl(var(--chart-3))"
                   stackId="a"
                   cornerRadius={5}
                   className="stroke-transparent stroke-2"
