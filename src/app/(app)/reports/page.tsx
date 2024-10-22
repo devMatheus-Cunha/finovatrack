@@ -94,22 +94,12 @@ function Reports() {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      width="100%"
-      p={2}
-      gap={{ base: '4', md: '5' }}
-    >
+    <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
       <HeaderFilter onSubmit={setPeriod} period={period} />
 
       {/* <StatiscExpense expensesData={[]} /> */}
 
-      <Box
-        display="flex"
-        flexDir={{ base: 'column', lg: 'row' }}
-        gap={{ base: 2, lg: 3 }}
-      >
+      <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} gap={2}>
         <Box
           display="flex"
           w={{ base: '100%', lg: '50%' }}
@@ -120,7 +110,7 @@ function Reports() {
             <Skeleton
               height={{ base: 214, lg: 227 }}
               w={{ base: 374, lg: 797.03 }}
-              rounded="lg"
+              rounded="md"
             />
           ) : (
             <>
@@ -155,7 +145,7 @@ function Reports() {
             <Skeleton
               height={{ base: 278, lg: 518 }}
               w={{ base: 374, lg: 797.03 }}
-              rounded="lg"
+              rounded="md"
             />
           ) : (
             <Box>
