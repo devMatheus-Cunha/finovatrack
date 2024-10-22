@@ -8,13 +8,12 @@ export const categoryOptions = [
   { label: 'Alimentação', value: 'Alimentação' },
   { label: 'Contas Casa', value: 'Contas Casa' },
   { label: 'Contas Pessoais', value: 'Contas Pessoais' },
+  { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
   { label: 'Educação', value: 'Educação' },
   { label: 'Investimentos', value: 'Investimentos' },
   { label: 'Moradia', value: 'Moradia' },
-  { label: 'Gastos Livre', value: 'Roupas' },
   { label: 'Saúde', value: 'Saúde' },
-  { label: 'Seguro', value: 'Seguro' },
-  { label: 'Transporte', value: 'Transporte' },
+  { label: 'Carro', value: 'Carro' },
   { label: 'Viagens', value: 'Viagens' }
 ]
 

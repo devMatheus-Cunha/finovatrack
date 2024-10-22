@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { PieChart, Pie, Label } from 'recharts'
-import { chartConfig } from '../../finance/parts/Investments/utils'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { UserData } from '@/hooks/auth/useAuth/types'
 
@@ -62,18 +61,28 @@ const ExpenseToCategory = ({
     }))
   }
 
-  const chartData = sumToCategory(expensesData).map((category, index) => ({
-    browser: ['chrome', 'safari', 'firefox', 'edge', 'other'][index] || 'other',
-    visitors: category.value,
-    fill:
-      [
-        'var(--color-chrome)',
-        'var(--color-safari)',
-        'var(--color-firefox)',
-        'var(--color-edge)',
-        'var(--color-other)'
-      ][index] || 'var(--color-other)'
-  }))
+  const chartData = sumToCategory(expensesData).map((category, index) => {
+    const colorIndex = index + 1
+    return {
+      label: category.label,
+      value: category.value,
+      fill: `hsl(var(--chart-${colorIndex}))`
+    }
+  })
+
+  function formatarParaChartConfig(data: any) {
+    return data.reduce((config: any, item: any, index: any) => {
+      const colorIndex = index + 1
+      config[item.label] = {
+        label: item.label,
+        color: `hsl(var(--chart-${colorIndex}))`
+      }
+      return config
+    }, {})
+  }
+
+  const chartConfig = formatarParaChartConfig(sumToCategory(expensesData))
+
   return (
     <Card w={{ base: '100%', lg: '45%' }} h="max-content">
       <CardHeader>
@@ -92,8 +101,8 @@ const ExpenseToCategory = ({
               />
               <Pie
                 data={chartData}
-                dataKey="visitors"
-                nameKey="browser"
+                dataKey="value"
+                nameKey="label"
                 innerRadius={60}
                 strokeWidth={5}
               >
