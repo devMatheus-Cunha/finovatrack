@@ -100,15 +100,9 @@ function TableToControl({
   }
 
   return (
-    <Box
-      overflowY="auto"
-      borderRadius="md"
-      height="63vh"
-      bg="gray.700"
-      position="relative"
-    >
+    <Box overflowY="auto" borderRadius="md" height="63vh" bg="gray.700">
       {isLoadingExpensesData ? (
-        <Skeleton height="73vh" rounded="lg" />
+        <Skeleton height="63vh" rounded="md" />
       ) : (
         <>
           {calculationSumValues?.length > 0 ? (

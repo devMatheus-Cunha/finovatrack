@@ -69,30 +69,6 @@ function Reports() {
     return columns
   }
 
-  const summaryItems = [
-    { label: 'Total Entradas', value: data?.totalEntrys },
-    { label: 'Total Gastos', value: data?.totalExpenses },
-    { label: 'Total Livre', value: data?.totalFree },
-    {
-      label: 'Total Investido',
-      value: formatCurrencyMoney(
-        data?.investments?.totalInvestments,
-        userData?.primary_currency
-      ),
-      investments: `${data?.investments?.investmentPercentageFormat}`
-    }
-  ]
-
-  if (userData?.typeAccount === 'hybrid') {
-    summaryItems.push(
-      {
-        label: `Total gastos em ${userData?.secondary_currency}`,
-        value: data?.totalExpenseEurToReal
-      },
-      { label: 'Cotação Usada', value: data?.quatation }
-    )
-  }
-
   return (
     <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
       <HeaderFilter onSubmit={setPeriod} period={period} />
@@ -100,35 +76,32 @@ function Reports() {
       {/* <StatiscExpense expensesData={[]} /> */}
 
       <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} gap={2}>
-        <Box
-          display="flex"
-          w={{ base: '100%', lg: '50%' }}
-          flexDir="column"
-          gap={2}
-        >
+        <Box display="flex" flexDir="column" gap={2}>
           {isLoading ? (
             <Skeleton
               height={{ base: 214, lg: 227 }}
-              w={{ base: 374, lg: 797.03 }}
+              w={{ base: '100%', lg: '2xl' }}
               rounded="md"
             />
           ) : (
             <>
               {expensesData && expensesData.length > 0 ? (
-                <InfoCardsToReport
-                  data={data}
-                  userData={userData}
-                  isLoading={isLoading}
-                />
+                <Box>
+                  <InfoCardsToReport
+                    data={data}
+                    userData={userData}
+                    isLoading={isLoading}
+                  />
+                </Box>
               ) : (
                 <VStack
                   h="full"
                   alignItems="center"
                   justifyContent="center"
                   overflowY="auto"
-                  minH={{ base: 'auto', md: '18.3vh' }}
                   rounded="md"
-                  w="100%"
+                  w={{ base: '100%', lg: '2xl' }}
+                  height={{ base: 214, lg: 227 }}
                   bg={{ lg: 'gray.700' }}
                 >
                   <Text mt={4} fontWeight="bold" fontSize={30} color="white">
@@ -144,7 +117,7 @@ function Reports() {
           {isLoading ? (
             <Skeleton
               height={{ base: 278, lg: 518 }}
-              w={{ base: 374, lg: 797.03 }}
+              w={{ base: '100%', lg: '2xl' }}
               rounded="md"
             />
           ) : (
@@ -171,28 +144,30 @@ function Reports() {
           )}
         </Box>
 
-        <Box flex={1}>
+        <Box>
           {isLoading ? (
             <Skeleton
-              w={{ base: 374, lg: 353.25 }}
+              w={{ base: '100%', lg: 'xs' }}
               h={{ base: 551, lg: 573.5 }}
               rounded="md"
             />
           ) : (
             <>
               {expensesData && expensesData.length > 0 ? (
-                <ExpenseToCategory
-                  expensesData={expensesData}
-                  userData={userData}
-                  isVisibilityData={isVisibilityData}
-                  totalExpenses={data?.totalExpenses}
-                />
+                <Box w={{ base: '100%', lg: 'xs' }} h="max-content">
+                  <ExpenseToCategory
+                    expensesData={expensesData}
+                    userData={userData}
+                    isVisibilityData={isVisibilityData}
+                    totalExpenses={data?.totalExpenses}
+                  />
+                </Box>
               ) : (
                 <VStack
                   alignItems="center"
                   justifyContent="center"
                   overflowY="auto"
-                  w={{ base: 374, lg: 353.25 }}
+                  w={{ base: '100%', lg: 'xs' }}
                   h={{ base: 551, lg: 573.5 }}
                   rounded="md"
                   bg={{ lg: 'gray.700' }}

@@ -43,7 +43,8 @@ const ExpenseToCategory = ({
     const result: { [category: string]: number } = {}
 
     for (const expense of expenses) {
-      if (expense.description === 'Totais') {
+      console.log(expense)
+      if (expense.category === 'Investimentos') {
         continue
       }
 
@@ -84,7 +85,7 @@ const ExpenseToCategory = ({
   const chartConfig = formatarParaChartConfig(sumToCategory(expensesData))
 
   return (
-    <Card w={{ base: '100%', lg: '45%' }} h="max-content">
+    <Card>
       <CardHeader>
         <Heading size="md">Gastos por Categoria</Heading>
       </CardHeader>

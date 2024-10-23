@@ -83,7 +83,10 @@ function InfoCardsToControl({
       currency: userData.primary_currency
     },
     {
-      infoData: totalEntrys - totalExpensesEurSumRealToReal,
+      infoData:
+        totalEntrys -
+        totalExpensesEurSumRealToReal -
+        investments?.totalInvestments,
       currency: userData.primary_currency,
       icon: MoneyWavy,
       iconColor: 'cyan',

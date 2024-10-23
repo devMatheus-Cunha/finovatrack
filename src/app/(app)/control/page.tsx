@@ -176,12 +176,20 @@ export default function Control() {
     totalEntrys
   )
 
-  const onSaveReport = ({ data, period }: { data: any[]; period: string }) => {
+  const onSaveReport = ({
+    data,
+    period
+  }: {
+    data: ExpenseData[]
+    period: string
+  }) => {
     saveReport({
       data,
       period,
       totalFree: formatCurrencyMoney(
-        totalEntrys - (validateExpenseData[typeAccount] || 0),
+        totalEntrys -
+          (validateExpenseData[typeAccount] || 0) -
+          investments.totalInvestments,
         userData.primary_currency
       ),
       investments: investments,
@@ -217,9 +225,7 @@ export default function Control() {
           infoAction={controlModalInfoCard.onOpen}
           totalEntrys={totalEntrys}
           entrysData={entrysData}
-          totalExpensesEurSumRealToReal={
-            calculationTotalExpensesEurSumRealToReal
-          }
+          totalExpensesEurSumRealToReal={validateExpenseData[typeAccount]}
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           userData={userData}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
@@ -290,7 +296,7 @@ export default function Control() {
         size="xl"
       >
         <ConfirmSaveReportModal
-          initialData={calculationSumValues}
+          initialData={expensesData}
           onCancel={controlModalSaveReport.onClose}
           onSubmit={({ data, period }: any) => onSaveReport({ data, period })}
         />
