@@ -29,12 +29,12 @@ import { BarChart, CartesianGrid, XAxis, Bar, YAxis } from 'recharts'
 
 interface InvestmentsAndDividendsCardProps {
   userData: UserData
-  dividendsData?: IDividendProps[]
+  dividendsData: IDividendProps[]
   isLoadingDividendsData: boolean
   refetchDividendsData: () => void
   isVisibilityData: boolean
-  allPiesData: IGetAllPies
-  currentPage: string
+  allPiesData?: IGetAllPies
+  currentPage: number
   setCurrentPage: any
 }
 
@@ -48,7 +48,7 @@ export function Dividendos({
   setCurrentPage
 }: InvestmentsAndDividendsCardProps) {
   const formattedDividendsData = dividendsData
-    ? dividendsData.reduce(
+    ? dividendsData?.reduce(
         (acc: any, curr: any) => {
           const month = new Date(curr.paidOn).toLocaleString('default', {
             month: 'short'
@@ -138,9 +138,9 @@ export function Dividendos({
               mb={6}
               mt={2}
             >
-              <option value="10">10 itens por página</option>
-              <option value="20">20 itens por página</option>
-              <option value="50">50 itens por página</option>
+              <option value={10}>10 itens por página</option>
+              <option value={20}>20 itens por página</option>
+              <option value={50}>50 itens por página</option>
             </Select>
             <Grid
               templateColumns="repeat(2, 1fr)"
@@ -149,7 +149,7 @@ export function Dividendos({
               maxHeight="215px"
             >
               {dividendsData &&
-                dividendsData.map(({ amountInEuro, ticker }: any) => {
+                dividendsData?.map(({ amountInEuro, ticker }: any) => {
                   return (
                     <GridItem key={ticker}>
                       <Stat>

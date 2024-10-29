@@ -1,5 +1,3 @@
-'use server'
-
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 
 export async function getAllPies(): Promise<IGetAllPies[]> {
@@ -9,7 +7,7 @@ export async function getAllPies(): Promise<IGetAllPies[]> {
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/equity/pies`,
+    `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
     {
       headers: {
         Authorization: apiKey,

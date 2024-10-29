@@ -1,4 +1,3 @@
-'use server'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 
 export async function fetchDividends(limit: string): Promise<IDividendProps[]> {
@@ -8,11 +7,10 @@ export async function fetchDividends(limit: string): Promise<IDividendProps[]> {
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL_TRANDING_212}/api/v0/history/dividends?limit=${limit}`,
+    `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/dividends?limit=${limit}`,
     {
       headers: {
-        Authorization: apiKey,
-        'X-Requested-With': 'XMLHttpRequest'
+        Authorization: apiKey
       }
     }
   )

@@ -34,7 +34,7 @@ interface IRodela {
   investimentsData: IInvestmentsProps | undefined
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
-  allPiesData: IGetAllPies
+  allPiesData?: IGetAllPies
   isVisibilityData: boolean
 }
 
@@ -46,13 +46,16 @@ export function Investments({
   allPiesData,
   isVisibilityData
 }: IRodela) {
-  const valorizacao = (allPiesData && allPiesData.result.result) || 0
-  const dividends = allPiesData?.dividendDetails?.gained + 0.32 || 0
-  const investmentPercentage =
-    investimentsData &&
-    ((valorizacao / investimentsData?.invested) * 100).toFixed(2)
-  const investPlusDiv = (valorizacao || 0) + dividends || 0
-  const investedValue = (allPiesData && allPiesData?.result.investedValue) || 0
+  if (!allPiesData) return
+  const valorizacao = allPiesData.result.priceAvgValue || 0
+  const valorValorizacao = investimentsData?.ppl || 0
+  const investedValue = allPiesData?.result.priceAvgInvestedValue || 0
+  const dividends = allPiesData?.dividendDetails?.gained + 0.37 || 0
+  const investmentPercentage = (
+    (valorValorizacao / investedValue) *
+    100
+  ).toFixed(2)
+  const investPlusDiv = investedValue + valorValorizacao + dividends
 
   const chartData = [
     {
@@ -74,18 +77,18 @@ export function Investments({
     { label: 'Disponível', value: investimentsData?.free || 0 },
     { label: 'Aplicado', value: investedValue || 0 },
     {
-      label: 'Valorizacao',
+      label: 'Valorizacao Inves',
       value: valorizacao || 0,
       percentage: isVisibilityData ? `(${investmentPercentage}%)` : '****'
     },
+    {
+      label: 'Valor Val',
+      value: valorValorizacao
+    },
     { label: 'Dividendos', value: dividends || 0 },
     {
-      label: 'Val + Div',
-      value: investPlusDiv
-    },
-    {
       label: 'Invest + Val',
-      value: (investimentsData && investedValue + investPlusDiv) || 0
+      value: investPlusDiv
     }
   ]
   return (

@@ -29,7 +29,7 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-  const { allPiesData } = useFetchAllPies()
+  const { allPiesData, refetchAllPiesData } = useFetchAllPies()
 
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
@@ -39,6 +39,11 @@ const Finance = () => {
       ? financialPlanningYear[0].reserve + investimentsData?.total
       : 0
   }, [financialPlanningYear, investimentsData?.total])
+
+  const updatedData = () => {
+    refetchAllPiesData()
+    refetchInvestimentsData()
+  }
 
   return (
     <Box
@@ -69,7 +74,7 @@ const Finance = () => {
             isLoadingFinancialPlanningYear={isLoadingFinancialPlanningYear}
             investmentFree={investimentsData?.free}
             investmentValue={
-              (allPiesData && allPiesData[0]?.result.investedValue) || 0
+              (allPiesData && allPiesData?.result.priceAvgValue) || 0
             }
             wise={
               financialPlanningYear && Number(financialPlanningYear[0].reserve)
@@ -93,8 +98,8 @@ const Finance = () => {
             userData={userData}
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
-            refetchInvestimentsData={refetchInvestimentsData}
-            allPiesData={allPiesData && allPiesData[0]}
+            refetchInvestimentsData={updatedData}
+            allPiesData={allPiesData && allPiesData}
             isVisibilityData={isVisibilityData}
           />
           <Dividendos
@@ -105,7 +110,7 @@ const Finance = () => {
             isLoadingDividendsData={isLoadingDividendsData}
             refetchDividendsData={refetchDividendsData}
             isVisibilityData={isVisibilityData}
-            allPiesData={allPiesData && allPiesData[0]}
+            allPiesData={allPiesData && allPiesData}
           />
         </Box>
       </Box>
