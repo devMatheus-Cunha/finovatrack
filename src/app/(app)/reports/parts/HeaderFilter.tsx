@@ -1,30 +1,30 @@
 import { Flex, Box, Text, Tabs, TabList, Tab, Input } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import DatePicker from 'react-datepicker'
 
 interface CardHeader {
-  onSubmit: any
-  period: string
+  setSelectedDate: (date: Date) => void
+  year: number
+  formattedDate: string
 }
 
-function HeaderFilter({ onSubmit, period }: CardHeader) {
-  const [year, setYear] = useState(new Date())
-
-  const months = [
-    { month: 'Janeiro', value: '01/2024' },
-    { month: 'Fevereiro', value: '02/2024' },
-    { month: 'Março', value: '03/2024' },
-    { month: 'Abril', value: '04/2024' },
-    { month: 'Maio', value: '05/2024' },
-    { month: 'Junho', value: '06/2024' },
-    { month: 'Julho', value: '07/2024' },
-    { month: 'Agosto', value: '08/2024' },
-    { month: 'Setembro', value: '09/2024' },
-    { month: 'Outubro', value: '10/2024' },
-    { month: 'Novembro', value: '11/2024' },
-    { month: 'Dezembro', value: '12/2024' }
-  ]
-
+function HeaderFilter({ setSelectedDate, year, formattedDate }: CardHeader) {
+  const months = useMemo(() => {
+    return [
+      { month: 'Janeiro', monthNumber: '01', value: `01/${year}` },
+      { month: 'Fevereiro', monthNumber: '02', value: `02/${year}` },
+      { month: 'Março', monthNumber: '03', value: `03/${year}` },
+      { month: 'Abril', monthNumber: '04', value: `04/${year}` },
+      { month: 'Maio', monthNumber: '05', value: `05/${year}` },
+      { month: 'Junho', monthNumber: '06', value: `06/${year}` },
+      { month: 'Julho', monthNumber: '07', value: `07/${year}` },
+      { month: 'Agosto', monthNumber: '08', value: `08/${year}` },
+      { month: 'Setembro', monthNumber: '09', value: `09/${year}` },
+      { month: 'Outubro', monthNumber: '10', value: `10/${year}` },
+      { month: 'Novembro', monthNumber: '11', value: `11/${year}` },
+      { month: 'Dezembro', monthNumber: '12', value: `12/${year}` }
+    ]
+  }, [year])
   return (
     <Box bg="gray.700" px={4} py={6} w="full" rounded="md">
       <Flex alignItems="center" justifyContent="space-between">
@@ -38,10 +38,10 @@ function HeaderFilter({ onSubmit, period }: CardHeader) {
         </Flex>
         <Flex alignItems="center">
           <DatePicker
-            selected={year}
+            selected={new Date(year, parseInt(formattedDate.split('/')[0]) - 1)}
             showYearPicker
             dateFormat="yyyy"
-            onChange={(date: Date) => setYear(date)}
+            onChange={(date: Date) => setSelectedDate(date)}
             customInput={
               <Input variant="flushed" w={100} _focus={{ boxShadow: 'none' }} />
             }
@@ -54,8 +54,12 @@ function HeaderFilter({ onSubmit, period }: CardHeader) {
         align="start"
         variant="unstyled"
         overflow="auto"
-        defaultIndex={months.findIndex((month) => month.value === period)}
-        onChange={(value) => onSubmit(months[value].value)}
+        defaultIndex={months.findIndex((data) => data.value === formattedDate)}
+        index={months.findIndex((data) => data.value === formattedDate)}
+        onChange={(index) => {
+          const selectedMonth = parseInt(months[index].monthNumber) - 1
+          setSelectedDate(new Date(year, selectedMonth))
+        }}
         sx={{
           '.chakra-tabs__tab-list': {
             borderBottom: '2px solid',

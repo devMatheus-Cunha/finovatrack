@@ -43,7 +43,6 @@ const ExpenseToCategory = ({
     const result: { [category: string]: number } = {}
 
     for (const expense of expenses) {
-      console.log(expense)
       if (expense.category === 'Investimentos') {
         continue
       }

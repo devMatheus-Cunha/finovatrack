@@ -17,7 +17,8 @@ function Reports() {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  const { reportData, setPeriod, period, isLoading } = useFetchReportsData()
+  const { reportData, setSelectedDate, year, formattedDate, isLoading } =
+    useFetchReportsData()
 
   const [data] = reportData ?? []
 
@@ -71,7 +72,11 @@ function Reports() {
 
   return (
     <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
-      <HeaderFilter onSubmit={setPeriod} period={period} />
+      <HeaderFilter
+        setSelectedDate={setSelectedDate}
+        year={year}
+        formattedDate={formattedDate}
+      />
 
       {/* <StatiscExpense expensesData={[]} /> */}
 

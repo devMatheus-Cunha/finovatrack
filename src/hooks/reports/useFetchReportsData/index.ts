@@ -4,25 +4,26 @@ import { IReportData, getReport } from '@/services/reports/getReport'
 import { useUserId } from '@/hooks/globalStates'
 
 export default function useFetchReportsData() {
-  const date = new Date()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = date.getFullYear()
+  const { userId } = useUserId() as any
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
+  const year = selectedDate.getFullYear()
+  const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
   const formattedDate = `${month}/${year}`
 
-  const [period, setPeriod] = useState(formattedDate)
-  const { userId } = useUserId() as any
-
   const { data: reportData, isLoading } = useQuery<IReportData[], unknown>({
-    queryKey: ['report_data', period, userId],
-    queryFn: () => getReport(userId, period),
+    queryKey: ['report_data', month, year, userId],
+    queryFn: () => getReport(userId, formattedDate),
     keepPreviousData: true,
     enabled: !!userId
   })
 
   return {
     reportData,
-    setPeriod,
-    period,
-    isLoading
+    setSelectedDate,
+    month,
+    year,
+    isLoading,
+    formattedDate
   }
 }

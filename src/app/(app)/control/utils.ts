@@ -140,8 +140,6 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
     return [...expensesData, calculation]
   }, [expensesData])
 
-  console.log(calculationSumValues)
-
   return {
     calculationSumValues
   }
