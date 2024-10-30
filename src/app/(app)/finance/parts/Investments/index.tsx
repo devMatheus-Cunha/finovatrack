@@ -47,15 +47,16 @@ export function Investments({
   isVisibilityData
 }: IRodela) {
   if (!allPiesData) return
-  const valorizacao = allPiesData.result.priceAvgValue || 0
-  const valorValorizacao = investimentsData?.ppl || 0
+  const assetAppreciation = allPiesData.result.priceAvgValue || 0
+  const totalAppreciationValue = investimentsData?.ppl || 0
   const investedValue = allPiesData?.result.priceAvgInvestedValue || 0
   const dividends = allPiesData?.dividendDetails?.gained + 0.37 || 0
-  const investmentPercentage = (
-    (valorValorizacao / investedValue) *
+  const appreciationPercentage = (
+    (totalAppreciationValue / investedValue) *
     100
   ).toFixed(2)
-  const investPlusDiv = investedValue + valorValorizacao + dividends
+  const totalInvestedAndGains =
+    investedValue + totalAppreciationValue + dividends
 
   const chartData = [
     {
@@ -68,29 +69,38 @@ export function Investments({
       visitors: investedValue || 0,
       fill: 'var(--color-safari)'
     },
-    { browser: 'firefox', visitors: valorizacao, fill: 'var(--color-firefox)' },
+    {
+      browser: 'firefox',
+      visitors: assetAppreciation,
+      fill: 'var(--color-firefox)'
+    },
     { browser: 'edge', visitors: dividends, fill: 'var(--color-edge)' },
-    { browser: 'other', visitors: investPlusDiv, fill: 'var(--color-other)' }
+    {
+      browser: 'other',
+      visitors: totalInvestedAndGains,
+      fill: 'var(--color-other)'
+    }
   ]
 
   const investmentData = [
     { label: 'Disponível', value: investimentsData?.free || 0 },
     { label: 'Aplicado', value: investedValue || 0 },
     {
-      label: 'Valorizacao Inves',
-      value: valorizacao || 0,
-      percentage: isVisibilityData ? `(${investmentPercentage}%)` : '****'
+      label: 'Valorização Ativos',
+      value: assetAppreciation || 0,
+      percentage: isVisibilityData ? `(${appreciationPercentage}%)` : '****'
     },
     {
-      label: 'Valor Val',
-      value: valorValorizacao
+      label: 'Valor Valorização',
+      value: totalAppreciationValue
     },
     { label: 'Dividendos', value: dividends || 0 },
     {
-      label: 'Invest + Val',
-      value: investPlusDiv
+      label: 'Valorizações + Div',
+      value: totalInvestedAndGains
     }
   ]
+
   return (
     <>
       {isLoadingInvestimentsData ? (
