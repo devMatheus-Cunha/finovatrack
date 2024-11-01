@@ -12,6 +12,8 @@ interface PatrimonioCardProps {
   primaryCurrency: string
   isVisibilityData: boolean
   isLoadingFinancialPlanningYear: boolean
+  isLoadingInvestimentsData: boolean
+  isLoadingAllPies: boolean
   investmentFree?: number
   sumTotalCurrency?: number | string
   investmentValue?: number
@@ -24,6 +26,8 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
   isLoadingFinancialPlanningYear,
   investmentFree,
   investmentValue,
+  isLoadingInvestimentsData,
+  isLoadingAllPies,
   sumTotalCurrency,
   wise
 }) => {
@@ -48,7 +52,9 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
 
   return (
     <>
-      {isLoadingFinancialPlanningYear ? (
+      {isLoadingFinancialPlanningYear ||
+      isLoadingInvestimentsData ||
+      isLoadingAllPies ? (
         <Skeleton height="130px" rounded="md" />
       ) : (
         <Card width="100%" height="130px" p={2}>

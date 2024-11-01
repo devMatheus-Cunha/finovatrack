@@ -1,8 +1,10 @@
 'use client'
-import * as React from 'react'
+
+import React, { useMemo } from 'react'
 import { Label, Pie, PieChart } from 'recharts'
 
 import {
+  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent
@@ -17,100 +19,84 @@ import {
   GridItem,
   HStack,
   Stat,
-  StatArrow,
-  StatHelpText,
   StatLabel,
   StatNumber
 } from '@chakra-ui/react'
 import { UserData } from '@/hooks/auth/useAuth/types'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
-import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
-import { chartConfig } from './utils'
 
-interface IRodela {
+interface IGoals {
   userData: UserData
-  investimentsData: IInvestmentsProps | undefined
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
   allPiesData?: IGetAllPies
   isVisibilityData: boolean
-  isLoadingAllPies: boolean
+  investmentValue?: number
+  investmentFree?: number
+  wise?: number
 }
 
-export function Investments({
+export const chartConfig = {
+  visitors: {
+    label: 'Visitors'
+  },
+  rendavariavel: {
+    label: 'Renda Variável',
+    color: 'hsl(var(--chart-1))'
+  },
+  rendafixa: {
+    label: 'Renda Fixa',
+    color: 'hsl(var(--chart-2))'
+  }
+} satisfies ChartConfig
+
+export const chartData = [
+  {
+    apps: 'rendavariavel',
+    value: 11165,
+    fill: 'var(--color-rendavariavel)'
+  },
+  {
+    apps: 'rendafixa',
+    value: 30000,
+    fill: 'var(--color-rendafixa)'
+  }
+]
+
+export const Goals = ({
   userData,
-  investimentsData,
   isLoadingInvestimentsData,
   refetchInvestimentsData,
   allPiesData,
   isVisibilityData,
-  isLoadingAllPies
-}: IRodela) {
+  investmentFree,
+  wise
+}: IGoals) => {
+  const totalValue = useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.value, 0)
+  }, [])
+
   if (!allPiesData) return
   const assetAppreciation = allPiesData.result.priceAvgValue || 0
-  const totalAppreciationValue = investimentsData?.ppl || 0
-  const investedValue = allPiesData?.result.priceAvgInvestedValue || 0
-  const dividends = allPiesData?.dividendDetails?.gained + 0.37 || 0
-  const appreciationPercentage = (
-    (totalAppreciationValue / investedValue) *
-    100
-  ).toFixed(2)
-  const totalInvestedAndGains =
-    investedValue + totalAppreciationValue + dividends
-
-  const chartData = [
-    {
-      browser: 'chrome',
-      visitors: investimentsData?.free || 0,
-      fill: 'var(--color-chrome)'
-    },
-    {
-      browser: 'safari',
-      visitors: investedValue || 0,
-      fill: 'var(--color-safari)'
-    },
-    {
-      browser: 'firefox',
-      visitors: assetAppreciation,
-      fill: 'var(--color-firefox)'
-    },
-    { browser: 'edge', visitors: dividends, fill: 'var(--color-edge)' },
-    {
-      browser: 'other',
-      visitors: totalInvestedAndGains,
-      fill: 'var(--color-other)'
-    }
-  ]
 
   const investmentData = [
-    { label: 'Disponível', value: investimentsData?.free || 0 },
-    { label: 'Aplicado', value: investedValue || 0 },
     {
-      label: 'Valorização Ativos',
-      value: assetAppreciation || 0,
-      percentage: isVisibilityData ? `(${appreciationPercentage}%)` : '****'
+      label: 'Renda Fixa Hoje',
+      value: (investmentFree && wise && investmentFree + wise) || 0
     },
-    {
-      label: 'Valor Valorização',
-      value: totalAppreciationValue
-    },
-    { label: 'Dividendos', value: dividends || 0 },
-    {
-      label: 'Valorizações + Div',
-      value: totalInvestedAndGains
-    }
+    { label: 'Renda Variável Hoje', value: assetAppreciation || 0 }
   ]
 
   return (
     <>
-      {isLoadingInvestimentsData || isLoadingAllPies ? (
-        <Skeleton width={{ base: '100%', lg: '2xl' }} h="570px" rounded="md" />
+      {isLoadingInvestimentsData ? (
+        <Skeleton width="100%" h="max-content" minHeight="420px" rounded="md" />
       ) : (
-        <Card width={{ base: '100%', lg: '2xl' }} h="570px">
+        <Card width="100%" h="max-content" minHeight="420px">
           <CardHeader display="flex" justifyContent="space-between" pb={0}>
-            <Heading size="md">Investimenos Tranding 212</Heading>
+            <Heading size="md">Objetivo para 2026</Heading>
             <button
               type="button"
               onClick={() => refetchInvestimentsData()}
@@ -136,8 +122,8 @@ export function Investments({
                 />
                 <Pie
                   data={chartData}
-                  dataKey="visitors"
-                  nameKey="browser"
+                  dataKey="value"
+                  nameKey="apps"
                   innerRadius={60}
                   strokeWidth={5}
                 >
@@ -157,7 +143,7 @@ export function Investments({
                               className="fill-white text-lg lg:text-xl font-bold "
                             >
                               {formatCurrencyMoney(
-                                Number(investimentsData?.total),
+                                Number(totalValue),
                                 userData.primary_currency,
                                 isVisibilityData
                               )}
@@ -167,7 +153,7 @@ export function Investments({
                               y={(viewBox.cy || 0) + 24}
                               className="fill-slate-200"
                             >
-                              Total Conta
+                              Meta
                             </tspan>
                           </text>
                         )
@@ -191,14 +177,6 @@ export function Investments({
                           isVisibilityData
                         )}
                       </StatNumber>
-                      {item.percentage && (
-                        <StatHelpText>
-                          <StatArrow
-                            type={item.value > 0 ? 'increase' : 'decrease'}
-                          />
-                          {item.percentage}
-                        </StatHelpText>
-                      )}
                     </HStack>
                   </Stat>
                 </GridItem>

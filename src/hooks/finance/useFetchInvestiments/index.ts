@@ -1,7 +1,9 @@
 import { useUserId } from '@/hooks/globalStates'
-import { getInvestments } from '@/services/finance/getInvestiments'
-import { db } from '@/services/firebase'
-import { doc, getDoc, updateDoc, setDoc } from '@firebase/firestore'
+import {
+  getInvestmentData,
+  getInvestments,
+  updateOrCreateDoc
+} from '@/services/finance/getInvestiments'
 import { useQuery } from '@tanstack/react-query'
 
 export interface IInvestmentsProps {
@@ -14,50 +16,35 @@ export interface IInvestmentsProps {
   total: number
 }
 
-const func = async (idUser: string, data: any) => {
-  const docRef = doc(db, 'users', idUser, 'finance', 'investiments')
-  const docSnap = await getDoc(docRef)
-
-  if (docSnap.exists()) {
-    await updateDoc(docRef, data)
-    return 'Document updated successfully'
-  }
-  await setDoc(docRef, data, { merge: true })
-}
-
-const get = async (idUser: string) => {
-  const docRef = doc(db, 'users', idUser, 'finance', 'investiments')
-  const docSnap = await getDoc(docRef)
-
-  if (docSnap.exists()) {
-    const data = docSnap.data()
-    return data as IInvestmentsProps
-  }
-  return undefined
-}
-
 export const useFetchInvestiments = () => {
-  const { userId } = useUserId() as any
+  const { userId } = useUserId()
 
   const {
     data: investimentsData,
     isFetching: isLoadingInvestimentsData,
-    status: statusInvestimentsData,
-    refetch: refetchInvestimentsDatassss
-  } = useQuery(['investiments_data', userId], async () => get(userId), {
-    enabled: !!userId
+    refetch
+  } = useQuery({
+    queryKey: ['investiments_data', userId],
+    queryFn: () => getInvestmentData(userId!),
+    enabled: !!userId,
+    onError: (error) => {
+      console.error('Erro na query:', error)
+    }
   })
 
   const refetchInvestimentsData = async () => {
-    const investiments = await getInvestments()
-    func(userId, investiments)
-    refetchInvestimentsDatassss()
+    try {
+      const investiments = await getInvestments()
+      await updateOrCreateDoc(userId!, investiments)
+      refetch()
+    } catch (error) {
+      console.error('Error refetching investments:', error)
+    }
   }
 
   return {
     investimentsData,
     isLoadingInvestimentsData,
-    statusInvestimentsData,
     refetchInvestimentsData
   }
 }

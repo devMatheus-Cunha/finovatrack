@@ -95,13 +95,13 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
       {isLoadingInvestimentsData ? (
         <Skeleton
           w="100%"
-          minH="425px"
-          maxH="425px"
+          minH="433px"
+          maxH="433px"
           height="100%"
           rounded="md"
         />
       ) : (
-        <Card width="100%" minH="425px">
+        <Card width="100%" minH="433px">
           <CardHeader>
             <Heading size="md" mb={6}>
               Finanças

@@ -38,7 +38,7 @@ interface InvestmentsAndDividendsCardProps {
   setCurrentPage: any
 }
 
-export function Dividendos({
+export function Dividends({
   userData,
   dividendsData,
   isLoadingDividendsData,
@@ -60,7 +60,7 @@ export function Dividendos({
             acc.push({
               name: month,
               value: curr.amountInEuro,
-              fill: 'hsl(var(--chart-1))' // Cor padrão caso não haja cor definida para o ticker
+              fill: 'hsl(var(--chart-1))'
             })
           }
           return acc
@@ -70,7 +70,7 @@ export function Dividendos({
     : []
 
   formattedDividendsData.sort((a: any, b: any) => {
-    const monthA = new Date(Date.parse(a.name + ' 1, 2000')).getMonth() // Converter o nome do mês para um número
+    const monthA = new Date(Date.parse(a.name + ' 1, 2000')).getMonth()
     const monthB = new Date(Date.parse(b.name + ' 1, 2000')).getMonth()
     return monthA - monthB
   })
@@ -85,9 +85,18 @@ export function Dividendos({
   return (
     <>
       {isLoadingDividendsData ? (
-        <Skeleton width="100%" h="max-content" minHeight="570px" rounded="md" />
+        <Skeleton
+          width={{ base: '100%', lg: '2xl' }}
+          h="max-content"
+          minHeight="570px"
+          rounded="md"
+        />
       ) : (
-        <Card width="100%" minHeight="570px" maxH="570px">
+        <Card
+          width={{ base: '100%', lg: '2xl' }}
+          minHeight="570px"
+          maxH="570px"
+        >
           <CardHeader display="flex" justifyContent="space-between" pb={0}>
             <Heading size="md">Dividendos</Heading>
             <button
@@ -146,7 +155,7 @@ export function Dividendos({
               templateColumns="repeat(2, 1fr)"
               gap={6}
               overflowY="auto"
-              maxHeight="215px"
+              maxHeight="200px"
             >
               {dividendsData &&
                 dividendsData?.map(({ amountInEuro, ticker }: any) => {

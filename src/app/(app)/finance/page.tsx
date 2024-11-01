@@ -9,7 +9,7 @@ import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlani
 import { useFetchDividends, useFetchInvestiments } from '@/hooks/finance'
 import PatrimonioCard from './parts/PatrimonioCard'
 import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
-import { Dividendos } from './parts/Dividendos'
+import { Dividends } from './parts/Dividends'
 import { Investments } from './parts/Investments'
 
 const Finance = () => {
@@ -29,7 +29,7 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-  const { allPiesData, refetchAllPiesData } = useFetchAllPies()
+  const { allPiesData, refetchAllPies, isLoadingAllPies } = useFetchAllPies()
 
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
@@ -41,37 +41,31 @@ const Finance = () => {
   }, [financialPlanningYear, investimentsData?.total])
 
   const updatedData = () => {
-    refetchAllPiesData()
+    refetchAllPies()
     refetchInvestimentsData()
   }
 
   return (
-    <Box
-      display="flex"
-      py={2}
-      px={{ base: 2, lg: 3 }}
-      flexDirection="column"
-      gap={5}
-      h="95vh"
-      w="full"
-    >
+    <Box display="flex" flexDirection="column" gap={5} h="95vh" w="full">
       <Box
         display="flex"
         flexDirection={['column', 'column', 'column', 'row']}
-        gap={5}
+        gap={2}
         p={[2, 2, 0]}
       >
         <Box
           w={{ base: '100%', lg: '45%' }}
           display="flex"
           flexDir="column"
-          gap={4}
+          gap={2}
         >
           <PatrimonioCard
             primaryCurrency={userData.primary_currency}
             sumTotalCurrency={sumTotalCurrency}
             isVisibilityData={isVisibilityData}
             isLoadingFinancialPlanningYear={isLoadingFinancialPlanningYear}
+            isLoadingInvestimentsData={isLoadingInvestimentsData}
+            isLoadingAllPies={isLoadingAllPies}
             investmentFree={investimentsData?.free}
             investmentValue={
               (allPiesData && allPiesData?.result.priceAvgValue) || 0
@@ -81,7 +75,6 @@ const Finance = () => {
             }
           />
           <FinanceYear
-            investimentsData={investimentsData}
             userData={userData}
             isVisibilityData={isVisibilityData}
             financialPlanningYear={financialPlanningYear}
@@ -91,18 +84,19 @@ const Finance = () => {
         <Box
           display="flex"
           w={{ base: '100%', lg: '55%' }}
-          gap={4}
+          gap={2}
           flexDirection={['column', 'column', 'row', 'column', 'row']}
         >
           <Investments
             userData={userData}
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
+            isLoadingAllPies={isLoadingAllPies}
             refetchInvestimentsData={updatedData}
             allPiesData={allPiesData && allPiesData}
             isVisibilityData={isVisibilityData}
           />
-          <Dividendos
+          <Dividends
             userData={userData}
             dividendsData={dividendsData}
             currentPage={currentPage}

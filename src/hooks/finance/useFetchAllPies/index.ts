@@ -1,7 +1,9 @@
 import { useUserId } from '@/hooks/globalStates'
-import { getAllPies } from '@/services/finance/getAllPies'
-import { db } from '@/services/firebase'
-import { doc, getDoc, updateDoc, setDoc } from '@firebase/firestore'
+import {
+  getAllPies,
+  getPieData,
+  updateOrCreateDoc
+} from '@/services/finance/getAllPies'
 import { useQuery } from '@tanstack/react-query'
 
 export interface IGetAllPies {
@@ -22,54 +24,36 @@ export interface IGetAllPies {
   status: null
 }
 
-const func = async (idUser: string, data: any) => {
-  const docRef = doc(db, 'users', idUser, 'finance', 'allPies')
-  const docSnap = await getDoc(docRef)
-
-  if (!data[0]) return
-  if (docSnap.exists()) {
-    await updateDoc(docRef, data[0])
-    return 'Document updated successfully'
-  }
-  await setDoc(docRef, data[0], { merge: true })
-}
-
-const get = async (idUser: string) => {
-  const docRef = doc(db, 'users', idUser, 'finance', 'allPies')
-  const docSnap = await getDoc(docRef)
-
-  if (docSnap.exists()) {
-    const data = docSnap.data()
-    return data as IGetAllPies
-  }
-  return undefined
-}
-
 export const useFetchAllPies = () => {
-  const { userId } = useUserId() as any
+  const { userId } = useUserId()
 
   const {
     data: allPiesData,
-    isFetching: isLoadingAllPiesData,
-    status: statusAllPiesData,
-    refetch: refetchAllPiesDataasss
+    isFetching: isLoadingAllPies,
+    refetch
   } = useQuery({
     queryKey: ['all_pies_data', userId],
-    queryFn: () => get(userId),
-    enabled: !!userId
+    queryFn: () => getPieData(userId!),
+    enabled: !!userId,
+    onError: (error) => {
+      console.error('Erro na query:', error)
+    }
   })
 
-  const refetchAllPiesData = async () => {
-    const allpies = await getAllPies()
-    func(userId, allpies)
-    refetchAllPiesDataasss()
+  const refetchAllPies = async () => {
+    try {
+      const allpies = await getAllPies()
+      await updateOrCreateDoc(userId!, allpies)
+      refetch()
+    } catch (error) {
+      console.error('Error refetching pies:', error)
+    }
   }
 
   return {
-    allPiesData: allPiesData,
-    isLoadingAllPiesData,
-    statusAllPiesData,
-    refetchAllPiesData
+    allPiesData,
+    isLoadingAllPies,
+    refetchAllPies
   }
 }
 
