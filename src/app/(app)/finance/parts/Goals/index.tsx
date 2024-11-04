@@ -35,7 +35,7 @@ interface IGoals {
   isVisibilityData: boolean
   investmentValue?: number
   investmentFree?: number
-  wise?: number
+  millenium?: number
 }
 
 export const chartConfig = {
@@ -72,7 +72,7 @@ export const Goals = ({
   allPiesData,
   isVisibilityData,
   investmentFree,
-  wise
+  millenium
 }: IGoals) => {
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0)
@@ -84,17 +84,28 @@ export const Goals = ({
   const investmentData = [
     {
       label: 'Renda Fixa Hoje',
-      value: (investmentFree && wise && investmentFree + wise) || 0
+      value: (investmentFree && millenium && investmentFree + millenium) || 0
     },
-    { label: 'Renda Variável Hoje', value: assetAppreciation || 0 }
+    { label: 'Renda Fixa Objetivo', value: 30000 },
+    { label: 'Renda Variável Hoje', value: assetAppreciation || 0 },
+    { label: 'Renda Variável Objetivo', value: 11175 }
   ]
 
   return (
     <>
       {isLoadingInvestimentsData ? (
-        <Skeleton width="100%" h="max-content" minHeight="420px" rounded="md" />
+        <Skeleton
+          width={{ base: '100%', lg: '3' }}
+          h="max-content"
+          minHeight="420px"
+          rounded="md"
+        />
       ) : (
-        <Card width="100%" h="max-content" minHeight="420px">
+        <Card
+          width={{ base: '100%', lg: 'max-content' }}
+          h="max-content"
+          minHeight="420px"
+        >
           <CardHeader display="flex" justifyContent="space-between" pb={0}>
             <Heading size="md">Objetivo para 2026</Heading>
             <button
@@ -140,7 +151,7 @@ export const Goals = ({
                             <tspan
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              className="fill-white text-lg lg:text-xl font-bold "
+                              className="fill-white text-lg  font-bold "
                             >
                               {formatCurrencyMoney(
                                 Number(totalValue),
@@ -168,9 +179,9 @@ export const Goals = ({
               {investmentData.map((item) => (
                 <GridItem key={item.label}>
                   <Stat>
-                    <StatLabel>{item.label}</StatLabel>
+                    <StatLabel fontSize="xs">{item.label}</StatLabel>
                     <HStack>
-                      <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
+                      <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
                         {formatCurrencyMoney(
                           Number(item.value),
                           userData.primary_currency,

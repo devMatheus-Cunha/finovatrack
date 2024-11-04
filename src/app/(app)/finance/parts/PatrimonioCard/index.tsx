@@ -17,7 +17,7 @@ interface PatrimonioCardProps {
   investmentFree?: number
   sumTotalCurrency?: number | string
   investmentValue?: number
-  wise?: number
+  millenium?: number
 }
 
 const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
@@ -29,24 +29,24 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
   isLoadingInvestimentsData,
   isLoadingAllPies,
   sumTotalCurrency,
-  wise
+  millenium
 }) => {
   const chartData = [
     {
       investmentFree: investmentFree,
       investmentValue: investmentValue,
-      wise: wise
+      millenium: millenium
     }
   ]
   const chartConfig = {
     investmentFree: {
-      label: 'Investimento Free'
+      label: 'Inv Free'
     },
     investmentValue: {
-      label: 'Investimentos'
+      label: 'Inv'
     },
-    wise: {
-      label: 'Wise'
+    millenium: {
+      label: 'Millenium'
     }
   } satisfies ChartConfig
 
@@ -130,7 +130,7 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
                   className="stroke-transparent stroke-2"
                 />
                 <RadialBar
-                  dataKey="wise"
+                  dataKey="millenium"
                   fill="hsl(var(--chart-3))"
                   stackId="a"
                   cornerRadius={5}

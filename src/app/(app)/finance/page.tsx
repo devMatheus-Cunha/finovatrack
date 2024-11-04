@@ -11,6 +11,7 @@ import PatrimonioCard from './parts/PatrimonioCard'
 import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
 import { Dividends } from './parts/Dividends'
 import { Investments } from './parts/Investments'
+import { Goals } from './parts/Goals'
 
 const Finance = () => {
   const { userData } = useUserData()
@@ -46,12 +47,18 @@ const Finance = () => {
   }
 
   return (
-    <Box display="flex" flexDirection="column" gap={5} h="95vh" w="full">
+    <Box
+      display="flex"
+      flexDirection="column"
+      gap={2}
+      h="95vh"
+      w="full"
+      px={[2, 2, 0]}
+    >
       <Box
         display="flex"
         flexDirection={['column', 'column', 'column', 'row']}
         gap={2}
-        p={[2, 2, 0]}
       >
         <Box
           w={{ base: '100%', lg: '45%' }}
@@ -70,7 +77,7 @@ const Finance = () => {
             investmentValue={
               (allPiesData && allPiesData?.result.priceAvgValue) || 0
             }
-            wise={
+            millenium={
               financialPlanningYear && Number(financialPlanningYear[0].reserve)
             }
           />
@@ -107,6 +114,19 @@ const Finance = () => {
             allPiesData={allPiesData && allPiesData}
           />
         </Box>
+      </Box>
+      <Box>
+        <Goals
+          userData={userData}
+          isLoadingInvestimentsData={isLoadingInvestimentsData}
+          refetchInvestimentsData={refetchInvestimentsData}
+          allPiesData={allPiesData}
+          isVisibilityData={isVisibilityData}
+          investmentFree={investimentsData?.free}
+          millenium={
+            financialPlanningYear && Number(financialPlanningYear[0].reserve)
+          }
+        />
       </Box>
     </Box>
   )

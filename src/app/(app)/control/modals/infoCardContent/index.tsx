@@ -32,7 +32,7 @@ const InfoCardContent = ({ handleInfoAction }: IInfoCardContentProps) => {
         </Button>
         <Button
           onClick={() => {
-            const linkWise = 'https://wise.com/invite/dic/matheusc1004'
+            const linkWise = 'https://millenium.com/invite/dic/matheusc1004'
             window.open(linkWise, '_blank')
           }}
           type="button"

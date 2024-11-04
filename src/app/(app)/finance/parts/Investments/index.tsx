@@ -154,7 +154,7 @@ export function Investments({
                             <tspan
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              className="fill-white text-lg lg:text-xl font-bold "
+                              className="fill-white text-lg  font-bold "
                             >
                               {formatCurrencyMoney(
                                 Number(investimentsData?.total),
@@ -182,9 +182,9 @@ export function Investments({
               {investmentData.map((item) => (
                 <GridItem key={item.label}>
                   <Stat>
-                    <StatLabel>{item.label}</StatLabel>
+                    <StatLabel fontSize="sm">{item.label}</StatLabel>
                     <HStack>
-                      <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
+                      <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
                         {formatCurrencyMoney(
                           Number(item.value),
                           userData.primary_currency,
@@ -192,8 +192,9 @@ export function Investments({
                         )}
                       </StatNumber>
                       {item.percentage && (
-                        <StatHelpText>
+                        <StatHelpText fontSize="sm">
                           <StatArrow
+                            fontSize="sm"
                             type={item.value > 0 ? 'increase' : 'decrease'}
                           />
                           {item.percentage}
