@@ -148,7 +148,7 @@ const ExpenseToCategory = ({
                       {card.label}
                     </StatLabel>
                     <HStack>
-                      <StatNumber fontSize={{ base: 'lg', lg: '23' }}>
+                      <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
                         {formatCurrencyMoney(
                           card.value,
                           userData.primary_currency,

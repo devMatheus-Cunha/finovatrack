@@ -70,7 +70,7 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
                   {card.label}
                 </StatLabel>
                 <HStack>
-                  <StatNumber fontSize={{ base: 'lg', lg: '23' }}>
+                  <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
                     {isVisibilityData
                       ? card.value ||
                         formatCurrencyMoney(
