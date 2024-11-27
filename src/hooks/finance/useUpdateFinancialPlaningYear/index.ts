@@ -8,18 +8,16 @@ const useUpdateFinancialPlaningYear = () => {
   const { userId } = useUserId() as any
   const { refetchFinancialPlanningYear } = useFetchFinancialPlaningYear()
 
-  const { mutateAsync: updateFinancialPlaningYear } = useMutation(
-    (data: any) => updateFinancialPlanningYearData(data, userId),
-    {
-      onSuccess: () => {
-        refetchFinancialPlanningYear()
-        toast.success('Sucesso ao editar planejamento')
-      },
-      onError: () => {
-        toast.error('Erro ao editar planejamento')
-      }
+  const { mutateAsync: updateFinancialPlaningYear } = useMutation({
+    mutationFn: (data: any) => updateFinancialPlanningYearData(data, userId),
+    onSuccess: () => {
+      refetchFinancialPlanningYear()
+      toast.success('Sucesso ao editar planejamento')
+    },
+    onError: () => {
+      toast.error('Erro ao editar planejamento')
     }
-  )
+  })
 
   return {
     updateFinancialPlaningYear

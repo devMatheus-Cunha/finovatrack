@@ -1,6 +1,6 @@
 'use client'
 
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { ButtonGroup, Empty } from '@/components'
 import { PencilSimpleLine, Trash } from '@phosphor-icons/react'

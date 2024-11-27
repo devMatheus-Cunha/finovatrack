@@ -8,18 +8,16 @@ const useUpadtedEntry = () => {
   const { userId } = useUserId() as any
   const { refetchEntrysData } = useFetchEntrysData()
 
-  const { mutateAsync: upadtedEntry } = useMutation(
-    (data: IEntrysData) => updatedEntry(userId, data),
-    {
-      onSuccess: () => {
-        refetchEntrysData()
-        toast.success('Sucesso ao editar entrada')
-      },
-      onError: () => {
-        toast.error('Erro ao editar entrada')
-      }
+  const { mutateAsync: upadtedEntry } = useMutation({
+    mutationFn: (data: IEntrysData) => updatedEntry(userId, data),
+    onSuccess: () => {
+      refetchEntrysData()
+      toast.success('Sucesso ao editar entrada')
+    },
+    onError: () => {
+      toast.error('Erro ao editar entrada')
     }
-  )
+  })
 
   return {
     upadtedEntry

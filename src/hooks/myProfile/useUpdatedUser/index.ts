@@ -14,28 +14,26 @@ const useUpdatedUser = () => {
   const { userId } = useUserId() as any
   const { refetchUserData } = useUserData()
 
-  const { mutateAsync: updatedUserData, isLoading } = useMutation(
-    async (values: IUpadtedUserProps) => {
+  const { mutateAsync: updatedUserData, isPending: isLoading } = useMutation({
+    mutationFn: async (values: IUpadtedUserProps) => {
       await updatedEmailUser(values.email)
       await updatedDocumentForUser({
         id: userId,
         ...values
       } as any)
     },
-    {
-      onSuccess: async () => {
-        await refetchUserData()
-        toast.success('Usuario atualizado com sucesso!', {
-          position: toast.POSITION.TOP_RIGHT
-        })
-      },
-      onError: () => {
-        toast.error('Erro ao atualizar usuario.', {
-          position: toast.POSITION.TOP_RIGHT
-        })
-      }
+    onSuccess: async () => {
+      await refetchUserData()
+      toast.success('Usuario atualizado com sucesso!', {
+        position: toast.POSITION.TOP_RIGHT
+      })
+    },
+    onError: () => {
+      toast.error('Erro ao atualizar usuario.', {
+        position: toast.POSITION.TOP_RIGHT
+      })
     }
-  )
+  })
 
   return {
     updatedUserData,

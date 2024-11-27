@@ -3,7 +3,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { InputTypeMoney } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'

@@ -5,7 +5,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SigingProps } from '@/services/auth/siging'
-import { useSignUp } from '../../../hooks/auth'
+import { useSignUp } from '../../../hooks/entrys/useDeletedEntry/auth'
 import { Input, InputPassword, Link, Select } from '@/components'
 import {
   dropdownOptionsCurrency,

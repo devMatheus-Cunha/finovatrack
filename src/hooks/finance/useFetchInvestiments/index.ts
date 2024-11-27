@@ -26,10 +26,7 @@ export const useFetchInvestiments = () => {
   } = useQuery({
     queryKey: ['investiments_data', userId],
     queryFn: () => getInvestmentData(userId!),
-    enabled: !!userId,
-    onError: (error) => {
-      console.error('Erro na query:', error)
-    }
+    enabled: !!userId
   })
 
   const refetchInvestimentsData = async () => {

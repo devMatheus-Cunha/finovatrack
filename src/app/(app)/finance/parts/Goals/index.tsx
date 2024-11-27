@@ -22,7 +22,7 @@ import {
   StatLabel,
   StatNumber
 } from '@chakra-ui/react'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'

@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { Trash } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 

@@ -3,7 +3,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useForgetPassword } from '@/hooks/auth'
+import { useForgetPassword } from '@/hooks/entrys/useDeletedEntry/auth'
 import { LogoutProps } from '@/services/auth/forgetPassword'
 import { Input, Link } from '../../../components'
 import { zodResolver } from '@hookform/resolvers/zod'

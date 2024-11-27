@@ -9,7 +9,7 @@ import {
   Tooltip
 } from '@chakra-ui/react'
 import { Info, PencilSimpleLine } from '@phosphor-icons/react'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 

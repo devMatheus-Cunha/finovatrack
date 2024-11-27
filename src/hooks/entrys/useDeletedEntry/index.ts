@@ -11,18 +11,16 @@ const useDeletedEntry = () => {
 
   const { refetchEntrysData } = useFetchEntrysData()
 
-  const { mutateAsync: deletedEntry } = useMutation(
-    async (itemId?: string) => deleteEntry(itemId, userId),
-    {
-      onSuccess: () => {
-        refetchEntrysData()
-        toast.success('Sucesso ao deletar entrada')
-      },
-      onError: () => {
-        toast.error('Erro ao deletar entrada')
-      }
+  const { mutateAsync: deletedEntry } = useMutation({
+    mutationFn: async (itemId?: string) => deleteEntry(itemId, userId),
+    onSuccess: () => {
+      refetchEntrysData()
+      toast.success('Sucesso ao deletar entrada')
+    },
+    onError: () => {
+      toast.error('Erro ao deletar entrada')
     }
-  )
+  })
 
   return {
     deletedEntry

@@ -22,7 +22,6 @@ export const useFetchExpensesData = () => {
   } = useQuery({
     queryKey: ['expenses_data', filter, userId],
     queryFn: async () => await getExpenses(userId, filter),
-    keepPreviousData: true,
     enabled: !!userId
   })
 

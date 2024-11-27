@@ -9,21 +9,19 @@ export default function useSaveReport() {
 
   const {
     mutateAsync: saveReport,
-    isLoading: isLoadingSaveReport,
+    isPending: isLoadingSaveReport,
     status: statusSaveReport
-  } = useMutation(
-    async (data: IReportData) => {
+  } = useMutation({
+    mutationFn: async (data: IReportData) => {
       await saveReportService(data, userId)
     },
-    {
-      onSuccess: () => {
-        toast.success('Sucesso ao salvar relatório')
-      },
-      onError: () => {
-        toast.error('Erro ao salvar relatório')
-      }
+    onSuccess: () => {
+      toast.success('Sucesso ao salvar relatório')
+    },
+    onError: () => {
+      toast.error('Erro ao salvar relatório')
     }
-  )
+  })
 
   return {
     saveReport,

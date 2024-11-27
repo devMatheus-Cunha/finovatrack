@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { auth, db } from '../firebase'
 
 export interface SigingProps {

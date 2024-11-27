@@ -34,10 +34,7 @@ export const useFetchAllPies = () => {
   } = useQuery({
     queryKey: ['all_pies_data', userId],
     queryFn: () => getPieData(userId!),
-    enabled: !!userId,
-    onError: (error) => {
-      console.error('Erro na query:', error)
-    }
+    enabled: !!userId
   })
 
   const refetchAllPies = async () => {

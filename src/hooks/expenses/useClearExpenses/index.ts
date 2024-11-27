@@ -9,18 +9,16 @@ const useClearExpenses = () => {
 
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutateAsync: clearExpensesData } = useMutation(
-    () => clearExpenses(userId),
-    {
-      onSuccess: () => {
-        refetchExpensesData()
-        toast.success('Sucesso ao limpar gastos')
-      },
-      onError: () => {
-        toast.error('Erro ao limpar gastos')
-      }
+  const { mutateAsync: clearExpensesData } = useMutation({
+    mutationFn: () => clearExpenses(userId),
+    onSuccess: () => {
+      refetchExpensesData()
+      toast.success('Sucesso ao limpar gastos')
+    },
+    onError: () => {
+      toast.error('Erro ao limpar gastos')
     }
-  )
+  })
   return {
     clearExpensesData
   }

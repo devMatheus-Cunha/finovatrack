@@ -13,20 +13,19 @@ export default function useAddEntrys() {
 
   const {
     mutateAsync: addEntry,
-    isLoading: isLoadingAddEntrys,
+    isPending: isLoadingAddEntrys,
     status: statusAddEntrys
-  } = useMutation(
-    (values: IAddEntryServiceProps) => addEntryService(values, userId),
-    {
-      onSuccess: () => {
-        refetchEntrysData()
-        toast.success('Sucesso ao adicionar entrada')
-      },
-      onError: () => {
-        toast.error('Erro ao adicionar entrada')
-      }
+  } = useMutation({
+    mutationFn: (values: IAddEntryServiceProps) =>
+      addEntryService(values, userId),
+    onSuccess: () => {
+      refetchEntrysData()
+      toast.success('Sucesso ao adicionar entrada')
+    },
+    onError: () => {
+      toast.error('Erro ao adicionar entrada')
     }
-  )
+  })
 
   return { addEntry, isLoadingAddEntrys, statusAddEntrys }
 }

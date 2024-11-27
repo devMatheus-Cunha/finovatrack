@@ -19,7 +19,7 @@ import {
 import React from 'react'
 import { PieChart, Pie, Label } from 'recharts'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 interface Resultcategory {
   value: number

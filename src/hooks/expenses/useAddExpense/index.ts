@@ -12,9 +12,10 @@ const useAddExpense = () => {
 
   const {
     mutateAsync: addExpense,
-    isLoading: isLoadingAddExpense,
+    isPending: isLoadingAddExpense,
     status: statusAddExpense
-  } = useMutation((values: ExpenseData) => addExpenseService(values, userId), {
+  } = useMutation({
+    mutationFn: (values: ExpenseData) => addExpenseService(values, userId),
     onSuccess: () => {
       refetchExpensesData()
       toast.success('Sucesso ao adicionar gasto')

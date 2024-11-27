@@ -14,7 +14,7 @@ import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import { formatToJavaScriptNumber } from '@/utils/formatNumber'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 interface IFinanceYearProps {
   investimentsData?: IInvestmentsProps

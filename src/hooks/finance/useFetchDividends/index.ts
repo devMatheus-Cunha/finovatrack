@@ -31,10 +31,7 @@ export const useFetchDividends = () => {
   } = useQuery({
     queryKey: ['dividends_data', currentPage, userId],
     queryFn: () => getDividendData(userId!, currentPage),
-    enabled: !!userId,
-    onError: (error) => {
-      console.error('Erro na query:', error)
-    }
+    enabled: !!userId
   })
 
   const refetchDividendsData = async () => {

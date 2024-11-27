@@ -8,7 +8,8 @@ import { useUserId } from '@/hooks/globalStates'
 const useLogout = () => {
   const router = useRouter()
   const { clearUserId } = useUserId()
-  const { mutateAsync: onLogout } = useMutation(logout, {
+  const { mutateAsync: onLogout } = useMutation({
+    mutationFn: logout,
     onSuccess: () => {
       clearUserId()
       router.push('/')

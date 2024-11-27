@@ -9,18 +9,17 @@ const useUpadtedExpense = () => {
   const { userId } = useUserId() as any
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutateAsync: upadtedExpense } = useMutation(
-    async (data: ExpenseData) => await updatedExpenseService(data, userId),
-    {
-      onSuccess: () => {
-        refetchExpensesData()
-        toast.success('Sucesso ao editar gasto')
-      },
-      onError: () => {
-        toast.error('Erro ao editar gasto')
-      }
+  const { mutateAsync: upadtedExpense } = useMutation({
+    mutationFn: async (data: ExpenseData) =>
+      await updatedExpenseService(data, userId),
+    onSuccess: () => {
+      refetchExpensesData()
+      toast.success('Sucesso ao editar gasto')
+    },
+    onError: () => {
+      toast.error('Erro ao editar gasto')
     }
-  )
+  })
 
   return {
     upadtedExpense

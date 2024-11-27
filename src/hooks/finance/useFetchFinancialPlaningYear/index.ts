@@ -10,13 +10,11 @@ export const useFetchFinancialPlaningYear = () => {
     isLoading: isLoadingFinancialPlanningYear,
     status: statusFinancialPlanningYear,
     refetch: refetchFinancialPlanningYear
-  } = useQuery(
-    ['financial_planning_year_data', userId],
-    async () => await getFinancialPlanningYear(userId),
-    {
-      enabled: !!userId
-    }
-  )
+  } = useQuery({
+    queryKey: ['financial_planning_year_data', userId],
+    queryFn: async () => await getFinancialPlanningYear(userId),
+    enabled: !!userId
+  })
 
   return {
     financialPlanningYear,

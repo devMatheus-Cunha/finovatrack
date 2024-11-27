@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 

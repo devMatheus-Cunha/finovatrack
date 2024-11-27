@@ -11,21 +11,21 @@ function useUserId() {
   }
 
   const clearUserId = () => {
-    queryClient.removeQueries(USER_ID_QUERY_KEY)
+    queryClient.removeQueries({
+      queryKey: USER_ID_QUERY_KEY
+    })
     localStorage.removeItem(USER_ID_STORAGE_KEY)
   }
 
-  const { data: userId } = useQuery(
-    USER_ID_QUERY_KEY,
-    () => {
+  const { data: userId } = useQuery({
+    queryKey: USER_ID_QUERY_KEY,
+    queryFn: () => {
       const storedUserId = localStorage.getItem(USER_ID_STORAGE_KEY)
       return storedUserId ?? null
     },
-    {
-      staleTime: Infinity,
-      enabled: true
-    }
-  )
+    staleTime: Infinity,
+    enabled: true
+  })
 
   return { userId, setUserId, clearUserId }
 }

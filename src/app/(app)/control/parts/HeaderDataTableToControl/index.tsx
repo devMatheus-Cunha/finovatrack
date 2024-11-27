@@ -19,7 +19,7 @@ import {
   ArrowsCounterClockwise,
   Plus
 } from '@phosphor-icons/react'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'

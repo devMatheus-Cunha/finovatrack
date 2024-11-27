@@ -13,7 +13,7 @@ import {
 import React from 'react'
 import { HeaderMobile, Logo, ShowAndHide } from '@/components'
 import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
-import { useLogout } from '@/hooks/auth'
+import { useLogout } from '@/hooks/entrys/useDeletedEntry/auth'
 
 import SideMenuMobile from './SideMenuMobile'
 import SideMenuDesktop from './SideMenuDesktop'

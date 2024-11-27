@@ -5,7 +5,7 @@ import { SimpleGrid, VStack, Box, Text } from '@chakra-ui/react'
 import {} from 'lucide-react'
 import React from 'react'
 import { TableColumn } from '@/components/Table'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 interface ITableReportsProps {
   data: ExpenseData[]

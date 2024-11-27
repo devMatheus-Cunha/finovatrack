@@ -2,7 +2,7 @@
 
 import { InfoCardMoney } from '@/components'
 import React from 'react'
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'

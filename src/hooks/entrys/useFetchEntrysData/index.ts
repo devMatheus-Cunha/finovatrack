@@ -15,7 +15,9 @@ export const useFetchEntrysData = () => {
     isLoading: isLoadingEntrysData,
     status: statusEntrysData,
     refetch: refetchEntrysData
-  } = useQuery(['entrys_data', userId], async () => await getEntrys(userId), {
+  } = useQuery({
+    queryKey: ['entrys_data', userId],
+    queryFn: async () => await getEntrys(userId),
     enabled: !!userId
   })
 

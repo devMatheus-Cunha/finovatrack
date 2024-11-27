@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 const useSignUp = () => {
   const router = useRouter()
   const { setUserId } = useUserId()
-  const { mutateAsync: createAccountUser, isLoading } = useMutation({
+  const { mutateAsync: createAccountUser, isPending: isLoading } = useMutation({
     mutationFn: async (values: SigingProps) => siging(values),
     onSuccess: (id: string) => {
       setUserId(id)

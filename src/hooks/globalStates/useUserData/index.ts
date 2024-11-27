@@ -2,7 +2,7 @@
 
 import { doc, getDoc } from '@firebase/firestore'
 import { useQuery } from '@tanstack/react-query'
-import { UserData } from '../../auth/useAuth/types'
+import { UserData } from '../../entrys/useDeletedEntry/auth/useAuth/types'
 import { db } from '../../../services/firebase'
 import useUserId from '../useUserId'
 

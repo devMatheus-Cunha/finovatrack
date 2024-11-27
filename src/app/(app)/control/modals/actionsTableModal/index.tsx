@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { UserData } from '@/hooks/auth/useAuth/types'
+import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { Input, InputTypeMoney, Select } from '@/components'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
