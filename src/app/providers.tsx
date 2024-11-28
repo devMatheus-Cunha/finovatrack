@@ -13,6 +13,13 @@ import { ToastContainer } from 'react-toastify'
 import { ChakraProvider, extendTheme, ThemeConfig } from '@chakra-ui/react'
 import { ThemeProvider } from 'next-themes'
 
+const config: ThemeConfig = {
+  initialColorMode: 'dark',
+  useSystemColorMode: false
+}
+
+export const theme = extendTheme({ config })
+
 function Providers({ children }: React.PropsWithChildren) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -25,21 +32,12 @@ function Providers({ children }: React.PropsWithChildren) {
     }
   })
 
-  const config: ThemeConfig = {
-    initialColorMode: 'dark',
-    useSystemColorMode: false
-  }
-
-  const theme = extendTheme({ config })
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <ChakraProvider theme={theme}>
-          {children}
-          <ToastContainer theme="dark" />
-        </ChakraProvider>
+        <ChakraProvider theme={theme}>{children}</ChakraProvider>
       </ThemeProvider>
+      <ToastContainer theme="dark" />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

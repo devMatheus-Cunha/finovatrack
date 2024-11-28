@@ -1,4 +1,3 @@
-import React from 'react'
 import { CardHeader, Heading } from '@chakra-ui/react'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 

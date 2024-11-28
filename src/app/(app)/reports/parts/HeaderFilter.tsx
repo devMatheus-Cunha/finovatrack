@@ -25,8 +25,9 @@ function HeaderFilter({ setSelectedDate, year, formattedDate }: CardHeader) {
       { month: 'Dezembro', monthNumber: '12', value: `12/${year}` }
     ]
   }, [year])
+
   return (
-    <Box bg="gray.700" px={4} py={6} w="full" rounded="md">
+    <Box bg="gray.700" px={4} py={6} w="full" rounded="md" color="white">
       <Flex alignItems="center" justifyContent="space-between">
         <Flex alignItems="center">
           <Box>

@@ -8,7 +8,12 @@ interface SideBarProps {
 
 export default function AppLayout({ children }: SideBarProps) {
   return (
-    <Box h="100vh" display="flex" flexDirection={{ base: 'column', lg: 'row' }}>
+    <Box
+      h="100vh"
+      display="flex"
+      flexDirection={{ base: 'column', lg: 'row' }}
+      bg="gray.800"
+    >
       <SideMenu />
       <Box flex="1" overflow="auto" w="full" p={{ base: 0, md: 4 }}>
         {children}

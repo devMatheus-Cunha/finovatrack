@@ -58,7 +58,7 @@ export const Goals = ({
   if (isLoadingInvestimentsData) {
     return (
       <Skeleton
-        width={{ base: '100%', lg: '3' }}
+        width={{ base: '100%', lg: 'md' }}
         h="max-content"
         minHeight="420px"
         rounded="md"
@@ -68,48 +68,40 @@ export const Goals = ({
 
   return (
     <>
-      {isLoadingInvestimentsData ? (
-        <Skeleton
-          width={{ base: '100%', lg: '3' }}
-          h="max-content"
-          minHeight="420px"
-          rounded="md"
+      <Card
+        width={{ base: '100%', lg: 'max-content' }}
+        h="max-content"
+        minHeight="420px"
+        bg="gray.700"
+      >
+        <Header
+          title="Objetivo para 2026"
+          onRefresh={refetchInvestimentsData}
         />
-      ) : (
-        <Card
-          width={{ base: '100%', lg: 'max-content' }}
-          h="max-content"
-          minHeight="420px"
-        >
-          <Header
-            title="Objetivo para 2026"
-            onRefresh={refetchInvestimentsData}
+        <CardBody>
+          <PieChartComponent
+            totalValue={totalValue}
+            currency={userData.primary_currency}
+            isVisibilityData={isVisibilityData}
           />
-          <CardBody>
-            <PieChartComponent
-              totalValue={totalValue}
-              currency={userData.primary_currency}
-              isVisibilityData={isVisibilityData}
-            />
-            <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
-              {investmentData.map((item) => (
-                <GridItem key={item.label}>
-                  <Stat>
-                    <StatLabel fontSize="xs">{item.label}</StatLabel>
-                    <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
-                      {formatCurrencyMoney(
-                        item.value,
-                        userData.primary_currency,
-                        isVisibilityData
-                      )}
-                    </StatNumber>
-                  </Stat>
-                </GridItem>
-              ))}
-            </Grid>
-          </CardBody>
-        </Card>
-      )}
+          <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
+            {investmentData.map((item) => (
+              <GridItem key={item.label}>
+                <Stat>
+                  <StatLabel fontSize="xs">{item.label}</StatLabel>
+                  <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
+                    {formatCurrencyMoney(
+                      item.value,
+                      userData.primary_currency,
+                      isVisibilityData
+                    )}
+                  </StatNumber>
+                </Stat>
+              </GridItem>
+            ))}
+          </Grid>
+        </CardBody>
+      </Card>
     </>
   )
 }

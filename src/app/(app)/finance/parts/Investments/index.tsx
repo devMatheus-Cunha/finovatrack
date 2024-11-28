@@ -1,16 +1,10 @@
-'use client'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { calculateInvestmentData, createChartConfig } from './utils'
-import { Card, CardBody } from '@chakra-ui/react'
+import { Card, CardBody, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import {
-  CardHeaderSection,
-  ChartSection,
-  InvestmentStats,
-  LoadingSkeleton
-} from './parts'
+import { CardHeaderSection, ChartSection, InvestmentStats } from './parts'
 
 interface IRodela {
   userData: UserData
@@ -22,7 +16,7 @@ interface IRodela {
   isLoadingAllPies: boolean
 }
 
-export function Investments({
+export const Investments = ({
   userData,
   investimentsData,
   isLoadingInvestimentsData,
@@ -30,7 +24,7 @@ export function Investments({
   allPiesData,
   isVisibilityData,
   isLoadingAllPies
-}: IRodela) {
+}: IRodela) => {
   if (!allPiesData) return
 
   const {
@@ -57,11 +51,13 @@ export function Investments({
   )
 
   if (isLoadingInvestimentsData || isLoadingAllPies) {
-    return <LoadingSkeleton />
+    return (
+      <Skeleton width={{ base: '100%', lg: '2xl' }} h="570px" rounded="md" />
+    )
   }
 
   return (
-    <Card width={{ base: '100%', lg: '2xl' }} h="570px">
+    <Card width={{ base: '100%', lg: '2xl' }} h="570px" bg="gray.700">
       <CardHeaderSection onRefetch={refetchInvestimentsData} />
       <CardBody>
         <ChartSection

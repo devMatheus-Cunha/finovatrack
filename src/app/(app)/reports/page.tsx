@@ -21,7 +21,6 @@ function Reports() {
     useFetchReportsData()
 
   const [data] = reportData ?? []
-
   const expensesData = data?.data ?? []
 
   const columsHeadProps = (): TableColumn[] => {
@@ -77,8 +76,6 @@ function Reports() {
         year={year}
         formattedDate={formattedDate}
       />
-
-      {/* <StatiscExpense expensesData={[]} /> */}
 
       <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} gap={2}>
         <Box display="flex" flexDir="column" gap={2}>

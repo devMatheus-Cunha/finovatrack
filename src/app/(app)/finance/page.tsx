@@ -2,15 +2,14 @@
 
 import { Box } from '@chakra-ui/react'
 import { useMemo } from 'react'
-
 import FinanceYear from './parts/FinanceYaer'
+import PatrimonioCard from './parts/PatrimonioCard'
+import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlaningYear'
 import { useFetchDividends, useFetchInvestiments } from '@/hooks/finance'
-import PatrimonioCard from './parts/PatrimonioCard'
-import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
-import { Dividends } from './parts/Dividends'
 import { Investments } from './parts/Investments'
+import { Dividends } from './parts/Dividends'
 import { Goals } from './parts/Goals'
 
 const Finance = () => {

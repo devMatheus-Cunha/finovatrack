@@ -57,14 +57,14 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
       isLoadingAllPies ? (
         <Skeleton height="130px" rounded="md" />
       ) : (
-        <Card width="100%" height="130px" p={2}>
+        <Card width="100%" height="130px" p={2} bg="gray.700">
           <CardBody
             display="flex"
             flexDir="row"
             justifyContent="space-around"
             p={0}
           >
-            <Heading size={{ base: 'sm', lg: 'md' }} mt="50px">
+            <Heading size={{ base: 'sm', lg: 'md' }} mt="50px" color="white">
               Patrimônio atual
             </Heading>
             <ChartContainer
