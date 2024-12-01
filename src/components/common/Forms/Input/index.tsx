@@ -38,6 +38,7 @@ export default function Input<T extends FieldValues>({
         disabled={disabled}
         variant={disabled ? 'filled' : 'outline'}
         placeholder={disabled ? 'Disabled' : undefined}
+        borderColor="rgba(255, 255, 255, 0.24)"
         _disabled={{
           bg: 'gray.700',
           borderColor: 'gray.600',

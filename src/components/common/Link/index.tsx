@@ -9,7 +9,7 @@ interface ILinksProps extends LinkProps {
 
 const Link = ({ href, children, ...props }: ILinksProps) => {
   return (
-    <ChakraLink as={NextLink} {...props} href={href}>
+    <ChakraLink as={NextLink} {...props} href={href} color="white">
       {children}
     </ChakraLink>
   )

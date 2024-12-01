@@ -44,6 +44,7 @@ export default function Input<T extends FieldValues>({
         <ChakraPasswordInput
           id={name as string}
           pr="4.5rem"
+          borderColor="rgba(255, 255, 255, 0.24)"
           type={showPassword ? 'text' : 'password'}
           ref={ref}
           _placeholder={{ color: 'gray.400' }}
