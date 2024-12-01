@@ -12,27 +12,24 @@ import {
   StatNumber
 } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { Header } from './Header'
 import { PieChartComponent } from './PieChartComponent'
 import { chartData } from './chartConfig'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 
 interface CardToGoalsProps {
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
-  allPiesData?: IGetAllPies
-  investmentValue?: number
-  investmentFree?: number
+  investments?: IInvestimentsData
   millenium?: number
 }
 
 const CardToGoals = ({
   isLoadingInvestimentsData,
   refetchInvestimentsData,
-  allPiesData,
-  investmentFree,
-  millenium
+  millenium,
+  investments
 }: CardToGoalsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
@@ -40,13 +37,14 @@ const CardToGoals = ({
     return chartData.reduce((acc, curr) => acc + curr.value, 0)
   }, [])
 
-  if (!allPiesData) return
-  const assetAppreciation = allPiesData.result.priceAvgValue || 0
+  if (!investments?.pies) return
+  const assetAppreciation = investments?.pies?.result?.priceAvgValue || 0
 
   const investmentData = [
     {
       label: 'Renda Fixa Hoje',
-      value: (investmentFree && millenium && investmentFree + millenium) || 0
+      value:
+        (investments?.free && millenium && investments?.free + millenium) || 0
     },
     { label: 'Renda Fixa Objetivo', value: 30000 },
     { label: 'Renda Variável Hoje', value: assetAppreciation || 0 },

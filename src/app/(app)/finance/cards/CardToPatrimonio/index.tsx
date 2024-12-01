@@ -1,31 +1,28 @@
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart'
+import { useFetchFinancialPlaningYear } from '@/hooks/finance'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Card, CardBody, Heading, Skeleton } from '@chakra-ui/react'
+import { useMemo } from 'react'
 import { RadialBarChart, PolarRadiusAxis, Label, RadialBar } from 'recharts'
+import { chartConfig, chartData } from './utilts'
 
 interface CardToPatrimonioProps {
-  isLoadingFinancialPlanningYear: boolean
   isLoadingInvestimentsData: boolean
-  isLoadingAllPies: boolean
-  investmentFree?: number
-  sumTotalCurrency?: number | string
+  investments?: IInvestimentsData
   investmentValue?: number
   millenium?: number
 }
 
 const CardToPatrimonio = ({
-  isLoadingFinancialPlanningYear,
-  investmentFree,
+  investments,
   investmentValue,
   isLoadingInvestimentsData,
-  isLoadingAllPies,
-  sumTotalCurrency,
   millenium
 }: CardToPatrimonioProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -33,30 +30,18 @@ const CardToPatrimonio = ({
     userData: { primary_currency }
   } = useUserData()
 
-  const chartData = [
-    {
-      investmentFree: investmentFree,
-      investmentValue: investmentValue,
-      millenium: millenium
-    }
-  ]
-  const chartConfig = {
-    investmentFree: {
-      label: 'Inv Free'
-    },
-    investmentValue: {
-      label: 'Inv'
-    },
-    millenium: {
-      label: 'Millenium'
-    }
-  } satisfies ChartConfig
+  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
+    useFetchFinancialPlaningYear()
+
+  const sumTotalCurrency = useMemo(() => {
+    return financialPlanningYear && financialPlanningYear.length > 0
+      ? financialPlanningYear[0].reserve + investments?.total
+      : 0
+  }, [financialPlanningYear, investments?.total])
 
   return (
     <>
-      {isLoadingFinancialPlanningYear ||
-      isLoadingInvestimentsData ||
-      isLoadingAllPies ? (
+      {isLoadingFinancialPlanningYear || isLoadingInvestimentsData ? (
         <Skeleton height="130px" rounded="md" />
       ) : (
         <Card width="100%" height="130px" p={2} bg="gray.700">
@@ -74,7 +59,7 @@ const CardToPatrimonio = ({
               className="mx-auto h-[180px] w-[200px] p-0 m-0 "
             >
               <RadialBarChart
-                data={chartData}
+                data={chartData(investments?.free, investmentValue, millenium)}
                 endAngle={180}
                 innerRadius={80}
                 outerRadius={110}

@@ -1,4 +1,3 @@
-import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Skeleton, Card, CardBody } from '@chakra-ui/react'
@@ -13,7 +12,6 @@ interface CardToDividendsProps {
   dividendsData: IDividendProps[]
   isLoadingDividendsData: boolean
   refetchDividendsData: () => void
-  allPiesData?: IGetAllPies
   currentPage: number
   setCurrentPage: any
 }

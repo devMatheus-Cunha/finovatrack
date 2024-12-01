@@ -1,7 +1,7 @@
 import { useUserId } from '@/hooks/globalStates'
 import {
+  getCombinedData,
   getInvestmentData,
-  getInvestments,
   updateOrCreateDoc
 } from '@/services/finance/getInvestiments'
 import { useQuery } from '@tanstack/react-query'
@@ -14,6 +14,28 @@ export interface IInvestmentsProps {
   ppl: number
   result: number
   total: number
+}
+
+export interface IGetAllPies {
+  id: number
+  cash: number
+  dividendDetails: {
+    gained: number
+    reinvested: number
+    inCash: number
+  }
+  result: {
+    priceAvgInvestedValue: number
+    priceAvgResult: number
+    priceAvgResultCoef: number
+    priceAvgValue: number
+  }
+  progress: number
+  status: null
+}
+
+export interface IInvestimentsData extends IInvestmentsProps {
+  pies: IGetAllPies
 }
 
 export const useFetchInvestiments = () => {
@@ -31,7 +53,7 @@ export const useFetchInvestiments = () => {
 
   const refetchInvestimentsData = async () => {
     try {
-      const investiments = await getInvestments()
+      const investiments = await getCombinedData()
       await updateOrCreateDoc(userId!, investiments)
       refetch()
     } catch (error) {

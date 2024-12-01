@@ -1,11 +1,9 @@
 'use client'
 
-import { useMemo } from 'react'
 import { Box } from '@chakra-ui/react'
 import {
   useFetchDividends,
   useFetchInvestiments,
-  useFetchAllPies,
   useFetchFinancialPlaningYear
 } from '@/hooks/finance'
 import {
@@ -31,21 +29,8 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-  const { allPiesData, refetchAllPies, isLoadingAllPies } = useFetchAllPies()
-
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
-
-  const sumTotalCurrency = useMemo(() => {
-    return financialPlanningYear && financialPlanningYear.length > 0
-      ? financialPlanningYear[0].reserve + investimentsData?.total
-      : 0
-  }, [financialPlanningYear, investimentsData?.total])
-
-  const updatedData = () => {
-    refetchAllPies()
-    refetchInvestimentsData()
-  }
 
   return (
     <Box
@@ -68,13 +53,12 @@ const Finance = () => {
           gap={2}
         >
           <CardToPatrimonio
-            sumTotalCurrency={sumTotalCurrency}
-            isLoadingFinancialPlanningYear={isLoadingFinancialPlanningYear}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
-            isLoadingAllPies={isLoadingAllPies}
-            investmentFree={investimentsData?.free}
+            investments={investimentsData}
             investmentValue={
-              (allPiesData && allPiesData?.result.priceAvgValue) || 0
+              (investimentsData?.pies &&
+                investimentsData?.pies?.result?.priceAvgValue) ||
+              0
             }
             millenium={
               financialPlanningYear && Number(financialPlanningYear[0].reserve)
@@ -94,9 +78,8 @@ const Finance = () => {
           <CardToInvestments
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
-            isLoadingAllPies={isLoadingAllPies}
-            refetchInvestimentsData={updatedData}
-            allPiesData={allPiesData && allPiesData}
+            isLoadingAllPies={isLoadingInvestimentsData}
+            refetchInvestimentsData={refetchInvestimentsData}
           />
           <CardToDividends
             dividendsData={dividendsData}
@@ -104,7 +87,6 @@ const Finance = () => {
             setCurrentPage={setCurrentPage}
             isLoadingDividendsData={isLoadingDividendsData}
             refetchDividendsData={refetchDividendsData}
-            allPiesData={allPiesData && allPiesData}
           />
         </Box>
       </Box>
@@ -112,8 +94,7 @@ const Finance = () => {
         <CardToGoals
           isLoadingInvestimentsData={isLoadingInvestimentsData}
           refetchInvestimentsData={refetchInvestimentsData}
-          allPiesData={allPiesData}
-          investmentFree={investimentsData?.free}
+          investments={investimentsData}
           millenium={
             financialPlanningYear && Number(financialPlanningYear[0].reserve)
           }

@@ -1,5 +1,4 @@
-import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
-import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { calculateInvestmentData, createChartConfig } from './utils'
 import { Card, CardBody, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
@@ -7,10 +6,9 @@ import { CardHeaderSection, ChartSection, InvestmentStats } from './parts'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 interface IRodela {
-  investimentsData: IInvestmentsProps | undefined
+  investimentsData: IInvestimentsData | undefined
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
-  allPiesData?: IGetAllPies
   isLoadingAllPies: boolean
 }
 
@@ -18,7 +16,6 @@ const CardToInvestments = ({
   investimentsData,
   isLoadingInvestimentsData,
   refetchInvestimentsData,
-  allPiesData,
   isLoadingAllPies
 }: IRodela) => {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -32,7 +29,7 @@ const CardToInvestments = ({
     totalInvestedAndGains,
     totalInvestedAndGainsPercentage,
     totalAppreciationValue
-  } = calculateInvestmentData(investimentsData, allPiesData)
+  } = calculateInvestmentData(investimentsData, investimentsData?.pies)
 
   const { chartData, formatDataToStats } = createChartConfig(
     investimentsData,
