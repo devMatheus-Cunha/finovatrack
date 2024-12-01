@@ -12,7 +12,7 @@ import {
 } from '@phosphor-icons/react'
 import React from 'react'
 import { HeaderMobile, Logo, ShowAndHide } from '@/components'
-import { useIsVisibilityDatas, useUserId } from '@/hooks/globalStates'
+import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/entrys/useDeletedEntry/auth'
 
 import SideMenuMobile from './SideMenuMobile'
@@ -23,7 +23,6 @@ export const SideMenu = () => {
     useIsVisibilityDatas()
   const router = useRouter()
   const pathname = usePathname()
-  const { userId } = useUserId()
   const { onLogout } = useLogout()
 
   const sidebarItems = [
