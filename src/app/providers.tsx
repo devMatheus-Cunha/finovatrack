@@ -20,18 +20,18 @@ const config: ThemeConfig = {
 
 export const theme = extendTheme({ config })
 
-function Providers({ children }: React.PropsWithChildren) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 5,
-        refetchOnMount: true,
-        retry: false
-      }
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5,
+      refetchOnMount: true,
+      retry: false
     }
-  })
+  }
+})
 
+function Providers({ children }: React.PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>

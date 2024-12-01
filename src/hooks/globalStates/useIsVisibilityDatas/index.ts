@@ -2,27 +2,34 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
+const VISIBILITY_KEY = 'is_visibility_data'
+
 const useIsVisibilityDatas = () => {
   const queryClient = useQueryClient()
-  let initialData = true
 
-  if (typeof localStorage !== 'undefined') {
-    initialData = localStorage.getItem('isVisibilityData') === 'true'
+  const getInitialData = () => {
+    if (typeof localStorage !== 'undefined') {
+      const storedValue = localStorage.getItem(VISIBILITY_KEY)
+      return storedValue === 'true'
+    }
+    return true
   }
 
   const { data: isVisibilityData } = useQuery({
-    queryKey: ['is_visibility_data'],
-    initialData
+    queryKey: [VISIBILITY_KEY],
+    queryFn: () => getInitialData(),
+    initialData: getInitialData()
   })
 
   const handleToggleVisibilityData = () => {
-    const [queryKey, data] = queryClient
-      .getQueriesData({
-        queryKey: ['is_visibility_data']
-      })
-      .flat(Infinity)
-    queryClient.setQueryData([queryKey], !data)
-    localStorage.setItem('isVisibilityData', String(!data))
+    const currentValue = queryClient.getQueryData([VISIBILITY_KEY])
+    const newValue = !currentValue
+
+    queryClient.setQueryData([VISIBILITY_KEY], newValue)
+
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(VISIBILITY_KEY, String(newValue))
+    }
   }
 
   return { isVisibilityData, handleToggleVisibilityData }
