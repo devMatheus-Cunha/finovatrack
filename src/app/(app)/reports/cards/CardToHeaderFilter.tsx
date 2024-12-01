@@ -8,7 +8,11 @@ interface CardHeader {
   formattedDate: string
 }
 
-function HeaderFilter({ setSelectedDate, year, formattedDate }: CardHeader) {
+const CardToHeaderFilter = ({
+  setSelectedDate,
+  year,
+  formattedDate
+}: CardHeader) => {
   const months = useMemo(() => {
     return [
       { month: 'Janeiro', monthNumber: '01', value: `01/${year}` },
@@ -98,4 +102,4 @@ function HeaderFilter({ setSelectedDate, year, formattedDate }: CardHeader) {
   )
 }
 
-export default HeaderFilter
+export default CardToHeaderFilter
