@@ -48,6 +48,7 @@ import {
 } from './modals'
 import TableMobileAndDesktop from './parts/TableMobileAndDesktop'
 import useControlModals from './hooks/useControlModal'
+import { useInvestmentMetrics } from './hooks/useInvestmentMetrics'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -80,7 +81,6 @@ export default function Control() {
   const { deletedEntry } = useDeletedEntry()
 
   const { clearExpensesData } = useClearExpenses()
-
   const { saveReport } = useSaveReport()
 
   const { calculationSumValues } = useCalculationSumValues(expensesData)
@@ -89,12 +89,17 @@ export default function Control() {
     userData,
     getTotals?.value_secondary_currency
   )
+  const totalEntrys = SumValues(entrysData)
+  const investments = useInvestmentMetrics(calculationSumValues, totalEntrys)
 
-  const calculationTotalExpensesEurSumRealToReal =
-    convertEurToReal(
-      lastQuatationData?.current_quotation,
-      Number(getTotals?.value_secondary_currency)
-    ) + (getTotals?.value_primary_currency || 0)
+  const calculationTotalExpensesEurSumRealToReal = useMemo(
+    () =>
+      convertEurToReal(
+        lastQuatationData?.current_quotation,
+        Number(getTotals?.value_secondary_currency)
+      ) + (getTotals?.value_primary_currency || 0),
+    [lastQuatationData, getTotals]
+  )
 
   const calculationTotalExpensesEurToReal = convertEurToReal(
     lastQuatationData?.current_quotation,
@@ -117,8 +122,6 @@ export default function Control() {
     hybrid: calculationTotalExpensesEurSumRealToReal,
     oneCurrency: getTotals?.value_primary_currency
   }
-
-  const totalEntrys = SumValues(entrysData)
 
   const onAddExpense = async (data: ExpenseData) => {
     if (configModalExpense.type === 'edit') {
@@ -146,35 +149,6 @@ export default function Control() {
   const onFilter = (value: any) => {
     setFilter(value)
   }
-
-  function calculateInvestmentMetrics(
-    transactions: any[],
-    totalIncome: number
-  ) {
-    const totalInvestments = transactions.reduce((acc, transaction) => {
-      if (transaction.category === 'Investimentos') {
-        return acc + transaction.value_primary_currency
-      } else {
-        return acc
-      }
-    }, 0)
-
-    const investmentPercentage = (
-      (totalInvestments / totalIncome) *
-      100
-    ).toFixed(2)
-
-    return {
-      totalInvestments,
-      investmentPercentageFormat: `${investmentPercentage}%`,
-      investmentPercentage: investmentPercentage
-    }
-  }
-
-  const investments = calculateInvestmentMetrics(
-    calculationSumValues,
-    totalEntrys
-  )
 
   const onSaveReport = ({
     data,
@@ -224,10 +198,8 @@ export default function Control() {
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
           totalEntrys={totalEntrys}
-          entrysData={entrysData}
           totalExpensesEurSumRealToReal={validateExpenseData[typeAccount]}
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
-          userData={userData}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
           investments={investments}
         />
@@ -235,7 +207,6 @@ export default function Control() {
 
       <Box display="flex" flexDir="column" gap={4} w="100%">
         <HeaderDataTableToControl
-          userData={userData}
           currentQuotation={lastQuatationData?.current_quotation}
           filter={filter}
           onFilter={onFilter}
@@ -249,7 +220,6 @@ export default function Control() {
         <TableMobileAndDesktop
           calculationSumValues={calculationSumValues}
           expensesData={expensesData}
-          userData={userData}
           isVisibilityData={isVisibilityData}
           isLoadingExpensesData={isLoadingExpensesData}
           handleControlModalExpense={handleControlModalExpense}
@@ -269,7 +239,6 @@ export default function Control() {
           handleOpenModal={handleControlModalExpense}
           onSubmit={onAddExpense}
           isLoadingAddExpense={isLoadingAddExpense}
-          userData={userData}
           onDelete={onDelete}
         />
       </ModalChakra>
@@ -311,7 +280,6 @@ export default function Control() {
         <ContentAddEntryModal
           handleOpenModal={controlModalAddEntry.onClose}
           onSubmit={onAddEntrys}
-          userData={userData}
         />
       </ModalChakra>
 
@@ -325,7 +293,6 @@ export default function Control() {
           handleOpenModal={controlModalTotalEntrys.onClose}
           data={entrysData}
           onDelete={deletedEntry}
-          userData={userData}
         />
       </ModalChakra>
 

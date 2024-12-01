@@ -18,15 +18,13 @@ import {
 } from '@chakra-ui/react'
 import { Trash } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
-import { useIsVisibilityDatas } from '@/hooks/globalStates'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 
 interface IContentModal {
   handleOpenModal: () => void // Alterado para função sem parâmetro
   data: IEntrysData[]
   onDelete: (itemId?: string) => void
-  userData: UserData
 }
 
 const columsHeadProps = [
@@ -37,10 +35,10 @@ const columsHeadProps = [
 function ContentTotalEntrys({
   handleOpenModal,
   data,
-  onDelete,
-  userData
+  onDelete
 }: IContentModal) {
   const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
 
   return (
     <>

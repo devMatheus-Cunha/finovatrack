@@ -2,11 +2,11 @@ import React from 'react'
 import TableToControl from './TableToControl'
 import MobileTable from './MobileTable'
 import { ShowAndHide } from '@/components'
+import { useUserData } from '@/hooks/globalStates'
 
 interface ITableMobileAndDesktopProps {
   calculationSumValues: any
   expensesData: any
-  userData: any
   isVisibilityData: any
   isLoadingExpensesData: any
   handleControlModalExpense: any
@@ -16,12 +16,13 @@ interface ITableMobileAndDesktopProps {
 const TableMobileAndDesktop = ({
   calculationSumValues,
   expensesData,
-  userData,
   isVisibilityData,
   isLoadingExpensesData,
   handleControlModalExpense,
   filter
 }: ITableMobileAndDesktopProps) => {
+  const { userData } = useUserData()
+
   return (
     <>
       <ShowAndHide displayLg="initial" displayBase="none">

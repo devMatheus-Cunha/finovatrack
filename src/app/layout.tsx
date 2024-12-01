@@ -47,7 +47,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="bg-[#1a202c]">
         <Providers>{children}</Providers>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       </body>

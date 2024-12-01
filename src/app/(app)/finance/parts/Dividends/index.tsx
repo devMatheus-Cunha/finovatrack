@@ -59,7 +59,6 @@ export const Dividends = ({
             )
           }
         />
-
         <Filter
           currentPage={currentPage}
           onChange={(event) => setCurrentPage(event.target.value)}

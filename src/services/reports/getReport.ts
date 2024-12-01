@@ -17,20 +17,28 @@ export interface IReportData {
   quatation: string
 }
 
-export async function getReport(idUser: string, period: string) {
-  const docsArray: IReportData[] = []
-  let querySnapshot
-
-  if (period) {
-    querySnapshot = query(
-      collection(db, 'users', String(idUser), 'reports'),
-      where('period', '==', period)
-    )
-    const get = await getDocs(querySnapshot)
-    get.forEach((doc) => {
-      docsArray.push({ id: doc.id, ...doc.data() } as any)
-    })
-    return docsArray
+export async function getReport(
+  idUser: string,
+  period: string
+): Promise<IReportData | null> {
+  if (!period) {
+    return null
   }
-  return []
+
+  const reportsCollection = collection(db, 'users', String(idUser), 'reports')
+  const periodQuery = query(reportsCollection, where('period', '==', period))
+
+  try {
+    const querySnapshot = await getDocs(periodQuery)
+
+    if (querySnapshot.empty) {
+      return null
+    }
+
+    const reportDoc = querySnapshot.docs[0]
+    return { ...(reportDoc.data() as IReportData) }
+  } catch (error) {
+    console.error('Erro ao buscar relatório:', error)
+    return null
+  }
 }

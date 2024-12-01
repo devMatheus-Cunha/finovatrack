@@ -11,11 +11,13 @@ export default function useFetchReportsData() {
   const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
   const formattedDate = `${month}/${year}`
 
-  const { data: reportData, isLoading } = useQuery<IReportData[], unknown>({
+  const { data: reportData, isLoading } = useQuery<IReportData | null>({
     queryKey: ['report_data', month, year, userId],
     queryFn: () => getReport(userId, formattedDate),
     enabled: !!userId
   })
+
+  console.log(reportData)
 
   return {
     reportData,

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { Input, InputTypeMoney, Select } from '@/components'
 import { validateTextToModal } from '../../utils'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
@@ -30,6 +29,7 @@ import {
 } from '../../hooks/useControlModal'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { categoryOptions, paymentsOptions } from './utilts'
+import { useUserData } from '@/hooks/globalStates'
 
 interface IContentModal {
   onSubmit: (data: ExpenseData) => Promise<void>
@@ -37,7 +37,6 @@ interface IContentModal {
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   typeModal: ITypeModalExpense
-  userData: UserData
   onDelete: () => void
 }
 
@@ -46,9 +45,9 @@ function ContentActionsTableModal({
   handleOpenModal,
   initialData,
   typeModal,
-  userData,
   onDelete
 }: IContentModal) {
+  const { userData } = useUserData()
   const schema = z.object({
     description: z.string({
       required_error: 'Campo obrigatorio'

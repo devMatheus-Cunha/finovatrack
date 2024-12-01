@@ -3,7 +3,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { InputTypeMoney } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
@@ -18,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { ITypeModalExpense } from '../../hooks/useControlModal'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useUserData } from '@/hooks/globalStates'
 
 type FormData = {
   value: string
@@ -27,7 +27,6 @@ interface IContentModal {
   onSubmit: (value: FormData) => void
   handleOpenModal: (type?: ITypeModalExpense, data?: ExpenseData) => void
   isLoadingAddExpense?: boolean
-  userData: UserData
 }
 
 const schema = z.object({
@@ -39,9 +38,9 @@ const schema = z.object({
 function ContentAddEntryModal({
   onSubmit,
   handleOpenModal,
-  isLoadingAddExpense,
-  userData
+  isLoadingAddExpense
 }: IContentModal) {
+  const { userData } = useUserData()
   const {
     handleSubmit,
     control,

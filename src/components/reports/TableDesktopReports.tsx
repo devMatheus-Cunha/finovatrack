@@ -1,7 +1,7 @@
 import { ShowAndHide } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import React from 'react'
-import Table, { TableColumn } from '@/components/Table'
+import Table, { TableColumn } from '@/components/common/Table'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 
 interface ITableReportsProps {

@@ -1,5 +1,5 @@
 import { Input } from '@/components'
-import { InputProps } from '@/components/Forms/Input'
+import { InputProps } from '@/components/common/Forms/Input'
 import { Box, Button } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FieldValues } from 'react-hook-form'

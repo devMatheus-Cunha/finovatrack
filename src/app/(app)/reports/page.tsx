@@ -4,14 +4,16 @@ import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { TableColumn } from '@/components/Table'
 import { Box, Skeleton, VStack, Text } from '@chakra-ui/react'
-import InfoCardsToReport from './parts/InfoCardsToReport'
-import EmptyWithoutReport from './parts/EmptyWithoutReport'
-import HeaderFilter from './parts/HeaderFilter'
-import TableDesktopReports from './parts/TableDesktopReports'
-import TableMobileReports from './parts/TableMobileReports'
-import ExpenseToCategory from './parts/ExpenseToCategory'
+import {
+  InfoCardsToReport,
+  TableDesktopReports,
+  TableMobileReports,
+  EmptyWithoutReport,
+  ExpenseToCategory,
+  HeaderFilter
+} from '@/components'
+import { TableColumn } from '@/components/common/Table'
 
 function Reports() {
   const { userData } = useUserData()
@@ -19,9 +21,6 @@ function Reports() {
 
   const { reportData, setSelectedDate, year, formattedDate, isLoading } =
     useFetchReportsData()
-
-  const [data] = reportData ?? []
-  const expensesData = data?.data ?? []
 
   const columsHeadProps = (): TableColumn[] => {
     const columns = [
@@ -87,10 +86,10 @@ function Reports() {
             />
           ) : (
             <>
-              {expensesData && expensesData.length > 0 ? (
+              {reportData?.data && reportData?.data.length > 0 ? (
                 <Box>
                   <InfoCardsToReport
-                    data={data}
+                    data={reportData.data}
                     userData={userData}
                     isLoading={isLoading}
                   />
@@ -124,16 +123,16 @@ function Reports() {
             />
           ) : (
             <Box>
-              {expensesData && expensesData.length > 0 ? (
+              {reportData?.data && reportData?.data.length > 0 ? (
                 <>
                   <TableDesktopReports
-                    data={expensesData}
+                    data={reportData?.data}
                     colums={columsHeadProps()}
                     userData={userData}
                     isVisibilityData={isVisibilityData}
                   />
                   <TableMobileReports
-                    data={expensesData}
+                    data={reportData?.data}
                     colums={columsHeadProps()}
                     userData={userData}
                     isVisibilityData={isVisibilityData}
@@ -155,13 +154,13 @@ function Reports() {
             />
           ) : (
             <>
-              {expensesData && expensesData.length > 0 ? (
+              {reportData?.data && reportData?.data.length > 0 ? (
                 <Box w={{ base: '100%', lg: 'xs' }} h="max-content">
                   <ExpenseToCategory
-                    expensesData={expensesData}
+                    expensesData={reportData.data}
                     userData={userData}
                     isVisibilityData={isVisibilityData}
-                    totalExpenses={data?.totalExpenses}
+                    totalExpenses={reportData?.totalExpenses}
                   />
                 </Box>
               ) : (

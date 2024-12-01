@@ -1,6 +1,6 @@
 'use client'
 
-import { TableColumn } from '@/components/Table'
+import { TableColumn } from '@/components/common/Table'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'

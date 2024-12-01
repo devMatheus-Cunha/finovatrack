@@ -1,4 +1,4 @@
-import { OptionsType } from '@/components/Forms/Select'
+import { OptionsType } from '@/components/common/Forms/Select'
 import { z } from 'zod'
 
 export const dropdownOptionsCurrency = [

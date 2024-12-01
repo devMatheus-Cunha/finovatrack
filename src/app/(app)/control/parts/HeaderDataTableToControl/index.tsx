@@ -19,15 +19,14 @@ import {
   ArrowsCounterClockwise,
   Plus
 } from '@phosphor-icons/react'
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { DropdownFilter, ShowAndHide } from '@/components'
+import { useUserData } from '@/hooks/globalStates'
 
 interface IHeaderDataTableToControl {
-  userData: UserData
   currentQuotation: number | undefined
   filter: string
   onOpenAddEntry: () => void
@@ -39,7 +38,6 @@ interface IHeaderDataTableToControl {
 }
 
 function HeaderDataTableToControl({
-  userData,
   currentQuotation,
   filter,
   onFilter,
@@ -49,6 +47,8 @@ function HeaderDataTableToControl({
   onOpenDeleteExpenses,
   handleControlModalExpense
 }: IHeaderDataTableToControl) {
+  const { userData } = useUserData()
+
   const buttonData = [
     {
       label: 'Add Gastos',

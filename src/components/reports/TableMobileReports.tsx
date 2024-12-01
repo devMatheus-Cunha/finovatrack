@@ -2,10 +2,9 @@ import { ShowAndHide } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { SimpleGrid, VStack, Box, Text } from '@chakra-ui/react'
-import {} from 'lucide-react'
-import React from 'react'
-import { TableColumn } from '@/components/Table'
+import { TableColumn } from '@/components/common/Table'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
+import React from 'react'
 
 interface ITableReportsProps {
   data: ExpenseData[]
@@ -23,7 +22,7 @@ const TableReports: React.FC<ITableReportsProps> = ({
     <ShowAndHide displayLg="none" displayBase="initial">
       <SimpleGrid columns={1} spacing={2} maxH={278} overflow="auto">
         {data?.map((item) => (
-          <>
+          <React.Fragment key={item.id}>
             {item.value_primary_currency && (
               <Box
                 key={item.id}
@@ -61,7 +60,7 @@ const TableReports: React.FC<ITableReportsProps> = ({
                 </VStack>
               </Box>
             )}
-          </>
+          </React.Fragment>
         ))}
       </SimpleGrid>
     </ShowAndHide>

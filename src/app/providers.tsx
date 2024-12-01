@@ -36,9 +36,9 @@ function Providers({ children }: React.PropsWithChildren) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <ChakraProvider theme={theme}>{children}</ChakraProvider>
+        <ToastContainer theme="dark" />
+        <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>
-      <ToastContainer theme="dark" />
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }
