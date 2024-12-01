@@ -1,4 +1,3 @@
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
@@ -8,27 +7,27 @@ import { CardHeader } from './CardHeader'
 import { BarChart } from './BarChart'
 import Filter from './Filter'
 import { DividendsList } from './DividendsList'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
-interface InvestmentsAndDividendsCardProps {
-  userData: UserData
+interface CardToDividendsProps {
   dividendsData: IDividendProps[]
   isLoadingDividendsData: boolean
   refetchDividendsData: () => void
-  isVisibilityData: boolean
   allPiesData?: IGetAllPies
   currentPage: number
   setCurrentPage: any
 }
 
-export const Dividends = ({
-  userData,
+const CardToDividends = ({
   dividendsData,
   isLoadingDividendsData,
   refetchDividendsData,
-  isVisibilityData,
   currentPage,
   setCurrentPage
-}: InvestmentsAndDividendsCardProps) => {
+}: CardToDividendsProps) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
+
   if (isLoadingDividendsData) {
     return (
       <Skeleton
@@ -77,3 +76,4 @@ export const Dividends = ({
     </Card>
   )
 }
+export default CardToDividends

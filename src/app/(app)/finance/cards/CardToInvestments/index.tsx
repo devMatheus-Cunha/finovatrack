@@ -1,32 +1,28 @@
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { calculateInvestmentData, createChartConfig } from './utils'
 import { Card, CardBody, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { CardHeaderSection, ChartSection, InvestmentStats } from './parts'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 interface IRodela {
-  userData: UserData
   investimentsData: IInvestmentsProps | undefined
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
   allPiesData?: IGetAllPies
-  isVisibilityData: boolean
   isLoadingAllPies: boolean
 }
 
-export const Investments = ({
-  userData,
+const CardToInvestments = ({
   investimentsData,
   isLoadingInvestimentsData,
   refetchInvestimentsData,
   allPiesData,
-  isVisibilityData,
   isLoadingAllPies
 }: IRodela) => {
-  if (!allPiesData) return
-
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
   const {
     totalAccountValue,
     assetAppreciation,
@@ -77,3 +73,5 @@ export const Investments = ({
     </Card>
   )
 }
+
+export default CardToInvestments

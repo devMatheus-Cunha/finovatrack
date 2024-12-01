@@ -11,33 +11,31 @@ import {
   StatLabel,
   StatNumber
 } from '@chakra-ui/react'
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { IGetAllPies } from '@/hooks/finance/useFetchAllPies'
 import { Header } from './Header'
 import { PieChartComponent } from './PieChartComponent'
 import { chartData } from './chartConfig'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
-interface IGoals {
-  userData: UserData
+interface CardToGoalsProps {
   isLoadingInvestimentsData: boolean
   refetchInvestimentsData: () => void
   allPiesData?: IGetAllPies
-  isVisibilityData: boolean
   investmentValue?: number
   investmentFree?: number
   millenium?: number
 }
 
-export const Goals = ({
-  userData,
+const CardToGoals = ({
   isLoadingInvestimentsData,
   refetchInvestimentsData,
   allPiesData,
-  isVisibilityData,
   investmentFree,
   millenium
-}: IGoals) => {
+}: CardToGoalsProps) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0)
   }, [])
@@ -105,3 +103,4 @@ export const Goals = ({
     </>
   )
 }
+export default CardToGoals

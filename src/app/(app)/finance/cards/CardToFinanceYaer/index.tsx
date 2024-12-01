@@ -14,22 +14,21 @@ import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import { formatToJavaScriptNumber } from '@/utils/formatNumber'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
-import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
-interface IFinanceYearProps {
+interface CardToFinanceYaerProps {
   investimentsData?: IInvestmentsProps
-  userData: UserData
-  isVisibilityData?: boolean
   isLoadingInvestimentsData?: boolean
   financialPlanningYear?: IFinancialPlanningProps[]
 }
 
-const FinanceYear: React.FC<IFinanceYearProps> = ({
-  userData,
-  isVisibilityData,
+const CardToFinanceYaer = ({
   financialPlanningYear,
   isLoadingInvestimentsData
-}) => {
+}: CardToFinanceYaerProps) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
+
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -137,4 +136,4 @@ const FinanceYear: React.FC<IFinanceYearProps> = ({
   )
 }
 
-export default FinanceYear
+export default CardToFinanceYaer

@@ -1,20 +1,22 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import FinanceYear from './parts/FinanceYaer'
-import PatrimonioCard from './parts/PatrimonioCard'
-import useFetchAllPies from '@/hooks/finance/useFetchAllPies'
-import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import useFetchFinancialPlaningYear from '@/hooks/finance/useFetchFinancialPlaningYear'
-import { useFetchDividends, useFetchInvestiments } from '@/hooks/finance'
-import { Investments } from './parts/Investments'
-import { Dividends } from './parts/Dividends'
-import { Goals } from './parts/Goals'
+import { Box } from '@chakra-ui/react'
+import {
+  useFetchDividends,
+  useFetchInvestiments,
+  useFetchAllPies,
+  useFetchFinancialPlaningYear
+} from '@/hooks/finance'
+import {
+  CardToDividends,
+  CardToFinanceYaer,
+  CardToGoals,
+  CardToInvestments,
+  CardToPatrimonio
+} from './cards'
 
 const Finance = () => {
-  const { userData } = useUserData()
-  const { isVisibilityData } = useIsVisibilityDatas()
   const {
     dividendsData,
     isLoadingDividendsData,
@@ -65,10 +67,8 @@ const Finance = () => {
           flexDir="column"
           gap={2}
         >
-          <PatrimonioCard
-            primaryCurrency={userData.primary_currency}
+          <CardToPatrimonio
             sumTotalCurrency={sumTotalCurrency}
-            isVisibilityData={isVisibilityData}
             isLoadingFinancialPlanningYear={isLoadingFinancialPlanningYear}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             isLoadingAllPies={isLoadingAllPies}
@@ -80,9 +80,7 @@ const Finance = () => {
               financialPlanningYear && Number(financialPlanningYear[0].reserve)
             }
           />
-          <FinanceYear
-            userData={userData}
-            isVisibilityData={isVisibilityData}
+          <CardToFinanceYaer
             financialPlanningYear={financialPlanningYear}
             isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
           />
@@ -93,34 +91,28 @@ const Finance = () => {
           gap={2}
           flexDirection={['column', 'column', 'row', 'column', 'row']}
         >
-          <Investments
-            userData={userData}
+          <CardToInvestments
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             isLoadingAllPies={isLoadingAllPies}
             refetchInvestimentsData={updatedData}
             allPiesData={allPiesData && allPiesData}
-            isVisibilityData={isVisibilityData}
           />
-          <Dividends
-            userData={userData}
+          <CardToDividends
             dividendsData={dividendsData}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             isLoadingDividendsData={isLoadingDividendsData}
             refetchDividendsData={refetchDividendsData}
-            isVisibilityData={isVisibilityData}
             allPiesData={allPiesData && allPiesData}
           />
         </Box>
       </Box>
       <Box>
-        <Goals
-          userData={userData}
+        <CardToGoals
           isLoadingInvestimentsData={isLoadingInvestimentsData}
           refetchInvestimentsData={refetchInvestimentsData}
           allPiesData={allPiesData}
-          isVisibilityData={isVisibilityData}
           investmentFree={investimentsData?.free}
           millenium={
             financialPlanningYear && Number(financialPlanningYear[0].reserve)

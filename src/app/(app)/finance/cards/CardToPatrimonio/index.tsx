@@ -4,13 +4,12 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Card, CardBody, Heading, Skeleton } from '@chakra-ui/react'
 import { RadialBarChart, PolarRadiusAxis, Label, RadialBar } from 'recharts'
 
-interface PatrimonioCardProps {
-  primaryCurrency: string
-  isVisibilityData: boolean
+interface CardToPatrimonioProps {
   isLoadingFinancialPlanningYear: boolean
   isLoadingInvestimentsData: boolean
   isLoadingAllPies: boolean
@@ -20,9 +19,7 @@ interface PatrimonioCardProps {
   millenium?: number
 }
 
-const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
-  primaryCurrency,
-  isVisibilityData,
+const CardToPatrimonio = ({
   isLoadingFinancialPlanningYear,
   investmentFree,
   investmentValue,
@@ -30,7 +27,12 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
   isLoadingAllPies,
   sumTotalCurrency,
   millenium
-}) => {
+}: CardToPatrimonioProps) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const {
+    userData: { primary_currency }
+  } = useUserData()
+
   const chartData = [
     {
       investmentFree: investmentFree,
@@ -98,7 +100,7 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
                             >
                               {formatCurrencyMoney(
                                 Number(sumTotalCurrency) || 0,
-                                primaryCurrency,
+                                primary_currency,
                                 isVisibilityData
                               )}
                             </tspan>
@@ -145,4 +147,4 @@ const PatrimonioCard: React.FC<PatrimonioCardProps> = ({
   )
 }
 
-export default PatrimonioCard
+export default CardToPatrimonio
