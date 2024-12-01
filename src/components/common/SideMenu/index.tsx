@@ -55,27 +55,20 @@ export const SideMenu = () => {
       icon: <Archive size={21} />,
       action: () => router.push(`/reports`)
     },
+    // ...(userId === process.env.NEXT_PUBLIC_USER_ID_1 ||
+    // userId === process.env.NEXT_PUBLIC_USER_ID_2 ||
+    // userId === process.env.NEXT_PUBLIC_USER_ID_3
+    //   ? [
     {
       id: 'finance',
       label: 'Finanças',
       route: 'finance',
-      disabled:
-        userId !== process.env.NEXT_USER_ID_1 &&
-        userId !== process.env.NEXT_USER_ID_2 &&
-        userId !== process.env.NEXT_USER_ID_3,
+      disabled: false,
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/finance`)
     },
-    // {
-    //   id: 'statistics',
-    //   label: 'Estatísticas',
-    //   route: 'statistics',
-    //   disabled:
-    //     userId !== process.env.NEXT_USER_ID_1 &&
-    //     userId !== process.env.NEXT_USER_ID_2,
-    //   icon: <ChartPie size={21} />,
-    //   action: () => router.push(`/statistics`)
-    // },
+    // ]
+    // : []),
     {
       id: 'myProfile',
       label: 'Perfil',
