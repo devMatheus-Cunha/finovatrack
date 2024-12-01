@@ -66,37 +66,37 @@ const CardToTableExpenses = ({
     return columns
   }
 
+  if (isLoading) {
+    return (
+      <Skeleton
+        height={{ base: 278, lg: 518 }}
+        w={{ base: '100%', lg: '2xl' }}
+        rounded="md"
+      />
+    )
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <Skeleton
-          height={{ base: 278, lg: 518 }}
-          w={{ base: '100%', lg: '2xl' }}
-          rounded="md"
-        />
+    <Box>
+      {reportData?.data && reportData?.data.length > 0 ? (
+        <>
+          <TableDesktopReports
+            data={reportData?.data}
+            colums={columsHeadProps()}
+            userData={userData}
+            isVisibilityData={isVisibilityData}
+          />
+          <TableMobileReports
+            data={reportData?.data}
+            colums={columsHeadProps()}
+            userData={userData}
+            isVisibilityData={isVisibilityData}
+          />
+        </>
       ) : (
-        <Box>
-          {reportData?.data && reportData?.data.length > 0 ? (
-            <>
-              <TableDesktopReports
-                data={reportData?.data}
-                colums={columsHeadProps()}
-                userData={userData}
-                isVisibilityData={isVisibilityData}
-              />
-              <TableMobileReports
-                data={reportData?.data}
-                colums={columsHeadProps()}
-                userData={userData}
-                isVisibilityData={isVisibilityData}
-              />
-            </>
-          ) : (
-            <EmptyWithoutReport />
-          )}
-        </Box>
+        <EmptyWithoutReport />
       )}
-    </>
+    </Box>
   )
 }
 

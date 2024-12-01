@@ -33,11 +33,11 @@ const CardToGoals = ({
 }: CardToGoalsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
+
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0)
   }, [])
 
-  if (!investments?.pies) return
   const assetAppreciation = investments?.pies?.result?.priceAvgValue || 0
 
   const investmentData = [
@@ -51,7 +51,7 @@ const CardToGoals = ({
     { label: 'Renda Variável Objetivo', value: 11175 }
   ]
 
-  if (isLoadingInvestimentsData) {
+  if (isLoadingInvestimentsData || !investments || !millenium) {
     return (
       <Skeleton
         width={{ base: '100%', lg: 'md' }}
@@ -65,7 +65,7 @@ const CardToGoals = ({
   return (
     <>
       <Card
-        width={{ base: '100%', lg: 'max-content' }}
+        width={{ base: '100%', lg: 'md' }}
         h="max-content"
         minHeight="420px"
         bg="gray.700"

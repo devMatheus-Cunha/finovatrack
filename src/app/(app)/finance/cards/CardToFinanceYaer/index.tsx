@@ -89,49 +89,45 @@ const CardToFinanceYaer = ({
     return data
   }
 
+  if (isLoadingInvestimentsData || !financialPlanningYear) {
+    return (
+      <Skeleton w="100%" minH="433px" maxH="433px" height="100%" rounded="md" />
+    )
+  }
+
   return (
     <>
-      {isLoadingInvestimentsData ? (
-        <Skeleton
-          w="100%"
-          minH="433px"
-          maxH="433px"
-          height="100%"
-          rounded="md"
-        />
-      ) : (
-        <Card width="100%" minH="433px" bg="gray.700">
-          <CardHeader>
-            <Heading size="md" mb={6} color="white">
-              Finanças
-            </Heading>
-            <Accordion allowMultiple>
-              {calcTotalsLaterYear(financialPlanningYear) &&
-                calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
-                  <React.Fragment key={item.year}>
-                    <AccordionFinanceYear.Root>
-                      <AccordionFinanceYear.Button year={item.year} />
-                      <AccordionFinanceYear.Panel
-                        data={item}
-                        onOpen={() => onOpenModal(item)}
-                        userData={userData}
-                        isVisibilityData={isVisibilityData}
-                      />
-                    </AccordionFinanceYear.Root>
-                  </React.Fragment>
-                ))}
-              <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
-                <ModalContent
-                  onClose={onCloseModal}
-                  onSubmit={handleSubmit}
-                  initialValues={selectedData}
-                  currency={userData.primary_currency}
-                />
-              </Modal>
-            </Accordion>
-          </CardHeader>
-        </Card>
-      )}
+      <Card width="100%" minH="433px" bg="gray.700">
+        <CardHeader>
+          <Heading size="md" mb={6} color="white">
+            Finanças
+          </Heading>
+          <Accordion allowMultiple>
+            {calcTotalsLaterYear(financialPlanningYear) &&
+              calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
+                <React.Fragment key={item.year}>
+                  <AccordionFinanceYear.Root>
+                    <AccordionFinanceYear.Button year={item.year} />
+                    <AccordionFinanceYear.Panel
+                      data={item}
+                      onOpen={() => onOpenModal(item)}
+                      userData={userData}
+                      isVisibilityData={isVisibilityData}
+                    />
+                  </AccordionFinanceYear.Root>
+                </React.Fragment>
+              ))}
+            <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
+              <ModalContent
+                onClose={onCloseModal}
+                onSubmit={handleSubmit}
+                initialValues={selectedData}
+                currency={userData.primary_currency}
+              />
+            </Modal>
+          </Accordion>
+        </CardHeader>
+      </Card>
     </>
   )
 }

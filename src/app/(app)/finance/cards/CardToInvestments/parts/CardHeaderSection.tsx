@@ -7,11 +7,13 @@ interface CardHeaderSectionProps {
 
 const CardHeaderSection = ({ onRefetch }: CardHeaderSectionProps) => (
   <CardHeader display="flex" justifyContent="space-between" pb={0}>
-    <Heading size="md">Investimenos Tranding 212</Heading>
+    <Heading size="md" color="white">
+      Investimenos Tranding 212
+    </Heading>
     <button type="button" onClick={onRefetch} className="hover:text-gray-400">
       <ArrowsCounterClockwise
         size={20}
-        color="#eee2e2"
+        color="white"
         className="hover:opacity-75"
       />
     </button>

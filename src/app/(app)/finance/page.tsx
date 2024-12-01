@@ -2,7 +2,6 @@
 
 import { Box } from '@chakra-ui/react'
 import {
-  useFetchDividends,
   useFetchInvestiments,
   useFetchFinancialPlaningYear
 } from '@/hooks/finance'
@@ -15,14 +14,6 @@ import {
 } from './cards'
 
 const Finance = () => {
-  const {
-    dividendsData,
-    isLoadingDividendsData,
-    refetchDividendsData,
-    currentPage,
-    setCurrentPage
-  } = useFetchDividends()
-
   const {
     investimentsData,
     isLoadingInvestimentsData,
@@ -55,11 +46,6 @@ const Finance = () => {
           <CardToPatrimonio
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             investments={investimentsData}
-            investmentValue={
-              (investimentsData?.pies &&
-                investimentsData?.pies?.result?.priceAvgValue) ||
-              0
-            }
             millenium={
               financialPlanningYear && Number(financialPlanningYear[0].reserve)
             }
@@ -81,13 +67,7 @@ const Finance = () => {
             isLoadingAllPies={isLoadingInvestimentsData}
             refetchInvestimentsData={refetchInvestimentsData}
           />
-          <CardToDividends
-            dividendsData={dividendsData}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            isLoadingDividendsData={isLoadingDividendsData}
-            refetchDividendsData={refetchDividendsData}
-          />
+          <CardToDividends />
         </Box>
       </Box>
       <Box>

@@ -20,6 +20,13 @@ const CardToInvestments = ({
 }: IRodela) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
+
+  if (isLoadingInvestimentsData || isLoadingAllPies || !investimentsData) {
+    return (
+      <Skeleton width={{ base: '100%', lg: '2xl' }} h="570px" rounded="md" />
+    )
+  }
+
   const {
     totalAccountValue,
     assetAppreciation,
@@ -42,12 +49,6 @@ const CardToInvestments = ({
     totalInvestedAndGainsPercentage,
     totalAppreciationValue
   )
-
-  if (isLoadingInvestimentsData || isLoadingAllPies) {
-    return (
-      <Skeleton width={{ base: '100%', lg: '2xl' }} h="570px" rounded="md" />
-    )
-  }
 
   return (
     <Card width={{ base: '100%', lg: '2xl' }} h="570px" bg="gray.700">

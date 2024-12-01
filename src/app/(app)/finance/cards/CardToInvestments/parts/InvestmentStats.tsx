@@ -26,7 +26,7 @@ const InvestmentStats = ({
 }: InvestmentStatsProps) => (
   <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
     {dataStats.map((item) => (
-      <GridItem key={item.label}>
+      <GridItem key={item.label} color="white">
         <Stat>
           <StatLabel fontSize="sm">{item.label}</StatLabel>
           <HStack>
