@@ -22,6 +22,7 @@ interface CalculatedInvestmentData {
   totalInvestedAndGains: number
   totalInvestedAndGainsPercentage: number
   totalAccountValue?: number
+  totalJuros: number
 }
 
 export const chartConfig = {
@@ -59,7 +60,8 @@ export const createChartConfig = (
   isVisibilityData: boolean,
   appreciationPercentage: number,
   totalInvestedAndGainsPercentage: number,
-  totalAppreciationValue: number
+  totalAppreciationValue: number,
+  totalJuros: number
 ): {
   chartData: ChartData[]
   formatDataToStats: IFormatDataToStats[]
@@ -95,7 +97,11 @@ export const createChartConfig = (
       value: totalAppreciationValue,
       percentage: isVisibilityData ? `(${appreciationPercentage}%)` : '****'
     },
-    { label: 'Dividendos', value: dividends },
+    {
+      label: 'Valor Juros',
+      value: totalJuros
+    },
+    { label: 'Valor Dividendos', value: dividends },
     {
       label: 'Valorizações + Div',
       value: totalInvestedAndGains,
@@ -117,15 +123,17 @@ export const calculateInvestmentData = (
   const totalAppreciationValue = investimentsData?.ppl || 0
   const investedValue = allPiesData?.result?.priceAvgInvestedValue || 0
   const dividends = (allPiesData?.dividendDetails?.gained || 0) + 0.37
+  const totalJuros = 73.37
 
   const appreciationPercentage = (totalAppreciationValue / investedValue) * 100
-  const totalInvestedAndGains = totalAppreciationValue + dividends
+  const totalInvestedAndGains = totalAppreciationValue + dividends + totalJuros
   const totalInvestedAndGainsPercentage =
     (totalInvestedAndGains / investedValue) * 100
 
   return {
     totalAccountValue,
     assetAppreciation,
+    totalJuros: totalJuros,
     totalAppreciationValue,
     investedValue,
     dividends,

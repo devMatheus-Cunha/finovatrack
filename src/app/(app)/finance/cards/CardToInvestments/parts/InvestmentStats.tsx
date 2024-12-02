@@ -24,7 +24,7 @@ const InvestmentStats = ({
   userData,
   isVisibilityData
 }: InvestmentStatsProps) => (
-  <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
+  <Grid templateColumns="repeat(2, 1fr)" gap={4}>
     {dataStats.map((item) => (
       <GridItem key={item.label} color="white">
         <Stat>

@@ -35,7 +35,8 @@ const CardToInvestments = ({
     appreciationPercentage,
     totalInvestedAndGains,
     totalInvestedAndGainsPercentage,
-    totalAppreciationValue
+    totalAppreciationValue,
+    totalJuros
   } = calculateInvestmentData(investimentsData, investimentsData?.pies)
 
   const { chartData, formatDataToStats } = createChartConfig(
@@ -47,7 +48,8 @@ const CardToInvestments = ({
     isVisibilityData,
     appreciationPercentage,
     totalInvestedAndGainsPercentage,
-    totalAppreciationValue
+    totalAppreciationValue,
+    totalJuros
   )
 
   return (
