@@ -38,6 +38,7 @@ const CardToCategoryExpense = ({
         <VStack
           alignItems="center"
           justifyContent="center"
+          textAlign="center"
           overflowY="auto"
           w={{ base: '100%', lg: 'xs' }}
           h={{ base: 214, lg: 555 }}
