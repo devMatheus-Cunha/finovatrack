@@ -49,7 +49,7 @@ const CardToCategoryExpense = ({
             mt={4}
             fontWeight="bold"
             color="white"
-            fontSize={{ base: 'xl', lg: 26 }}
+            fontSize={{ base: 'xl', lg: 23 }}
           >
             Nenhum relatório gerado
           </Text>
