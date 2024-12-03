@@ -56,7 +56,7 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
   }
 
   return (
-    <Card bg="gray.700" rounded="md">
+    <Card bg="gray.700" rounded="md" h={200}>
       <CardHeader display="flex" justifyContent="space-between" pb={0}>
         <Heading size="md">Relatorio Total</Heading>
       </CardHeader>

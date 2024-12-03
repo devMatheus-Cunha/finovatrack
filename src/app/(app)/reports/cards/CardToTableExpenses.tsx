@@ -40,13 +40,6 @@ const CardToTableExpenses = ({
         header: 'category',
         field: 'category',
         modifier: (value: string) => value ?? '-'
-      },
-      {
-        header: 'Status',
-        field: 'payment',
-        styles: (value: string) => ({
-          color: value === 'A Pagar' ? 'red' : 'green'
-        })
       }
     ]
 
@@ -69,7 +62,7 @@ const CardToTableExpenses = ({
   if (isLoading) {
     return (
       <Skeleton
-        height={{ base: 278, lg: 518 }}
+        height={{ base: 278, lg: '45vh' }}
         w={{ base: '100%', lg: '2xl' }}
         rounded="md"
       />
@@ -82,7 +75,7 @@ const CardToTableExpenses = ({
         <>
           <TableDesktopReports
             data={reportData?.data}
-            colums={columsHeadProps()}
+            columns={columsHeadProps()}
             userData={userData}
             isVisibilityData={isVisibilityData}
           />

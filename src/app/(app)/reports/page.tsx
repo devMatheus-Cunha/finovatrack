@@ -5,7 +5,7 @@ import { Box } from '@chakra-ui/react'
 import {
   CardToCategoryExpense,
   CardToHeaderFilter,
-  CardToStats,
+  CardToStatsInMonth,
   CardToTableExpenses
 } from './cards'
 
@@ -15,6 +15,7 @@ function Reports() {
 
   return (
     <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
+      {/* <CardToStatsInYear reportData={reportData} isLoading={isLoading} /> */}
       <CardToHeaderFilter
         setSelectedDate={setSelectedDate}
         year={year}
@@ -23,15 +24,10 @@ function Reports() {
 
       <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} gap={2}>
         <Box display="flex" flexDir="column" gap={2}>
-          <CardToStats reportData={reportData} isLoading={isLoading} />
+          <CardToStatsInMonth reportData={reportData} isLoading={isLoading} />
           <CardToTableExpenses reportData={reportData} isLoading={isLoading} />
         </Box>
-        <Box>
-          <CardToCategoryExpense
-            reportData={reportData}
-            isLoading={isLoading}
-          />
-        </Box>
+        <CardToCategoryExpense reportData={reportData} isLoading={isLoading} />
       </Box>
     </Box>
   )

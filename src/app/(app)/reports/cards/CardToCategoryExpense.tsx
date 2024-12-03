@@ -17,7 +17,7 @@ const CardToCategoryExpense = ({
     return (
       <Skeleton
         w={{ base: '100%', lg: 'xs' }}
-        h={{ base: 551, lg: 573.5 }}
+        h={{ base: 214, lg: 555 }}
         rounded="md"
       />
     )
@@ -26,7 +26,7 @@ const CardToCategoryExpense = ({
   return (
     <>
       {reportData?.data && reportData?.data.length > 0 ? (
-        <Box w={{ base: '100%', lg: 'xs' }} h="max-content">
+        <Box w={{ base: '100%', lg: 'xs' }}>
           <ExpenseToCategory
             expensesData={reportData.data}
             userData={userData}
@@ -40,14 +40,19 @@ const CardToCategoryExpense = ({
           justifyContent="center"
           overflowY="auto"
           w={{ base: '100%', lg: 'xs' }}
-          h={{ base: 551, lg: 573.5 }}
+          h={{ base: 214, lg: 555 }}
           rounded="md"
-          bg={{ lg: 'gray.700' }}
+          bg="gray.700"
         >
-          <Text mt={4} fontWeight="bold" fontSize={23} color="white">
+          <Text
+            mt={4}
+            fontWeight="bold"
+            color="white"
+            fontSize={{ base: 'xl', lg: 26 }}
+          >
             Nenhum relatório gerado
           </Text>
-          <Text mt={2} fontSize="sm" color="gray.300">
+          <Text mt={2} fontSize={{ base: 'sm', lg: 'md' }} color="gray.300">
             Não há dados disponíveis para este período.
           </Text>
         </VStack>

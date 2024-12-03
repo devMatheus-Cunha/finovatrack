@@ -84,7 +84,7 @@ const ExpenseToCategory = ({
   const chartConfig = formatarParaChartConfig(sumToCategory(expensesData))
 
   return (
-    <Card>
+    <Card h={555}>
       <CardHeader>
         <Heading size="md">Gastos por Categoria</Heading>
       </CardHeader>
@@ -139,7 +139,7 @@ const ExpenseToCategory = ({
             </PieChart>
           </ChartContainer>
 
-          <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
+          <Grid templateColumns="repeat(2, 1fr)" gap={4} mt={3}>
             <>
               {sumToCategory(expensesData).map((card, index) => (
                 <GridItem key={card.label}>

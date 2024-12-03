@@ -4,24 +4,24 @@ import React from 'react'
 const EmptyWithoutReport: React.FC = () => {
   return (
     <VStack
-      h="full"
       alignItems="center"
       justifyContent="center"
       overflowY="auto"
-      minH={{ base: 'auto', md: '50vh' }}
-      borderRadius={{ sm: 'lg' }}
-      w="100%"
-      bg={{ lg: 'gray.700' }}
+      borderRadius="lg"
+      h={{ base: 'auto', md: '45vh' }}
+      w={{ base: '100%', lg: '2xl' }}
+      p={{ base: '4', lg: '0' }}
+      bg="gray.700"
     >
       <Heading
         mt={4}
-        size={{ base: 'md', md: 'xl' }}
+        fontSize={{ base: 'xl', lg: 26 }}
         fontWeight="bold"
         color="white"
       >
         Nenhum relatório gerado
       </Heading>
-      <Text mt={2} fontSize="md" color="gray.300">
+      <Text mt={2} fontSize={{ base: 'sm', lg: 'md' }} color="gray.300">
         Não há dados disponíveis para este período.
       </Text>
     </VStack>

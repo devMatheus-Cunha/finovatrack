@@ -36,9 +36,9 @@ const CardToHeaderFilter = ({
         <Flex alignItems="center">
           <Box>
             <Text color="gray.400" fontSize="sm">
-              Relatorio
+              Relatorio Mensal
             </Text>
-            <Text fontWeight="semibold">Veja todas informações</Text>
+            <Text fontWeight="semibold">Veja todas os dados por mês</Text>
           </Box>
         </Flex>
         <Flex alignItems="center">
