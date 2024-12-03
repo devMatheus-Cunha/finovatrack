@@ -123,7 +123,7 @@ export const calculateInvestmentData = (
   const totalAppreciationValue = investimentsData?.ppl || 0
   const investedValue = allPiesData?.result?.priceAvgInvestedValue || 0
   const dividends = (allPiesData?.dividendDetails?.gained || 0) + 0.37
-  const totalJuros = 73.37
+  const totalJuros = 74.47
 
   const appreciationPercentage = (totalAppreciationValue / investedValue) * 100
   const totalInvestedAndGains = totalAppreciationValue + dividends + totalJuros
