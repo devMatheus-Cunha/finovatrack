@@ -51,15 +51,23 @@ const SideMenuMobile: React.FC<{
       <HStack spacing={3}>
         <IconButton
           aria-label={isVisibilityData ? 'Hide Data' : 'Show Data'}
-          icon={isVisibilityData ? <Eye size={21} /> : <EyeSlash size={21} />}
+          icon={
+            isVisibilityData ? (
+              <Eye size={21} color="white" />
+            ) : (
+              <EyeSlash size={21} color="white" />
+            )
+          }
           onClick={handleToggleVisibilityData}
-          color="white"
+          colorScheme="gray"
+          bg="gray.700"
         />
         <IconButton
           aria-label="Open Menu"
-          icon={<List size={22} />}
+          icon={<List size={22} color="white" />}
           onClick={onOpen}
-          color="white"
+          colorScheme="gray"
+          bg="gray.700"
         />
       </HStack>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
