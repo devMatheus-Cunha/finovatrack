@@ -32,9 +32,21 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
 
   const summaryItems = [
-    { label: 'Total Entradas', value: data?.totalEntrys },
-    { label: 'Total Gastos', value: data?.totalExpenses },
-    { label: 'Total Livre', value: data?.totalFree },
+    {
+      label: 'Total Entradas',
+      value: formatCurrencyMoney(data?.totalEntrys, userData?.primary_currency)
+    },
+    {
+      label: 'Total Gastos',
+      value: formatCurrencyMoney(
+        data?.totalExpenses,
+        userData?.primary_currency
+      )
+    },
+    {
+      label: 'Total Livre',
+      value: formatCurrencyMoney(data?.totalFree, userData?.primary_currency)
+    },
     {
       label: 'Total Investido',
       value: formatCurrencyMoney(

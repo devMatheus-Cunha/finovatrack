@@ -10,36 +10,44 @@ import {
   Heading,
   HStack,
   Stat,
-  StatArrow,
-  StatHelpText,
   StatLabel,
-  StatNumber
+  StatNumber,
+  StatArrow,
+  StatHelpText
 } from '@chakra-ui/react'
-import { IReportData } from '@/services/reports/getReport'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData '
 
-const CardToStatsInYear = ({
-  isLoading,
-  reportData
-}: {
-  isLoading: boolean
-  reportData: IReportData | null | undefined
-}) => {
+const CardToStatsInYear = ({ year }: { year: string }) => {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
+  const { reportDataToYear, isLoading } = useFetchReportsToYearData(year)
+
+  const investmentPercentage =
+    reportDataToYear &&
+    (
+      (reportDataToYear?.totalInvestments / reportDataToYear?.totalEntrys) *
+      100
+    ).toFixed(2)
 
   const summaryItems = [
-    { label: 'Total Entradas', value: reportData?.totalEntrys },
-    { label: 'Total Gastos', value: reportData?.totalExpenses },
-    { label: 'Total Livre', value: reportData?.totalFree },
+    {
+      label: 'Total Entradas',
+      value: reportDataToYear?.totalEntrys
+    },
+    {
+      label: 'Total Gastos',
+      value: reportDataToYear?.totalExpenses
+    },
+    {
+      label: 'Total Livre',
+      value: reportDataToYear?.totalFree
+    },
     {
       label: 'Total Investido',
-      value: formatCurrencyMoney(
-        reportData?.investments?.totalInvestments,
-        userData?.primary_currency
-      ),
-      investments: `${reportData?.investments?.investmentPercentageFormat}`
+      value: reportDataToYear?.totalInvestments,
+      investments: `${investmentPercentage}%`
     }
   ]
 
@@ -55,30 +63,30 @@ const CardToStatsInYear = ({
 
   return (
     <>
-      {reportData?.data && reportData?.data.length > 0 ? (
+      {reportDataToYear ? (
         <Card bg="gray.700" rounded="md" h={'40'}>
-          <CardHeader display="flex" justifyContent="space-between" pb={0}>
+          <CardHeader display="flex" alignItems="center" pb={0}>
             <Heading size="md">Relatorio Anual</Heading>
           </CardHeader>
 
           <CardBody pt={0}>
-            <Box display="flex" justifyContent="space-between" gap={6} mt={3.5}>
+            <Box display="flex" justifyContent="space-evenly" gap={6} mt={3.5}>
               {summaryItems.map((card, index) => (
-                <GridItem key={card.label}>
+                <GridItem key={card.label} px={10} py={4} rounded="md">
                   <Stat key={index}>
                     <StatLabel fontSize="xs" color="gray.500">
                       {card.label}
                     </StatLabel>
                     <HStack>
-                      <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
-                        {isVisibilityData
-                          ? card.value ||
-                            formatCurrencyMoney(
-                              0,
-                              userData.primary_currency,
-                              isVisibilityData
-                            )
-                          : '****'}
+                      <StatNumber
+                        fontSize={{ base: 'lg', lg: 'xl' }}
+                        textDecor="underline"
+                      >
+                        {formatCurrencyMoney(
+                          card.value,
+                          userData.primary_currency,
+                          isVisibilityData
+                        )}
                       </StatNumber>
                       {card.investments && (
                         <StatHelpText display="flex" alignItems="center">

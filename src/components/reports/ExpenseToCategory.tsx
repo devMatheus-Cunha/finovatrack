@@ -30,7 +30,7 @@ interface IExpenseToCategory {
   expensesData: ExpenseData[]
   userData: UserData
   isVisibilityData: boolean
-  totalExpenses: string
+  totalExpenses: number
 }
 
 const ExpenseToCategory = ({
@@ -121,7 +121,11 @@ const ExpenseToCategory = ({
                             y={viewBox.cy}
                             className="fill-white text-lg lg:text-xl font-bold "
                           >
-                            {isVisibilityData ? totalExpenses : '****'}
+                            {formatCurrencyMoney(
+                              totalExpenses,
+                              userData.primary_currency,
+                              isVisibilityData
+                            )}
                           </tspan>
                           <tspan
                             x={viewBox.cx}

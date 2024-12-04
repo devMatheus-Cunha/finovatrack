@@ -6,6 +6,7 @@ import {
   CardToCategoryExpense,
   CardToHeaderFilter,
   CardToStatsInMonth,
+  CardToStatsInYear,
   CardToTableExpenses
 } from './cards'
 
@@ -15,7 +16,7 @@ function Reports() {
 
   return (
     <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
-      {/* <CardToStatsInYear reportData={reportData} isLoading={isLoading} /> */}
+      <CardToStatsInYear year={String(year)} />
       <CardToHeaderFilter
         setSelectedDate={setSelectedDate}
         year={year}

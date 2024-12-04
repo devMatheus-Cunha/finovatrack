@@ -4,17 +4,19 @@ import { ExpenseData } from '../expenses/getExpenses'
 
 export interface IReportData {
   data: ExpenseData[]
-  totalFree: string
   investments: {
-    totalInvestments: any
-    investmentPercentageFormat: any
-    investmentPercentage: any
+    totalInvestments: number
+    investmentPercentageFormat: string
+    investmentPercentage: number
   }
-  totalEntrys: string
-  totalExpenses: string
-  totalExpenseEurToReal: string
+  totalFree: number
+  totalEntrys: number
+  totalExpenses: number
+  totalExpenseEurToReal: number
   period?: string
-  quatation: string
+  year?: string
+  quatation: number | undefined
+  id?: string
 }
 
 export async function getReport(

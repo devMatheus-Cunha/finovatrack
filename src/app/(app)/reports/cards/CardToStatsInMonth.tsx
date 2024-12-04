@@ -1,7 +1,7 @@
 import { InfoCardsToReport } from '@/components'
 import { Skeleton, VStack, Box, Text } from '@chakra-ui/react'
-import { IReportData } from '@/services/reports/getReport'
 import { useUserData } from '@/hooks/globalStates'
+import { IReportData } from '@/services/reports/getReport'
 
 const CardToStatsInMonth = ({
   isLoading,

@@ -6,6 +6,7 @@ import { useUserId } from '@/hooks/globalStates'
 
 export default function useSaveReport() {
   const { userId } = useUserId() as any
+  const year = new Date().getFullYear()
 
   const {
     mutateAsync: saveReport,
@@ -13,7 +14,7 @@ export default function useSaveReport() {
     status: statusSaveReport
   } = useMutation({
     mutationFn: async (data: IReportData) => {
-      await saveReportService(data, userId)
+      await saveReportService({ ...data, year: String(year) }, userId)
     },
     onSuccess: () => {
       toast.success('Sucesso ao salvar relatório')

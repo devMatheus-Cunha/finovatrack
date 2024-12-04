@@ -24,7 +24,6 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import {
   convertEurToReal,
-  formatCurrencyMoney,
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import {
@@ -160,26 +159,15 @@ export default function Control() {
     saveReport({
       data,
       period,
-      totalFree: formatCurrencyMoney(
+      totalFree:
         totalEntrys -
-          (validateExpenseData[typeAccount] || 0) -
-          investments.totalInvestments,
-        userData.primary_currency
-      ),
+        (validateExpenseData[typeAccount] || 0) -
+        investments.totalInvestments,
       investments: investments,
-      totalEntrys: formatCurrencyMoney(totalEntrys, userData.primary_currency),
-      totalExpenses: formatCurrencyMoney(
-        validateExpenseData[typeAccount],
-        userData.primary_currency
-      ),
-      totalExpenseEurToReal: formatCurrencyMoney(
-        calculationTotalExpensesEurToReal,
-        userData.primary_currency
-      ),
-      quatation: formatCurrencyMoney(
-        lastQuatationData?.current_quotation,
-        userData.primary_currency
-      )
+      totalEntrys: totalEntrys,
+      totalExpenses: validateExpenseData[typeAccount],
+      totalExpenseEurToReal: calculationTotalExpensesEurToReal,
+      quatation: lastQuatationData?.current_quotation
     })
     controlModalSaveReport.onClose()
   }
