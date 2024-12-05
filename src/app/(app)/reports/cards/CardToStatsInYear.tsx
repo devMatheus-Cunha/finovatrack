@@ -1,7 +1,6 @@
 import {
   Skeleton,
   VStack,
-  Box,
   Text,
   Card,
   CardBody,
@@ -13,11 +12,13 @@ import {
   StatLabel,
   StatNumber,
   StatArrow,
-  StatHelpText
+  StatHelpText,
+  Box
 } from '@chakra-ui/react'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData '
+import Slider from 'react-slick'
 
 const CardToStatsInYear = ({ year }: { year: string }) => {
   const { userData } = useUserData()
@@ -61,44 +62,85 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
     )
   }
 
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    arrows: false,
+    arrowsPadding: 0,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          arrows: true,
+          slidesToShow: 3
+        }
+      },
+      {
+        breakpoint: 700,
+        settings: {
+          arrows: true,
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      }
+    ]
+  }
+
   return (
     <>
       {reportDataToYear ? (
-        <Card bg="gray.700" rounded="md" h={'40'}>
+        <Card
+          bg={{ base: 'transparent', lg: 'gray.700' }}
+          rounded="md"
+          h={'40'}
+        >
           <CardHeader display="flex" alignItems="center" pb={0}>
             <Heading size="md">Relatorio Anual</Heading>
           </CardHeader>
 
-          <CardBody pt={0}>
-            <Box display="flex" justifyContent="space-evenly" gap={6} mt={3.5}>
+          <CardBody pt={{ base: 'inherit', lg: 0 }}>
+            <Slider {...settings} className="w-full">
               {summaryItems.map((card, index) => (
-                <GridItem key={card.label} px={10} py={4} rounded="md">
-                  <Stat key={index}>
-                    <StatLabel fontSize="xs" color="gray.500">
-                      {card.label}
-                    </StatLabel>
-                    <HStack>
-                      <StatNumber
-                        fontSize={{ base: 'lg', lg: 'xl' }}
-                        textDecor="underline"
-                      >
-                        {formatCurrencyMoney(
-                          card.value,
-                          userData.primary_currency,
-                          isVisibilityData
+                <Box key={index} p={{ base: 2, lg: 4 }}>
+                  <GridItem
+                    display="flex"
+                    w="full"
+                    alignItems="center"
+                    bg="gray.700"
+                    borderRadius="md"
+                    py={5}
+                    px={{ base: 2, lg: 4 }}
+                  >
+                    <Stat>
+                      <StatLabel fontSize="xs" color="gray.500">
+                        {card.label}
+                      </StatLabel>
+                      <HStack>
+                        <StatNumber
+                          fontSize={{ base: 'lg', lg: 'xl' }}
+                          textDecor="underline"
+                        >
+                          {formatCurrencyMoney(
+                            card.value,
+                            userData.primary_currency,
+                            isVisibilityData
+                          )}
+                        </StatNumber>
+                        {card.investments && (
+                          <StatHelpText display="flex" alignItems="center">
+                            <StatArrow type="increase" />
+                            {card.investments}
+                          </StatHelpText>
                         )}
-                      </StatNumber>
-                      {card.investments && (
-                        <StatHelpText display="flex" alignItems="center">
-                          <StatArrow type="increase" />
-                          {card.investments}
-                        </StatHelpText>
-                      )}
-                    </HStack>
-                  </Stat>
-                </GridItem>
+                      </HStack>
+                    </Stat>
+                  </GridItem>
+                </Box>
               ))}
-            </Box>
+            </Slider>
           </CardBody>
         </Card>
       ) : (
@@ -110,7 +152,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
           rounded="md"
           w={{ base: '100%', lg: '100%' }}
           height={{ base: '40', lg: '40' }}
-          bg={{ lg: 'gray.700' }}
+          bg="gray.700"
         >
           <Text mt={4} fontWeight="bold" fontSize={23} color="white">
             Nenhum relatório gerado

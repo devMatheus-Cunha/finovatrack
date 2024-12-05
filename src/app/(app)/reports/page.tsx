@@ -15,7 +15,7 @@ function Reports() {
     useFetchReportsData()
 
   return (
-    <Box display="flex" flexDirection="column" width="100%" p={2} gap={2}>
+    <Box display="flex" flexDirection="column" width="100%" p={2} gap={3}>
       <CardToStatsInYear year={String(year)} />
       <CardToHeaderFilter
         setSelectedDate={setSelectedDate}
