@@ -29,7 +29,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
     <TableContainer
       bg={{ lg: 'gray.700' }}
-      maxH="62vh"
+      height="63vh"
       rounded="md"
       overflowY="auto"
       w="full"

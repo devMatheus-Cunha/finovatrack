@@ -9,7 +9,7 @@ import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/common/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ITypeModalExpense } from '../../../hooks/useControlModal'
-import { Box, Skeleton } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -25,8 +25,7 @@ function TableToControl({
   handleOpenModal,
   isVisibilityData,
   filter,
-  userData,
-  isLoadingExpensesData
+  userData
 }: ITableToControl) {
   const columsHeadProps = (): TableColumn[] => {
     const columns = [
@@ -99,13 +98,9 @@ function TableToControl({
     return columns
   }
 
-  if (isLoadingExpensesData) {
-    return <Skeleton height="63vh" rounded="md" />
-  }
-
   return (
     <Box overflowY="auto" borderRadius="md" height="63vh" bg="gray.700">
-      {calculationSumValues?.length > 0 && !isLoadingExpensesData ? (
+      {calculationSumValues?.length > 0 ? (
         <Table columns={columsHeadProps()} data={calculationSumValues} />
       ) : (
         <Empty<Filter> filter={filter} />

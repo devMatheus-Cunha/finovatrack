@@ -92,16 +92,12 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
   return (
     <>
       {reportDataToYear ? (
-        <Card
-          bg={{ base: 'transparent', lg: 'gray.700' }}
-          rounded="md"
-          h={'40'}
-        >
+        <Card bg={{ base: 'none', lg: 'gray.700' }} h={'40'} boxShadow="none">
           <CardHeader display="flex" alignItems="center" pb={0}>
             <Heading size="md">Relatorio Anual</Heading>
           </CardHeader>
 
-          <CardBody pt={{ base: 'inherit', lg: 0 }}>
+          <CardBody pt={{ base: '4', lg: 0 }}>
             <Slider {...settings} className="w-full">
               {summaryItems.map((card, index) => (
                 <Box key={index} p={{ base: 2, lg: 4 }}>
@@ -111,7 +107,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
                     alignItems="center"
                     bg="gray.700"
                     borderRadius="md"
-                    py={5}
+                    py={4}
                     px={{ base: 2, lg: 4 }}
                   >
                     <Stat>
@@ -130,7 +126,10 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
                           )}
                         </StatNumber>
                         {card.investments && (
-                          <StatHelpText display="flex" alignItems="center">
+                          <StatHelpText
+                            display={{ base: 'none', md: 'flex' }}
+                            alignItems="center"
+                          >
                             <StatArrow type="increase" />
                             {card.investments}
                           </StatHelpText>
@@ -154,10 +153,15 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
           height={{ base: '40', lg: '40' }}
           bg="gray.700"
         >
-          <Text mt={4} fontWeight="bold" fontSize={23} color="white">
+          <Text
+            mt={4}
+            fontWeight="bold"
+            fontSize={{ base: 'xl', lg: 26 }}
+            color="white"
+          >
             Nenhum relatório gerado
           </Text>
-          <Text mt={2} fontSize="md" color="gray.300">
+          <Text mt={2} fontSize={{ base: 'sm', lg: 'md' }} color="gray.300">
             Não há dados disponíveis para este período.
           </Text>
         </VStack>

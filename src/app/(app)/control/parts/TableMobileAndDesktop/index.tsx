@@ -36,7 +36,6 @@ const TableMobileAndDesktop = ({
           handleOpenModal={handleControlModalExpense}
           isVisibilityData={isVisibilityData}
           filter={filter}
-          isLoadingExpensesData={isLoadingExpensesData}
         />
       </ShowAndHide>
 

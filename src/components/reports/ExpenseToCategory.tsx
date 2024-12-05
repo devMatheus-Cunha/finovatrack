@@ -84,7 +84,7 @@ const ExpenseToCategory = ({
   const chartConfig = formatarParaChartConfig(sumToCategory(expensesData))
 
   return (
-    <Card h={555}>
+    <Card h={{ base: 'auto', lg: 555 }}>
       <CardHeader>
         <Heading size="md">Gastos por Categoria</Heading>
       </CardHeader>

@@ -42,7 +42,7 @@ function InfoCardsToControl({
   })
 
   return (
-    <Slider {...settings} className="w-full">
+    <Slider {...settings} className="w-full lg:h-[124.5px]">
       {cardsData?.map((card, index) => (
         <Box key={index} p={{ base: 2, lg: 4 }} rounded="md">
           <InfoCardMoney {...card} />
