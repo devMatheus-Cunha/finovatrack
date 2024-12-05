@@ -92,9 +92,18 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
   return (
     <>
       {reportDataToYear ? (
-        <Card bg={{ base: 'none', lg: 'gray.700' }} h={'40'} boxShadow="none">
-          <CardHeader display="flex" alignItems="center" pb={0}>
-            <Heading size="md">Relatorio Anual</Heading>
+        <Card
+          bg={{ base: 'none', lg: 'gray.700' }}
+          h={{ base: 'initial', lg: '44' }}
+          boxShadow="none"
+        >
+          <CardHeader display="flex" alignItems="end" gap={3} pb={0}>
+            <Box>
+              <Text color="gray.400" fontSize="sm">
+                Ano {year}
+              </Text>
+              <Heading size="md">Relatorio Anual</Heading>
+            </Box>
           </CardHeader>
 
           <CardBody pt={{ base: '4', lg: 0 }}>

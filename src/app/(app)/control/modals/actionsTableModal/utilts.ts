@@ -7,12 +7,14 @@ export const categoryOptions = [
   },
   { label: 'Alimentação', value: 'Alimentação' },
   { label: 'Contas Casa', value: 'Contas Casa' },
-  { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
+  { label: 'Carro', value: 'Carro' },
   { label: 'Educação', value: 'Educação' },
+  { label: 'Financiamento', value: 'Financiamento' },
+  { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
   { label: 'Investimentos', value: 'Investimentos' },
   { label: 'Moradia', value: 'Moradia' },
   { label: 'Saúde', value: 'Saúde' },
-  { label: 'Carro', value: 'Carro' },
+  { label: 'Seguro', value: 'Seguro' },
   { label: 'Viagens', value: 'Viagens' }
 ]
 

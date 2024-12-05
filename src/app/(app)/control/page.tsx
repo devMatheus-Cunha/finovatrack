@@ -166,8 +166,8 @@ export default function Control() {
       investments: investments,
       totalEntrys: totalEntrys,
       totalExpenses: validateExpenseData[typeAccount],
-      totalExpenseEurToReal: calculationTotalExpensesEurToReal,
-      quatation: lastQuatationData?.current_quotation
+      totalExpenseEurToReal: calculationTotalExpensesEurToReal ?? 0,
+      quatation: lastQuatationData?.current_quotation ?? 0
     })
     controlModalSaveReport.onClose()
   }

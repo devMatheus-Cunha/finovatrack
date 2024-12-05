@@ -161,12 +161,6 @@ export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
   }
 }
 
-export const optionsFilterType = [
-  { text: 'Limpar', value: '', type: 'type' },
-  { text: 'Essencial', value: 'Essencial', type: 'type' },
-  { text: 'Gasto Livre', value: 'Gasto Livre', type: 'type' },
-  { text: 'Não essencial', value: 'Não essencial', type: 'type' }
-]
 export const optionsFilterCategory = [
   { text: 'Limpar', value: '', type: 'category' },
   { text: 'Alimentação', value: 'Alimentação', type: 'category' },
@@ -174,6 +168,7 @@ export const optionsFilterCategory = [
   { text: 'Economias', value: 'Economias', type: 'category' },
   { text: 'Educação', value: 'Educação', type: 'category' },
   { text: 'Entretenimento', value: 'Entretenimento', type: 'category' },
+  { text: 'Financiamento', value: 'Financiamento', type: 'category' },
   { text: 'Lazer', value: 'Lazer', type: 'category' },
   { text: 'Moradia', value: 'Moradia', type: 'category' },
   { text: 'Roupas', value: 'Roupas', type: 'category' },

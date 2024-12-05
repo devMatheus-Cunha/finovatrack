@@ -89,14 +89,6 @@ const CardToHeaderFilter = ({
             </Tab>
           ))}
         </TabList>
-
-        {/* <TabPanels mt="4">
-          {months.map((month) => (
-            <TabPanel key={month.value} onChange={() => onSubmit(month.value)}>
-              <Text>Conteúdo da aba {month.value}</Text>
-            </TabPanel>
-          ))}
-        </TabPanels> */}
       </Tabs>
     </Box>
   )

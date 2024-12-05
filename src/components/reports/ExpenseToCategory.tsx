@@ -143,27 +143,30 @@ const ExpenseToCategory = ({
             </PieChart>
           </ChartContainer>
 
-          <Grid templateColumns="repeat(2, 1fr)" gap={4} mt={3}>
-            <>
-              {sumToCategory(expensesData).map((card, index) => (
-                <GridItem key={card.label}>
-                  <Stat key={index}>
-                    <StatLabel fontSize="xs" color="gray.500">
-                      {card.label}
-                    </StatLabel>
-                    <HStack>
-                      <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
-                        {formatCurrencyMoney(
-                          card.value,
-                          userData.primary_currency,
-                          isVisibilityData
-                        )}
-                      </StatNumber>
-                    </HStack>
-                  </Stat>
-                </GridItem>
-              ))}
-            </>
+          <Grid
+            templateColumns="repeat(2, 1fr)"
+            gap={4}
+            overflowY="auto"
+            h={200}
+          >
+            {sumToCategory(expensesData).map((card, index) => (
+              <GridItem key={card.label}>
+                <Stat key={index}>
+                  <StatLabel fontSize="xs" color="gray.500">
+                    {card.label}
+                  </StatLabel>
+                  <HStack>
+                    <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
+                      {formatCurrencyMoney(
+                        card.value,
+                        userData.primary_currency,
+                        isVisibilityData
+                      )}
+                    </StatNumber>
+                  </HStack>
+                </Stat>
+              </GridItem>
+            ))}
           </Grid>
         </CardBody>
       </CardBody>
