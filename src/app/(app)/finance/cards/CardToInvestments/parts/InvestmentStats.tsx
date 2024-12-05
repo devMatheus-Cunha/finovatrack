@@ -5,9 +5,9 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  HStack,
   StatHelpText,
-  StatArrow
+  StatArrow,
+  Box
 } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
@@ -24,12 +24,12 @@ const InvestmentStats = ({
   userData,
   isVisibilityData
 }: InvestmentStatsProps) => (
-  <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+  <Grid templateColumns="repeat(2, 1fr)" gap={3.5}>
     {dataStats.map((item) => (
       <GridItem key={item.label} color="white">
         <Stat>
           <StatLabel fontSize="sm">{item.label}</StatLabel>
-          <HStack>
+          <Box display="flex" alignItems="center" gap={1}>
             <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
               {formatCurrencyMoney(
                 Number(item.value),
@@ -38,7 +38,7 @@ const InvestmentStats = ({
               )}
             </StatNumber>
             {item.percentage && (
-              <StatHelpText fontSize="sm">
+              <StatHelpText fontSize="sm" mb={0}>
                 <StatArrow
                   fontSize="sm"
                   type={item.value > 0 ? 'increase' : 'decrease'}
@@ -46,7 +46,7 @@ const InvestmentStats = ({
                 {item.percentage}
               </StatHelpText>
             )}
-          </HStack>
+          </Box>
         </Stat>
       </GridItem>
     ))}

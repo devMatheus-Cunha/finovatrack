@@ -94,7 +94,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
       {reportDataToYear ? (
         <Card
           bg={{ base: 'none', lg: 'gray.700' }}
-          h={{ base: 'initial', lg: '44' }}
+          h={{ base: 'initial', lg: '40' }}
           boxShadow="none"
         >
           <CardHeader display="flex" alignItems="end" gap={3} pb={0}>
@@ -109,7 +109,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
           <CardBody pt={{ base: '4', lg: 0 }}>
             <Slider {...settings} className="w-full">
               {summaryItems.map((card, index) => (
-                <Box key={index} p={{ base: 2, lg: 4 }}>
+                <Box key={index} p={{ base: 2, lg: 1 }}>
                   <GridItem
                     display="flex"
                     w="full"
