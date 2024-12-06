@@ -1,4 +1,4 @@
-import { useUserData, useUserId } from '@/hooks/globalStates'
+import { useUserData } from '@/hooks/globalStates'
 import {
   fetchDividends,
   getDividendData,

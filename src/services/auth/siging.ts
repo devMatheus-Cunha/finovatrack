@@ -42,6 +42,7 @@ export async function siging({
 
     const data: UserData = {
       email,
+      admin: false,
       primary_currency:
         typeAccount === 'hybrid' ? primary_currency : typeAccount,
       secondary_currency: typeAccount === 'hybrid' ? secondary_currency : '',

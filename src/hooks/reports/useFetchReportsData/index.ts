@@ -17,8 +17,6 @@ export default function useFetchReportsData() {
     enabled: !!userId
   })
 
-  console.log(reportData)
-
   return {
     reportData,
     setSelectedDate,
