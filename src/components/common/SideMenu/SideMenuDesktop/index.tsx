@@ -29,7 +29,6 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
             const itemTextColor = isActive ? 'cyan' : 'white'
 
             if (item.id === 'eye' || item.id === 'logout') {
-              // Botões
               return (
                 <Button
                   key={item.id}
@@ -37,6 +36,7 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
                   disabled={item.disabled}
                   variant="ghost"
                   _hover={{ opacity: 0.75 }}
+                  _active={{ opacity: 0.75 }}
                   p={0}
                   color={itemTextColor}
                   display="flex"
@@ -50,7 +50,6 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
               )
             }
 
-            // Links
             return (
               <Link
                 as={item.disabled ? 'span' : NextLink}
@@ -65,7 +64,7 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
                 alignItems="center"
                 justifyContent="center"
                 p={0}
-                opacity={item.disabled ? 0.5 : 1} // Aplica estilo de disabled
+                opacity={item.disabled ? 0.5 : 1}
               >
                 {item.icon}
                 <Text fontSize="xs">{item.label}</Text>

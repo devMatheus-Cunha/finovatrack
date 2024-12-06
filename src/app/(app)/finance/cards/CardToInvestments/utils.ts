@@ -1,16 +1,10 @@
-import { ChartConfig } from '@/components/ui/chart'
+import { ChartConfigProps, ChartDataProps } from '@/components/ui/chart'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 
 export interface IFormatDataToStats {
   label: string
   value: number
   percentage?: string
-}
-
-export interface ChartData {
-  category: string
-  value: number
-  fill: string
 }
 
 interface CalculatedInvestmentData {
@@ -26,7 +20,7 @@ interface CalculatedInvestmentData {
 }
 
 export const chartConfig = {
-  visitors: {
+  value: {
     label: 'Visitors'
   },
   chrome: {
@@ -49,7 +43,7 @@ export const chartConfig = {
     label: 'Val + Div:',
     color: 'hsl(var(--chart-5))'
   }
-} satisfies ChartConfig
+} satisfies ChartConfigProps
 
 export const createChartConfig = (
   investimentsData: IInvestmentsProps | undefined,
@@ -63,26 +57,26 @@ export const createChartConfig = (
   totalAppreciationValue: number,
   totalJuros: number
 ): {
-  chartData: ChartData[]
+  chartData: ChartDataProps[]
   formatDataToStats: IFormatDataToStats[]
 } => {
-  const chartData: ChartData[] = [
+  const chartData: ChartDataProps[] = [
     {
-      category: 'Disponível',
+      label: 'Disponível',
       value: investimentsData?.free || 0,
       fill: 'var(--color-chrome)'
     },
     {
-      category: 'Aplicado',
+      label: 'Aplicado',
       value: investedValue || 0,
       fill: 'var(--color-safari)'
     },
     {
-      category: 'Valor Valorização',
+      label: 'Valor Valorização',
       value: totalAppreciationValue,
       fill: 'var(--color-firefox)'
     },
-    { category: 'Dividendos', value: dividends, fill: 'var(--color-edge)' }
+    { label: 'Dividendos', value: dividends, fill: 'var(--color-edge)' }
   ]
 
   const formatDataToStats: IFormatDataToStats[] = [

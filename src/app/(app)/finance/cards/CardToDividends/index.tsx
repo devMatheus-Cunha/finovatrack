@@ -1,12 +1,14 @@
 import useFetchDividends from '@/hooks/finance/useFetchDividends'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Skeleton, Card, CardBody } from '@chakra-ui/react'
+import { Skeleton, Card, CardBody, Heading, CardHeader } from '@chakra-ui/react'
 import React from 'react'
-import { BarChart } from './BarChart'
 import Filter from './Filter'
-import { DividendsList } from './DividendsList'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { CardHeader } from './CardHeader'
+import { chartConfig, formattedDividendsData } from './utils'
+import { ChartWithDescritions } from '@/components'
+import { tickerToCompanyName } from '@/utils/namesCompanyByTicker'
+import { FormatChartData } from '@/components/ui/chart'
+import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 
 const CardToDividends = () => {
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -38,10 +40,27 @@ const CardToDividends = () => {
       maxH="570px"
       bg="gray.700"
     >
-      <CardHeader refetchDividendsData={refetchDividendsData} />
+      <CardHeader display="flex" justifyContent="space-between" pb={0}>
+        <Heading color="white" size="md">
+          Dividendos
+        </Heading>
+        <button
+          type="button"
+          onClick={() => refetchDividendsData()}
+          className="hover:text-gray-400"
+        >
+          <ArrowsCounterClockwise
+            size={20}
+            color="#eee2e2"
+            className="hover:opacity-75"
+          />
+        </button>
+      </CardHeader>
+
       <CardBody display="flex" flexDir="column">
-        <BarChart
-          dividendsData={dividendsData}
+        <ChartWithDescritions.BarChart
+          chartData={formattedDividendsData(dividendsData)}
+          chartConfig={chartConfig}
           tickFormatter={(value: string) =>
             formatCurrencyMoney(
               Number(value),
@@ -54,15 +73,9 @@ const CardToDividends = () => {
           currentPage={currentPage}
           onChange={(event) => setCurrentPage(Number(event.target.value))}
         />
-        <DividendsList
-          dividendsData={dividendsData}
-          formatAmount={(value) =>
-            formatCurrencyMoney(
-              value,
-              userData.primary_currency,
-              isVisibilityData
-            )
-          }
+        <ChartWithDescritions.Descripitons
+          dataStats={FormatChartData(dividendsData, 'ticker', 'amount')}
+          formatLabel={(value) => tickerToCompanyName[value]}
         />
       </CardBody>
     </Card>

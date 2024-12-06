@@ -1,10 +1,11 @@
 import React from 'react'
 import {
+  ChartConfigProps,
   ChartContainer,
+  ChartDataProps,
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart'
-import { chartConfig, formattedDividendsData } from './utils'
 import {
   BarChart as BarChartRecharts,
   CartesianGrid,
@@ -12,21 +13,17 @@ import {
   Bar,
   YAxis
 } from 'recharts'
-import { IDividendProps } from '@/hooks/finance/useFetchDividends'
 
-export const BarChart = ({
-  dividendsData,
-  tickFormatter
-}: {
-  dividendsData: IDividendProps[]
+interface BarChartProps {
+  chartData: ChartDataProps[]
   tickFormatter: (value: string) => string
-}) => {
+  chartConfig: ChartConfigProps
+}
+
+const BarChart = ({ chartData, tickFormatter, chartConfig }: BarChartProps) => {
   return (
     <ChartContainer config={chartConfig}>
-      <BarChartRecharts
-        accessibilityLayer
-        data={formattedDividendsData(dividendsData)}
-      >
+      <BarChartRecharts accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="name"
@@ -49,3 +46,5 @@ export const BarChart = ({
     </ChartContainer>
   )
 }
+
+export default BarChart

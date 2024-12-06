@@ -1,24 +1,26 @@
 import React from 'react'
 import {
+  ChartConfigProps,
   ChartContainer,
+  ChartDataProps,
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart'
-import { PieChart, Pie, Label } from 'recharts'
-import { chartConfig, ChartData } from '../utils'
+import { PieChart as PieChartRecharts, Pie, Label } from 'recharts'
 
-interface ChartSectionProps {
-  chartData: ChartData[]
-  total: string
+interface ChartPieProps {
+  chartConfig: ChartConfigProps
+  chartData: ChartDataProps[]
+  total: string | number
 }
 
-const ChartSection = ({ chartData, total }: ChartSectionProps) => {
+const PieChart = ({ chartConfig, chartData, total }: ChartPieProps) => {
   return (
     <ChartContainer
       config={chartConfig}
       className="mx-auto aspect-square max-h-[250px]"
     >
-      <PieChart>
+      <PieChartRecharts>
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
@@ -60,9 +62,9 @@ const ChartSection = ({ chartData, total }: ChartSectionProps) => {
             }}
           />
         </Pie>
-      </PieChart>
+      </PieChartRecharts>
     </ChartContainer>
   )
 }
 
-export default ChartSection
+export default PieChart

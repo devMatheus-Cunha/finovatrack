@@ -138,6 +138,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
                           <StatHelpText
                             display={{ base: 'none', md: 'flex' }}
                             alignItems="center"
+                            marginBottom={0}
                           >
                             <StatArrow type="increase" />
                             {card.investments}

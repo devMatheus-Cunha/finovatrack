@@ -1,9 +1,14 @@
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
-import { calculateInvestmentData, createChartConfig } from './utils'
-import { Card, CardBody, Skeleton } from '@chakra-ui/react'
+import {
+  calculateInvestmentData,
+  chartConfig,
+  createChartConfig
+} from './utils'
+import { Card, CardBody, CardHeader, Heading, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { CardHeaderSection, ChartSection, InvestmentStats } from './parts'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { ChartWithDescritions } from '@/components'
+import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 
 interface IRodela {
   investimentsData: IInvestimentsData | undefined
@@ -54,9 +59,26 @@ const CardToInvestments = ({
 
   return (
     <Card width={{ base: '100%', lg: '2xl' }} h="570px" bg="gray.700">
-      <CardHeaderSection onRefetch={refetchInvestimentsData} />
+      <CardHeader display="flex" justifyContent="space-between" pb={0}>
+        <Heading size="md" color="white">
+          Investimenos Tranding 212
+        </Heading>
+        <button
+          type="button"
+          onClick={refetchInvestimentsData}
+          className="hover:text-gray-400"
+        >
+          <ArrowsCounterClockwise
+            size={20}
+            color="white"
+            className="hover:opacity-75"
+          />
+        </button>
+      </CardHeader>
+
       <CardBody>
-        <ChartSection
+        <ChartWithDescritions.PieChart
+          chartConfig={chartConfig}
           chartData={chartData}
           total={formatCurrencyMoney(
             Number(totalAccountValue),
@@ -64,11 +86,8 @@ const CardToInvestments = ({
             isVisibilityData
           )}
         />
-        <InvestmentStats
-          dataStats={formatDataToStats}
-          userData={userData}
-          isVisibilityData={isVisibilityData}
-        />
+
+        <ChartWithDescritions.Descripitons dataStats={formatDataToStats} />
       </CardBody>
     </Card>
   )

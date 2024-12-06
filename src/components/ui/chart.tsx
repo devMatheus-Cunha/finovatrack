@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
 
-export type ChartConfig = {
+export type ChartConfigProps = {
   [k in string]: {
     label?: React.ReactNode
     icon?: React.ComponentType
@@ -19,8 +19,14 @@ export type ChartConfig = {
   )
 }
 
+export interface ChartDataProps {
+  label: string
+  value: number
+  fill: string
+}
+
 type ChartContextProps = {
-  config: ChartConfig
+  config: ChartConfigProps
 }
 
 const ChartContext = React.createContext<ChartContextProps | null>(null)
@@ -38,7 +44,7 @@ function useChart() {
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'> & {
-    config: ChartConfig
+    config: ChartConfigProps
     children: React.ComponentProps<
       typeof RechartsPrimitive.ResponsiveContainer
     >['children']
@@ -68,7 +74,13 @@ const ChartContainer = React.forwardRef<
 })
 ChartContainer.displayName = 'Chart'
 
-const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+const ChartStyle = ({
+  id,
+  config
+}: {
+  id: string
+  config: ChartConfigProps
+}) => {
   const colorConfig = Object.entries(config).filter(
     ([_, config]) => config.theme || config.color
   )
@@ -102,6 +114,19 @@ ${colorConfig
 }
 
 const ChartTooltip = RechartsPrimitive.Tooltip
+
+function FormatChartData<T>(
+  data: T[],
+  labelKey: keyof T,
+  valueKey: keyof T,
+  fillColor: string = '#0000FF'
+): ChartDataProps[] {
+  return data.map((item) => ({
+    label: String(item[labelKey]),
+    value: Number(item[valueKey]),
+    fill: fillColor
+  }))
+}
 
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
@@ -319,7 +344,7 @@ ChartLegendContent.displayName = 'ChartLegend'
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
-  config: ChartConfig,
+  config: ChartConfigProps,
   payload: unknown,
   key: string
 ) {
@@ -362,5 +387,6 @@ export {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-  ChartStyle
+  ChartStyle,
+  FormatChartData
 }
