@@ -1,4 +1,4 @@
-import { ChartConfig } from '@/components/ui/chart'
+import { ChartConfigProps } from '@/components/ui/chart'
 
 export const chartConfig = {
   investmentFree: {
@@ -10,7 +10,7 @@ export const chartConfig = {
   millenium: {
     label: 'Millenium'
   }
-} satisfies ChartConfig
+} satisfies ChartConfigProps
 
 export const chartData = (
   investmentsFree?: number,
