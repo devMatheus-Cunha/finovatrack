@@ -1,4 +1,4 @@
-import { useUserId } from '@/hooks/globalStates'
+import { useUserData, useUserId } from '@/hooks/globalStates'
 import {
   getCombinedData,
   getInvestmentData,
@@ -39,22 +39,22 @@ export interface IInvestimentsData extends IInvestmentsProps {
 }
 
 export const useFetchInvestiments = () => {
-  const { userId } = useUserId()
+  const { userData } = useUserData()
 
   const {
     data: investimentsData,
     isFetching: isLoadingInvestimentsData,
     refetch
   } = useQuery({
-    queryKey: ['investiments_data', userId],
-    queryFn: () => getInvestmentData(userId!),
-    enabled: !!userId
+    queryKey: ['investiments_data', userData.id],
+    queryFn: () => getInvestmentData(userData.id!),
+    enabled: !!userData.id && userData.admin
   })
 
   const refetchInvestimentsData = async () => {
     try {
       const investiments = await getCombinedData()
-      await updateOrCreateDoc(userId!, investiments)
+      await updateOrCreateDoc(userData.id!, investiments)
       refetch()
     } catch (error) {
       console.error('Error refetching investments:', error)

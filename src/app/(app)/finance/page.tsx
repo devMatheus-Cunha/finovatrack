@@ -12,6 +12,8 @@ import {
   CardToInvestments,
   CardToPatrimonio
 } from './cards'
+import { useUserData } from '@/hooks/globalStates'
+import { redirect } from 'next/navigation'
 
 const Finance = () => {
   const {
@@ -22,6 +24,14 @@ const Finance = () => {
 
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
+
+  const { userData } = useUserData()
+
+  if (userData.id) {
+    if (!userData.admin) {
+      redirect('/control')
+    }
+  }
 
   return (
     <Box

@@ -12,7 +12,7 @@ import {
 } from '@phosphor-icons/react'
 import React from 'react'
 import { HeaderMobile, Logo, ShowAndHide } from '@/components'
-import { useIsVisibilityDatas } from '@/hooks/globalStates'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useLogout } from '@/hooks/entrys/useDeletedEntry/auth'
 
 import SideMenuMobile from './SideMenuMobile'
@@ -21,6 +21,7 @@ import SideMenuDesktop from './SideMenuDesktop'
 export const SideMenu = () => {
   const { isVisibilityData, handleToggleVisibilityData } =
     useIsVisibilityDatas()
+  const { userData } = useUserData()
   const router = useRouter()
   const pathname = usePathname()
   const { onLogout } = useLogout()
@@ -54,20 +55,14 @@ export const SideMenu = () => {
       icon: <Archive size={21} />,
       action: () => router.push(`/reports`)
     },
-    // ...(userId === process.env.NEXT_PUBLIC_USER_ID_1 ||
-    // userId === process.env.NEXT_PUBLIC_USER_ID_2 ||
-    // userId === process.env.NEXT_PUBLIC_USER_ID_3
-    //   ? [
     {
       id: 'finance',
       label: 'Finanças',
       route: 'finance',
-      disabled: false,
+      disabled: !userData.admin,
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/finance`)
     },
-    // ]
-    // : []),
     {
       id: 'myProfile',
       label: 'Perfil',

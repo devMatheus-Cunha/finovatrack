@@ -1,4 +1,4 @@
-import { useUserId } from '@/hooks/globalStates'
+import { useUserData, useUserId } from '@/hooks/globalStates'
 import {
   fetchDividends,
   getDividendData,
@@ -21,7 +21,7 @@ export interface IDividendProps {
 export type IDividendsProps = IDividendProps[]
 
 export const useFetchDividends = () => {
-  const { userId } = useUserId()
+  const { userData } = useUserData()
   const [currentPage, setCurrentPage] = useState(10)
 
   const {
@@ -29,15 +29,15 @@ export const useFetchDividends = () => {
     isFetching: isLoadingDividendsData,
     refetch
   } = useQuery({
-    queryKey: ['dividends_data', currentPage, userId],
-    queryFn: () => getDividendData(userId!, currentPage),
-    enabled: !!userId
+    queryKey: ['dividends_data', currentPage, userData.id],
+    queryFn: () => getDividendData(userData.id!, currentPage),
+    enabled: !!userData.id && userData.admin
   })
 
   const refetchDividendsData = async () => {
     try {
       const dividends = await fetchDividends('50')
-      await updateOrCreateDoc(userId!, dividends)
+      await updateOrCreateDoc(userData.id!, dividends)
       refetch()
     } catch (error) {
       console.error('Error refetching dividends:', error)

@@ -9,4 +9,5 @@ export interface UserData {
   typeAccount: TypeAccount
   primary_currency: string
   secondary_currency: string
+  admin: boolean
 }

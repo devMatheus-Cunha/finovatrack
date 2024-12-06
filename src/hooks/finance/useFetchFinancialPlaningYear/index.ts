@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { getFinancialPlanningYear } from '@/services/finance/getFinancialPlanningYear'
-import { useUserId } from '@/hooks/globalStates'
+import { useUserData, useUserId } from '@/hooks/globalStates'
 
 export const useFetchFinancialPlaningYear = () => {
-  const { userId } = useUserId() as any
+  const { userData } = useUserData()
+  console.log(!!userData.id)
 
   const {
     data: financialPlanningYear,
@@ -11,9 +12,9 @@ export const useFetchFinancialPlaningYear = () => {
     status: statusFinancialPlanningYear,
     refetch: refetchFinancialPlanningYear
   } = useQuery({
-    queryKey: ['financial_planning_year_data', userId],
-    queryFn: async () => await getFinancialPlanningYear(userId),
-    enabled: !!userId
+    queryKey: ['financial_planning_year_data', userData.id],
+    queryFn: async () => await getFinancialPlanningYear(userData.id),
+    enabled: !!userData.id && userData.admin
   })
 
   return {
