@@ -11,7 +11,7 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react'
-import { TableColumn, TableRow } from '../common/Table'
+import { TableColumn, TableRow } from '@/components/common/Table'
 
 interface ITableReportsProps {
   data: ExpenseData[]
