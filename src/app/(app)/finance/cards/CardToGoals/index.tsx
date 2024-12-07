@@ -45,7 +45,7 @@ const CardToGoals = ({
   if (isLoadingInvestimentsData || !investments || !millenium) {
     return (
       <Skeleton
-        width={{ base: '100%', lg: 'md' }}
+        w={{ base: '100%', lg: 'md' }}
         h="max-content"
         minHeight="420px"
         rounded="md"
@@ -56,7 +56,7 @@ const CardToGoals = ({
   return (
     <>
       <Card
-        width={{ base: '100%', lg: 'md' }}
+        w={{ base: '100%', lg: 'md' }}
         h="max-content"
         minHeight="420px"
         bg="gray.700"

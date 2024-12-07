@@ -1,10 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryClient } from '@/app/providers'
+import { useQuery } from '@tanstack/react-query'
 
 const USER_ID_QUERY_KEY = ['userId']
 const USER_ID_STORAGE_KEY = 'userId'
 function useUserId() {
-  const queryClient = useQueryClient()
-
   const setUserId = (userId: string) => {
     queryClient.setQueryData(USER_ID_QUERY_KEY, userId)
     localStorage.setItem(USER_ID_STORAGE_KEY, userId)

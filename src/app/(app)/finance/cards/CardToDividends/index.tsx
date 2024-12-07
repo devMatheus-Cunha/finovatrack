@@ -25,7 +25,7 @@ const CardToDividends = () => {
   if (isLoadingDividendsData || dividendsData.length <= 0) {
     return (
       <Skeleton
-        width={{ base: '100%', lg: '2xl' }}
+        w={{ base: '100%', lg: 'md' }}
         h="max-content"
         minHeight="570px"
         rounded="md"
@@ -35,7 +35,7 @@ const CardToDividends = () => {
 
   return (
     <Card
-      width={{ base: '100%', lg: '2xl' }}
+      w={{ base: '100%', lg: 'md' }}
       minHeight="570px"
       maxH="570px"
       bg="gray.700"

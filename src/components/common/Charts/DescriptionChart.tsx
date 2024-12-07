@@ -33,18 +33,18 @@ const DescriptionChart = ({
   return (
     <Grid
       templateColumns="repeat(2, 1fr)"
-      gap={3}
+      gap={4}
       overflowY="auto"
-      maxHeight={{ base: '233px', lg: '230px' }}
+      maxHeight={{ base: '230px' }}
     >
       {dataStats.map((item) => (
         <GridItem key={item.label} color="white">
           <Stat>
-            <StatLabel fontSize="sm">
+            <StatLabel fontSize={{ base: 'xs' }} opacity={0.7}>
               {formatLabel ? formatLabel(item.label) : item.label}
             </StatLabel>
             <Box display="flex" alignItems="center" gap={1}>
-              <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
+              <StatNumber fontSize={{ base: 'md', lg: 'lg' }}>
                 {formatCurrencyMoney(
                   Number(item.value),
                   userData.primary_currency,

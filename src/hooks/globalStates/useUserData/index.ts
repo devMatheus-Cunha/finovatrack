@@ -18,18 +18,18 @@ export const initialState: UserData = {
   admin: false
 }
 
+export const checkAuthState = async (userId: string) => {
+  const myDocRef = doc(db, 'users', userId)
+  const myDocSnapshot = await getDoc(myDocRef)
+  return myDocSnapshot.data() as UserData
+}
+
 const useUserData = () => {
   const { userId } = useUserId() as any
 
-  const checkAuthState = async () => {
-    const myDocRef = doc(db, 'users', userId)
-    const myDocSnapshot = await getDoc(myDocRef)
-    return myDocSnapshot.data() as UserData
-  }
-
   const { data, refetch: refetchUserData } = useQuery<UserData>({
     queryKey: ['user_data', userId],
-    queryFn: checkAuthState,
+    queryFn: () => checkAuthState(userId),
     staleTime: Infinity,
     enabled: !!userId
   })

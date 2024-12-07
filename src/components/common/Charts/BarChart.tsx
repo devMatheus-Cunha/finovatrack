@@ -22,7 +22,7 @@ interface BarChartProps {
 
 const BarChart = ({ chartData, tickFormatter, chartConfig }: BarChartProps) => {
   return (
-    <ChartContainer config={chartConfig}>
+    <ChartContainer config={chartConfig} className="h-[35%]">
       <BarChartRecharts accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
