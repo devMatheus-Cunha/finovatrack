@@ -1,22 +1,13 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import {
-  Card,
-  CardBody,
-  Skeleton,
-  Grid,
-  GridItem,
-  Stat,
-  StatLabel,
-  StatNumber
-} from '@chakra-ui/react'
+import { Card, CardBody, CardHeader, Heading, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Header } from './Header'
-import { PieChartComponent } from './PieChartComponent'
-import { chartData } from './chartConfig'
+import { chartConfig, chartData } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
+import { ChartWithDescritions } from '@/components'
+import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 
 interface CardToGoalsProps {
   isLoadingInvestimentsData: boolean
@@ -70,32 +61,33 @@ const CardToGoals = ({
         minHeight="420px"
         bg="gray.700"
       >
-        <Header
-          title="Objetivo para 2026"
-          onRefresh={refetchInvestimentsData}
-        />
+        <CardHeader display="flex" justifyContent="space-between" pb={0}>
+          <Heading size="md">Objetivo para 2026</Heading>
+          <button
+            type="button"
+            onClick={refetchInvestimentsData}
+            className="hover:text-gray-400"
+          >
+            <ArrowsCounterClockwise
+              size={20}
+              color="#eee2e2"
+              className="hover:opacity-75"
+            />
+          </button>
+        </CardHeader>
+
         <CardBody>
-          <PieChartComponent
-            totalValue={totalValue}
-            currency={userData.primary_currency}
-            isVisibilityData={isVisibilityData}
+          <ChartWithDescritions.PieChart
+            chartConfig={chartConfig}
+            chartData={chartData}
+            total={formatCurrencyMoney(
+              Number(totalValue),
+              userData.primary_currency,
+              isVisibilityData
+            )}
           />
-          <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
-            {investmentData.map((item) => (
-              <GridItem key={item.label}>
-                <Stat>
-                  <StatLabel fontSize="xs">{item.label}</StatLabel>
-                  <StatNumber fontSize={{ base: 'lg', lg: 'lg' }}>
-                    {formatCurrencyMoney(
-                      item.value,
-                      userData.primary_currency,
-                      isVisibilityData
-                    )}
-                  </StatNumber>
-                </Stat>
-              </GridItem>
-            ))}
-          </Grid>
+
+          <ChartWithDescritions.Descripitons dataStats={investmentData} />
         </CardBody>
       </Card>
     </>
