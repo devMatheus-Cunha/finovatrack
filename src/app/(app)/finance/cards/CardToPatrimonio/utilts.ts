@@ -12,7 +12,7 @@ export const chartConfig = {
   }
 } satisfies ChartConfigProps
 
-export const chartData = (
+export const chartDataFormat = (
   investmentsFree?: number,
   investmentValue?: number,
   millenium?: number

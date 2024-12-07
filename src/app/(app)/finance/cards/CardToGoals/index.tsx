@@ -6,7 +6,7 @@ import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { chartConfig, chartData } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
-import { ChartWithDescritions } from '@/components'
+import { Charts } from '@/components'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 
 interface CardToGoalsProps {
@@ -77,7 +77,7 @@ const CardToGoals = ({
         </CardHeader>
 
         <CardBody>
-          <ChartWithDescritions.PieChart
+          <Charts.PieChart
             chartConfig={chartConfig}
             chartData={chartData}
             total={formatCurrencyMoney(
@@ -87,7 +87,7 @@ const CardToGoals = ({
             )}
           />
 
-          <ChartWithDescritions.Descripitons dataStats={investmentData} />
+          <Charts.DescriptionChart dataStats={investmentData} />
         </CardBody>
       </Card>
     </>

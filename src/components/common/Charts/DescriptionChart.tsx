@@ -18,12 +18,15 @@ export interface IFormatDataToStats {
   percentage?: string
 }
 
-interface DescripitonsProps {
+interface DescriptionChartProps {
   dataStats: IFormatDataToStats[]
   formatLabel?: (value: string) => string
 }
 
-const Descripitons = ({ dataStats, formatLabel }: DescripitonsProps) => {
+const DescriptionChart = ({
+  dataStats,
+  formatLabel
+}: DescriptionChartProps) => {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
@@ -32,7 +35,7 @@ const Descripitons = ({ dataStats, formatLabel }: DescripitonsProps) => {
       templateColumns="repeat(2, 1fr)"
       gap={3}
       overflowY="auto"
-      maxHeight="235px"
+      height={{ base: '233px', lg: '230px' }}
     >
       {dataStats.map((item) => (
         <GridItem key={item.label} color="white">
@@ -65,4 +68,4 @@ const Descripitons = ({ dataStats, formatLabel }: DescripitonsProps) => {
   )
 }
 
-export default Descripitons
+export default DescriptionChart

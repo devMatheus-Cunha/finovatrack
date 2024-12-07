@@ -5,7 +5,7 @@ import React from 'react'
 import Filter from './Filter'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { chartConfig, formattedDividendsData } from './utils'
-import { ChartWithDescritions } from '@/components'
+import { Charts } from '@/components'
 import { tickerToCompanyName } from '@/utils/namesCompanyByTicker'
 import { FormatChartData } from '@/components/ui/chart'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
@@ -58,7 +58,7 @@ const CardToDividends = () => {
       </CardHeader>
 
       <CardBody display="flex" flexDir="column">
-        <ChartWithDescritions.BarChart
+        <Charts.BarChart
           chartData={formattedDividendsData(dividendsData)}
           chartConfig={chartConfig}
           tickFormatter={(value: string) =>
@@ -73,7 +73,7 @@ const CardToDividends = () => {
           currentPage={currentPage}
           onChange={(event) => setCurrentPage(Number(event.target.value))}
         />
-        <ChartWithDescritions.Descripitons
+        <Charts.DescriptionChart
           dataStats={FormatChartData(dividendsData, 'ticker', 'amount')}
           formatLabel={(value) => tickerToCompanyName[value]}
         />

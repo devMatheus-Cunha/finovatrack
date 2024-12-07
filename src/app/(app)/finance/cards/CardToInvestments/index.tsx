@@ -7,7 +7,7 @@ import {
 import { Card, CardBody, CardHeader, Heading, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { ChartWithDescritions } from '@/components'
+import { Charts } from '@/components'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 
 interface IRodela {
@@ -77,7 +77,7 @@ const CardToInvestments = ({
       </CardHeader>
 
       <CardBody>
-        <ChartWithDescritions.PieChart
+        <Charts.PieChart
           chartConfig={chartConfig}
           chartData={chartData}
           total={formatCurrencyMoney(
@@ -87,7 +87,7 @@ const CardToInvestments = ({
           )}
         />
 
-        <ChartWithDescritions.Descripitons dataStats={formatDataToStats} />
+        <Charts.DescriptionChart dataStats={formatDataToStats} />
       </CardBody>
     </Card>
   )

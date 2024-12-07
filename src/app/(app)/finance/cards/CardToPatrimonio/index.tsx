@@ -1,16 +1,11 @@
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart'
 import { useFetchFinancialPlaningYear } from '@/hooks/finance'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Card, CardBody, Heading, Skeleton } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { RadialBarChart, PolarRadiusAxis, Label, RadialBar } from 'recharts'
-import { chartConfig, chartData } from './utilts'
+import { chartConfig, chartDataFormat } from './utilts'
+import { Charts } from '@/components'
 
 interface CardToPatrimonioProps {
   isLoadingInvestimentsData: boolean
@@ -58,77 +53,20 @@ const CardToPatrimonio = ({
           <Heading size={{ base: 'sm', lg: 'md' }} mt="50px" color="white">
             Patrimônio atual
           </Heading>
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto h-[180px] w-[200px] p-0 m-0 "
-          >
-            <RadialBarChart
-              data={chartData(
-                investments?.free,
-                investments?.pies?.result?.priceAvgValue,
-                millenium
-              )}
-              endAngle={180}
-              innerRadius={80}
-              outerRadius={110}
-            >
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                      return (
-                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) - 16}
-                            className="fill-white text-lg lg:text-xl font-bold"
-                          >
-                            {formatCurrencyMoney(
-                              Number(sumTotalCurrency) || 0,
-                              primary_currency,
-                              isVisibilityData
-                            )}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 4}
-                            className="fill-slate-300"
-                          >
-                            Patrimônio
-                          </tspan>
-                        </text>
-                      )
-                    }
-                  }}
-                />
-              </PolarRadiusAxis>
-              <RadialBar
-                dataKey="investmentValue"
-                fill="hsl(var(--chart-1))"
-                stackId="a"
-                cornerRadius={5}
-                className="stroke-transparent stroke-2"
-              />
-              <RadialBar
-                dataKey="investmentFree"
-                stackId="a"
-                cornerRadius={5}
-                fill="hsl(var(--chart-2))"
-                className="stroke-transparent stroke-2"
-              />
-              <RadialBar
-                dataKey="millenium"
-                fill="hsl(var(--chart-3))"
-                stackId="a"
-                cornerRadius={5}
-                className="stroke-transparent stroke-2"
-              />
-            </RadialBarChart>
-          </ChartContainer>
+
+          <Charts.RadialBarChart
+            chartConfig={chartConfig}
+            chartData={chartDataFormat(
+              investments?.free,
+              investments?.pies?.result?.priceAvgValue,
+              millenium
+            )}
+            total={formatCurrencyMoney(
+              Number(sumTotalCurrency) || 0,
+              primary_currency,
+              isVisibilityData
+            )}
+          />
         </CardBody>
       </Card>
     </>

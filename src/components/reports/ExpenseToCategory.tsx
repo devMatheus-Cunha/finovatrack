@@ -3,7 +3,7 @@ import React from 'react'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { ChartWithDescritions } from '../common'
+import { Charts } from '../common'
 
 interface Resultcategory {
   value: number
@@ -74,7 +74,7 @@ const ExpenseToCategory = ({
       </CardHeader>
       <CardBody>
         <CardBody p={0}>
-          <ChartWithDescritions.PieChart
+          <Charts.PieChart
             chartConfig={chartConfig}
             chartData={chartData}
             total={formatCurrencyMoney(
@@ -84,9 +84,7 @@ const ExpenseToCategory = ({
             )}
           />
 
-          <ChartWithDescritions.Descripitons
-            dataStats={sumToCategory(expensesData)}
-          />
+          <Charts.DescriptionChart dataStats={sumToCategory(expensesData)} />
         </CardBody>
       </CardBody>
     </Card>
