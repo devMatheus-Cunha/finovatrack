@@ -1,9 +1,9 @@
-import { ExpenseToCategory } from '@/components'
-import { Skeleton, Box, VStack, Text } from '@chakra-ui/react'
+import { Skeleton, VStack, Box, Text } from '@chakra-ui/react'
+import { useUserData } from '@/hooks/globalStates'
 import { IReportData } from '@/services/reports/getReport'
-import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import InfoCardsToReport from './InfoCardsToReport'
 
-const CardToCategoryExpense = ({
+const CardToStatsInMonth = ({
   isLoading,
   reportData
 }: {
@@ -11,13 +11,12 @@ const CardToCategoryExpense = ({
   reportData: IReportData | null | undefined
 }) => {
   const { userData } = useUserData()
-  const { isVisibilityData } = useIsVisibilityDatas()
 
   if (isLoading) {
     return (
       <Skeleton
-        w={{ base: '100%', lg: 'xs' }}
-        h={{ base: 214, lg: 555 }}
+        height={{ base: 214, lg: 200 }}
+        w={{ base: '100%', lg: '2xl' }}
         rounded="md"
       />
     )
@@ -26,30 +25,29 @@ const CardToCategoryExpense = ({
   return (
     <>
       {reportData?.data && reportData?.data.length > 0 ? (
-        <Box w={{ base: '100%', lg: 'xs' }}>
-          <ExpenseToCategory
-            expensesData={reportData.data}
+        <Box>
+          <InfoCardsToReport
+            data={reportData}
             userData={userData}
-            isVisibilityData={isVisibilityData}
-            totalExpenses={reportData?.totalExpenses}
+            isLoading={isLoading}
           />
         </Box>
       ) : (
         <VStack
           alignItems="center"
           justifyContent="center"
-          textAlign="center"
           overflowY="auto"
-          w={{ base: '100%', lg: 'xs' }}
-          h={{ base: 214, lg: 555 }}
           rounded="md"
+          w={{ base: '100%', lg: '2xl' }}
+          height={{ base: 214, lg: 200 }}
           bg="gray.700"
+          p={{ base: '4', lg: '0' }}
         >
           <Text
             mt={4}
             fontWeight="bold"
+            fontSize={{ base: 'xl', lg: 26 }}
             color="white"
-            fontSize={{ base: 'xl', lg: 23 }}
           >
             Nenhum relatório gerado
           </Text>
@@ -62,4 +60,4 @@ const CardToCategoryExpense = ({
   )
 }
 
-export default CardToCategoryExpense
+export default CardToStatsInMonth

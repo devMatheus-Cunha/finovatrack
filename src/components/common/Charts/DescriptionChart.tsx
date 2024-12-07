@@ -35,7 +35,7 @@ const DescriptionChart = ({
       templateColumns="repeat(2, 1fr)"
       gap={3}
       overflowY="auto"
-      height={{ base: '233px', lg: '230px' }}
+      maxHeight={{ base: '233px', lg: '230px' }}
     >
       {dataStats.map((item) => (
         <GridItem key={item.label} color="white">

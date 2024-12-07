@@ -10,7 +10,7 @@ import {
   CardToFinanceYaer,
   CardToGoals,
   CardToInvestments,
-  CardToPatrimonio
+  CardToPatrimony
 } from './cards'
 import { useUserData } from '@/hooks/globalStates'
 import { redirect } from 'next/navigation'
@@ -53,7 +53,7 @@ const Finance = () => {
           flexDir="column"
           gap={2}
         >
-          <CardToPatrimonio
+          <CardToPatrimony
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             investments={investimentsData}
             millenium={

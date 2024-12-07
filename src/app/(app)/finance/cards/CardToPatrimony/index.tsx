@@ -7,17 +7,17 @@ import { useMemo } from 'react'
 import { chartConfig, chartDataFormat } from './utilts'
 import { Charts } from '@/components'
 
-interface CardToPatrimonioProps {
+interface CardToPatrimonyProps {
   isLoadingInvestimentsData: boolean
   investments?: IInvestimentsData
   millenium?: number
 }
 
-const CardToPatrimonio = ({
+const CardToPatrimony = ({
   investments,
   isLoadingInvestimentsData,
   millenium
-}: CardToPatrimonioProps) => {
+}: CardToPatrimonyProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const {
     userData: { primary_currency }
@@ -73,4 +73,4 @@ const CardToPatrimonio = ({
   )
 }
 
-export default CardToPatrimonio
+export default CardToPatrimony

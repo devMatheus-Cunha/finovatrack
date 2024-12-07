@@ -3,7 +3,7 @@ import React from 'react'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Charts } from '../common'
+import { Charts } from '@/components'
 
 interface Resultcategory {
   value: number

@@ -1,14 +1,12 @@
-import {
-  TableDesktopReports,
-  TableMobileReports,
-  EmptyWithoutReport
-} from '@/components'
 import { Skeleton, Box } from '@chakra-ui/react'
 import { IReportData } from '@/services/reports/getReport'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { TableColumn } from '@/components/common/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import EmptyWithoutReport from './EmptyWithoutReport'
+import TableDesktopReports from './TableDesktopReports'
+import TableMobileReports from './TableMobileReports'
 
 const CardToTableExpenses = ({
   isLoading,
