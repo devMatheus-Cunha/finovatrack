@@ -113,6 +113,7 @@ const CardToFinanceYaer = ({
                       onOpen={() => onOpenModal(item)}
                       userData={userData}
                       isVisibilityData={isVisibilityData}
+                      year={item.year}
                     />
                   </AccordionFinanceYear.Root>
                 </React.Fragment>
