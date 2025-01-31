@@ -53,6 +53,8 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
   onSubmit,
   currency
 }) => {
+
+  const validate = initialValues?.year === "2025"
   const {
     handleSubmit,
     control,
@@ -65,9 +67,9 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
       periodContributions: initialValues?.periodContributions,
       investments: formatToCustomFormat(Number(initialValues?.investments)),
       receivables: formatToCustomFormat(Number(initialValues?.receivables)),
-      reserve: initialValues?.totoalReserveLastYear
-        ? formatToCustomFormat(Number(initialValues?.totoalReserveLastYear))
-        : formatToCustomFormat(Number(initialValues?.reserve)),
+      reserve: validate
+        ? formatToCustomFormat(Number(initialValues?.reserve))
+        : formatToCustomFormat(Number(initialValues?.totoalReserveLastYear)),
       monthlyContributions: formatToCustomFormat(
         Number(initialValues?.monthlyContributions)
       ),
@@ -134,7 +136,7 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
                 control={control}
                 required
                 name="receivables"
-                label={`A receber (${optionsLabelCurrencyKeyAndValue[currency]})`}
+                label={`Aporte Extra (${optionsLabelCurrencyKeyAndValue[currency]})`}
                 placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
                 errors={errors?.receivables?.message}
               />

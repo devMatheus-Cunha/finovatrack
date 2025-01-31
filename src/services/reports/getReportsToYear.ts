@@ -3,7 +3,6 @@ import { db } from '../firebase'
 import { IReportData } from './getReport'
 
 export interface IReportToYearData {
-  totalInvestments: number
   totalFree: number
   totalEntrys: number
   totalExpenses: number
@@ -37,19 +36,16 @@ export async function getReportsToYear(
   })
 
   const initialValue: IReportToYearData = {
-    totalInvestments: 0,
     totalFree: 0,
     totalEntrys: 0,
     totalExpenses: 0,
     totalExpenseEurToReal: 0
   }
 
+  
   const sum = docsArray.reduce<IReportToYearData>(
     (accumulator, currentValue) => {
       return {
-        totalInvestments:
-          accumulator.totalInvestments +
-          (currentValue.investments?.totalInvestments || 0),
         totalFree: accumulator.totalFree + parseAndSum(currentValue.totalFree),
         totalEntrys:
           accumulator.totalEntrys + parseAndSum(currentValue.totalEntrys),

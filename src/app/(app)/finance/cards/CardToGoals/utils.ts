@@ -7,6 +7,11 @@ export const chartConfig = {
 } as const
 
 export const chartData: ChartDataProps[] = [
-  { label: 'rendavariavel', value: 11165, fill: 'var(--color-rendavariavel)' },
+  { label: 'rendavariavel', value: 11000, fill: 'var(--color-rendavariavel)' },
   { label: 'rendafixa', value: 30000, fill: 'var(--color-rendafixa)' }
+]
+
+export const chartDataActual: ChartDataProps[] = [
+  { label: 'rendavariavel', value: 0, fill: 'var(--color-rendavariavel)' },
+  { label: 'rendafixa', value: 41700.00, fill: 'var(--color-rendafixa)' }
 ]

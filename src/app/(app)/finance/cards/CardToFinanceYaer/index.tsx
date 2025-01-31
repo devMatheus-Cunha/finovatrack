@@ -75,9 +75,10 @@ const CardToFinanceYaer = ({
     if (data)
       for (let i = 0; i < data.length - 1; i++) {
         const dataAtual = data[i]
+        const validate = dataAtual.year === "2025"
         const total =
           Number(dataAtual.investments) +
-          Number(dataAtual.totoalReserveLastYear ?? dataAtual.reserve) +
+          Number(validate ? dataAtual.reserve : dataAtual.totoalReserveLastYear) +
           Number(dataAtual.monthlyContributions) *
             Number(dataAtual.periodContributions) +
           Number(dataAtual.receivables) -

@@ -36,9 +36,14 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
   isVisibilityData,
   year
 }) => {
+  const validate = data.year === "2025"
   const yearContributions =
     Number(data.periodContributions) * Number(data.monthlyContributions)
-  const { reportDataToYear } = useFetchReportsToYearData(year)
+  const quantidadeDeMesesAportados = 12 - Number(data.periodContributions)
+  const valorAportadoFixo = quantidadeDeMesesAportados * Number(data.monthlyContributions)
+  const valorAportadoFixoMaisExtra = valorAportadoFixo + Number(data.receivables)
+  const reserve = validate ? data.reserve : data.totoalReserveLastYear
+
   return (
     <AccordionPanelChakra
       display="flex"
@@ -60,7 +65,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Heading size="sm">Reserva</Heading>
         <Text fontSize="md">
           {formatCurrencyMoney(
-            Number(data.totoalReserveLastYear ?? data.reserve),
+            Number(reserve),
             userData?.primary_currency,
             isVisibilityData
           )}
@@ -70,7 +75,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Heading size="sm" display="flex" gap={1}>
           Aporte Mensal
           <Tooltip
-            label={`O cálculo é baseado nos campos Aporte Mensal x Período do Aporte.`}
+            label="Aporte fixo que e feito todos os meses"
             fontSize="sm"
             hasArrow
             placement="top"
@@ -100,22 +105,21 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
           )}
         </Text>
       </Stack>
-
       <Stack w="max-content">
-        <Heading size="sm">Total Aportado</Heading>
+        <Heading size="sm">Aporte Extra</Heading>
         <Text fontSize="md">
           {formatCurrencyMoney(
-            Number(reportDataToYear?.totalInvestments) || 0,
+            Number(data.receivables),
             userData?.primary_currency,
             isVisibilityData
           )}
         </Text>
       </Stack>
       <Stack w="max-content">
-        <Heading size="sm">A Receber</Heading>
+        <Heading size="sm">Total Aportado</Heading>
         <Text fontSize="md">
           {formatCurrencyMoney(
-            Number(data.receivables),
+           valorAportadoFixoMaisExtra || 0,
             userData?.primary_currency,
             isVisibilityData
           )}
@@ -136,7 +140,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
         <Text fontSize="md">
           {formatCurrencyMoney(
             Number(data.investments) +
-              Number(data.totoalReserveLastYear ?? data.reserve) +
+              Number(reserve) +
               yearContributions +
               Number(data.receivables) -
               Number(data.deduction),

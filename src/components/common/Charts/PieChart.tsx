@@ -10,11 +10,12 @@ import { PieChart as PieChartRecharts, Pie, Label } from 'recharts'
 
 interface ChartPieProps {
   chartConfig: ChartConfigProps
-  chartData: ChartDataProps[]
+  chartData?: ChartDataProps[]
+  chartDataActual?: ChartDataProps[]
   total: string | number
 }
 
-const PieChart = ({ chartConfig, chartData, total }: ChartPieProps) => {
+const PieChart = ({ chartConfig, chartData, chartDataActual, total }: ChartPieProps) => {
   return (
     <ChartContainer
       config={chartConfig}
@@ -26,7 +27,7 @@ const PieChart = ({ chartConfig, chartData, total }: ChartPieProps) => {
           content={<ChartTooltipContent hideLabel />}
         />
         <Pie
-          data={chartData}
+          data={chartDataActual ?? chartData}
           dataKey="value"
           nameKey="category"
           innerRadius={60}
@@ -54,7 +55,7 @@ const PieChart = ({ chartConfig, chartData, total }: ChartPieProps) => {
                       y={(viewBox.cy || 0) + 24}
                       className="fill-slate-200"
                     >
-                      Total Conta
+                     {!!chartDataActual ? "Estimativa" : "Objetivo"}
                     </tspan>
                   </text>
                 )
