@@ -12,6 +12,7 @@ export const categoryOptions = [
   { label: 'Financiamento', value: 'Financiamento' },
   { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
   { label: 'Investimentos', value: 'Investimentos' },
+  { label: 'Lazer', value: 'Lazer' },
   { label: 'Moradia', value: 'Moradia' },
   { label: 'Saúde', value: 'Saúde' },
   { label: 'Seguro', value: 'Seguro' },

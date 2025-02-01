@@ -15,7 +15,12 @@ interface ChartPieProps {
   total: string | number
 }
 
-const PieChart = ({ chartConfig, chartData, chartDataActual, total }: ChartPieProps) => {
+const PieChart = ({
+  chartConfig,
+  chartData,
+  chartDataActual,
+  total
+}: ChartPieProps) => {
   return (
     <ChartContainer
       config={chartConfig}
@@ -55,7 +60,7 @@ const PieChart = ({ chartConfig, chartData, chartDataActual, total }: ChartPiePr
                       y={(viewBox.cy || 0) + 24}
                       className="fill-slate-200"
                     >
-                     {!!chartDataActual ? "Estimativa" : "Objetivo"}
+                      Objetivo
                     </tspan>
                   </text>
                 )

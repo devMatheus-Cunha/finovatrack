@@ -5,7 +5,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputTypeMoney, NumberInput } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { formatToCustomFormat } from '@/utils/formatNumber'
+import {
+  currentAndPreviousYearValidity,
+  formatToCustomFormat
+} from '@/utils/formatNumber'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import {
   Button,
@@ -53,8 +56,6 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
   onSubmit,
   currency
 }) => {
-
-  const validate = initialValues?.year === "2025"
   const {
     handleSubmit,
     control,
@@ -67,7 +68,7 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
       periodContributions: initialValues?.periodContributions,
       investments: formatToCustomFormat(Number(initialValues?.investments)),
       receivables: formatToCustomFormat(Number(initialValues?.receivables)),
-      reserve: validate
+      reserve: currentAndPreviousYearValidity(initialValues?.year)
         ? formatToCustomFormat(Number(initialValues?.reserve))
         : formatToCustomFormat(Number(initialValues?.totoalReserveLastYear)),
       monthlyContributions: formatToCustomFormat(

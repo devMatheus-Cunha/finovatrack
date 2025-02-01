@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react'
 import { Card, CardBody, CardHeader, Heading, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { chartConfig, chartData, chartDataActual } from './utils'
+import { chartConfig, chartData } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { Charts } from '@/components'
@@ -27,10 +27,6 @@ const CardToGoals = ({
 
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0)
-  }, [])
-
-  const totalValueActualPlan= useMemo(() => {
-    return chartDataActual.reduce((acc, curr) => acc + curr.value, 0)
   }, [])
 
   const assetAppreciation = investments?.pies?.result?.priceAvgValue || 0
@@ -86,15 +82,6 @@ const CardToGoals = ({
             chartData={chartData}
             total={formatCurrencyMoney(
               Number(totalValue),
-              userData.primary_currency,
-              isVisibilityData
-            )}
-          />
-          <Charts.PieChart
-            chartConfig={chartConfig}
-            chartDataActual={chartDataActual}
-            total={formatCurrencyMoney(
-              Number(totalValueActualPlan),
               userData.primary_currency,
               isVisibilityData
             )}

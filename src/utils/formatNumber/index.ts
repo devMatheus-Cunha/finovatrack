@@ -54,3 +54,10 @@ export function formatToCustomFormat(number = 0): string | undefined {
     maximumFractionDigits: 2
   })
 }
+
+export function currentAndPreviousYearValidity(
+  year?: string | number
+): boolean {
+  const currentYear = new Date().getFullYear()
+  return Number(year) <= currentYear
+}

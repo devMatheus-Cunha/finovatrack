@@ -10,33 +10,29 @@ import { Charts } from '@/components'
 interface CardToPatrimonyProps {
   isLoadingInvestimentsData: boolean
   investments?: IInvestimentsData
-  millenium?: number
 }
 
 const CardToPatrimony = ({
   investments,
-  isLoadingInvestimentsData,
-  millenium
+  isLoadingInvestimentsData
 }: CardToPatrimonyProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const {
     userData: { primary_currency }
   } = useUserData()
-
-  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
+  const { financialPlanningActualYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
 
   const sumTotalCurrency = useMemo(() => {
-    return financialPlanningYear && financialPlanningYear.length > 0
-      ? financialPlanningYear[0].reserve + investments?.total
+    return financialPlanningActualYear?.reserve && investments?.total
+      ? Number(financialPlanningActualYear.reserve) + investments.total
       : 0
-  }, [financialPlanningYear, investments?.total])
+  }, [financialPlanningActualYear, investments?.total])
 
   if (
     isLoadingFinancialPlanningYear ||
     isLoadingInvestimentsData ||
-    !investments ||
-    !millenium
+    !investments
   ) {
     return <Skeleton height="130px" rounded="md" />
   }
@@ -59,7 +55,7 @@ const CardToPatrimony = ({
             chartData={chartDataFormat(
               investments?.free,
               investments?.pies?.result?.priceAvgValue,
-              millenium
+              Number(financialPlanningActualYear?.reserve)
             )}
             total={formatCurrencyMoney(
               Number(sumTotalCurrency) || 0,

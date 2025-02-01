@@ -12,7 +12,10 @@ import { AccordionFinanceYear } from './AccordionFinanceYear'
 import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
-import { formatToJavaScriptNumber } from '@/utils/formatNumber'
+import {
+  currentAndPreviousYearValidity,
+  formatToJavaScriptNumber
+} from '@/utils/formatNumber'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
@@ -75,10 +78,13 @@ const CardToFinanceYaer = ({
     if (data)
       for (let i = 0; i < data.length - 1; i++) {
         const dataAtual = data[i]
-        const validate = dataAtual.year === "2025"
         const total =
           Number(dataAtual.investments) +
-          Number(validate ? dataAtual.reserve : dataAtual.totoalReserveLastYear) +
+          Number(
+            currentAndPreviousYearValidity(dataAtual.year)
+              ? dataAtual.reserve
+              : dataAtual.totoalReserveLastYear
+          ) +
           Number(dataAtual.monthlyContributions) *
             Number(dataAtual.periodContributions) +
           Number(dataAtual.receivables) -

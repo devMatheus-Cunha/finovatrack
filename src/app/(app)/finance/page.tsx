@@ -22,8 +22,11 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
-    useFetchFinancialPlaningYear()
+  const {
+    financialPlanningYear,
+    isLoadingFinancialPlanningYear,
+    financialPlanningActualYear
+  } = useFetchFinancialPlaningYear()
 
   const { userData } = useUserData()
 
@@ -56,9 +59,6 @@ const Finance = () => {
           <CardToPatrimony
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             investments={investimentsData}
-            millenium={
-              financialPlanningYear && Number(financialPlanningYear[0].reserve)
-            }
           />
           <CardToFinanceYaer
             financialPlanningYear={financialPlanningYear}
@@ -86,7 +86,8 @@ const Finance = () => {
           refetchInvestimentsData={refetchInvestimentsData}
           investments={investimentsData}
           millenium={
-            financialPlanningYear && Number(financialPlanningYear[0].reserve)
+            financialPlanningActualYear &&
+            Number(financialPlanningActualYear.reserve)
           }
         />
       </Box>
