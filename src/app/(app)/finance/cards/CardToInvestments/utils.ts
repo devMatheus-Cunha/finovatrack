@@ -1,5 +1,8 @@
 import { ChartConfigProps, ChartDataProps } from '@/components/ui/chart'
-import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
+import {
+  IInvestimentsData,
+  IInvestmentsProps
+} from '@/hooks/finance/useFetchInvestiments'
 
 export interface IFormatDataToStats {
   label: string
@@ -16,7 +19,7 @@ interface CalculatedInvestmentData {
   totalInvestedAndGains: number
   totalInvestedAndGainsPercentage: number
   totalAccountValue?: number
-  totalJuros: number
+  totalInterest: number
 }
 
 export const chartConfig = {
@@ -55,7 +58,7 @@ export const createChartConfig = (
   appreciationPercentage: number,
   totalInvestedAndGainsPercentage: number,
   totalAppreciationValue: number,
-  totalJuros: number
+  totalInterest: number
 ): {
   chartData: ChartDataProps[]
   formatDataToStats: IFormatDataToStats[]
@@ -93,7 +96,7 @@ export const createChartConfig = (
     },
     {
       label: 'Valor Juros',
-      value: totalJuros
+      value: totalInterest
     },
     { label: 'Valor Dividendos', value: dividends },
     {
@@ -109,25 +112,27 @@ export const createChartConfig = (
 }
 
 export const calculateInvestmentData = (
-  investimentsData: IInvestmentsProps | undefined,
-  allPiesData: any
+  investimentsData: IInvestimentsData | undefined
 ): CalculatedInvestmentData => {
   const totalAccountValue = investimentsData?.total
-  const assetAppreciation = allPiesData?.result?.priceAvgValue || 0
+  const assetAppreciation = investimentsData?.pies?.result?.priceAvgValue || 0
   const totalAppreciationValue = investimentsData?.ppl || 0
-  const investedValue = allPiesData?.result?.priceAvgInvestedValue || 0
-  const dividends = (allPiesData?.dividendDetails?.gained || 0) + 0.37
-  const totalJuros = 137.66
+  const investedValue =
+    investimentsData?.pies?.result?.priceAvgInvestedValue || 0
+  const dividends =
+    (investimentsData?.pies?.dividendDetails?.gained || 0) + 0.37
+  const totalInterest = investimentsData?.totalInterest.actual || 0
 
   const appreciationPercentage = (totalAppreciationValue / investedValue) * 100
-  const totalInvestedAndGains = totalAppreciationValue + dividends + totalJuros
+  const totalInvestedAndGains =
+    totalAppreciationValue + dividends + totalInterest
   const totalInvestedAndGainsPercentage =
     (totalInvestedAndGains / investedValue) * 100
 
   return {
     totalAccountValue,
     assetAppreciation,
-    totalJuros: totalJuros,
+    totalInterest: totalInterest,
     totalAppreciationValue,
     investedValue,
     dividends,

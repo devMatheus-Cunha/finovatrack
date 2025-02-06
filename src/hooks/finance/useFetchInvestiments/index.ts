@@ -34,8 +34,20 @@ export interface IGetAllPies {
   status: null
 }
 
+export interface TransactionListProps {
+  type: string
+  amount: number
+  reference: string
+  dateTime: string
+}
+
 export interface IInvestimentsData extends IInvestmentsProps {
-  pies: IGetAllPies
+  pies?: IGetAllPies
+  totalListaData: TransactionListProps[]
+  totalInterest: {
+    actual: number
+    old: number
+  }
 }
 
 export const useFetchInvestiments = () => {
@@ -53,7 +65,7 @@ export const useFetchInvestiments = () => {
 
   const refetchInvestimentsData = async () => {
     try {
-      const investiments = await getCombinedData()
+      const investiments = await getCombinedData(userData.id, investimentsData)
       await updateOrCreateDoc(userData.id!, investiments)
       refetch()
     } catch (error) {

@@ -1,54 +1,94 @@
 import {
   IInvestimentsData,
   IGetAllPies,
-  IInvestmentsProps
+  IInvestmentsProps,
+  TransactionListProps
 } from '@/hooks/finance/useFetchInvestiments'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 
-export const getCombinedData = async (): Promise<IInvestimentsData> => {
+export const getCombinedData = async (
+  userId: string,
+  investimentsData: IInvestimentsData | undefined
+): Promise<IInvestimentsData> => {
   const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
   }
 
   try {
-    const [investmentsResponse, piesResponse] = await Promise.all([
-      fetch(
-        `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/account/cash`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: apiKey
+    const [investmentsResponse, piesResponse, transactionListResponse] =
+      await Promise.all([
+        fetch(
+          `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/account/cash`,
+          {
+            method: 'GET',
+            headers: { Authorization: apiKey }
           }
-        }
-      ),
-      fetch(
-        `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
-        {
-          headers: {
-            Authorization: apiKey,
-            'X-Requested-With': 'XMLHttpRequest'
+        ),
+        fetch(
+          `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
+          {
+            headers: {
+              Authorization: apiKey,
+              'X-Requested-With': 'XMLHttpRequest'
+            }
           }
-        }
-      )
-    ])
+        ),
+        fetch(
+          `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/transactions?limit=20`,
+          {
+            method: 'GET',
+            headers: { Authorization: apiKey }
+          }
+        )
+      ])
 
-    if (!investmentsResponse.ok) {
-      const errorText = await investmentsResponse.text()
-      throw new Error(`API Error: ${investmentsResponse.status} - ${errorText}`)
-    }
-
-    if (!piesResponse.ok) {
-      const errorText = await piesResponse.text()
-      throw new Error(`API Error: ${piesResponse.status} - ${errorText}`)
+    if (
+      !investmentsResponse.ok ||
+      !piesResponse.ok ||
+      !transactionListResponse.ok
+    ) {
+      throw new Error('API request failed')
     }
 
     const investmentsData =
       (await investmentsResponse.json()) as IInvestmentsProps
     const piesData = (await piesResponse.json()) as IGetAllPies[]
+    const apiTransactionList = await transactionListResponse.json()
+    const transactionListData =
+      apiTransactionList.items as TransactionListProps[]
 
-    return { ...investmentsData, pies: piesData[0] }
+    let previousTransactions: TransactionListProps[] = []
+    let previousTotalInterest = { actual: 0, old: 0 }
+
+    previousTransactions = investimentsData?.totalListaData || []
+    previousTotalInterest = investimentsData?.totalInterest || {
+      actual: 0,
+      old: 0
+    }
+
+    const previousTransactionDates = new Set(
+      previousTransactions.map((t) => t.dateTime)
+    )
+    const newDeposits = transactionListData.filter(
+      (t) => !previousTransactionDates.has(t.dateTime)
+    )
+
+    const newInterestTotal = newDeposits.reduce(
+      (sum, transaction) => sum + transaction.amount,
+      previousTotalInterest.actual
+    )
+
+    return {
+      ...investmentsData,
+      totalListaData: transactionListData,
+      totalInterest: {
+        actual: newInterestTotal,
+        old: previousTotalInterest.actual
+      },
+      pies: piesData[0]
+    }
   } catch (error) {
     console.error('Error fetching data from API:', error)
     throw error
