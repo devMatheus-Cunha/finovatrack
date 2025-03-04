@@ -29,7 +29,7 @@ export type IHandleControlModalExpenseFunction = (
   item?: ExpenseData
 ) => void
 
-const useControlModals = () => {
+export const useControlModals = () => {
   const [configModalExpense, setConfigModalExpense] =
     useState<IConfigModalExpenseProps>({
       selectedData: initialDataSelectedData
@@ -91,5 +91,3 @@ const useControlModals = () => {
     configModalExpense
   }
 }
-
-export default useControlModals

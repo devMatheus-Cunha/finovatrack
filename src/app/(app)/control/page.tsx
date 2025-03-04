@@ -1,7 +1,5 @@
 'use client'
-
 import { useMemo } from 'react'
-
 import { SubmitHandler } from 'react-hook-form'
 
 import {
@@ -13,15 +11,16 @@ import {
   useAddExpense,
   useFetchExpensesData,
   useDeletedExpense,
-  useUpadtedExpense,
+  useUpdatedExpense,
   useClearExpenses
 } from '@/hooks/expenses'
+import { useInvestmentMetrics } from './hooks/useInvestmentMetrics'
 import { useFetchQuatationEur } from '@/hooks/quatation'
 
 import { useSaveReport } from '@/hooks/reports'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { useControlModals } from './hooks/useControlModal'
 
-import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 import {
   convertEurToReal,
   formatToJavaScriptNumber
@@ -34,25 +33,44 @@ import {
 
 import HeaderDataTableToControl from './parts/HeaderDataTableToControl'
 import InfoCardsToControl from './parts/InfoCardsToControl'
+import TableMobileAndDesktop from './parts/TableMobileAndDesktop'
 
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { Modal as ModalChakra, Box } from '@chakra-ui/react'
-import InfoCardContent from './modals/infoCardContent'
-import {
-  ConfirmSaveReportModal,
-  ContentActionsTableModal,
-  ContentAddEntryModal,
-  ContentTotalEntrys,
-  DeleteModalContent
-} from './modals'
-import TableMobileAndDesktop from './parts/TableMobileAndDesktop'
-import useControlModals from './hooks/useControlModal'
-import { useInvestmentMetrics } from './hooks/useInvestmentMetrics'
+import { Box } from '@chakra-ui/react'
+import { ModalsControl } from './modals'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
   const { typeAccount } = userData
+
+  const { addExpense, isLoadingAddExpense } = useAddExpense()
+  const {
+    expensesData = [],
+    setFilter,
+    filter,
+    isLoadingExpensesData
+  } = useFetchExpensesData()
+  const { deletedExpense } = useDeletedExpense()
+  const { updatedExpense } = useUpdatedExpense()
+
+  const { entrysData = [], sumTotalEntry } = useFetchEntrysData()
+  const { addEntry } = useAddEntrys()
+  const { deletedEntry } = useDeletedEntry()
+
+  const { clearExpensesData } = useClearExpenses()
+  const { saveReport } = useSaveReport()
+
+  const { calculationSumValues } = useCalculationSumValues(expensesData)
+  const { investments } = useInvestmentMetrics(
+    calculationSumValues,
+    sumTotalEntry
+  )
+  const { getTotals } = useGetTotalsFree(calculationSumValues)
+  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
+    userData,
+    getTotals?.value_secondary_currency
+  )
 
   const {
     controlModalAddEntry,
@@ -65,31 +83,15 @@ export default function Control() {
     configModalExpense
   } = useControlModals()
 
-  const { addExpense, isLoadingAddExpense } = useAddExpense()
-  const {
-    expensesData = [],
-    setFilter,
-    filter,
-    isLoadingExpensesData
-  } = useFetchExpensesData()
-  const { deletedExpense } = useDeletedExpense()
-  const { upadtedExpense } = useUpadtedExpense()
-
-  const { entrysData = [] } = useFetchEntrysData()
-  const { addEntry } = useAddEntrys()
-  const { deletedEntry } = useDeletedEntry()
-
-  const { clearExpensesData } = useClearExpenses()
-  const { saveReport } = useSaveReport()
-
-  const { calculationSumValues } = useCalculationSumValues(expensesData)
-  const { getTotals } = useGetTotalsFree(calculationSumValues)
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
-    userData,
-    getTotals?.value_secondary_currency
-  )
-  const totalEntrys = SumValues(entrysData)
-  const investments = useInvestmentMetrics(calculationSumValues, totalEntrys)
+  const controlModals = {
+    controlModalAddEntry,
+    controlModalAddExpense,
+    controlModalTotalEntrys,
+    controlModalSaveReport,
+    controlModalDeleteExpenses,
+    controlModalInfoCard,
+    handleControlModalExpense
+  }
 
   const calculationTotalExpensesEurSumRealToReal = useMemo(
     () =>
@@ -100,35 +102,29 @@ export default function Control() {
     [lastQuatationData, getTotals]
   )
 
-  const calculationTotalExpensesEurToReal = convertEurToReal(
-    lastQuatationData?.current_quotation,
-    Number(getTotals?.value_secondary_currency)
+  const calculationTotalExpensesEurToReal = useMemo(
+    () =>
+      convertEurToReal(
+        lastQuatationData?.current_quotation,
+        Number(getTotals?.value_secondary_currency)
+      ),
+    [lastQuatationData, getTotals]
   )
-
-  function SumValues(array: IEntrysData[]) {
-    const total = useMemo(
-      () =>
-        array.reduce((accumulator, item) => {
-          return accumulator + Number(item.value)
-        }, 0),
-      [array]
-    )
-
-    return total
-  }
 
   const validateExpenseData: any = {
     hybrid: calculationTotalExpensesEurSumRealToReal,
     oneCurrency: getTotals?.value_primary_currency
   }
 
-  const onAddExpense = async (data: ExpenseData) => {
+  const onAddExpense: SubmitHandler<ExpenseData> = async (data) => {
+    const formattedData = formattedValuesSubmitExpense(data, userData)
+
     if (configModalExpense.type === 'edit') {
-      await upadtedExpense(formattedValuesSubmitExpense(data, userData))
-      handleControlModalExpense('cancel')
-      return
+      await updatedExpense(formattedData)
+    } else {
+      addExpense(formattedData)
     }
-    addExpense(formattedValuesSubmitExpense(data, userData))
+
     handleControlModalExpense('cancel')
     setFilter('')
   }
@@ -160,11 +156,11 @@ export default function Control() {
       data,
       period,
       totalFree:
-        totalEntrys -
+        sumTotalEntry -
         (validateExpenseData[typeAccount] || 0) -
         investments.totalInvestments,
       investments: investments,
-      totalEntrys: totalEntrys,
+      totalEntrys: sumTotalEntry,
       totalExpenses: validateExpenseData[typeAccount],
       totalExpenseEurToReal: calculationTotalExpensesEurToReal ?? 0,
       quatation: lastQuatationData?.current_quotation ?? 0
@@ -185,7 +181,7 @@ export default function Control() {
       <Box w={{ base: '93%', lg: '97%' }} margin="auto">
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
-          totalEntrys={totalEntrys}
+          totalEntrys={sumTotalEntry}
           totalExpensesEurSumRealToReal={validateExpenseData[typeAccount]}
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
@@ -215,83 +211,19 @@ export default function Control() {
         />
       </Box>
 
-      <ModalChakra
-        isOpen={controlModalAddExpense.isOpen}
-        onClose={controlModalAddExpense.onClose}
-        isCentered
-        size="xl"
-      >
-        <ContentActionsTableModal
-          typeModal={configModalExpense?.type}
-          initialData={configModalExpense?.selectedData}
-          handleOpenModal={handleControlModalExpense}
-          onSubmit={onAddExpense}
-          isLoadingAddExpense={isLoadingAddExpense}
-          onDelete={onDelete}
-        />
-      </ModalChakra>
-
-      <ModalChakra
-        isOpen={controlModalDeleteExpenses.isOpen}
-        onClose={controlModalDeleteExpenses.onClose}
-        isCentered
-      >
-        <DeleteModalContent
-          onCancel={controlModalDeleteExpenses.onClose}
-          onSubmit={
-            configModalExpense.type === 'deleteAllExpenses'
-              ? clearExpensesData
-              : onDelete
-          }
-        />
-      </ModalChakra>
-
-      <ModalChakra
-        isOpen={controlModalSaveReport.isOpen}
-        onClose={controlModalSaveReport.onOpen}
-        isCentered
-        size="xl"
-      >
-        <ConfirmSaveReportModal
-          initialData={expensesData}
-          onCancel={controlModalSaveReport.onClose}
-          onSubmit={({ data, period }: any) => onSaveReport({ data, period })}
-        />
-      </ModalChakra>
-
-      <ModalChakra
-        isOpen={controlModalAddEntry.isOpen}
-        onClose={controlModalAddEntry.onClose}
-        isCentered
-        size="xl"
-      >
-        <ContentAddEntryModal
-          handleOpenModal={controlModalAddEntry.onClose}
-          onSubmit={onAddEntrys}
-        />
-      </ModalChakra>
-
-      <ModalChakra
-        isOpen={controlModalTotalEntrys.isOpen}
-        onClose={controlModalTotalEntrys.onClose}
-        isCentered
-        size="xl"
-      >
-        <ContentTotalEntrys
-          handleOpenModal={controlModalTotalEntrys.onClose}
-          data={entrysData}
-          onDelete={deletedEntry}
-        />
-      </ModalChakra>
-
-      <ModalChakra
-        isOpen={controlModalInfoCard.isOpen}
-        onClose={controlModalInfoCard.onClose}
-        isCentered
-        size="xl"
-      >
-        <InfoCardContent handleInfoAction={controlModalInfoCard.onOpen} />
-      </ModalChakra>
+      <ModalsControl
+        controlModals={controlModals}
+        configModalExpense={configModalExpense}
+        expensesData={expensesData}
+        clearExpensesData={clearExpensesData}
+        isLoadingAddExpense={isLoadingAddExpense}
+        onAddExpense={onAddExpense}
+        onDelete={onDelete}
+        onAddEntrys={onAddEntrys}
+        onSaveReport={onSaveReport}
+        entrysData={entrysData}
+        deletedEntry={deletedEntry}
+      />
     </Box>
   )
 }

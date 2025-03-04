@@ -21,8 +21,12 @@ export const useFetchEntrysData = () => {
     enabled: !!userId
   })
 
+  const sumTotalEntry =
+    entrysData && entrysData.reduce((acc, item) => acc + Number(item.value), 0)
+
   return {
     entrysData,
+    sumTotalEntry: sumTotalEntry || 0,
     isLoadingEntrysData,
     statusEntrysData,
     refetchEntrysData

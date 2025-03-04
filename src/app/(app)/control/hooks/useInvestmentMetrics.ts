@@ -15,8 +15,10 @@ export const useInvestmentMetrics = (
   )
 
   return {
-    totalInvestments,
-    investmentPercentageFormat: `${investmentPercentage}%`,
-    investmentPercentage: Number(investmentPercentage)
+    investments: {
+      totalInvestments,
+      investmentPercentageFormat: `${investmentPercentage}%`,
+      investmentPercentage: Number(investmentPercentage)
+    }
   }
 }

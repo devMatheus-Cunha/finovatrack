@@ -5,11 +5,11 @@ import { useFetchExpensesData } from '../useFetchExpensesData'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { useUserId } from '@/hooks/globalStates'
 
-const useUpadtedExpense = () => {
+const useUpdatedExpense = () => {
   const { userId } = useUserId() as any
   const { refetchExpensesData } = useFetchExpensesData()
 
-  const { mutateAsync: upadtedExpense } = useMutation({
+  const { mutateAsync: updatedExpense } = useMutation({
     mutationFn: async (data: ExpenseData) =>
       await updatedExpenseService(data, userId),
     onSuccess: () => {
@@ -22,8 +22,8 @@ const useUpadtedExpense = () => {
   })
 
   return {
-    upadtedExpense
+    updatedExpense
   }
 }
 
-export default useUpadtedExpense
+export default useUpdatedExpense

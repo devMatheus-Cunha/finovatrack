@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -31,8 +31,8 @@ import { DeleteIcon } from '@chakra-ui/icons'
 import { categoryOptions, paymentsOptions } from './utilts'
 import { useUserData } from '@/hooks/globalStates'
 
-interface IContentModal {
-  onSubmit: (data: ExpenseData) => Promise<void>
+interface IExpenseModalContent {
+  onSubmit: SubmitHandler<ExpenseData>
   handleOpenModal: IHandleControlModalExpenseFunction
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
@@ -40,13 +40,13 @@ interface IContentModal {
   onDelete: () => void
 }
 
-function ContentActionsTableModal({
+const ExpenseModalContent = ({
   onSubmit,
   handleOpenModal,
   initialData,
   typeModal,
   onDelete
-}: IContentModal) {
+}: IExpenseModalContent) => {
   const { userData } = useUserData()
   const schema = z.object({
     description: z.string({
@@ -225,4 +225,4 @@ function ContentActionsTableModal({
   )
 }
 
-export default ContentActionsTableModal
+export default ExpenseModalContent
