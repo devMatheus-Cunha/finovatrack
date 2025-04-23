@@ -14,6 +14,8 @@ import {
   formatCurrencyMoney
 } from '@/utils/formatNumber'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData '
+import { useFetchReportsData } from '@/hooks/reports'
 
 interface AccordionPanelProps {
   data: IFinancialPlanningProps
@@ -38,13 +40,12 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
   userData,
   isVisibilityData
 }) => {
+    const { year } =
+      useFetchReportsData()
+  const { reportDataToYear } = useFetchReportsToYearData(String(year))
   const yearContributions =
     Number(data.periodContributions) * Number(data.monthlyContributions)
-  const contributedMonths = MONTHS_IN_YEAR - Number(data.periodContributions)
-  const fixedContribution =
-    contributedMonths * Number(data.monthlyContributions)
-  const totalFixedAndExtraContribution =
-    fixedContribution + Number(data.receivables)
+  const totalFixedAndExtraContribution = reportDataToYear?.totalInvestments
 
   const reserveAmount = currentAndPreviousYearValidity(data.year)
     ? data.reserve
