@@ -4,6 +4,7 @@ import { ExpenseData } from '../expenses/getExpenses'
 
 export interface IReportData {
   data: ExpenseData[]
+  entrys: { value: number }[] // Array de entradas
   investments: {
     totalInvestments: number
     investmentPercentageFormat: string

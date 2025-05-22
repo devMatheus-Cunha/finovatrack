@@ -155,6 +155,7 @@ export default function Control() {
     saveReport({
       data,
       period,
+      entrys: entrysData || [], // Adicionando array de entradas
       totalFree:
         sumTotalEntry -
         (validateExpenseData[typeAccount] || 0) -
