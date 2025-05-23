@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactNode } from 'react'
-import { Button, HStack, useColorModeValue } from '@chakra-ui/react'
+import Button from '../Button'
 
 interface ButtonOption {
   onClick: () => void
@@ -13,30 +13,19 @@ interface ButtonGroupProps {
 }
 
 function ButtonGroup({ buttonOptions }: ButtonGroupProps) {
-  const borderColor = useColorModeValue('gray.200', 'gray.600')
-  const hoverBorderColor = useColorModeValue('gray.400', 'gray.600')
-  const textColor = useColorModeValue('gray.500', 'white')
-
   return (
-    <HStack>
+    <div className="flex space-x-2">
       {buttonOptions?.map((item, index) => (
         <Button
           key={index}
           onClick={item?.onClick}
           variant="outline"
-          p={0}
-          borderColor={borderColor}
-          _hover={{
-            borderColor: hoverBorderColor,
-            textDecoration: 'none',
-            bg: 'transparent'
-          }}
-          color={textColor}
+          className="p-0 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-white hover:border-gray-400 dark:hover:border-gray-600 hover:bg-transparent"
         >
           {item?.content}
         </Button>
       ))}
-    </HStack>
+    </div>
   )
 }
 

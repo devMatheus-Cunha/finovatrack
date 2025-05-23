@@ -9,7 +9,6 @@ import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/common/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ITypeModalExpense } from '../../../hooks/useControlModal'
-import { Box } from '@chakra-ui/react'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -99,13 +98,13 @@ function TableToControl({
   }
 
   return (
-    <Box overflowY="auto" borderRadius="md" height="63vh" bg="gray.700">
+    <div className="overflow-y-auto rounded-md h-[63vh] bg-[#2D3748]">
       {calculationSumValues?.length > 0 ? (
         <Table columns={columsHeadProps()} data={calculationSumValues} />
       ) : (
         <Empty<Filter> filter={filter} />
       )}
-    </Box>
+    </div>
   )
 }
 

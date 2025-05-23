@@ -5,7 +5,6 @@ import Slider from 'react-slick'
 import { InfoCardMoney } from '@/components'
 import useFetchEntrysData from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { Box } from '@chakra-ui/react'
 import { generateCardsData, settings } from './utils'
 
 interface IInfoCardsToControl {
@@ -44,9 +43,9 @@ function InfoCardsToControl({
   return (
     <Slider {...settings} className="w-full h-[100px] lg:h-[124.5px]">
       {cardsData?.map((card, index) => (
-        <Box key={index} p={{ base: 2, lg: 4 }} rounded="md">
+        <div key={index} className="p-2 lg:p-4 rounded-md">
           <InfoCardMoney {...card} />
-        </Box>
+        </div>
       ))}
     </Slider>
   )

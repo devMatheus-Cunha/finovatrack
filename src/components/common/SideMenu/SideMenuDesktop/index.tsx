@@ -1,14 +1,16 @@
-import { Box, Flex, Button, Text, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
+
+// Ajuste do tipo do ícone para aceitar componente React
+// e action opcional para itens de navegação
 
 type SidebarItem = {
   id: string
   label: string
   route: string
   disabled: boolean
-  icon: React.JSX.Element
-  action: () => void
+  icon: React.ElementType | React.ReactNode // Aceita componente ou elemento
+  action?: () => void
 }
 
 type SideMenuDesktopProps = {
@@ -21,59 +23,71 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
   pathname
 }) => {
   return (
-    <Box transition="opacity 0.3s" height="full">
-      <Flex height="full" flexDirection="column" px={2.5} py={3} bg="gray.700">
-        <Flex flexDirection="column" gap={6}>
+    <div className="transition-opacity duration-300 h-full">
+      <div className="h-full flex flex-col px-2.5 py-3 bg-gray-700">
+        <div className="flex flex-col gap-6">
           {sidebarItems.map((item) => {
             const isActive = pathname?.includes(item.route)
-            const itemTextColor = isActive ? 'cyan' : 'white'
+            const itemTextColor = item.disabled
+              ? 'text-gray-500'
+              : isActive
+                ? 'text-cyan-400'
+                : 'text-white'
 
             if (item.id === 'eye' || item.id === 'logout') {
               return (
-                <Button
+                <button
                   key={item.id}
                   onClick={item.action}
                   disabled={item.disabled}
-                  variant="ghost"
-                  _hover={{ opacity: 0.75 }}
-                  _active={{ opacity: 0.75 }}
-                  p={0}
-                  color={itemTextColor}
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
+                  className={`bg-transparent border-none flex flex-col items-center justify-center p-0 ${itemTextColor} hover:opacity-75 active:opacity-75 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed`}
+                  type="button"
                 >
-                  {item.icon}
-                  <Text fontSize="xs">{item.label}</Text>
-                </Button>
+                  {typeof item.icon === 'function'
+                    ? React.createElement(item.icon, {
+                        className: 'w-6 h-6 mb-1'
+                      })
+                    : item.icon}
+                  <span className="text-xs">{item.label}</span>
+                </button>
               )
             }
 
-            return (
-              <Link
-                as={item.disabled ? 'span' : NextLink}
+            return item.disabled ? (
+              <span
                 key={item.id}
-                href={item.disabled ? undefined : `/${item.route}`}
-                onClick={(e) => item.disabled && e.preventDefault()} // Impede o clique
-                _hover={item.disabled ? { opacity: 0.5 } : { opacity: 0.75 }}
-                color={item.disabled ? 'gray.500' : itemTextColor}
-                cursor={item.disabled ? 'not-allowed' : 'pointer'}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                p={0}
-                opacity={item.disabled ? 0.5 : 1}
+                className={`flex flex-col items-center justify-center p-0 opacity-50 cursor-not-allowed ${itemTextColor}`}
               >
-                {item.icon}
-                <Text fontSize="xs">{item.label}</Text>
-              </Link>
+                {typeof item.icon === 'function'
+                  ? React.createElement(item.icon, {
+                      className: 'w-6 h-6 mb-1'
+                    })
+                  : item.icon}
+                <span className="text-xs">{item.label}</span>
+              </span>
+            ) : (
+              <NextLink
+                key={item.id}
+                href={`/${item.route}`}
+                passHref
+                legacyBehavior
+              >
+                <a
+                  className={`flex flex-col items-center justify-center p-0 hover:opacity-75 ${itemTextColor}`}
+                >
+                  {typeof item.icon === 'function'
+                    ? React.createElement(item.icon, {
+                        className: 'w-6 h-6 mb-1'
+                      })
+                    : item.icon}
+                  <span className="text-xs">{item.label}</span>
+                </a>
+              </NextLink>
             )
           })}
-        </Flex>
-      </Flex>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -1,17 +1,24 @@
 import React from 'react'
-
 import NextLink from 'next/link'
-import { Link as ChakraLink, LinkProps } from '@chakra-ui/react'
 
-interface ILinksProps extends LinkProps {
+interface ILinksProps {
   href: string
+  children: React.ReactNode
+  textDecor?: string
+  [key: string]: any
 }
 
-const Link = ({ href, children, ...props }: ILinksProps) => {
+const Link = ({ href, children, textDecor, ...props }: ILinksProps) => {
+  const decorationClass = textDecor === 'underline' ? 'underline' : ''
+
   return (
-    <ChakraLink as={NextLink} {...props} href={href} color="white">
+    <NextLink
+      href={href}
+      className={`text-white hover:text-blue-300 ${decorationClass}`}
+      {...props}
+    >
       {children}
-    </ChakraLink>
+    </NextLink>
   )
 }
 

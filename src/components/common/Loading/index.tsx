@@ -1,4 +1,3 @@
-import { Flex, Spinner } from '@chakra-ui/react'
 import React from 'react'
 
 export type StatusRequestProps = 'idle' | 'error' | 'loading' | 'success'
@@ -12,17 +11,14 @@ function Loading({ children, loading }: LoadingProps) {
   return (
     <>
       {loading ? (
-        <Flex height="100vh" width="100%" align="center" justify="center">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="cyan.500"
-            size="xl"
-          />
-        </Flex>
+        <div className="flex h-screen w-full items-center justify-center">
+          <div className="relative h-16 w-16">
+            <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-blue-500 animate-spin"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-t-transparent border-cyan-500 animate-spin animation-delay-150"></div>
+          </div>
+        </div>
       ) : (
-        { children }
+        children
       )}
     </>
   )

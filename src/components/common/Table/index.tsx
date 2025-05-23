@@ -1,13 +1,4 @@
 import React, { ReactNode } from 'react'
-import {
-  Table as TableChakra,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer
-} from '@chakra-ui/react'
 
 export interface TableColumn {
   header: string
@@ -27,24 +18,23 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
-    <TableContainer
-      bg={{ lg: 'gray.700' }}
-      height="63vh"
-      rounded="md"
-      overflowY="auto"
-      w="full"
-    >
-      <TableChakra variant="simple" colorScheme="teal">
-        <Thead>
-          <Tr>
+    <div className="bg-gray-700 h-[63vh] rounded-md overflow-y-auto w-full">
+      <table className="min-w-full">
+        <thead className="border-b border-gray-600">
+          <tr>
             {columns.map((column) => (
-              <Th key={column.field}>{column.header}</Th>
+              <th
+                key={column.field}
+                className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
+              >
+                {column.header}
+              </th>
             ))}
-          </Tr>
-        </Thead>
-        <Tbody>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-700">
           {data.map((row, rowIndex) => (
-            <Tr key={rowIndex}>
+            <tr key={rowIndex} className="hover:bg-gray-600">
               {columns.map((column) => {
                 const cellStyles = column.styles
                   ? column.styles(row[column.field])
@@ -56,24 +46,20 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                     : row[column.field]
 
                 return (
-                  <Td
+                  <td
                     key={column.field}
-                    px="6"
-                    py="4"
-                    fontWeight="medium"
-                    whiteSpace="nowrap"
-                    color="white"
+                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
                     style={cellStyles}
                   >
                     {cellContent}
-                  </Td>
+                  </td>
                 )
               })}
-            </Tr>
+            </tr>
           ))}
-        </Tbody>
-      </TableChakra>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   )
 }
 

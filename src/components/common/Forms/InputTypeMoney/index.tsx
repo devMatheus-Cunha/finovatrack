@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Tooltip,
-  FormControl,
-  FormLabel,
-  Input,
-  FormErrorMessage
-} from '@chakra-ui/react'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import React from 'react'
 import { Controller, Control, FieldValues, Path } from 'react-hook-form'
 import { NumericFormat, NumericFormatProps } from 'react-number-format'
 
@@ -36,26 +29,33 @@ function InputTypeMoney<T extends FieldValues>({
   defaultValue
 }: InputTypeMoneyProps<T>) {
   return (
-    <FormControl isInvalid={!!errors} w="100%">
-      <FormLabel
+    <div className="w-full">
+      <label
         htmlFor={name}
-        mb="2"
-        color="white"
-        fontSize="sm"
-        display="flex"
-        gap={0.5}
+        className="mb-2 text-sm font-medium text-white block flex gap-1 items-center"
       >
         {required ? `${label} *` : label}
         {labelHint && (
-          <Tooltip label={labelHint} fontSize="sm" hasArrow placement="top">
-            <InfoOutlineIcon color="orange" />
-          </Tooltip>
+          <span className="text-orange-400 cursor-pointer" title={labelHint}>
+            {/* Info icon SVG inline */}
+            <svg
+              className="w-4 h-4 inline"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </span>
         )}
-      </FormLabel>
+      </label>
       <Controller
         control={control}
         name={name}
-        defaultValue={defaultValue} // Passando defaultValue para o Controller
+        defaultValue={defaultValue}
         render={({ field }) => (
           <NumericFormat
             {...field}
@@ -64,23 +64,19 @@ function InputTypeMoney<T extends FieldValues>({
             allowLeadingZeros
             displayType="input"
             type="text"
-            customInput={Input} // Usando o Input do Chakra UI
-            variant={disabled ? 'filled' : 'outline'}
-            _disabled={{
-              bg: 'gray.700',
-              borderColor: 'gray.600',
-              color: 'gray.300',
-              cursor: 'not-allowed'
-            }}
-            _placeholder={{ color: 'gray.400' }}
+            className={`w-full px-3 py-2 bg-transparent border rounded-md border-[#4A5568] text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-150 placeholder-gray-400 appearance-none ${
+              disabled
+                ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
+                : 'hover:border-blue-500'
+            }`}
             allowNegative={false}
             decimalScale={2}
             decimalSeparator=","
           />
         )}
       />
-      <FormErrorMessage>{errors}</FormErrorMessage>
-    </FormControl>
+      {errors && <div className="mt-1 text-sm text-red-500">{errors}</div>}
+    </div>
   )
 }
 

@@ -1,17 +1,9 @@
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { useDisclosure } from '@chakra-ui/react'
 import { initialDataSelectedData } from '../utils'
 import { useState } from 'react'
+import { useCustomDisclosure } from '@/hooks/globalStates'
 
-type UseDisclosureReturn = {
-  isOpen: boolean
-  onOpen: () => void
-  onClose: any
-  onToggle: () => void
-  isControlled: boolean
-  getButtonProps: (props?: any) => any
-  getDisclosureProps: (props?: any) => any
-}
+
 export type ITypeModalExpense =
   | 'cancel'
   | 'add'
@@ -35,12 +27,12 @@ export const useControlModals = () => {
       selectedData: initialDataSelectedData
     })
 
-  const controlModalAddEntry: UseDisclosureReturn = useDisclosure()
-  const controlModalTotalEntrys: UseDisclosureReturn = useDisclosure()
-  const controlModalSaveReport: UseDisclosureReturn = useDisclosure()
-  const controlModalDeleteExpenses: UseDisclosureReturn = useDisclosure()
-  const controlModalAddExpense: UseDisclosureReturn = useDisclosure()
-  const controlModalInfoCard: UseDisclosureReturn = useDisclosure()
+  const controlModalAddEntry = useCustomDisclosure()
+  const controlModalTotalEntrys = useCustomDisclosure()
+  const controlModalSaveReport = useCustomDisclosure()
+  const controlModalDeleteExpenses = useCustomDisclosure()
+  const controlModalAddExpense = useCustomDisclosure()
+  const controlModalInfoCard = useCustomDisclosure()
 
   const handleControlModalExpense = (
     type: ITypeModalExpense,

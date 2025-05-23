@@ -36,7 +36,6 @@ import InfoCardsToControl from './parts/InfoCardsToControl'
 import TableMobileAndDesktop from './parts/TableMobileAndDesktop'
 
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { Box } from '@chakra-ui/react'
 import { ModalsControl } from './modals'
 
 export default function Control() {
@@ -170,16 +169,8 @@ export default function Control() {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDir="column"
-      w="full"
-      gap={10}
-      py={4}
-      px={3}
-      margin="auto"
-    >
-      <Box w={{ base: '93%', lg: '97%' }} margin="auto">
+    <div className="flex flex-col w-full gap-10 py-4 px-3 mx-auto">
+      <div className="w-[93%] lg:w-[97%] mx-auto">
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
           totalEntrys={sumTotalEntry}
@@ -188,9 +179,9 @@ export default function Control() {
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
           investments={investments}
         />
-      </Box>
+      </div>
 
-      <Box display="flex" flexDir="column" gap={4} w="100%">
+      <div className="flex flex-col gap-4 w-full">
         <HeaderDataTableToControl
           currentQuotation={lastQuatationData?.current_quotation}
           filter={filter}
@@ -210,7 +201,7 @@ export default function Control() {
           handleControlModalExpense={handleControlModalExpense}
           filter={filter}
         />
-      </Box>
+      </div>
 
       <ModalsControl
         controlModals={controlModals}
@@ -225,6 +216,6 @@ export default function Control() {
         entrysData={entrysData}
         deletedEntry={deletedEntry}
       />
-    </Box>
+    </div>
   )
 }

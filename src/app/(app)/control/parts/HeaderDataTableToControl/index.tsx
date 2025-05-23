@@ -1,17 +1,6 @@
 'use client'
 
 import {
-  HStack,
-  Text,
-  IconButton,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Icon,
-  Button,
-  Menu
-} from '@chakra-ui/react'
-import {
   Coins,
   HandCoins,
   Broom,
@@ -23,8 +12,9 @@ import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { optionsFilterCategory } from '../../utils'
 import { IHandleControlModalExpenseFunction } from '../../hooks/useControlModal'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { DropdownFilter, ShowAndHide } from '@/components'
+import { DropdownFilter, ShowAndHide, Button } from '@/components'
 import { useUserData } from '@/hooks/globalStates'
+import { useState } from 'react'
 
 interface IHeaderDataTableToControl {
   currentQuotation: number | undefined
@@ -48,6 +38,7 @@ function HeaderDataTableToControl({
   handleControlModalExpense
 }: IHeaderDataTableToControl) {
   const { userData } = useUserData()
+  const [showMenu, setShowMenu] = useState(false)
 
   const buttonData = [
     {
@@ -73,44 +64,53 @@ function HeaderDataTableToControl({
   ]
 
   return (
-    <HStack justifyContent="space-between" alignItems="center" wrap="wrap">
-      <HStack gap={3} justifyContent="center" flexWrap="wrap">
+    <div className="flex w-full justify-between items-center flex-wrap">
+      <div className="flex w-[50%] gap-3 justify-center">
         {buttonData.map((button, index) => (
           <Button
             key={index}
-            bg="gray.700"
-            leftIcon={<Icon as={button.icon} color="white" boxSize={5} />}
+            variant="default700"
             onClick={button.onClick}
-            display={{ base: 'none', lg: 'flex' }}
+            className="hidden lg:flex"
+            leftIcon={<button.icon size={20} color="white" />}
           >
             {button.label}
           </Button>
         ))}
 
         <ShowAndHide displayLg="none" displayBase="initial">
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              icon={<Icon as={Plus} />}
+          <div className="relative">
+            <Button
+              onClick={() => setShowMenu(!showMenu)}
+              variant="default700"
+              leftIcon={<Plus size={20} color="white" />}
               aria-label="Ações"
-              bg="gray.700"
-            />
-            <MenuList>
-              {buttonData.map((button, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={button.onClick}
-                  icon={<Icon as={button.icon} mr={2} />}
-                >
-                  {button.label}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
+            >
+              Ações
+            </Button>
+            {showMenu && (
+              <div className="absolute z-10 mt-2 bg-gray-800 border border-gray-700 rounded-md shadow-lg">
+                {buttonData.map((button, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => {
+                      button.onClick()
+                      setShowMenu(false)
+                    }}
+                    variant="ghost"
+                    className="w-full justify-start"
+                    leftIcon={<button.icon size={20} />}
+                  >
+                    {button.label}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
         </ShowAndHide>
-      </HStack>
+      </div>
 
-      <HStack>
+      <div className="flex items-center">
         <DropdownFilter
           value={filter}
           options={optionsFilterCategory}
@@ -119,26 +119,25 @@ function HeaderDataTableToControl({
         />
         {userData.typeAccount === 'hybrid' && (
           <>
-            <Text
-              fontSize={{ base: 'sm', md: 'md' }}
-              as="h3"
-              fontStyle="italic"
-            >
+            <p className="text-sm md:text-md italic">
               {`${userData.secondary_currency}: ${formatCurrencyMoney(
                 currentQuotation ?? 0,
                 userData.primary_currency
               )}`}
-            </Text>
-            <IconButton
-              aria-label="Refresh"
-              icon={<ArrowsCounterClockwise size={20} color="white" />}
+            </p>
+            <Button
               onClick={() => refetchQuationData()}
-              colorScheme="gray"
-            />
+              variant="default700"
+              className="ml-2"
+              leftIcon={<ArrowsCounterClockwise size={20} color="white" />}
+              aria-label="Refresh"
+            >
+              Atualizar
+            </Button>
           </>
         )}
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   )
 }
 

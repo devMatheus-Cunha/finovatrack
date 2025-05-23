@@ -1,0 +1,97 @@
+@keyframes slideInLeft {
+ from {
+  transform: translateX(-100%);
+ }
+ to {
+  transform: translateX(0);
+ }
+}
+
+.animate-slide-in {
+ animation: slideInLeft 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animation-delay-150 {
+ animation-delay: 150ms;
+}
+
+/* DatePicker personalizado para Tailwind */
+.react-datepicker {
+ background-color: #1a202c !important;
+ color: white !important;
+ border: 1px solid #4a5568 !important;
+ border-radius: 0.5rem !important;
+ font-family: inherit !important;
+ box-shadow:
+  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.react-datepicker__header {
+ background-color: #2d3748 !important;
+ border-bottom: 1px solid #4a5568 !important;
+ border-top-left-radius: 0.5rem !important;
+ border-top-right-radius: 0.5rem !important;
+ color: white !important;
+}
+
+.react-datepicker__current-month {
+ color: white !important;
+ font-weight: 600 !important;
+ padding: 0.5rem 0 !important;
+ text-align: center !important;
+}
+
+.react-datepicker__month {
+ margin: 0.5rem !important;
+ text-align: center !important;
+}
+
+.react-datepicker__year-text {
+ display: inline-block !important;
+ width: 4rem !important;
+ margin: 0.5rem !important;
+ padding: 0.25rem !important;
+ border-radius: 0.25rem !important;
+ color: white !important;
+}
+
+.react-datepicker__year-text:hover {
+ background-color: rgba(66, 153, 225, 0.5) !important;
+}
+
+.react-datepicker__year-text--selected {
+ background-color: #3182ce !important;
+ color: white !important;
+}
+
+.react-datepicker__month-text {
+ display: inline-block !important;
+ width: 4rem !important;
+ margin: 0.5rem !important;
+ padding: 0.35rem !important;
+ border-radius: 0.25rem !important;
+ color: white !important;
+}
+
+.react-datepicker__month-text:hover {
+ background-color: rgba(66, 153, 225, 0.5) !important;
+}
+
+.react-datepicker__month-text--selected {
+ background-color: #3182ce !important;
+ color: white !important;
+ font-weight: 600 !important;
+}
+
+.react-datepicker__navigation {
+ top: 0.5rem !important;
+}
+
+.react-datepicker__navigation--previous {
+ border-right-color: white !important;
+}
+
+.react-datepicker__navigation--next {
+ border-left-color: white !important;
+}

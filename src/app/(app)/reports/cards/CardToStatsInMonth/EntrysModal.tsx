@@ -1,20 +1,4 @@
 import React from 'react'
-import {
-  Button,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  Heading,
-  Text
-} from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
@@ -31,53 +15,54 @@ function EntrysModal({ onClose, entrys }: IEntrysModalProps) {
   const { userData } = useUserData()
 
   return (
-    <>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          <Heading as="h3" size="xl" fontWeight="semibold" color="white">
-            Detalhes das Entradas
-          </Heading>
-        </ModalHeader>
-        <ModalBody pb={6}>
-          <Table variant="simple" colorScheme="teal">
-            <Thead>
-              <Tr>
-                {columsHeadProps.map((item) => (
-                  <Th key={item.field}>{item.header}</Th>
-                ))}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {entrys?.map((item, index) => (
-                <Tr key={index} bg="gray.700">
-                  <Td color="white">
-                    <Text>
-                      {formatCurrencyMoney(
-                        item.value,
-                        userData.primary_currency,
-                        isVisibilityData
-                      )}
-                    </Text>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </ModalBody>
-        <ModalFooter
-          mt={8}
-          px={4}
-          py={6}
-          borderTop="1px"
-          borderColor="gray.600"
+    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-xl mx-auto">
+      <div className="px-6 pt-6 pb-2 border-b border-gray-600 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-white">
+          Detalhes das Entradas
+        </h3>
+        <button
+          onClick={onClose}
+          className="text-gray-400 hover:text-white text-2xl font-bold focus:outline-none"
+          aria-label="Fechar"
         >
-          <Button variant="outline" onClick={onClose}>
-            Fechar
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </>
+          ×
+        </button>
+      </div>
+      <div className="px-6 py-4">
+        <table className="min-w-full text-left">
+          <thead>
+            <tr>
+              {columsHeadProps.map((item) => (
+                <th key={item.field} className="text-gray-400 pb-2 font-medium">
+                  {item.header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {entrys?.map((item, index) => (
+              <tr key={index} className="bg-gray-700">
+                <td className="text-white py-2">
+                  {formatCurrencyMoney(
+                    item.value,
+                    userData.primary_currency,
+                    isVisibilityData
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="px-6 py-4 border-t border-gray-600 flex justify-end">
+        <button
+          onClick={onClose}
+          className="px-4 py-2 border border-gray-400 rounded text-gray-200 hover:bg-gray-700 focus:outline-none"
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
   )
 }
 

@@ -1,6 +1,5 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 interface ShowAndHideProps {
@@ -14,7 +13,9 @@ const ShowAndHide: React.FC<ShowAndHideProps> = ({
   displayLg = 'initial',
   displayBase = 'none'
 }) => {
-  return <Box display={{ base: displayBase, lg: displayLg }}>{children}</Box>
+  const baseClass = displayBase === 'none' ? 'hidden' : 'block'
+  const lgClass = displayLg === 'none' ? 'lg:hidden' : 'lg:block'
+  return <div className={`${baseClass} ${lgClass}`}>{children}</div>
 }
 
 export default ShowAndHide

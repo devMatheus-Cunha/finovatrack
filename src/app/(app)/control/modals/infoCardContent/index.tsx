@@ -1,5 +1,5 @@
-import { Button } from '@/components'
 import React from 'react'
+import { Button } from '@/components'
 
 interface IInfoCardContentProps {
   handleInfoAction: any
@@ -7,7 +7,7 @@ interface IInfoCardContentProps {
 
 const InfoCardContent = ({ handleInfoAction }: IInfoCardContentProps) => {
   return (
-    <div className="bg-gray-800 rounded-lg shadow">
+    <div className="bg-gray-800 rounded-lg shadow w-full max-w-lg mx-auto">
       <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
         <h3 className="text-xl font-semibold text-white">
           Saiba como calculamos o valor total de gastos!
@@ -25,7 +25,6 @@ const InfoCardContent = ({ handleInfoAction }: IInfoCardContentProps) => {
           Através da nossa plataforma, sua primeira transferência terá taxa 0.
         </p>
       </div>
-
       <div className="flex justify-center px-4 py-6 gap-3 border-t rounded-b border-gray-600">
         <Button onClick={handleInfoAction} type="button" variant="cancel">
           Fechar

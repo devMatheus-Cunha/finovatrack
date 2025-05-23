@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import {
@@ -16,13 +15,13 @@ import {
   Grid,
   GridItem,
   HStack,
-  Icon,
-  useDisclosure,
-  Modal
+  Icon
 } from '@chakra-ui/react'
 import { Eye } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import EntrysModal from './EntrysModal'
+import { Modal } from '@/components/common/Modal'
+import { useCustomDisclosure } from '@/hooks/globalStates'
 
 interface IInfoCardsToControl {
   userData: UserData
@@ -32,7 +31,7 @@ interface IInfoCardsToControl {
 
 function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useCustomDisclosure()
 
   const summaryItems = [
     {

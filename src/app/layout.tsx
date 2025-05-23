@@ -1,4 +1,6 @@
 import './globals.css'
+import '../rare-styles.scss'
+import 'react-datepicker/dist/react-datepicker.css'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import Providers from './providers'

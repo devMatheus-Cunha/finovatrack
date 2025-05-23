@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useForgetPassword } from '@/hooks/entrys/useDeletedEntry/auth'
 import { LogoutProps } from '@/services/auth/forgetPassword'
-import { Input, Link } from '../../../components'
+import { Input, Link, Button } from '../../../components'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, VStack, Text, useColorModeValue, Button } from '@chakra-ui/react'
 
 const schema = z.object({
   email: z.string().email('Formato de')
@@ -23,32 +22,19 @@ export default function ForgetPassword() {
     resolver: zodResolver(schema)
   })
 
-  const textColor = useColorModeValue('gray.800', 'white')
-  const secondaryTextColor = useColorModeValue('slate.300', 'gray.400')
-
   return (
     <form
       onSubmit={handleSubmit((values: LogoutProps) => onForgetPassword(values))}
     >
-      <Box
-        display="flex"
-        flexDir="column"
-        gap={6}
-        w="100%"
-        bg="gray.700"
-        py={7}
-        px={5}
-        borderRadius="lg"
-      >
-        <VStack spacing={3} textAlign="center">
-          <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-            Esqueceu sua senha?
-          </Text>
-          <Text color={secondaryTextColor}>
+      <div className="flex flex-col gap-6 w-full bg-[#2D3748] py-7 px-5 rounded-lg">
+        <div className="flex flex-col space-y-3 text-center">
+          <h2 className="text-2xl font-bold text-white">Esqueceu sua senha?</h2>
+          <p className="text-gray-400">
             Não se preocupe! Insira o seu e-mail de cadastro e enviaremos
             instruções para você.
-          </Text>
-        </VStack>
+          </p>
+        </div>
+
         <Input
           label="Email"
           name="email"
@@ -58,30 +44,24 @@ export default function ForgetPassword() {
           required
           errors={errors.email?.message}
         />
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          gap={10}
-        >
+
+        <div className="flex flex-col justify-center items-center gap-10">
           <Button
+            isDisabled={isLoading}
             isLoading={isLoading}
             loadingText="Enviando"
             type="submit"
-            color="gray.600"
-            textColor="white"
-            w="full"
+            variant="default700"
           >
-            Criar
+            Enviar
           </Button>
-          <Box display="flex" gap={7}>
-            <Link href="/" textDecor="underline">
+          <div className="flex gap-7">
+            <Link href="/login" textDecor="underline">
               Login
             </Link>
-          </Box>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
     </form>
   )
 }

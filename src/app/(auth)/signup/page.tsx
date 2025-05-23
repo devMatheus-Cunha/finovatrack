@@ -6,13 +6,12 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SigingProps } from '@/services/auth/siging'
 import { useSignUp } from '../../../hooks/entrys/useDeletedEntry/auth'
-import { Input, InputPassword, Link, Select } from '@/components'
+import { Input, InputPassword, Link, Select, Button } from '@/components'
 import {
   dropdownOptionsCurrency,
   dropdownOptionsCurrencyHybrid,
   schema
 } from './utils'
-import { Box, Button } from '@chakra-ui/react'
 
 export default function Signup() {
   const { isLoading, createAccountUser } = useSignUp()
@@ -32,16 +31,7 @@ export default function Signup() {
         createAccountUser(values)
       )}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap={6}
-        w="100%"
-        bg="gray.700"
-        py={5}
-        px={5}
-        rounded="lg"
-      >
+      <div className="flex flex-col gap-6 w-full bg-[#2D3748] py-5 px-5 rounded-lg">
         <div className="flex gap-6">
           <Input
             label="Nome"
@@ -82,7 +72,7 @@ export default function Signup() {
         </div>
 
         <Select
-          label="Selecione moeda da conta *"
+          label="Selecione moeda da conta"
           name="typeAccount"
           register={register}
           isRequired
@@ -129,33 +119,23 @@ export default function Signup() {
           </div>
         )}
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          gap={10}
-        >
+        <div className="flex flex-col justify-center items-center gap-10">
           <Button
+            isDisabled={isLoading}
             isLoading={isLoading}
             loadingText="Criando"
             type="submit"
-            color="gray.600"
-            textColor="white"
-            w="full"
+            variant="default700"
           >
             Criar
           </Button>
-          <Box display="flex" gap={7}>
-            <Link href="/" textDecor="underline">
-              Home
-            </Link>
-            <Link href="/" textDecor="underline">
+          <div className="flex gap-7">
+            <Link href="/login" textDecor="underline">
               Login
             </Link>
-          </Box>
-        </Box>
-      </Box>
+          </div>
+        </div>
+      </div>
     </form>
   )
 }

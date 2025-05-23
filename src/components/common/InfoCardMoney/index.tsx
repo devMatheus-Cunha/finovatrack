@@ -1,16 +1,6 @@
 import React, { ReactNode } from 'react'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Icon,
-  Skeleton,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  useColorModeValue
-} from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { Button } from '@/components'
 
 interface InfoCardProps {
   infoData: any
@@ -19,10 +9,31 @@ interface InfoCardProps {
   title: string
   contentAction?: ReactNode
   currency: any
-  icon: any
+  icon: React.ElementType // Aceita apenas componente, não elemento pronto
   iconColor: string
   isVisibilityData: boolean
 }
+
+// SVG do ícone de informação (substitui InfoOutlineIcon do Chakra)
+const InfoOutlineSvg = ({
+  className = '',
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={`w-4 h-4 ${className}`}
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+)
 
 function InfoCardMoney({
   infoData,
@@ -31,66 +42,55 @@ function InfoCardMoney({
   infoAction,
   isVisibilityData,
   currency,
-  icon,
+  icon: IconComponent,
   iconColor,
   actionCard
 }: InfoCardProps) {
-  const bgColor = useColorModeValue('gray.100', 'gray.700')
-
   return (
     <>
       {infoData ? (
-        <Box
-          display="flex"
-          w="full"
-          alignItems="center"
-          bg={bgColor}
-          borderRadius="md"
-          py={5}
-          px={{ base: 2, lg: 4 }}
-          onClick={actionCard && actionCard}
-          cursor={contentAction ? 'pointer' : ''}
+        <div
+          className={`flex w-full items-center bg-gray-700 rounded-md py-5 px-2 lg:px-4`}
+          onClick={actionCard}
+          style={{ cursor: contentAction ? 'pointer' : 'default' }}
         >
-          <Stat>
-            <StatLabel
-              fontSize="xs"
-              color="gray.500"
-              alignItems="center"
-              display="flex"
-            >
-              {title}
-              {contentAction && contentAction}
+          <div className="flex-1">
+            <div className="flex items-center text-xs text-gray-500 font-medium mb-1">
+              <span>{title}</span>
+              {contentAction && <span className="ml-1">{contentAction}</span>}
               {infoAction && (
-                <Icon
-                  as={InfoOutlineIcon}
-                  color="cyan"
-                  cursor="pointer"
-                  onClick={infoAction}
-                  marginLeft={1}
-                />
+                <Button
+                  variant="ghost"
+                  className="ml-1 text-cyan-500 hover:text-cyan-600 p-0"
+                  onClick={(e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                    e?.stopPropagation()
+                    infoAction()
+                  }}
+                  aria-label="Informações"
+                >
+                  <InfoOutlineSvg />
+                </Button>
               )}
-            </StatLabel>
-            <StatNumber display="flex" alignItems="center">
-              <Text
-                fontSize={{ base: 'lg', lg: '23' }}
-                fontWeight="bold"
-                marginRight={1}
-              >
+            </div>
+            <div className="flex items-center">
+              <span className="text-lg lg:text-[23px] font-bold mr-1">
                 {formatCurrencyMoney(infoData, currency, isVisibilityData)}
-              </Text>
-            </StatNumber>
-          </Stat>
-          <Icon
-            as={icon}
-            boxSize={{ base: 7, md: 8, lg: 10 }}
-            color={iconColor}
-          />
-        </Box>
+              </span>
+            </div>
+          </div>
+          <div className="ml-4 flex-shrink-0 flex items-center">
+            {IconComponent && typeof IconComponent === 'function' ? (
+              <IconComponent
+                className="w-7 md:w-8 lg:w-10 h-7 md:h-8 lg:h-10"
+                style={{ color: iconColor }}
+              />
+            ) : null}
+          </div>
+        </div>
       ) : (
-        <Skeleton
-          height={{ base: '85px', md: '92.5px' }}
-          w="full"
-          rounded="lg"
+        <div
+          className="w-full rounded-lg bg-gray-200 dark:bg-gray-800 animate-pulse"
+          style={{ height: '92.5px', minHeight: '85px' }}
         />
       )}
     </>

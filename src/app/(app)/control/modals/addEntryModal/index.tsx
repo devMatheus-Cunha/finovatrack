@@ -3,18 +3,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { InputTypeMoney } from '@/components'
+import { InputTypeMoney, Button } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import {
-  Box,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Button
-} from '@chakra-ui/react'
 import { ITypeModalExpense } from '../../hooks/useControlModal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUserData } from '@/hooks/globalStates'
@@ -50,56 +41,43 @@ function ContentAddEntryModal({
   })
 
   return (
-    <>
-      <ModalOverlay />
-      <ModalContent>
-        <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-          <Box bg="gray.700" borderRadius="md">
-            <ModalHeader p={4} borderBottom="1px" borderColor="gray.600">
-              <h3 className="text-xl font-semibold text-white">
-                Adicione uma Entrada
-              </h3>
-            </ModalHeader>
-
-            <ModalBody p={4}>
-              <InputTypeMoney
-                control={control}
-                name="value"
-                label={`Valor (${
-                  optionsLabelCurrencyKeyAndValue[userData.primary_currency]
-                })`}
-                placeholder={`Ex: ${
-                  optionsLabelCurrencyKeyAndValue[userData.primary_currency]
-                } 10.00`}
-                errors={errors.value?.message}
-              />
-            </ModalBody>
-
-            <ModalFooter
-              px={4}
-              py={6}
-              borderTop="1px"
-              borderColor="gray.600"
-              display="flex"
-              alignItems="center"
-              gap={3}
+    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-xl mx-auto flex flex-col gap-6">
+      <form onSubmit={handleSubmit((values) => onSubmit(values))}>
+        <div className="rounded-md">
+          <div className="p-4 border-b border-gray-600">
+            <h3 className="text-xl font-semibold text-white">
+              Adicione uma Entrada
+            </h3>
+          </div>
+          <div className="p-4">
+            <InputTypeMoney
+              control={control}
+              name="value"
+              label={`Valor (${optionsLabelCurrencyKeyAndValue[userData.primary_currency]})`}
+              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[userData.primary_currency]} 10.00`}
+              errors={errors.value?.message}
+            />
+          </div>
+          <div className="px-4 py-6 border-t border-gray-600 flex justify-end gap-3">
+            <Button
+              onClick={() => handleOpenModal()}
+              type="button"
+              variant="cancel"
             >
-              <Button onClick={() => handleOpenModal()} type="button">
-                Cancelar
-              </Button>
-              <Button
-                isLoading={isLoadingAddExpense}
-                loadingText="Salvando..."
-                colorScheme="green"
-                type="submit"
-              >
-                Salvar
-              </Button>
-            </ModalFooter>
-          </Box>
-        </form>
-      </ModalContent>
-    </>
+              Cancelar
+            </Button>
+            <Button
+              isLoading={isLoadingAddExpense}
+              loadingText="Salvando..."
+              type="submit"
+              variant="confirm"
+            >
+              Salvar
+            </Button>
+          </div>
+        </div>
+      </form>
+    </div>
   )
 }
 

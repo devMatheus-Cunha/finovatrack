@@ -1,4 +1,4 @@
-import { Modal as ModalChakra } from '@chakra-ui/react'
+import { Modal } from '@/components/common/Modal'
 
 import InfoCardContent from '../modals/infoCardContent'
 import ContentAddEntryModal from './addEntryModal'
@@ -22,7 +22,7 @@ export const ModalsControl = ({
 }: any) => {
   return (
     <>
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalAddExpense.isOpen}
         onClose={controlModals.controlModalAddExpense.onClose}
         isCentered
@@ -36,12 +36,13 @@ export const ModalsControl = ({
           isLoadingAddExpense={isLoadingAddExpense}
           onDelete={onDelete}
         />
-      </ModalChakra>
+      </Modal>
 
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalDeleteExpenses.isOpen}
         onClose={controlModals.controlModalDeleteExpenses.onClose}
         isCentered
+        size="md"
       >
         <DeleteModalContent
           onCancel={controlModals.controlModalDeleteExpenses.onClose}
@@ -51,9 +52,9 @@ export const ModalsControl = ({
               : onDelete
           }
         />
-      </ModalChakra>
+      </Modal>
 
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalSaveReport.isOpen}
         onClose={controlModals.controlModalSaveReport.onClose}
         isCentered
@@ -64,9 +65,9 @@ export const ModalsControl = ({
           onCancel={controlModals.controlModalSaveReport.onClose}
           onSubmit={({ data, period }: any) => onSaveReport({ data, period })}
         />
-      </ModalChakra>
+      </Modal>
 
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalAddEntry.isOpen}
         onClose={controlModals.controlModalAddEntry.onClose}
         isCentered
@@ -76,9 +77,9 @@ export const ModalsControl = ({
           handleOpenModal={controlModals.controlModalAddEntry.onClose}
           onSubmit={onAddEntrys}
         />
-      </ModalChakra>
+      </Modal>
 
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalTotalEntrys.isOpen}
         onClose={controlModals.controlModalTotalEntrys.onClose}
         isCentered
@@ -89,9 +90,9 @@ export const ModalsControl = ({
           data={entrysData}
           onDelete={deletedEntry}
         />
-      </ModalChakra>
+      </Modal>
 
-      <ModalChakra
+      <Modal
         isOpen={controlModals.controlModalInfoCard.isOpen}
         onClose={controlModals.controlModalInfoCard.onClose}
         isCentered
@@ -100,7 +101,7 @@ export const ModalsControl = ({
         <InfoCardContent
           handleInfoAction={controlModals.controlModalInfoCard.onOpen}
         />
-      </ModalChakra>
+      </Modal>
     </>
   )
 }
