@@ -13,7 +13,7 @@ import {
   IHandleControlModalExpenseFunction,
   ITypeModalExpense
 } from '../../hooks/useControlModal'
-import { DeleteIcon } from '@chakra-ui/icons'
+import { Trash } from '@phosphor-icons/react'
 import { categoryOptions, paymentsOptions } from './utilts'
 import { useUserData } from '@/hooks/globalStates'
 
@@ -153,7 +153,7 @@ const ExpenseModalContent = ({
               onClick={onDelete}
               variant="ghost"
               className="text-red-500 hover:text-red-700"
-              leftIcon={<DeleteIcon />}
+              leftIcon={<Trash size={20} />}
             >
               Deletar
             </Button>

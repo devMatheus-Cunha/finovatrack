@@ -7,7 +7,6 @@ import {
   Bank,
   ArrowCircleUp
 } from '@phosphor-icons/react'
-import { Icon } from '@chakra-ui/react'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 
 export interface CardDataProps {
@@ -46,12 +45,10 @@ export const generateCardsData = ({
       actionCard: onOpenTotalEntrys,
       contentAction:
         entrysData?.length > 0 ? (
-          <Icon
-            as={Eye}
-            cursor="pointer"
-            marginLeft={1}
-            color="cyan"
-            boxSize={{ base: 4, lg: 4 }}
+          <Eye
+            size={20}
+            className="text-cyan-400 cursor-pointer ml-1"
+            onClick={onOpenTotalEntrys}
           />
         ) : null
     },

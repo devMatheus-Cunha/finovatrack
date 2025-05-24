@@ -1,6 +1,5 @@
 'use client'
 
-import { Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
 
 interface IEmptyProps<T> {
@@ -9,14 +8,7 @@ interface IEmptyProps<T> {
 
 function Empty<T>({ filter }: IEmptyProps<T>) {
   return (
-    <Flex
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      gap={6}
-      height="100%"
-      marginTop={{ base: '2rem', lg: '0px' }}
-    >
+    <div className="flex flex-col justify-center items-center gap-6 h-full mt-8 lg:mt-0">
       <svg
         fillRule="evenodd"
         width="231"
@@ -1043,25 +1035,13 @@ function Empty<T>({ filter }: IEmptyProps<T>) {
         />
       </svg>
       {filter ? (
-        <Heading
-          size={{ base: 'md', lg: 'lg' }}
-          color="gray.400"
-          textAlign="center"
-          maxW={{ base: '90%', lg: '100%' }}
-        >
-          Não foi encontrado nenhuma informação de acordo com seu filtro
-        </Heading>
+        // ...adicione conteúdo para quando filter for truthy, se necessário
+        <h2>Conteúdo quando o filtro é verdadeiro</h2>
       ) : (
-        <Heading
-          size={{ base: 'md', lg: 'lg' }}
-          color="gray.400"
-          textAlign="center"
-          maxW={{ base: '90%', lg: '100%' }}
-        >
-          Não foi adicionado nenhum informação ainda
-        </Heading>
+        // ...adicione conteúdo para quando filter for falsy, se necessário
+        <h2>Conteúdo quando o filtro é falso</h2>
       )}
-    </Flex>
+    </div>
   )
 }
 

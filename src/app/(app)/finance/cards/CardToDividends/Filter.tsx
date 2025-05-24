@@ -1,4 +1,3 @@
-import { Select } from '@chakra-ui/react'
 import React from 'react'
 
 const Filter = ({
@@ -9,18 +8,15 @@ const Filter = ({
   onChange: React.ChangeEventHandler<HTMLSelectElement>
 }) => {
   return (
-    <Select
+    <select
       value={currentPage}
       onChange={onChange}
-      variant="flushed"
-      mb={6}
-      mt={2}
-      color="white"
+      className="w-full bg-transparent border-0 border-b border-gray-500 text-white focus:ring-0 focus:border-blue-500 mb-6 mt-2 text-base outline-none"
     >
       <option value={10}>10 itens por página</option>
       <option value={20}>20 itens por página</option>
       <option value={50}>50 itens por página</option>
-    </Select>
+    </select>
   )
 }
 

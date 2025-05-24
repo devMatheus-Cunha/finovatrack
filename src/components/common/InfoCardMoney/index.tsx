@@ -14,7 +14,6 @@ interface InfoCardProps {
   isVisibilityData: boolean
 }
 
-// SVG do ícone de informação (substitui InfoOutlineIcon do Chakra)
 const InfoOutlineSvg = ({
   className = '',
   ...props
@@ -62,7 +61,9 @@ function InfoCardMoney({
                 <Button
                   variant="ghost"
                   className="ml-1 text-cyan-500 hover:text-cyan-600 p-0"
-                  onClick={(e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  onClick={(
+                    e?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                  ) => {
                     e?.stopPropagation()
                     infoAction()
                   }}

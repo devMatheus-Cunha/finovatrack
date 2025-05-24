@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { Card, CardBody, CardHeader, Heading, Skeleton } from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { chartConfig, chartData } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
@@ -44,53 +43,39 @@ const CardToGoals = ({
 
   if (isLoadingInvestimentsData || !investments || !millenium) {
     return (
-      <Skeleton
-        w={{ base: '100%', lg: 'md' }}
-        h="max-content"
-        minHeight="420px"
-        rounded="md"
-      />
+      <div className="w-full max-w-md min-h-[420px] rounded-md bg-gray-700 animate-pulse" />
     )
   }
 
   return (
-    <>
-      <Card
-        w={{ base: '100%', lg: 'md' }}
-        h="max-content"
-        minHeight="420px"
-        bg="gray.700"
-      >
-        <CardHeader display="flex" justifyContent="space-between" pb={0}>
-          <Heading size="md">Objetivo para 2026</Heading>
-          <button
-            type="button"
-            onClick={refetchInvestimentsData}
-            className="hover:text-gray-400"
-          >
-            <ArrowsCounterClockwise
-              size={20}
-              color="#eee2e2"
-              className="hover:opacity-75"
-            />
-          </button>
-        </CardHeader>
-
-        <CardBody w="auto">
-          <Charts.PieChart
-            chartConfig={chartConfig}
-            chartData={chartData}
-            total={formatCurrencyMoney(
-              Number(totalValue),
-              userData.primary_currency,
-              isVisibilityData
-            )}
+    <div className="w-full max-w-md min-h-[420px] bg-gray-700 rounded-md">
+      <div className="flex items-center justify-between px-6 pt-6 pb-2">
+        <h2 className="text-lg font-semibold text-white">Objetivo para 2026</h2>
+        <button
+          type="button"
+          onClick={refetchInvestimentsData}
+          className="hover:text-gray-400"
+        >
+          <ArrowsCounterClockwise
+            size={20}
+            color="#eee2e2"
+            className="hover:opacity-75"
           />
-
-          <Charts.DescriptionChart dataStats={investmentData} />
-        </CardBody>
-      </Card>
-    </>
+        </button>
+      </div>
+      <div className="px-6 pb-6">
+        <Charts.PieChart
+          chartConfig={chartConfig}
+          chartData={chartData}
+          total={formatCurrencyMoney(
+            Number(totalValue),
+            userData.primary_currency,
+            isVisibilityData
+          )}
+        />
+        <Charts.DescriptionChart dataStats={investmentData} />
+      </div>
+    </div>
   )
 }
 export default CardToGoals

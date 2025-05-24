@@ -1,14 +1,4 @@
 import React from 'react'
-import {
-  GridItem,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatArrow,
-  Grid,
-  Box
-} from '@chakra-ui/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
@@ -31,40 +21,48 @@ const DescriptionChart = ({
   const { isVisibilityData } = useIsVisibilityDatas()
 
   return (
-    <Grid
-      templateColumns="repeat(2, 1fr)"
-      gap={4}
-      overflowY="auto"
-      maxHeight={{ base: '230px' }}
-    >
+    <div className="grid grid-cols-2 gap-4 overflow-y-auto max-h-[230px]">
       {dataStats.map((item) => (
-        <GridItem key={item.label} color="white">
-          <Stat>
-            <StatLabel fontSize={{ base: 'xs' }} opacity={0.7}>
+        <div key={item.label} className="text-white">
+          <div className="flex flex-col">
+            <span className="text-xs opacity-70">
               {formatLabel ? formatLabel(item.label) : item.label}
-            </StatLabel>
-            <Box display="flex" alignItems="center" gap={1}>
-              <StatNumber fontSize={{ base: 'md', lg: 'lg' }}>
+            </span>
+            <div className="flex items-center gap-1">
+              <span className="text-base lg:text-lg font-semibold">
                 {formatCurrencyMoney(
                   Number(item.value),
                   userData.primary_currency,
                   isVisibilityData
                 )}
-              </StatNumber>
+              </span>
               {item.percentage && (
-                <StatHelpText fontSize="sm" mb={0}>
-                  <StatArrow
-                    fontSize="sm"
-                    type={item.value > 0 ? 'increase' : 'decrease'}
-                  />
+                <span
+                  className={`text-sm mb-0 flex items-center gap-1 ${
+                    item.value > 0 ? 'text-green-400' : 'text-red-400'
+                  }`}
+                >
+                  <svg
+                    className={`w-3 h-3 ${item.value > 0 ? '' : 'rotate-180'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 10l7-7m0 0l7 7m-7-7v18"
+                    />
+                  </svg>
                   {item.percentage}
-                </StatHelpText>
+                </span>
               )}
-            </Box>
-          </Stat>
-        </GridItem>
+            </div>
+          </div>
+        </div>
       ))}
-    </Grid>
+    </div>
   )
 }
 

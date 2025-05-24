@@ -1,15 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Accordion,
-  Card,
-  CardHeader,
-  Heading,
-  Modal,
-  Skeleton,
-  useDisclosure
-} from '@chakra-ui/react'
 import { AccordionFinanceYear } from './AccordionFinanceYear'
-import ModalContent from './ModalContent'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import {
@@ -18,6 +8,10 @@ import {
 } from '@/utils/formatNumber'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import useCustomDisclosure from '@/hooks/globalStates/useCustomDisclosure'
+import Modal from '@/components/common/Modal'
+import ModalContent from './ModalContent'
+import { Accordion } from '@chakra-ui/react'
 
 interface CardToFinanceYaerProps {
   investimentsData?: IInvestmentsProps
@@ -31,11 +25,8 @@ const CardToFinanceYaer = ({
 }: CardToFinanceYaerProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
-
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const { isOpen, onOpen, onClose } = useCustomDisclosure()
   const [selectedData, setSelectedData] = useState<
     IFinancialPlanningProps | undefined
   >({
@@ -98,45 +89,39 @@ const CardToFinanceYaer = ({
 
   if (isLoadingInvestimentsData || !financialPlanningYear) {
     return (
-      <Skeleton w="100%" minH="433px" maxH="433px" height="100%" rounded="md" />
+      <div className="w-full min-h-[433px] max-h-[433px] h-full rounded-md bg-gray-700 animate-pulse" />
     )
   }
 
   return (
-    <>
-      <Card width="100%" minH="433px" bg="gray.700">
-        <CardHeader>
-          <Heading size="md" mb={6} color="white">
-            Finanças
-          </Heading>
-          <Accordion allowMultiple>
-            {calcTotalsLaterYear(financialPlanningYear) &&
-              calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
-                <React.Fragment key={item.year}>
-                  <AccordionFinanceYear.Root>
-                    <AccordionFinanceYear.Button year={item.year} />
-                    <AccordionFinanceYear.Panel
-                      data={item}
-                      onOpen={() => onOpenModal(item)}
-                      userData={userData}
-                      isVisibilityData={isVisibilityData}
-                      year={item.year}
-                    />
-                  </AccordionFinanceYear.Root>
-                </React.Fragment>
-              ))}
-            <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
-              <ModalContent
-                onClose={onCloseModal}
-                onSubmit={handleSubmit}
-                initialValues={selectedData}
-                currency={userData.primary_currency}
-              />
-            </Modal>
-          </Accordion>
-        </CardHeader>
-      </Card>
-    </>
+    <div className="w-full min-h-[433px] bg-gray-700 rounded-md">
+      <div className="px-6 pt-6 pb-2">
+        <h2 className="text-lg font-semibold text-white mb-6">Finanças</h2>
+        <Accordion allowMultiple>
+          {calcTotalsLaterYear(financialPlanningYear) &&
+            calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
+              <AccordionFinanceYear.Root key={item.year}>
+                <AccordionFinanceYear.Button year={item.year} />
+                <AccordionFinanceYear.Panel
+                  data={item}
+                  onOpen={() => onOpenModal(item)}
+                  userData={userData}
+                  isVisibilityData={isVisibilityData}
+                  year={item.year}
+                />
+              </AccordionFinanceYear.Root>
+            ))}
+          <Modal isOpen={isOpen} onClose={onCloseModal} size="2xl" isCentered>
+            <ModalContent
+              onClose={onCloseModal}
+              onSubmit={handleSubmit}
+              initialValues={selectedData}
+              currency={userData.primary_currency}
+            />
+          </Modal>
+        </Accordion>
+      </div>
+    </div>
   )
 }
 

@@ -5,7 +5,6 @@ export default function Logo({
 }: {
   fontSize?: 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 }) {
-  // Map ChakraUI font sizes to Tailwind classes
   const fontSizeMap = {
     lg: 'text-lg',
     xl: 'text-xl',

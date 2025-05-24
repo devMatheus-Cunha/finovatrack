@@ -1,6 +1,5 @@
 import useFetchDividends from '@/hooks/finance/useFetchDividends'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Skeleton, Card, CardBody, Heading, CardHeader } from '@chakra-ui/react'
 import React from 'react'
 import Filter from './Filter'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
@@ -24,30 +23,20 @@ const CardToDividends = () => {
 
   if (isLoadingDividendsData || dividendsData.length <= 0) {
     return (
-      <Skeleton
-        w={{ base: '100%', lg: 'md' }}
-        h="max-content"
-        minHeight="570px"
-        rounded="md"
-      />
+      <div className="w-full lg:max-w-md min-h-[570px] rounded-md bg-gray-700 animate-pulse flex items-center justify-center">
+        <div className="w-2/3 h-10 bg-gray-600 rounded mb-4" />
+      </div>
     )
   }
 
   return (
-    <Card
-      w={{ base: '100%', lg: 'md' }}
-      minHeight="570px"
-      maxH="570px"
-      bg="gray.700"
-    >
-      <CardHeader display="flex" justifyContent="space-between" pb={0}>
-        <Heading color="white" size="md">
-          Dividendos
-        </Heading>
+    <div className="w-full lg:max-w-md min-h-[570px] max-h-[570px] bg-gray-700 rounded-md shadow flex flex-col">
+      <div className="flex items-center justify-between px-6 pt-6 pb-0">
+        <h2 className="text-lg font-semibold text-white">Dividendos</h2>
         <button
           type="button"
           onClick={() => refetchDividendsData()}
-          className="hover:text-gray-400"
+          className="hover:text-gray-400 p-1 rounded transition-colors"
         >
           <ArrowsCounterClockwise
             size={20}
@@ -55,9 +44,8 @@ const CardToDividends = () => {
             className="hover:opacity-75"
           />
         </button>
-      </CardHeader>
-
-      <CardBody display="flex" flexDir="column">
+      </div>
+      <div className="flex-1 px-6 pb-6 pt-2 flex flex-col">
         <Charts.BarChart
           chartData={formattedDividendsData(dividendsData)}
           chartConfig={chartConfig}
@@ -77,8 +65,8 @@ const CardToDividends = () => {
           dataStats={FormatChartData(dividendsData, 'ticker', 'amount')}
           formatLabel={(value) => tickerToCompanyName[value]}
         />
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }
 export default CardToDividends
