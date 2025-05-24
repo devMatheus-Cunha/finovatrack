@@ -37,7 +37,7 @@ const styles = {
   outline:
     'bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-700',
   ghost: 'bg-transparent text-blue-500 hover:bg-blue-700',
-  default: 'bg-gray-700 text-gray-200 hover:bg-gray-600',
+  default: 'bg-gray-700 text-gray-200 hover:bg-gray-600'
 }
 
 function getButtonClasses(variant: string, className: string) {

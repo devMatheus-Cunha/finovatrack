@@ -36,12 +36,11 @@ export default function Input<T extends FieldValues>({
     <div className="w-full">
       <label
         htmlFor={name}
-        className="mb-2 text-sm font-medium text-white block flex gap-1 items-center"
+        className="mb-2 text-sm font-medium text-white gap-1 items-center"
       >
         {required ? `${label} *` : label}
         {labelHint && (
           <span className="text-orange-400 cursor-pointer" title={labelHint}>
-            {/* Info icon SVG inline */}
             <svg
               className="w-4 h-4 inline"
               fill="none"

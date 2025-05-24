@@ -6,10 +6,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useUpdatedUser from '@/hooks/myProfile/useUpdatedUser'
-import { Select } from '@/components'
+import { Select, Button } from '@/components'
 import { dropdownOptionsCurrencyHybrid } from '@/app/(auth)/signup/utils'
 import EditableField from './parts/EditableField'
-import { Box, Container, Heading, VStack, Text, Button } from '@chakra-ui/react'
 
 type FormValues = {
   email?: string
@@ -108,26 +107,16 @@ function MyProfile() {
   }
 
   return (
-    <Container
-      bg="gray.700"
-      display="flex"
-      flexDirection="column"
-      gap={{ base: 4, sm: 6 }}
-      w="full"
-      maxW="600px"
-      p={6}
-      borderRadius="lg"
-      boxShadow="lg"
-    >
-      <VStack spacing={1} align="stretch">
-        <Heading fontSize={{ base: '23px', sm: '3xl' }} fontWeight="bold">
+    <div className="bg-gray-700 flex flex-col gap-4 sm:gap-6 w-full max-w-[600px] p-6 rounded-lg shadow-lg">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-[23px] sm:text-3xl font-bold text-white">
           Olá {userData.name}
-        </Heading>
-        <Text color="gray.300" fontSize={{ base: '14px', sm: 'md' }}>
+        </h2>
+        <span className="text-gray-300 text-[14px] sm:text-md">
           Aqui você pode visualizar e alterar as informações do seu perfil de
           forma simples e fácil.
-        </Text>
-      </VStack>
+        </span>
+      </div>
       <EditableField
         label="Nome"
         name="name"
@@ -150,12 +139,11 @@ function MyProfile() {
         required
         errors={errorsEmail.email?.message}
       />
-      <Box as="form" w="full" display="flex" flexDir="column">
-        <Box
-          display="flex"
-          flexDirection={{ base: 'column', sm: 'row' }}
-          gap={2}
-        >
+      <form
+        className="w-full flex flex-col"
+        onSubmit={onSubmitCurrencys(updatedCurrencys)}
+      >
+        <div className="flex flex-col sm:flex-row gap-2">
           <Select
             label={
               userData.typeAccount === 'oneCurrency'
@@ -178,31 +166,32 @@ function MyProfile() {
               errors={errors.secondary_currency?.message}
             />
           )}
-        </Box>
-        <Box display="flex" gap={2} mt={4} className="flex gap-2 mt-4">
+        </div>
+        <div className="flex gap-2 mt-4">
           {optionsCurrencyEnabled && (
             <Button
               type="button"
-              onClick={() => handleOptionsCurrencyEnabled()}
-              w="100%"
+              variant="cancel"
+              onClick={handleOptionsCurrencyEnabled}
             >
               Cancelar
             </Button>
           )}
           <Button
-            type={!optionsCurrencyEnabled ? 'submit' : 'button'}
-            w="100%"
+            type={!optionsCurrencyEnabled ? 'button' : 'submit'}
+            variant={!optionsCurrencyEnabled ? 'default' : 'confirm'}
+            className="w-full"
             onClick={
               !optionsCurrencyEnabled
                 ? () => setOptionsCurrencyEnabled(true)
-                : onSubmitCurrencys(updatedCurrencys)
+                : undefined
             }
           >
             {!optionsCurrencyEnabled ? 'Alterar' : 'Salvar'}
           </Button>
-        </Box>
-      </Box>
-    </Container>
+        </div>
+      </form>
+    </div>
   )
 }
 
