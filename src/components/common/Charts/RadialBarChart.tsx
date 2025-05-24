@@ -26,7 +26,7 @@ const RadialBarChart = ({
   return (
     <ChartContainer
       config={chartConfig}
-      className="mx-auto h-[180px] w-[200px] p-0 m-0 "
+      className="mx-auto h-[178px] w-[200px] p-0 m-0 "
     >
       <RadialBarChartRechart
         data={chartData}

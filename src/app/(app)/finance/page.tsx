@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import React from 'react'
 import {
   useFetchInvestiments,
   useFetchFinancialPlaningYear
@@ -37,25 +37,9 @@ const Finance = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      gap={2}
-      h="95vh"
-      w="full"
-      px={[2, 2, 0]}
-    >
-      <Box
-        display="flex"
-        flexDirection={['column', 'column', 'column', 'row']}
-        gap={2}
-      >
-        <Box
-          w={{ base: '100%', lg: '45%' }}
-          display="flex"
-          flexDir="column"
-          gap={2}
-        >
+    <div className="flex flex-col gap-2 h-[95vh] w-full px-2 md:px-2 lg:px-0">
+      <div className="flex flex-col lg:flex-row gap-2">
+        <div className="w-full lg:w-[45%] flex flex-col gap-2">
           <CardToPatrimony
             isLoadingInvestimentsData={isLoadingInvestimentsData}
             investments={investimentsData}
@@ -64,13 +48,8 @@ const Finance = () => {
             financialPlanningYear={financialPlanningYear}
             isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
           />
-        </Box>
-        <Box
-          display="flex"
-          w={{ base: '100%', lg: '55%' }}
-          gap={2}
-          flexDirection={['column', 'column', 'row', 'column', 'row']}
-        >
+        </div>
+        <div className="flex w-full lg:w-[55%] gap-2 flex-col md:flex-row lg:flex-col xl:flex-row">
           <CardToInvestments
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
@@ -78,9 +57,9 @@ const Finance = () => {
             refetchInvestimentsData={refetchInvestimentsData}
           />
           <CardToDividends />
-        </Box>
-      </Box>
-      <Box>
+        </div>
+      </div>
+      <div>
         <CardToGoals
           isLoadingInvestimentsData={isLoadingInvestimentsData}
           refetchInvestimentsData={refetchInvestimentsData}
@@ -90,8 +69,8 @@ const Finance = () => {
             Number(financialPlanningActualYear.reserve)
           }
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 
