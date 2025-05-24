@@ -1,7 +1,6 @@
 'use client'
 
 import React, { ReactNode } from 'react'
-import Button from '../Button'
 
 interface ButtonOption {
   onClick: () => void
@@ -16,14 +15,14 @@ function ButtonGroup({ buttonOptions }: ButtonGroupProps) {
   return (
     <div className="flex space-x-2">
       {buttonOptions?.map((item, index) => (
-        <Button
+        <button
           key={index}
           onClick={item?.onClick}
-          variant="outline"
-          className="p-0 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-white hover:border-gray-400 dark:hover:border-gray-600 hover:bg-transparent"
+          type="button"
+          className="p-0 border border-gray-600 text-gray-300 hover:border-gray-400 hover:bg-transparent rounded-md transition-colors px-2 py-2 text-md font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           {item?.content}
-        </Button>
+        </button>
       ))}
     </div>
   )

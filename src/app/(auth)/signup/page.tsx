@@ -125,7 +125,6 @@ export default function Signup() {
             isLoading={isLoading}
             loadingText="Criando"
             type="submit"
-            variant="default700"
           >
             Criar
           </Button>

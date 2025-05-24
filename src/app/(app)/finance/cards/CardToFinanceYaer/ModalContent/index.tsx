@@ -163,9 +163,7 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
           >
             <HStack spacing={3}>
               <Button onClick={onClose}>Cancelar</Button>
-              <Button type="submit" colorScheme="green">
-                Salvar
-              </Button>
+              <Button type="submit">Salvar</Button>
             </HStack>
           </ModalFooter>
         </ModalContent>

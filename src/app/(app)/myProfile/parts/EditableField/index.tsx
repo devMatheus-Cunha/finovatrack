@@ -44,7 +44,6 @@ export default function EditableField({
         <Button
           type="button"
           onClick={!isEditing ? () => setIsEditing(true) : () => handleSubmit()}
-          colorScheme={!isEditing ? 'gray' : 'green'}
         >
           {!isEditing ? 'Alterar' : 'Salvar'}
         </Button>

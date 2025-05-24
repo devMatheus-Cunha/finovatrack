@@ -69,7 +69,6 @@ function HeaderDataTableToControl({
         {buttonData.map((button, index) => (
           <Button
             key={index}
-            variant="default700"
             onClick={button.onClick}
             className="hidden lg:flex"
             leftIcon={<button.icon size={20} color="white" />}
@@ -82,7 +81,6 @@ function HeaderDataTableToControl({
           <div className="relative">
             <Button
               onClick={() => setShowMenu(!showMenu)}
-              variant="default700"
               leftIcon={<Plus size={20} color="white" />}
               aria-label="Ações"
             >
@@ -127,7 +125,6 @@ function HeaderDataTableToControl({
             </p>
             <Button
               onClick={() => refetchQuationData()}
-              variant="default700"
               className="ml-2"
               leftIcon={<ArrowsCounterClockwise size={20} color="white" />}
               aria-label="Refresh"

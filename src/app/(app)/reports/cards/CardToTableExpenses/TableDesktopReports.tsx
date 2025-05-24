@@ -30,7 +30,7 @@ const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
         overflowY="auto"
         w="2xl"
       >
-        <Table variant="simple" colorScheme="teal">
+        <Table variant="simple">
           <Thead>
             <Tr>
               {columns.map((column) => (

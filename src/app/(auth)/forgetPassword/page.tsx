@@ -51,7 +51,6 @@ export default function ForgetPassword() {
             isLoading={isLoading}
             loadingText="Enviando"
             type="submit"
-            variant="default700"
           >
             Enviar
           </Button>

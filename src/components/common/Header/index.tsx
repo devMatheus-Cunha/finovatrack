@@ -12,12 +12,10 @@ export default function Header() {
       <Logo />
 
       <div className="flex gap-7">
-        <Button variant="link" routeLink="/" colorScheme="teal">
+        <Button variant="link" routeLink="/">
           Login
         </Button>
-        <Button onClick={() => router.push('/signup')} colorScheme="teal">
-          Sign up
-        </Button>
+        <Button onClick={() => router.push('/signup')}>Sign up</Button>
       </div>
     </nav>
   )

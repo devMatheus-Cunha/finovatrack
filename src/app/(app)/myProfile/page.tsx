@@ -190,7 +190,6 @@ function MyProfile() {
             </Button>
           )}
           <Button
-            colorScheme={!optionsCurrencyEnabled ? 'gray' : 'green'}
             type={!optionsCurrencyEnabled ? 'submit' : 'button'}
             w="100%"
             onClick={

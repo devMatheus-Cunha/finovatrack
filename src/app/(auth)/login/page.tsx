@@ -70,7 +70,6 @@ export default function Login() {
             isLoading={isLoading}
             loadingText="Entrando"
             type="submit"
-            variant="default700"
           >
             Entrar
           </Button>
