@@ -1,4 +1,3 @@
-import { Flex, Box, Text, Tabs, TabList, Tab, Input } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import DatePicker from 'react-datepicker'
 
@@ -30,67 +29,57 @@ const CardToHeaderFilter = ({
     ]
   }, [year])
 
+  const selectedMonthIndex = months.findIndex(
+    (data) => data.value === formattedDate
+  )
+
   return (
-    <Box bg="gray.700" px={4} py={6} w="full" rounded="md" color="white">
-      <Flex alignItems="center" justifyContent="space-between">
-        <Flex alignItems="center">
-          <Box>
-            <Text color="gray.400" fontSize="sm">
-              Relatorio Mensal
-            </Text>
-            <Text fontWeight="semibold">Veja todas os dados por mês</Text>
-          </Box>
-        </Flex>
-        <Flex alignItems="center">
+    <div className="bg-gray-700 px-4 py-6 w-full rounded-md text-white">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div>
+            <span className="text-gray-400 text-sm">Relatorio Mensal</span>
+            <div className="font-semibold">Veja todas os dados por mês</div>
+          </div>
+        </div>
+        <div className="flex items-center">
           <DatePicker
             selected={new Date(year, parseInt(formattedDate.split('/')[0]) - 1)}
             showYearPicker
             dateFormat="yyyy"
             onChange={(date: Date) => setSelectedDate(date)}
             customInput={
-              <Input variant="flushed" w={100} _focus={{ boxShadow: 'none' }} />
+              <input
+                className="border-b border-gray-400 bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white text-center py-1"
+                readOnly
+              />
             }
           />
-        </Flex>
-      </Flex>
+        </div>
+      </div>
 
-      <Tabs
-        mt="6"
-        align="start"
-        variant="unstyled"
-        overflow="auto"
-        defaultIndex={months.findIndex((data) => data.value === formattedDate)}
-        index={months.findIndex((data) => data.value === formattedDate)}
-        onChange={(index) => {
-          const selectedMonth = parseInt(months[index].monthNumber) - 1
-          setSelectedDate(new Date(year, selectedMonth))
-        }}
-        sx={{
-          '.chakra-tabs__tab-list': {
-            borderBottom: '2px solid',
-            borderColor: 'gray.700'
-          },
-          '.chakra-tabs__tab': {
-            px: 4,
-            py: 2,
-            borderBottom: '2px solid transparent',
-            _selected: {
-              color: 'blue.500',
-              borderBottomColor: 'blue.500',
-              fontWeight: 'bold'
-            }
-          }
-        }}
-      >
-        <TabList>
-          {months.map((month) => (
-            <Tab key={month.value} value={month.value}>
+      <div className="mt-6 overflow-auto">
+        <div className="flex border-b-2 border-gray-700">
+          {months.map((month, idx) => (
+            <button
+              key={month.value}
+              className={`px-4 py-2 border-b-2 transition-colors duration-200 whitespace-nowrap ${
+                idx === selectedMonthIndex
+                  ? 'text-blue-500 border-blue-500 font-bold'
+                  : 'text-white border-transparent hover:text-blue-400'
+              }`}
+              onClick={() => {
+                const selectedMonth = parseInt(month.monthNumber) - 1
+                setSelectedDate(new Date(year, selectedMonth))
+              }}
+              type="button"
+            >
               {month.month}
-            </Tab>
+            </button>
           ))}
-        </TabList>
-      </Tabs>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -1,7 +1,6 @@
 import { ShowAndHide } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { SimpleGrid, VStack, Box, Text } from '@chakra-ui/react'
 import { TableColumn } from '@/components/common/Table'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import React from 'react'
@@ -20,24 +19,19 @@ const TableReports: React.FC<ITableReportsProps> = ({
 }) => {
   return (
     <ShowAndHide displayLg="none" displayBase="initial">
-      <SimpleGrid columns={1} spacing={2} maxH={278} overflow="auto">
+      <div className="grid grid-cols-1 gap-2 max-h-[278px] overflow-auto">
         {data?.map((item) => (
           <React.Fragment key={item.id}>
             {item.value_primary_currency && (
-              <Box
+              <div
                 key={item.id}
-                bg="gray.700"
-                borderRadius="lg"
-                p={4}
-                h="85px"
-                w="full"
-                justifyContent="space-between"
-                display="flex"
-                alignItems="center"
+                className="bg-gray-700 rounded-lg p-4 h-[85px] w-full flex justify-between items-center"
               >
-                <VStack spacing={4} align="start">
-                  <Text fontSize="ms">{item?.description}</Text>
-                  <Text fontSize="m" fontWeight="semibold">
+                <div className="flex flex-col gap-1">
+                  <span className="text-base text-white">
+                    {item?.description}
+                  </span>
+                  <span className="text-md font-semibold text-white">
                     {formatCurrencyMoney(
                       Number(item?.value_primary_currency),
                       userData.typeAccount === 'oneCurrency'
@@ -45,24 +39,20 @@ const TableReports: React.FC<ITableReportsProps> = ({
                         : item?.typeMoney,
                       isVisibilityData
                     )}
-                  </Text>
-                </VStack>
-                <VStack spacing={4} align="start" w="33%">
-                  <Text
-                    fontSize="ms"
-                    fontWeight="medium"
-                    color={
-                      item?.payment === 'A Pagar' ? 'red.500' : 'green.500'
-                    }
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1 w-1/3">
+                  <span
+                    className={`text-base font-medium ${item?.payment === 'A Pagar' ? 'text-red-500' : 'text-green-500'}`}
                   >
                     {item?.payment}
-                  </Text>
-                </VStack>
-              </Box>
+                  </span>
+                </div>
+              </div>
             )}
           </React.Fragment>
         ))}
-      </SimpleGrid>
+      </div>
     </ShowAndHide>
   )
 }

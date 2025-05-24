@@ -1,4 +1,3 @@
-import { Skeleton, Box } from '@chakra-ui/react'
 import { IReportData } from '@/services/reports/getReport'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { TableColumn } from '@/components/common/Table'
@@ -59,16 +58,12 @@ const CardToTableExpenses = ({
 
   if (isLoading) {
     return (
-      <Skeleton
-        height={{ base: 278, lg: '45vh' }}
-        w={{ base: '100%', lg: '2xl' }}
-        rounded="md"
-      />
+      <div className="w-full max-w-2xl rounded-md bg-gray-700 h-[278px] lg:h-[45vh] animate-pulse" />
     )
   }
 
   return (
-    <Box>
+    <div className="w-full">
       {reportData?.data && reportData?.data.length > 0 ? (
         <>
           <TableDesktopReports
@@ -87,7 +82,7 @@ const CardToTableExpenses = ({
       ) : (
         <EmptyWithoutReport />
       )}
-    </Box>
+    </div>
   )
 }
 

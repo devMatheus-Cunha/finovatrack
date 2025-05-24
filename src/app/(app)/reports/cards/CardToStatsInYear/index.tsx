@@ -1,24 +1,7 @@
-import {
-  Skeleton,
-  VStack,
-  Text,
-  Card,
-  CardBody,
-  CardHeader,
-  GridItem,
-  Heading,
-  HStack,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatArrow,
-  StatHelpText,
-  Box
-} from '@chakra-ui/react'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData '
 import Slider from 'react-slick'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
 
 const CardToStatsInYear = ({ year }: { year: string }) => {
   const { userData } = useUserData()
@@ -53,13 +36,7 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
   ]
 
   if (isLoading) {
-    return (
-      <Skeleton
-        height={{ base: '40', lg: '40' }}
-        w={{ base: '100%', lg: '100%' }}
-        rounded="md"
-      />
-    )
+    return <div className="w-full rounded-md bg-gray-700 h-40 animate-pulse" />
   }
 
   const settings = {
@@ -92,89 +69,66 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
   return (
     <>
       {reportDataToYear ? (
-        <Card
-          bg={{ base: 'none', lg: 'gray.700' }}
-          h={{ base: 'initial', lg: '40' }}
-          boxShadow="none"
-        >
-          <CardHeader display="flex" alignItems="end" gap={3} pb={0}>
-            <Box>
-              <Text color="gray.400" fontSize="sm">
-                Ano {year}
-              </Text>
-              <Heading size="md">Relatorio Anual</Heading>
-            </Box>
-          </CardHeader>
+        <div className="bg-gray-700 lg:h-40 rounded-md shadow-none w-full">
+          <div className="flex items-end gap-3 pb-0 px-4 pt-4">
+            <div>
+              <span className="text-gray-400 text-sm">Ano {year}</span>
+              <h2 className="text-lg font-semibold text-white">
+                Relatorio Anual
+              </h2>
+            </div>
+          </div>
 
-          <CardBody pt={{ base: '4', lg: 0 }}>
+          <div className="pt-4 lg:pt-0 px-2">
             <Slider {...settings} className="w-full">
               {summaryItems.map((card, index) => (
-                <Box key={index} p={{ base: 2, lg: 1 }}>
-                  <GridItem
-                    display="flex"
-                    w="full"
-                    alignItems="center"
-                    bg="gray.700"
-                    borderRadius="md"
-                    py={4}
-                    px={{ base: 2, lg: 4 }}
-                  >
-                    <Stat>
-                      <StatLabel fontSize="xs" color="gray.500">
-                        {card.label}
-                      </StatLabel>
-                      <HStack>
-                        <StatNumber
-                          fontSize={{ base: 'lg', lg: 'xl' }}
-                          textDecor="underline"
-                        >
+                <div key={index} className="p-2 lg:p-1">
+                  <div className="flex w-full items-center bg-gray-700 rounded-md py-4 px-2 lg:px-4">
+                    <div className="w-full">
+                      <div className="text-xs text-gray-500">{card.label}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg lg:text-xl underline text-white font-bold">
                           {formatCurrencyMoney(
                             card.value,
                             userData.primary_currency,
                             isVisibilityData
                           )}
-                        </StatNumber>
+                        </span>
                         {card.investments && (
-                          <StatHelpText
-                            display={{ base: 'none', md: 'flex' }}
-                            alignItems="center"
-                            marginBottom={0}
-                          >
-                            <StatArrow type="increase" />
+                          <span className="hidden md:flex items-center text-green-400 text-xs font-semibold mb-0">
+                            <svg
+                              className="w-3 h-3 mr-1"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18"
+                              />
+                            </svg>
                             {card.investments}
-                          </StatHelpText>
+                          </span>
                         )}
-                      </HStack>
-                    </Stat>
-                  </GridItem>
-                </Box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </Slider>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       ) : (
-        <VStack
-          h="full"
-          alignItems="center"
-          justifyContent="center"
-          overflowY="auto"
-          rounded="md"
-          w={{ base: '100%', lg: '100%' }}
-          height={{ base: '40', lg: '40' }}
-          bg="gray.700"
-        >
-          <Text
-            mt={4}
-            fontWeight="bold"
-            fontSize={{ base: 'xl', lg: 26 }}
-            color="white"
-          >
+        <div className="flex flex-col items-center justify-center overflow-y-auto rounded-md w-full h-40 bg-gray-700">
+          <span className="mt-4 font-bold text-xl lg:text-[26px] text-white">
             Nenhum relatório gerado
-          </Text>
-          <Text mt={2} fontSize={{ base: 'sm', lg: 'md' }} color="gray.300">
+          </span>
+          <span className="mt-2 text-sm lg:text-md text-gray-300">
             Não há dados disponíveis para este período.
-          </Text>
-        </VStack>
+          </span>
+        </div>
       )}
     </>
   )

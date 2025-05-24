@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react'
 import React from 'react'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
@@ -25,12 +24,8 @@ const ExpenseToCategory = ({
 }: IExpenseToCategory) => {
   function sumToCategory(expenses: ExpenseData[]): Resultcategory[] {
     const result: { [category: string]: number } = {}
-
     for (const expense of expenses) {
-      if (expense.category === 'Investimentos') {
-        continue
-      }
-
+      if (expense.category === 'Investimentos') continue
       const { category, value_primary_currency } = expense
       if (result[category]) {
         result[category] += value_primary_currency
@@ -38,7 +33,6 @@ const ExpenseToCategory = ({
         result[category] = value_primary_currency
       }
     }
-
     return Object.keys(result).map((category) => ({
       value: result[category],
       label: category
@@ -68,12 +62,14 @@ const ExpenseToCategory = ({
   const chartConfig = formatarParaChartConfig(sumToCategory(expensesData))
 
   return (
-    <Card h={{ base: 'auto', lg: 555 }}>
-      <CardHeader>
-        <Heading size="md">Gastos por Categoria</Heading>
-      </CardHeader>
-      <CardBody>
-        <CardBody p={0}>
+    <div className="bg-gray-700 rounded-md h-auto lg:h-[555px] w-full flex flex-col">
+      <div className="px-6 pt-6 pb-2">
+        <h2 className="text-lg font-semibold text-white">
+          Gastos por Categoria
+        </h2>
+      </div>
+      <div className="flex-1 px-6 pb-6">
+        <div className="p-0">
           <Charts.PieChart
             chartConfig={chartConfig}
             chartData={chartData}
@@ -83,11 +79,10 @@ const ExpenseToCategory = ({
               isVisibilityData
             )}
           />
-
           <Charts.DescriptionChart dataStats={sumToCategory(expensesData)} />
-        </CardBody>
-      </CardBody>
-    </Card>
+        </div>
+      </div>
+    </div>
   )
 }
 

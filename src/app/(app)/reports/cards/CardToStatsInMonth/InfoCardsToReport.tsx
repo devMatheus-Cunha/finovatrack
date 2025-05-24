@@ -2,21 +2,6 @@
 
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
-import {
-  StatArrow,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
-  Card,
-  CardHeader,
-  CardBody,
-  Stat,
-  Heading,
-  Grid,
-  GridItem,
-  HStack,
-  Icon
-} from '@chakra-ui/react'
 import { Eye } from '@phosphor-icons/react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import EntrysModal from './EntrysModal'
@@ -72,58 +57,61 @@ function InfoCardsToReport({ userData, data }: IInfoCardsToControl) {
 
   return (
     <>
-      <Card bg="gray.700" rounded="md" h={200}>
-        <CardHeader display="flex" justifyContent="space-between" pb={0}>
-          <Heading size="md">Relatorio Total</Heading>
-        </CardHeader>
-
-        <CardBody pt={0}>
-          <Grid templateColumns="repeat(2, 1fr)" gap={6} mt={3.5}>
-            {summaryItems.map((card, index) => (
-              <GridItem key={card.label}>
-                <Stat key={index}>
-                  <StatLabel
-                    fontSize="xs"
-                    color="gray.500"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    {card.label}
-                    {card.showEntrysIcon && data?.entrys?.length > 0 && (
-                      <Icon
-                        as={Eye}
-                        cursor="pointer"
-                        marginLeft={2}
-                        color="cyan"
-                        boxSize={4}
-                        onClick={onOpen}
-                      />
-                    )}
-                  </StatLabel>
-                  <HStack>
-                    <StatNumber fontSize={{ base: 'lg', lg: 'xl' }}>
-                      {isVisibilityData
-                        ? card.value ||
-                          formatCurrencyMoney(
-                            0,
-                            userData.primary_currency,
-                            isVisibilityData
-                          )
-                        : '****'}
-                    </StatNumber>
-                    {card.investments && (
-                      <StatHelpText display="flex" alignItems="center">
-                        <StatArrow type="increase" />
-                        {card.investments}
-                      </StatHelpText>
-                    )}
-                  </HStack>
-                </Stat>
-              </GridItem>
+      <div className="bg-gray-700 rounded-md h-[200px] w-full p-4 flex flex-col">
+        <div className="flex justify-between items-center pb-0">
+          <h2 className="text-lg font-semibold text-white">Relatorio Total</h2>
+        </div>
+        <div className="flex-1 pt-0">
+          <div className="grid grid-cols-2 gap-6 mt-3.5">
+            {summaryItems.map((card) => (
+              <div key={card.label} className="flex flex-col">
+                <div className="text-xs text-gray-500 flex items-center">
+                  {card.label}
+                  {card.showEntrysIcon && data?.entrys?.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={onOpen}
+                      className="ml-2 text-cyan-400 hover:text-cyan-300 focus:outline-none"
+                    >
+                      <Eye size={16} />
+                    </button>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-lg lg:text-xl text-white font-bold">
+                    {isVisibilityData
+                      ? card.value ||
+                        formatCurrencyMoney(
+                          0,
+                          userData.primary_currency,
+                          isVisibilityData
+                        )
+                      : '****'}
+                  </span>
+                  {card.investments && (
+                    <span className="flex items-center text-green-400 text-xs font-semibold">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 10l7-7m0 0l7 7m-7-7v18"
+                        />
+                      </svg>
+                      {card.investments}
+                    </span>
+                  )}
+                </div>
+              </div>
             ))}
-          </Grid>
-        </CardBody>
-      </Card>
+          </div>
+        </div>
+      </div>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
         <EntrysModal onClose={onClose} entrys={data?.entrys || []} />

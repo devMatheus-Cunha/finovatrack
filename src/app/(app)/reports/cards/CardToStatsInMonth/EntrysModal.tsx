@@ -2,6 +2,7 @@ import React from 'react'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
+import { Button } from '@/components'
 
 interface IEntrysModalProps {
   onClose: () => void
@@ -41,7 +42,7 @@ function EntrysModal({ onClose, entrys }: IEntrysModalProps) {
           </thead>
           <tbody>
             {entrys?.map((item, index) => (
-              <tr key={index} className="bg-gray-700">
+              <tr key={index}>
                 <td className="text-white py-2">
                   {formatCurrencyMoney(
                     item.value,
@@ -55,12 +56,9 @@ function EntrysModal({ onClose, entrys }: IEntrysModalProps) {
         </table>
       </div>
       <div className="px-6 py-4 border-t border-gray-600 flex justify-end">
-        <button
-          onClick={onClose}
-          className="px-4 py-2 border border-gray-400 rounded text-gray-200 hover:bg-gray-700 focus:outline-none"
-        >
+        <Button variant="cancel" onClick={onClose}>
           Fechar
-        </button>
+        </Button>
       </div>
     </div>
   )

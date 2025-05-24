@@ -1,16 +1,6 @@
 import { ShowAndHide } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import React from 'react'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
-import {
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr
-} from '@chakra-ui/react'
 import { TableColumn, TableRow } from '@/components/common/Table'
 
 interface ITableReportsProps {
@@ -23,24 +13,26 @@ interface ITableReportsProps {
 const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
   return (
     <ShowAndHide displayLg="initial" displayBase="none">
-      <TableContainer
-        bg={{ lg: 'gray.700' }}
-        h="45vh"
-        rounded="md"
-        overflowY="auto"
-        w="2xl"
-      >
-        <Table variant="simple">
-          <Thead>
-            <Tr>
+      <div className="bg-gray-700 rounded-md overflow-y-auto w-full max-w-2xl h-[45vh]">
+        <table className="min-w-full text-left">
+          <thead>
+            <tr>
               {columns.map((column) => (
-                <Th key={column.field}>{column.header}</Th>
+                <th
+                  key={column.field}
+                  className="px-6 py-4 text-gray-300 font-semibold text-sm border-b border-gray-600"
+                >
+                  {column.header}
+                </th>
               ))}
-            </Tr>
-          </Thead>
-          <Tbody>
+            </tr>
+          </thead>
+          <tbody>
             {data.map((row: TableRow, rowIndex) => (
-              <Tr key={rowIndex}>
+              <tr
+                key={rowIndex}
+                className="border-b border-gray-600 last:border-b-0"
+              >
                 {columns.map((column) => {
                   const cellStyles = column.styles
                     ? column.styles(row[column.field])
@@ -52,24 +44,20 @@ const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
                       : row[column.field]
 
                   return (
-                    <Td
+                    <td
                       key={column.field}
-                      px="6"
-                      py="4"
-                      fontWeight="medium"
-                      whiteSpace="nowrap"
-                      color="white"
+                      className="px-6 py-4 font-medium whitespace-nowrap text-white"
                       style={cellStyles}
                     >
                       {cellContent}
-                    </Td>
+                    </td>
                   )
                 })}
-              </Tr>
+              </tr>
             ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+          </tbody>
+        </table>
+      </div>
     </ShowAndHide>
   )
 }
