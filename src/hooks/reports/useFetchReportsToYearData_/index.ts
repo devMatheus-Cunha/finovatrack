@@ -8,14 +8,23 @@ import { useUserId } from '@/hooks/globalStates'
 export default function useFetchReportsToYearData(year: string) {
   const { userId } = useUserId() as any
 
-  const { data: reportDataToYear, isLoading } = useQuery<IReportToYearData>({
+  const {
+    data: reportDataToYearRaw,
+    isFetching,
+    isFetched
+  } = useQuery<IReportToYearData>({
     queryKey: ['report_data_to_year', year, userId],
     queryFn: () => getReportsToYear(userId, year),
     enabled: !!userId
   })
 
+  const isLoading = isFetching || !isFetched
+  const reportDataToYear = isLoading ? undefined : reportDataToYearRaw
+
   return {
     reportDataToYear,
-    isLoading
+    isLoading,
+    isFetching,
+    isFetched
   }
 }

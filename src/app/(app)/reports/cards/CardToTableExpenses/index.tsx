@@ -1,19 +1,18 @@
-import { IReportData } from '@/services/reports/getReport'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { TableColumn } from '@/components/common/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import EmptyWithoutReport from './EmptyWithoutReport'
 import TableDesktopReports from './TableDesktopReports'
 import TableMobileReports from './TableMobileReports'
+import { useFetchReportsData } from '@/hooks/reports'
+import { Card } from '@/components'
 
-const CardToTableExpenses = ({
-  isLoading,
-  reportData
-}: {
-  isLoading: boolean
-  reportData: IReportData | null | undefined
-}) => {
+interface CardToTableExpensesProps {
+  selectedDate: Date
+}
+
+const CardToTableExpenses = ({ selectedDate }: CardToTableExpensesProps) => {
+  const { reportData, isLoading } = useFetchReportsData(selectedDate)
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
@@ -56,33 +55,28 @@ const CardToTableExpenses = ({
     return columns
   }
 
-  if (isLoading) {
-    return (
-      <div className="w-full max-w-2xl rounded-md bg-gray-700 h-[278px] lg:h-[45vh] animate-pulse" />
-    )
-  }
-
   return (
-    <div className="w-full">
-      {reportData?.data && reportData?.data.length > 0 ? (
-        <>
-          <TableDesktopReports
-            data={reportData?.data}
-            columns={columsHeadProps()}
-            userData={userData}
-            isVisibilityData={isVisibilityData}
-          />
-          <TableMobileReports
-            data={reportData?.data}
-            colums={columsHeadProps()}
-            userData={userData}
-            isVisibilityData={isVisibilityData}
-          />
-        </>
-      ) : (
-        <EmptyWithoutReport />
-      )}
-    </div>
+    <Card
+      title="Gastos"
+      isLoading={isLoading}
+      hasData={!!reportData?.data}
+      className="h-[45vh] overflow-x-auto w-full max-w-2xl xl:h-[48vh]"
+    >
+      <>
+        <TableDesktopReports
+          data={reportData?.data ?? []}
+          columns={columsHeadProps()}
+          userData={userData}
+          isVisibilityData={isVisibilityData}
+        />
+        <TableMobileReports
+          data={reportData?.data ?? []}
+          colums={columsHeadProps()}
+          userData={userData}
+          isVisibilityData={isVisibilityData}
+        />
+      </>
+    </Card>
   )
 }
 

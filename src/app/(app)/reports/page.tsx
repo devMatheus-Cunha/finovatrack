@@ -1,6 +1,5 @@
 'use client'
 
-import { useFetchReportsData } from '@/hooks/reports'
 import {
   CardToCategoryExpense,
   CardToHeaderFilter,
@@ -8,26 +7,25 @@ import {
   CardToStatsInYear,
   CardToTableExpenses
 } from './cards'
+import { useState } from 'react'
 
 function Reports() {
-  const { reportData, setSelectedDate, year, formattedDate, isLoading } =
-    useFetchReportsData()
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   return (
     <div className="flex flex-col w-full p-2 gap-3">
-      <CardToStatsInYear year={String(year)} />
+      <CardToStatsInYear selectedDate={selectedDate} />
       <CardToHeaderFilter
+        selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        year={year}
-        formattedDate={formattedDate}
       />
 
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="flex flex-col gap-2">
-          <CardToStatsInMonth reportData={reportData} isLoading={isLoading} />
-          <CardToTableExpenses reportData={reportData} isLoading={isLoading} />
+          <CardToStatsInMonth selectedDate={selectedDate} />
+          <CardToTableExpenses selectedDate={selectedDate} />
         </div>
-        <CardToCategoryExpense reportData={reportData} isLoading={isLoading} />
+        <CardToCategoryExpense selectedDate={selectedDate} />
       </div>
     </div>
   )

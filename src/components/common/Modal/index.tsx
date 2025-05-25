@@ -1,10 +1,10 @@
-import React, { useEffect, Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import React, { useEffect, useRef, Fragment } from 'react'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode
+  title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
   isCentered?: boolean
 }
@@ -13,21 +13,29 @@ export const Modal = ({
   isOpen,
   onClose,
   children,
+  title,
   size = 'md',
   isCentered = false
 }: ModalProps) => {
+  const modalRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
+    if (!isOpen) return
+
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose()
       }
     }
-
     document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [onClose])
 
-  // Map size to width classes
+    if (modalRef.current) {
+      modalRef.current.focus()
+    }
+
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isOpen, onClose])
+
   const sizeClasses = {
     sm: 'max-w-sm',
     md: 'max-w-md',
@@ -37,46 +45,39 @@ export const Modal = ({
     full: 'max-w-full'
   }
 
-  return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
-        </Transition.Child>
+  if (!isOpen) return null
 
-        <div className="fixed inset-0 overflow-y-auto">
+  return (
+    <Fragment>
+      <div
+        className="fixed inset-0 z-50 bg-black bg-opacity-50"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div
+          className={`flex min-h-full ${
+            isCentered ? 'items-center' : 'items-start pt-16'
+          } justify-center p-4 text-center`}
+        >
           <div
-            className={`flex min-h-full ${
-              isCentered ? 'items-center' : 'items-start pt-16'
-            } justify-center p-4 text-center`}
+            ref={modalRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            className={`w-full ${sizeClasses[size]} transform overflow-hidden rounded-lg bg-gray-700 text-left align-middle shadow-xl transition-all`}
+            onClick={(e) => e.stopPropagation()}
           >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel
-                className={`w-full ${sizeClasses[size]} transform overflow-hidden rounded-lg bg-gray-800 text-left align-middle shadow-xl transition-all`}
-              >
-                {children}
-              </Dialog.Panel>
-            </Transition.Child>
+            {title && (
+              <div className="flex items-center justify-between px-6 pt-6 pb-2 border-b border-gray-700">
+                <h3 className="text-xl font-semibold text-white">{title}</h3>
+              </div>
+            )}
+            <div className="px-6 py-4">{children}</div>
           </div>
         </div>
-      </Dialog>
-    </Transition>
+      </div>
+    </Fragment>
   )
 }
 

@@ -13,51 +13,49 @@ interface ITableReportsProps {
 const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
   return (
     <ShowAndHide displayLg="initial" displayBase="none">
-      <div className="bg-gray-700 rounded-md overflow-y-auto w-full max-w-2xl h-[45vh]">
-        <table className="min-w-full text-left">
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th
-                  key={column.field}
-                  className="px-6 py-4 text-gray-300 font-semibold text-sm border-b border-gray-600"
-                >
-                  {column.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row: TableRow, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="border-b border-gray-600 last:border-b-0"
+      <table className="min-w-full text-left">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column.field}
+                className="px-6 py-4 text-gray-300 font-semibold text-sm border-b border-gray-600"
               >
-                {columns.map((column) => {
-                  const cellStyles = column.styles
-                    ? column.styles(row[column.field])
-                    : {}
-
-                  const cellContent =
-                    column.modifier && typeof column.modifier === 'function'
-                      ? column.modifier(row[column.field], row)
-                      : row[column.field]
-
-                  return (
-                    <td
-                      key={column.field}
-                      className="px-6 py-4 font-medium whitespace-nowrap text-white"
-                      style={cellStyles}
-                    >
-                      {cellContent}
-                    </td>
-                  )
-                })}
-              </tr>
+                {column.header}
+              </th>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row: TableRow, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className="border-b border-gray-600 last:border-b-0"
+            >
+              {columns.map((column) => {
+                const cellStyles = column.styles
+                  ? column.styles(row[column.field])
+                  : {}
+
+                const cellContent =
+                  column.modifier && typeof column.modifier === 'function'
+                    ? column.modifier(row[column.field], row)
+                    : row[column.field]
+
+                return (
+                  <td
+                    key={column.field}
+                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                    style={cellStyles}
+                  >
+                    {cellContent}
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </ShowAndHide>
   )
 }

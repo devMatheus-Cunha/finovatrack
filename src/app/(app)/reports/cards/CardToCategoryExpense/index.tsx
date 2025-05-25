@@ -1,46 +1,87 @@
 import React from 'react'
-import { IReportData } from '@/services/reports/getReport'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import ExpenseToCategory from './ExpenseToCategory'
+import { useFetchReportsData } from '@/hooks/reports'
+import { Card, Charts } from '@/components'
+import { ExpenseData } from '@/services/expenses/getExpenses'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
+
+interface Resultcategory {
+  value: number
+  label: string
+}
+
+interface CardToCategoryExpenseProps {
+  selectedDate: Date
+}
 
 const CardToCategoryExpense = ({
-  isLoading,
-  reportData
-}: {
-  isLoading: boolean
-  reportData: IReportData | null | undefined
-}) => {
+  selectedDate
+}: CardToCategoryExpenseProps) => {
+  const { reportData, isLoading } = useFetchReportsData(selectedDate)
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  if (isLoading) {
-    return (
-      <div className="w-full lg:max-w-xs rounded-md bg-gray-700 h-[214px] lg:h-[555px] animate-pulse" />
-    )
+  const data = reportData?.data ?? []
+
+  function sumToCategory(expenses: ExpenseData[]): Resultcategory[] {
+    const result: { [category: string]: number } = {}
+    for (const expense of expenses) {
+      if (expense.category === 'Investimentos') continue
+      const { category, value_primary_currency } = expense
+      if (result[category]) {
+        result[category] += value_primary_currency
+      } else {
+        result[category] = value_primary_currency
+      }
+    }
+    return Object.keys(result).map((category) => ({
+      value: result[category],
+      label: category
+    }))
   }
 
+  const chartData = sumToCategory(data).map((category, index) => {
+    const colorIndex = index + 1
+    return {
+      label: category.label,
+      value: category.value,
+      fill: `hsl(var(--chart-${colorIndex}))`
+    }
+  })
+
+  const formatarParaChartConfig = (data: any) => {
+    return data.reduce((config: any, item: any, index: any) => {
+      const colorIndex = index + 1
+      config[item.label] = {
+        label: item.label,
+        color: `hsl(var(--chart-${colorIndex}))`
+      }
+      return config
+    }, {})
+  }
+
+  const chartConfig = formatarParaChartConfig(
+    sumToCategory(reportData?.data ?? [])
+  )
+
   return (
-    <>
-      {reportData?.data && reportData?.data.length > 0 ? (
-        <div className="w-full lg:max-w-xs">
-          <ExpenseToCategory
-            expensesData={reportData.data}
-            userData={userData}
-            isVisibilityData={isVisibilityData}
-            totalExpenses={reportData?.totalExpenses}
-          />
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center text-center overflow-y-auto w-full lg:max-w-xs h-[214px] lg:h-[555px] rounded-md bg-gray-700">
-          <span className="mt-4 font-bold text-white text-xl lg:text-[23px]">
-            Nenhum relatório gerado
-          </span>
-          <span className="mt-2 text-sm lg:text-md text-gray-300">
-            Não há dados disponíveis para este período.
-          </span>
-        </div>
-      )}
-    </>
+    <Card
+      title="Gastos por Categoria"
+      isLoading={isLoading}
+      hasData={!!data}
+      className="w-full lg:max-w-xs h-full min-h-96"
+    >
+      <Charts.PieChart
+        chartConfig={chartConfig}
+        chartData={chartData}
+        total={formatCurrencyMoney(
+          reportData?.totalExpenses,
+          userData.primary_currency,
+          isVisibilityData
+        )}
+      />
+      <Charts.DescriptionChart dataStats={sumToCategory(data)} />
+    </Card>
   )
 }
 

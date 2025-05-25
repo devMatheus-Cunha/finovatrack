@@ -12,7 +12,7 @@ const useLogout = () => {
     mutationFn: logout,
     onSuccess: () => {
       clearUserId()
-      router.push('/')
+      router.push('/login')
     }
   })
 

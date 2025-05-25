@@ -6,6 +6,7 @@ import ExpenseModalContent from './expenseModalContent'
 import ConfirmSaveReportModal from './confirmSaveReportModal'
 import DeleteModalContent from './deleteModal'
 import ContentTotalEntrys from './totalEntrysModal'
+import { validateTextToModal } from '../utils'
 
 export const ModalsControl = ({
   controlModals,
@@ -27,6 +28,7 @@ export const ModalsControl = ({
         onClose={controlModals.controlModalAddExpense.onClose}
         isCentered
         size="xl"
+        title={validateTextToModal[configModalExpense?.type || '']?.title}
       >
         <ExpenseModalContent
           typeModal={configModalExpense?.type}
@@ -72,6 +74,7 @@ export const ModalsControl = ({
         onClose={controlModals.controlModalAddEntry.onClose}
         isCentered
         size="xl"
+        title="Adicione uma Entrada"
       >
         <ContentAddEntryModal
           handleOpenModal={controlModals.controlModalAddEntry.onClose}

@@ -66,7 +66,7 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
             id: initialValues?.id
           })
         })}
-        className="bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl"
+        className="bg-gray-700 rounded-lg shadow-xl w-full max-w-2xl"
       >
         <div className="border-b border-gray-600 px-6 pt-6 pb-2">
           <h3 className="text-2xl font-semibold text-white">

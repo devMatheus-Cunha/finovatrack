@@ -19,13 +19,13 @@ const TableReports: React.FC<ITableReportsProps> = ({
 }) => {
   return (
     <ShowAndHide displayLg="none" displayBase="initial">
-      <div className="grid grid-cols-1 gap-2 max-h-[278px] overflow-auto">
+      <div className="grid grid-cols-1">
         {data?.map((item) => (
           <React.Fragment key={item.id}>
             {item.value_primary_currency && (
               <div
                 key={item.id}
-                className="bg-gray-700 rounded-lg p-4 h-[85px] w-full flex justify-between items-center"
+                className="rounded-lg p-3 h-full flex justify-between items-center"
               >
                 <div className="flex flex-col gap-1">
                   <span className="text-base text-white">

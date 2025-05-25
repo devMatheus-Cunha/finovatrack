@@ -7,13 +7,8 @@ interface IInfoCardContentProps {
 
 const InfoCardContent = ({ handleInfoAction }: IInfoCardContentProps) => {
   return (
-    <div className="bg-gray-800 rounded-lg shadow w-full max-w-lg mx-auto">
-      <div className="flex items-start justify-between p-4 border-b rounded-t border-gray-600">
-        <h3 className="text-xl font-semibold text-white">
-          Saiba como calculamos o valor total de gastos!
-        </h3>
-      </div>
-      <div className="flex flex-col gap-2 px-3 py-4">
+    <div>
+      <div className="flex flex-col gap-2 py-4">
         <p className="text-gray-300">
           Utilizamos a cotação atual da moeda secundária da conta, combinada com
           a taxa aproximada da plataforma Wise. Com a Wise, você terá cálculos
@@ -25,7 +20,7 @@ const InfoCardContent = ({ handleInfoAction }: IInfoCardContentProps) => {
           Através da nossa plataforma, sua primeira transferência terá taxa 0.
         </p>
       </div>
-      <div className="flex justify-center px-4 py-6 gap-3 border-t rounded-b border-gray-600">
+      <div className="flex justify-center py-6 gap-3">
         <Button onClick={handleInfoAction} type="button" variant="cancel">
           Fechar
         </Button>

@@ -16,7 +16,7 @@ function EntrysModal({ onClose, entrys }: IEntrysModalProps) {
   const { userData } = useUserData()
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-xl mx-auto">
+    <div className="bg-gray-700 rounded-lg shadow-xl w-full max-w-xl mx-auto">
       <div className="px-6 pt-6 pb-2 border-b border-gray-600 flex items-center justify-between">
         <h3 className="text-xl font-semibold text-white">
           Detalhes das Entradas

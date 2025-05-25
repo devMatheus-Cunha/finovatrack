@@ -30,22 +30,18 @@ function ConfirmSaveReportModal({
   })
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-xl mx-auto flex flex-col gap-4">
-      <div className="flex flex-col items-center p-6 border-b border-gray-600">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-center">
         <div className="bg-gray-700/50 p-3 rounded-full mb-4">
           <FolderPlus size={48} className="text-blue-400" weight="duotone" />
         </div>
-        <h3 className="text-xl font-semibold text-white mb-2">
-          Salvar Relatório
-        </h3>
-        <p className="text-base font-normal text-gray-300 text-center">
+        <p className="text-base font-normal text-gray-300 text-center mb-2">
           Essa ação irá salvar todos os dados abaixo como fechamento do mês
           atual. Caso já exista um relatório salvo para este mês, ele será
           substituído por este.
         </p>
       </div>
-
-      <div className="px-6 py-4 flex flex-col items-center w-full">
+      <div className="py-4 flex flex-col items-center w-full">
         <label
           htmlFor="selectedPeriod"
           className="block mb-3 text-white font-medium text-md"
@@ -61,8 +57,7 @@ function ConfirmSaveReportModal({
           className="px-4 py-2.5 bg-transparent text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 transition-colors"
         />
       </div>
-
-      <div className="px-6 py-4 border-t border-gray-600 flex justify-end gap-3">
+      <div className="px-0 py-6 flex justify-end gap-3">
         <Button variant="cancel" onClick={onCancel}>
           Cancelar
         </Button>

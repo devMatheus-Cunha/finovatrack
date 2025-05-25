@@ -2,11 +2,20 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import Slider from 'react-slick'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
+import { useFetchReportsData } from '@/hooks/reports'
+import { Card } from '@/components'
 
-const CardToStatsInYear = ({ year }: { year: string }) => {
+interface CardToStatsInYearProps {
+  selectedDate: Date
+}
+
+const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
   const { userData } = useUserData()
+  const { year } = useFetchReportsData(selectedDate)
   const { isVisibilityData } = useIsVisibilityDatas()
-  const { reportDataToYear, isLoading } = useFetchReportsToYearData(year)
+  const { reportDataToYear, isLoading } = useFetchReportsToYearData(
+    String(year)
+  )
 
   const investmentPercentage =
     reportDataToYear &&
@@ -34,10 +43,6 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
       investments: `${investmentPercentage}%`
     }
   ]
-
-  if (isLoading) {
-    return <div className="w-full rounded-md bg-gray-700 h-40 animate-pulse" />
-  }
 
   const settings = {
     dots: false,
@@ -67,70 +72,52 @@ const CardToStatsInYear = ({ year }: { year: string }) => {
   }
 
   return (
-    <>
-      {reportDataToYear ? (
-        <div className="bg-gray-700 lg:h-40 rounded-md shadow-none w-full">
-          <div className="flex items-end gap-3 pb-0 px-4 pt-4">
-            <div>
-              <span className="text-gray-400 text-sm">Ano {year}</span>
-              <h2 className="text-lg font-semibold text-white">
-                Relatorio Anual
-              </h2>
+    <Card
+      title="Relatorio Anual"
+      subtitle={`Ano ${year}`}
+      isLoading={isLoading}
+      hasData={!!reportDataToYear}
+      className="h-40"
+    >
+      <Slider {...settings} className="w-full">
+        {summaryItems.map((card, index) => (
+          <div key={index} className="p-2 lg:p-1">
+            <div className="flex w-full items-center bg-gray-700 rounded-md py-4 px-2 lg:px-4">
+              <div className="w-full">
+                <div className="text-xs text-gray-500">{card.label}</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg lg:text-xl underline text-white font-bold">
+                    {formatCurrencyMoney(
+                      card.value,
+                      userData.primary_currency,
+                      isVisibilityData
+                    )}
+                  </span>
+                  {card.investments && (
+                    <span className="hidden md:flex items-center text-green-400 text-xs font-semibold mb-0">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 10l7-7m0 0l7 7m-7-7v18"
+                        />
+                      </svg>
+                      {card.investments}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="pt-4 lg:pt-0 px-2">
-            <Slider {...settings} className="w-full">
-              {summaryItems.map((card, index) => (
-                <div key={index} className="p-2 lg:p-1">
-                  <div className="flex w-full items-center bg-gray-700 rounded-md py-4 px-2 lg:px-4">
-                    <div className="w-full">
-                      <div className="text-xs text-gray-500">{card.label}</div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg lg:text-xl underline text-white font-bold">
-                          {formatCurrencyMoney(
-                            card.value,
-                            userData.primary_currency,
-                            isVisibilityData
-                          )}
-                        </span>
-                        {card.investments && (
-                          <span className="hidden md:flex items-center text-green-400 text-xs font-semibold mb-0">
-                            <svg
-                              className="w-3 h-3 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M5 10l7-7m0 0l7 7m-7-7v18"
-                              />
-                            </svg>
-                            {card.investments}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center overflow-y-auto rounded-md w-full h-40 bg-gray-700">
-          <span className="mt-4 font-bold text-xl lg:text-[26px] text-white">
-            Nenhum relatório gerado
-          </span>
-          <span className="mt-2 text-sm lg:text-md text-gray-300">
-            Não há dados disponíveis para este período.
-          </span>
-        </div>
-      )}
-    </>
+        ))}
+      </Slider>
+    </Card>
   )
 }
 

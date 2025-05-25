@@ -39,7 +39,9 @@ const SideMenuMobile: React.FC<{
           variant="ghost"
           onClick={handleToggleVisibilityData}
           className="bg-gray-700 p-2 rounded-md"
-          leftIcon={isVisibilityData ? <Eye size={21} /> : <EyeSlash size={21} />}
+          leftIcon={
+            isVisibilityData ? <Eye size={21} /> : <EyeSlash size={21} />
+          }
           aria-label={isVisibilityData ? 'Hide Data' : 'Show Data'}
         />
         <Button
@@ -58,7 +60,7 @@ const SideMenuMobile: React.FC<{
             onClick={() => setIsOpen(false)}
             aria-label="Fechar menu"
           />
-          <aside className="fixed top-0 left-0 h-full w-64 bg-gray-800 border-r border-gray-700 z-50 flex flex-col shadow-lg animate-slide-in">
+          <aside className="fixed top-0 left-0 h-full w-64 bg-gray-700 border-r border-gray-700 z-50 flex flex-col shadow-lg animate-slide-in">
             <Button
               variant="ghost"
               onClick={() => setIsOpen(false)}

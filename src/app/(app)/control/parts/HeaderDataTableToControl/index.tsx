@@ -65,7 +65,7 @@ function HeaderDataTableToControl({
 
   return (
     <div className="flex w-full justify-between items-center flex-wrap">
-      <div className="flex w-[50%] gap-3 justify-center">
+      <div className="flex lg:w-[50%] gap-3 justify-center">
         {buttonData.map((button, index) => (
           <Button
             key={index}
@@ -87,7 +87,7 @@ function HeaderDataTableToControl({
               Ações
             </Button>
             {showMenu && (
-              <div className="absolute z-10 mt-2 bg-gray-800 border border-gray-700 rounded-md shadow-lg">
+              <div className="absolute z-10 mt-2 bg-gray-700 border border-gray-700 rounded-md shadow-lg">
                 {buttonData.map((button, index) => (
                   <Button
                     key={index}

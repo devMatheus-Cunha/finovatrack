@@ -65,7 +65,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
+        <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-10">
           <div className="py-1" role="menu" aria-orientation="vertical">
             <div className="block lg:hidden py-2 px-4 text-xs text-gray-400 border-b border-gray-700">
               {label}

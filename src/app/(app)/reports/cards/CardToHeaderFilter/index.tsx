@@ -1,17 +1,20 @@
+import { Card } from '@/components'
 import { useMemo } from 'react'
 import DatePicker from 'react-datepicker'
 
-interface CardHeader {
+interface CardToHeaderFilterProps {
+  selectedDate: Date
   setSelectedDate: (date: Date) => void
-  year: number
-  formattedDate: string
 }
 
 const CardToHeaderFilter = ({
-  setSelectedDate,
-  year,
-  formattedDate
-}: CardHeader) => {
+  selectedDate,
+  setSelectedDate
+}: CardToHeaderFilterProps) => {
+  const year = selectedDate.getFullYear()
+  const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
+  const formattedDate = `${month}/${year}`
+
   const months = useMemo(() => {
     return [
       { month: 'Janeiro', monthNumber: '01', value: `01/${year}` },
@@ -34,31 +37,8 @@ const CardToHeaderFilter = ({
   )
 
   return (
-    <div className="bg-gray-700 px-4 py-6 w-full rounded-md text-white">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <div>
-            <span className="text-gray-400 text-sm">Relatorio Mensal</span>
-            <div className="font-semibold">Veja todas os dados por mês</div>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <DatePicker
-            selected={new Date(year, parseInt(formattedDate.split('/')[0]) - 1)}
-            showYearPicker
-            dateFormat="yyyy"
-            onChange={(date: Date) => setSelectedDate(date)}
-            customInput={
-              <input
-                className="border-b border-gray-400 bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white text-center py-1"
-                readOnly
-              />
-            }
-          />
-        </div>
-      </div>
-
-      <div className="mt-6 overflow-auto">
+    <Card title="Relatorio Mensal" subtitle="Veja todas os dados por mês">
+      <div className=" flex justify-between items-center mt-6 overflow-auto">
         <div className="flex border-b-2 border-gray-700">
           {months.map((month, idx) => (
             <button
@@ -78,8 +58,23 @@ const CardToHeaderFilter = ({
             </button>
           ))}
         </div>
+
+        <div className="flex items-center">
+          <DatePicker
+            selected={selectedDate}
+            showYearPicker
+            dateFormat="yyyy"
+            onChange={(date: Date) => setSelectedDate(date)}
+            customInput={
+              <input
+                className="border-b border-gray-400 bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white text-center py-1"
+                readOnly
+              />
+            }
+          />
+        </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

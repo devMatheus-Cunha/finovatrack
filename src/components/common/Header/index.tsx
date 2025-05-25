@@ -8,7 +8,7 @@ export default function Header() {
   const router = useRouter()
 
   return (
-    <nav className="flex bg-gray-800 dark:bg-gray-900 px-4 py-2 md:py-4 items-center justify-between w-full">
+    <nav className="flex bg-gray-700 dark:bg-gray-900 px-4 py-2 md:py-4 items-center justify-between w-full">
       <Logo />
 
       <div className="flex gap-7">
