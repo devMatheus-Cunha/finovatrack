@@ -5,7 +5,6 @@ import {
   updateOrCreateDoc
 } from '@/services/finance/getDividends'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
 
 export interface IDividendProps {
   ticker: string
@@ -22,7 +21,6 @@ export type IDividendsProps = IDividendProps[]
 
 export const useFetchDividends = () => {
   const { userData } = useUserData()
-  const [currentPage, setCurrentPage] = useState(10)
 
   const {
     data: dividendsDataRaw,
@@ -30,8 +28,8 @@ export const useFetchDividends = () => {
     isFetched,
     refetch
   } = useQuery({
-    queryKey: ['dividends_data', currentPage, userData.id],
-    queryFn: () => getDividendData(userData.id!, currentPage),
+    queryKey: ['dividends_data', 50, userData.id],
+    queryFn: () => getDividendData(userData.id!, 50),
     enabled: !!userData.id && userData.admin
   })
 
@@ -51,9 +49,7 @@ export const useFetchDividends = () => {
   return {
     dividendsData,
     isLoadingDividendsData,
-    refetchDividendsData,
-    currentPage,
-    setCurrentPage
+    refetchDividendsData
   }
 }
 

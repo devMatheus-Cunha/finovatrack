@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { chartConfig, chartData } from './utils'
+import { chartData } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { Charts } from '@/components'

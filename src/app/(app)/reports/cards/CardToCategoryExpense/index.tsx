@@ -3,7 +3,6 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
 import { Card, Charts } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { blueHexShades } from '@/utils/colors'
 
 interface Resultcategory {

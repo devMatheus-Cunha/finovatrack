@@ -1,5 +1,4 @@
 import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
-import { ChartConfigProps, ChartDataProps } from '@/components/ui/chart'
 import {
   IInvestimentsData,
   IInvestmentsProps
@@ -23,32 +22,6 @@ interface CalculatedInvestmentData {
   totalAccountValue?: number
   totalInterest: number
 }
-
-export const chartConfig = {
-  value: {
-    label: 'Visitors'
-  },
-  chrome: {
-    label: 'Disponível',
-    color: 'hsl(var(--chart-1))'
-  },
-  safari: {
-    label: 'Aplicado',
-    color: 'hsl(var(--chart-2))'
-  },
-  firefox: {
-    label: 'Valorizacao',
-    color: 'hsl(var(--chart-3))'
-  },
-  edge: {
-    label: 'Dividendos',
-    color: 'hsl(var(--chart-4))'
-  },
-  other: {
-    label: 'Val + Div:',
-    color: 'hsl(var(--chart-5))'
-  }
-} satisfies ChartConfigProps
 
 export const createChartConfig = (
   investimentsData: IInvestmentsProps | undefined,

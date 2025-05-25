@@ -1,5 +1,3 @@
-import { ChartConfigProps } from '@/components/ui/chart'
-
 export const formattedDividendsData = (dividendsData: any[]) => {
   const formatData = dividendsData
     ? dividendsData?.reduce(
@@ -35,4 +33,4 @@ export const chartConfig = {
     label: 'Valor Mês',
     color: 'hsl(var(--chart-1))'
   }
-} satisfies ChartConfigProps
+}
