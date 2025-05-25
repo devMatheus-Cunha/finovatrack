@@ -25,19 +25,20 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseClasses =
-  'px-2 py-2 w-full text-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
+  'px-2 py-2 w-full text-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center'
 
 const styles = {
   cancel:
-    ' text-gray-300 border border-gray-500 hover:bg-gray-600 hover:text-white',
-  confirm: 'bg-green-600 text-white hover:bg-green-700',
-  delete: 'bg-red-600 text-white hover:bg-red-800',
-  link: 'text-blue-500 underline hover:text-blue-700',
-  primary: 'bg-blue-500 text-white hover:bg-blue-600',
+    ' text-gray-300 border border-gray-500 hover:bg-gray-600 hover:text-white justify-center',
+  confirm: 'bg-green-600 text-white hover:bg-green-700 justify-center',
+  delete: 'bg-red-600 text-white hover:bg-red-800 justify-center',
+  link: 'text-blue-500 underline hover:text-blue-700 justify-center',
+  primary: 'bg-blue-500 text-white hover:bg-blue-600 justify-center',
   outline:
-    'bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-700',
+    'bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-700 justify-center',
   ghost: 'bg-gray-700',
-  default: 'bg-gray-700 text-gray-200 hover:bg-gray-600 rounded-md'
+  default:
+    'bg-gray-700 text-gray-200 hover:bg-gray-600 rounded-md justify-center'
 }
 
 function getButtonClasses(variant: string, className: string) {

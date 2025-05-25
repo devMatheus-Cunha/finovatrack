@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { List, Eye, EyeSlash } from '@phosphor-icons/react'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components'
+import { Button, ButtonGroup } from '@/components'
 interface SidebarItem {
   id: string
   label: string
@@ -34,7 +34,7 @@ const SideMenuMobile: React.FC<{
 
   return (
     <>
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row gap-3">
         <Button
           variant="ghost"
           onClick={handleToggleVisibilityData}
@@ -52,7 +52,6 @@ const SideMenuMobile: React.FC<{
           aria-label="Open Menu"
         />
       </div>
-      {/* Drawer Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-40">
           <div
@@ -61,24 +60,14 @@ const SideMenuMobile: React.FC<{
             aria-label="Fechar menu"
           />
           <aside className="fixed top-0 left-0 h-full w-64 bg-gray-700 border-r border-gray-700 z-50 flex flex-col shadow-lg animate-slide-in">
-            <Button
-              variant="ghost"
+            <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 text-white"
+              className="absolute top-2 right-3 text-white text-xl"
               aria-label="Fechar menu"
             >
               ×
-            </Button>
+            </button>
             <div className="pt-7 pb-10 px-3 overflow-y-auto flex-1 flex flex-col">
-              <div className="mb-3">
-                <a
-                  href="/"
-                  className="text-xl font-semibold text-white hover:underline"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Menu
-                </a>
-              </div>
               <div className="flex flex-col gap-1.5 w-full">
                 {sidebarItems.map((item) => (
                   <Button
@@ -104,7 +93,6 @@ const SideMenuMobile: React.FC<{
           </aside>
         </div>
       )}
-      {/* Removido o bloco <style> inline. Use a classe animate-slide-in definida em um arquivo externo. */}
     </>
   )
 }
