@@ -4,6 +4,7 @@ import { useFetchReportsData } from '@/hooks/reports'
 import { Card, Charts } from '@/components'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { blueHexShades } from '@/utils/colors'
 
 interface Resultcategory {
   value: number
@@ -40,29 +41,22 @@ const CardToCategoryExpense = ({
     }))
   }
 
-  const chartData = sumToCategory(data).map((category, index) => {
-    const colorIndex = index + 1
-    return {
-      label: category.label,
-      value: category.value,
-      fill: `hsl(var(--chart-${colorIndex}))`
-    }
-  })
-
-  const formatarParaChartConfig = (data: any) => {
-    return data.reduce((config: any, item: any, index: any) => {
-      const colorIndex = index + 1
-      config[item.label] = {
-        label: item.label,
-        color: `hsl(var(--chart-${colorIndex}))`
-      }
-      return config
-    }, {})
-  }
-
-  const chartConfig = formatarParaChartConfig(
-    sumToCategory(reportData?.data ?? [])
-  )
+  const blueHexKeys = [
+    'blue900',
+    'blue800',
+    'blue700',
+    'blue600',
+    'blue500',
+    'blue400',
+    'blue300',
+    'blue200',
+    'blue100'
+  ] as const
+  const chartData = sumToCategory(data).map((category, index) => ({
+    label: category.label,
+    value: category.value,
+    color: blueHexShades[blueHexKeys[index % blueHexKeys.length]]
+  }))
 
   return (
     <Card
@@ -71,14 +65,12 @@ const CardToCategoryExpense = ({
       hasData={!!data}
       className="w-full lg:max-w-xs h-full min-h-96"
     >
-      <Charts.PieChart
-        chartConfig={chartConfig}
-        chartData={chartData}
-        total={formatCurrencyMoney(
-          reportData?.totalExpenses,
-          userData.primary_currency,
-          isVisibilityData
-        )}
+      <Charts.PieChartCircle
+        data={chartData}
+        total={chartData.reduce((acc, item) => acc + item.value, 0)}
+        currency={userData.primary_currency}
+        isVisibilityData={isVisibilityData}
+        showTooltip
       />
       <Charts.DescriptionChart dataStats={sumToCategory(data)} />
     </Card>

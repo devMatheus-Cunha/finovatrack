@@ -13,6 +13,7 @@ import {
   Bar,
   YAxis
 } from 'recharts'
+import { blueHexShades } from '@/utils/colors'
 
 interface BarChartProps {
   chartData: ChartDataProps[]
@@ -21,6 +22,18 @@ interface BarChartProps {
 }
 
 const BarChart = ({ chartData, tickFormatter, chartConfig }: BarChartProps) => {
+  const blueHexKeys = [
+    'blue900',
+    'blue800',
+    'blue700',
+    'blue600',
+    'blue500',
+    'blue400',
+    'blue300',
+    'blue200',
+    'blue100'
+  ] as const
+  const fillColor = chartData[0]?.fill || blueHexShades[blueHexKeys[0]]
   return (
     <ChartContainer config={chartConfig} className="h-[35%]">
       <BarChartRecharts accessibilityLayer data={chartData}>
@@ -41,7 +54,7 @@ const BarChart = ({ chartData, tickFormatter, chartConfig }: BarChartProps) => {
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
         />
-        <Bar dataKey="value" fill="var(--color-desktop)" radius={8} />
+        <Bar dataKey="value" fill={fillColor} radius={8} />
       </BarChartRecharts>
     </ChartContainer>
   )

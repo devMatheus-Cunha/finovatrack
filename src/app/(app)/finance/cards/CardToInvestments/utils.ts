@@ -1,8 +1,10 @@
+import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
 import { ChartConfigProps, ChartDataProps } from '@/components/ui/chart'
 import {
   IInvestimentsData,
   IInvestmentsProps
 } from '@/hooks/finance/useFetchInvestiments'
+import { blueHexShades } from '@/utils/colors'
 
 export interface IFormatDataToStats {
   label: string
@@ -60,26 +62,25 @@ export const createChartConfig = (
   totalAppreciationValue: number,
   totalInterest: number
 ): {
-  chartData: ChartDataProps[]
+  chartData: PieChartCircleData[]
   formatDataToStats: IFormatDataToStats[]
 } => {
-  const chartData: ChartDataProps[] = [
+  const chartData: PieChartCircleData[] = [
     {
       label: 'Disponível',
       value: investimentsData?.free || 0,
-      fill: 'var(--color-chrome)'
+      color: blueHexShades.blue600
     },
     {
       label: 'Aplicado',
       value: investedValue || 0,
-      fill: 'var(--color-safari)'
+      color: blueHexShades.blue400
     },
     {
-      label: 'Valor Valorização',
-      value: totalAppreciationValue,
-      fill: 'var(--color-firefox)'
-    },
-    { label: 'Dividendos', value: dividends, fill: 'var(--color-edge)' }
+      label: 'Dividendos',
+      value: dividends,
+      color: blueHexShades.blue300
+    }
   ]
 
   const formatDataToStats: IFormatDataToStats[] = [

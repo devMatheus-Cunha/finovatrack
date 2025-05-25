@@ -1,10 +1,6 @@
+import React from 'react'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
-import {
-  calculateInvestmentData,
-  chartConfig,
-  createChartConfig
-} from './utils'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { calculateInvestmentData, createChartConfig } from './utils'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { Card, Charts } from '@/components'
 import { ArrowsCounterClockwise } from '@phosphor-icons/react'
@@ -52,7 +48,7 @@ const CardToInvestments = ({
 
   return (
     <Card
-      title="Investimenos Tranding 212"
+      title="Investimentos Trading 212"
       isLoading={isLoadingAllPies || isLoadingInvestimentsData}
       hasData={!!investimentsData}
       className="w-full lg:max-w-md min-h-[570px] max-h-[570px] flex flex-col"
@@ -70,15 +66,13 @@ const CardToInvestments = ({
           />
         </button>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <Charts.PieChart
-          chartConfig={chartConfig}
-          chartData={chartData}
-          total={formatCurrencyMoney(
-            Number(totalAccountValue),
-            userData.primary_currency,
-            isVisibilityData
-          )}
+      <div className="flex-1 gap-3 flex flex-col ">
+        <Charts.PieChartCircle
+          data={chartData}
+          total={Number(totalAccountValue)}
+          currency={userData.primary_currency}
+          isVisibilityData={isVisibilityData}
+          showTooltip
         />
         <Charts.DescriptionChart dataStats={formatDataToStats} />
       </div>

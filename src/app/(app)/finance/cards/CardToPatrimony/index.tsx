@@ -3,6 +3,7 @@ import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { Card } from '@/components'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { blueShades } from '@/utils/colors'
 
 interface CardToPatrimonyProps {
   isLoadingInvestimentsData: boolean
@@ -20,10 +21,20 @@ const PatrimonyLevelsBar = ({
 }) => {
   const total = levels.reduce((acc, l) => acc + l.value, 0)
   const sortedLevels = [...levels].sort((a, b) => b.value - a.value)
-  const blueShades = ['bg-blue-700', 'bg-blue-500', 'bg-blue-300']
+  const blueShadeKeys = [
+    'blue900',
+    'blue800',
+    'blue700',
+    'blue600',
+    'blue500',
+    'blue400',
+    'blue300',
+    'blue200',
+    'blue100'
+  ] as const
   const levelColors = sortedLevels.map((level, idx) => ({
     ...level,
-    blueShade: blueShades[idx % blueShades.length]
+    blueShade: blueShades[blueShadeKeys[idx % blueShadeKeys.length]]
   }))
 
   return (

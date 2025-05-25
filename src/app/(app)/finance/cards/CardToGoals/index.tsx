@@ -64,14 +64,12 @@ const CardToGoals = ({
         </button>
       </div>
       <div className="px-6 pb-6">
-        <Charts.PieChart
-          chartConfig={chartConfig}
-          chartData={chartData}
-          total={formatCurrencyMoney(
-            Number(totalValue),
-            userData.primary_currency,
-            isVisibilityData
-          )}
+        <Charts.PieChartCircle
+          data={chartData}
+          total={Number(totalValue)}
+          currency={userData.primary_currency}
+          isVisibilityData={isVisibilityData}
+          showTooltip
         />
         <Charts.DescriptionChart dataStats={investmentData} />
       </div>
