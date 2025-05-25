@@ -26,7 +26,7 @@ const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-600">
           {data.map((row: TableRow, rowIndex) => (
             <tr
               key={rowIndex}

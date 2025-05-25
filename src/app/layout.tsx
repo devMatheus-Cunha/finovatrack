@@ -3,7 +3,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import Providers from './providers'
-import { ColorModeScript, theme } from '@chakra-ui/react'
 
 export const metadata: Metadata = {
   title: 'FinovaTrack - Home',
@@ -48,9 +47,8 @@ export default function RootLayout({
         />
       </head>
 
-      <body suppressHydrationWarning className="bg-[#1a202c]">
+      <body suppressHydrationWarning className="bg-gray-800">
         <Providers>{children}</Providers>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       </body>
     </html>
   )

@@ -46,7 +46,7 @@ const MobileTable: React.FC<IMobileTableProps> = ({
                 <div
                   key={item.id}
                   onClick={() => handleOpenModal('edit', item)}
-                  className="h-24 w-full md:w-[45%] bg-[#2D3748] rounded-lg p-4 text-white flex justify-between items-center cursor-pointer"
+                  className="h-24 w-full md:w-[45%] bg-gray-700 rounded-lg p-4 text-white flex justify-between items-center cursor-pointer"
                 >
                   <div className="flex flex-col items-start space-y-4">
                     <p className="text-ms">{item.description}</p>

@@ -32,7 +32,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-700">
+        <tbody className="divide-y divide-gray-600">
           {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="hover:bg-gray-600">
               {columns.map((column) => {

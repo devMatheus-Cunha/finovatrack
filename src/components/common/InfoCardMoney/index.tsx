@@ -90,7 +90,7 @@ function InfoCardMoney({
         </div>
       ) : (
         <div
-          className="w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse"
+          className="w-full rounded-lg bg-gray-700 animate-pulse"
           style={{ height: '92.5px', minHeight: '85px' }}
         />
       )}

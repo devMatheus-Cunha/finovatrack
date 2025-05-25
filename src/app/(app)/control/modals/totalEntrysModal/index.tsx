@@ -38,7 +38,7 @@ function ContentTotalEntrys({
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-600">
           {data?.map((item) => (
             <tr key={item.id}>
               <td className="text-white py-4">

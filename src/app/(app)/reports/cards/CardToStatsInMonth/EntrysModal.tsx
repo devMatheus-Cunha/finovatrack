@@ -40,7 +40,7 @@ function EntrysModal({ onClose, entrys }: IEntrysModalProps) {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-600">
             {entrys?.map((item, index) => (
               <tr key={index}>
                 <td className="text-white py-2">
