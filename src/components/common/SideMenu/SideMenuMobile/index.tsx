@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { List, Eye, EyeSlash } from '@phosphor-icons/react'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { useRouter } from 'next/navigation'
-import { Button, ButtonGroup } from '@/components'
+import { Button } from '@/components'
 interface SidebarItem {
   id: string
   label: string
