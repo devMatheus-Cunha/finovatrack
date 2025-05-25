@@ -4,7 +4,7 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { useMemo } from 'react'
 import { chartConfig, chartDataFormat } from './utilts'
-import { Charts } from '@/components'
+import { Card, Charts } from '@/components'
 
 interface CardToPatrimonyProps {
   isLoadingInvestimentsData: boolean
@@ -28,21 +28,13 @@ const CardToPatrimony = ({
       : 0
   }, [financialPlanningActualYear, investments?.total])
 
-  if (
-    isLoadingFinancialPlanningYear ||
-    isLoadingInvestimentsData ||
-    !investments
-  ) {
-    return (
-      <div className="w-full h-[130px] rounded-md bg-gray-700 animate-pulse" />
-    )
-  }
-
   return (
-    <div className="w-full  p-2 bg-gray-700 rounded-md flex items-center justify-around">
-      <h2 className="text-sm lg:text-xl text-white font-semibold">
-        Patrimônio atual
-      </h2>
+    <Card
+      title="Patrimônio atual"
+      isLoading={isLoadingFinancialPlanningYear || isLoadingInvestimentsData}
+      hasData={!!financialPlanningActualYear || !!investments}
+      className="w-full h-[130px] rounded-md flex items-center justify-around"
+    >
       <Charts.RadialBarChart
         chartConfig={chartConfig}
         chartData={chartDataFormat(
@@ -56,7 +48,7 @@ const CardToPatrimony = ({
           isVisibilityData
         )}
       />
-    </div>
+    </Card>
   )
 }
 

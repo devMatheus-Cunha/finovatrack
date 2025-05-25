@@ -12,6 +12,7 @@ import useCustomDisclosure from '@/hooks/globalStates/useCustomDisclosure'
 import Modal from '@/components/common/Modal'
 import ModalContent from './ModalContent'
 import { Accordion } from '@chakra-ui/react'
+import { Card } from '@/components'
 
 interface CardToFinanceYaerProps {
   investimentsData?: IInvestmentsProps
@@ -87,16 +88,14 @@ const CardToFinanceYaer = ({
     return data
   }
 
-  if (isLoadingInvestimentsData || !financialPlanningYear) {
-    return (
-      <div className="w-full min-h-[433px] max-h-[433px] h-full rounded-md bg-gray-700 animate-pulse" />
-    )
-  }
-
   return (
-    <div className="w-full min-h-[433px] bg-gray-700 rounded-md">
-      <div className="px-6 pt-6 pb-2">
-        <h2 className="text-lg font-semibold text-white mb-6">Finanças</h2>
+    <Card
+      title="Finanças"
+      isLoading={isLoadingInvestimentsData}
+      hasData={!!financialPlanningYear}
+      className=" min-h-[433px] max-h-[433px]"
+    >
+      <div className="pt-4">
         <Accordion allowMultiple>
           {calcTotalsLaterYear(financialPlanningYear) &&
             calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
@@ -121,7 +120,7 @@ const CardToFinanceYaer = ({
           </Modal>
         </Accordion>
       </div>
-    </div>
+    </Card>
   )
 }
 

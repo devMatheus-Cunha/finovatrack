@@ -54,8 +54,9 @@ export const useFetchInvestiments = () => {
   const { userData } = useUserData()
 
   const {
-    data: investimentsData,
-    isFetching: isLoadingInvestimentsData,
+    data: investimentsDataRequestRaw,
+    isFetching,
+    isFetched,
     refetch
   } = useQuery({
     queryKey: ['investiments_data', userData.id],
@@ -65,7 +66,10 @@ export const useFetchInvestiments = () => {
 
   const refetchInvestimentsData = async () => {
     try {
-      const investiments = await getCombinedData(userData.id, investimentsData)
+      const investiments = await getCombinedData(
+        userData.id,
+        investimentsDataRequestRaw
+      )
       await updateOrCreateDoc(userData.id!, investiments)
       refetch()
     } catch (error) {
@@ -73,9 +77,12 @@ export const useFetchInvestiments = () => {
     }
   }
 
+  const isLoading = isFetching || !isFetched
+  const investimentsData = isLoading ? undefined : investimentsDataRequestRaw
+
   return {
     investimentsData,
-    isLoadingInvestimentsData,
+    isLoadingInvestimentsData: isLoading,
     refetchInvestimentsData
   }
 }

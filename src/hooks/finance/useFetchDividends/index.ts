@@ -25,8 +25,9 @@ export const useFetchDividends = () => {
   const [currentPage, setCurrentPage] = useState(10)
 
   const {
-    data: dividendsData,
-    isFetching: isLoadingDividendsData,
+    data: dividendsDataRaw,
+    isFetching,
+    isFetched,
     refetch
   } = useQuery({
     queryKey: ['dividends_data', currentPage, userData.id],
@@ -44,8 +45,11 @@ export const useFetchDividends = () => {
     }
   }
 
+  const isLoadingDividendsData = isFetching || !isFetched
+  const dividendsData = isLoadingDividendsData ? [] : (dividendsDataRaw ?? [])
+
   return {
-    dividendsData: dividendsData ?? [],
+    dividendsData,
     isLoadingDividendsData,
     refetchDividendsData,
     currentPage,

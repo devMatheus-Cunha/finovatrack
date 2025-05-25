@@ -16,6 +16,8 @@ import { useUserData } from '@/hooks/globalStates'
 import { redirect } from 'next/navigation'
 
 const Finance = () => {
+  const { userData } = useUserData()
+
   const {
     investimentsData,
     isLoadingInvestimentsData,
@@ -27,8 +29,6 @@ const Finance = () => {
     isLoadingFinancialPlanningYear,
     financialPlanningActualYear
   } = useFetchFinancialPlaningYear()
-
-  const { userData } = useUserData()
 
   if (userData.id) {
     if (!userData.admin) {

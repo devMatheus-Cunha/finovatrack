@@ -10,8 +10,9 @@ export const useFetchFinancialPlaningYear = () => {
   const { userData } = useUserData()
 
   const {
-    data: financialPlanningYear,
-    isLoading: isLoadingFinancialPlanningYear,
+    data: financialPlanningYearRequestRaw,
+    isFetching,
+    isFetched,
     status: statusFinancialPlanningYear,
     refetch: refetchFinancialPlanningYear
   } = useQuery({
@@ -21,16 +22,22 @@ export const useFetchFinancialPlaningYear = () => {
   })
   const currentYear = new Date().getFullYear()
 
+  // Só libera os dados após o fetching acabar
+  const isLoading = isFetching || !isFetched
+  const financialPlanningYearRequest = isLoading ? undefined : financialPlanningYearRequestRaw
+
   const financialPlanningData = useMemo<
     IFinancialPlanningProps | undefined
   >(() => {
-    return financialPlanningYear?.find((fp) => Number(fp.year) === currentYear)
-  }, [currentYear, financialPlanningYear])
+    return financialPlanningYearRequest?.find(
+      (fp) => Number(fp.year) === currentYear
+    )
+  }, [currentYear, financialPlanningYearRequest])
 
   return {
-    financialPlanningYear,
+    financialPlanningYear: financialPlanningYearRequest,
     financialPlanningActualYear: financialPlanningData,
-    isLoadingFinancialPlanningYear,
+    isLoadingFinancialPlanningYear: isLoading,
     statusFinancialPlanningYear,
     refetchFinancialPlanningYear
   }
