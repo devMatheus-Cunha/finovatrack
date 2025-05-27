@@ -24,11 +24,8 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-  const {
-    financialPlanningYear,
-    isLoadingFinancialPlanningYear,
-    financialPlanningActualYear
-  } = useFetchFinancialPlaningYear()
+  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
+    useFetchFinancialPlaningYear()
 
   if (userData.id) {
     if (!userData.admin) {
@@ -37,7 +34,7 @@ const Finance = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2 h-[95vh] w-full px-2 md:px-2 lg:px-0">
+    <div className="flex flex-col gap-2 h-[95vh] w-full px-2 md:px-2 lg:px-0 ">
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="w-full lg:w-[45%] flex flex-col gap-2">
           <CardToPatrimony
@@ -60,15 +57,7 @@ const Finance = () => {
         </div>
       </div>
       <div>
-        <CardToGoals
-          isLoadingInvestimentsData={isLoadingInvestimentsData}
-          refetchInvestimentsData={refetchInvestimentsData}
-          investments={investimentsData}
-          millenium={
-            financialPlanningActualYear &&
-            Number(financialPlanningActualYear.reserve)
-          }
-        />
+        <CardToGoals />
       </div>
     </div>
   )
