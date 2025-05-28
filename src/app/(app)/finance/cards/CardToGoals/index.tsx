@@ -40,9 +40,9 @@ const CardToGoals = () => {
               className="flex flex-col items-center flex-1 bg-gray-800/70 rounded-xl shadow-lg p-2 border border-gray-700 min-w-[70px] max-w-[90px] w-full"
             >
               <span className="text-[10px] text-gray-300 mb-1 font-medium whitespace-nowrap">
-                {goal.target.toLocaleString('pt-BR', {
+                {goal.target.toLocaleString('pt-PT', {
                   style: 'currency',
-                  currency: 'BRL'
+                  currency: 'EUR'
                 })}
               </span>
               <div className="relative flex flex-col justify-end h-32 w-6 bg-gray-900 rounded-lg overflow-hidden shadow-inner border border-gray-700">
@@ -55,9 +55,9 @@ const CardToGoals = () => {
                 </span>
               </div>
               <span className="text-[10px] text-gray-200 mt-1 font-semibold whitespace-nowrap">
-                {goal.current.toLocaleString('pt-BR', {
+                {goal.current.toLocaleString('pt-PT', {
                   style: 'currency',
-                  currency: 'BRL'
+                  currency: 'EUR'
                 })}
               </span>
               <span className="text-[10px] text-gray-400 mt-1 text-center max-w-[60px]">
