@@ -54,7 +54,7 @@ const Card: React.FC<CardProps> = ({
     >
       <div className="flex flex-col ">
         {!isLoading && (
-          <h1 className="text-lg font-semibold text-white">{title}</h1>
+          <h1 className="text-lg font-semibold text-white mb-2">{title}</h1>
         )}
         {subtitle && !isLoading && (
           <span className="text-gray-400 text-sm">{subtitle}</span>
