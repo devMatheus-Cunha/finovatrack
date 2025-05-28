@@ -13,14 +13,14 @@ const goals = [
   },
   {
     name: 'Renda fixa',
-    current: 12000,
+    current: 16400.00,
     target: 30000,
     color: blueShades.blue700
   },
   {
     name: 'Investimentos',
-    current: 16400.00,
-    target: 30000,
+    current:  1206.29,
+    target: 10000,
     color: blueShades.blue300
   }
 ]
