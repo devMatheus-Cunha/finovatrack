@@ -6,21 +6,21 @@ import { Card } from '@/components'
 
 const goals = [
   {
-    name: 'Reserva de Emergência',
-    current: 8000,
-    target: 20000,
+    name: 'Comprr Casa',
+    current: 16814.61,
+    target: 42000,
     color: blueShades.blue500
   },
   {
-    name: 'Aposentadoria',
+    name: 'Renda fixa',
     current: 12000,
     target: 30000,
     color: blueShades.blue700
   },
   {
-    name: 'Viagem',
-    current: 3500,
-    target: 10000,
+    name: 'Investimentos',
+    current: 16400.00,
+    target: 30000,
     color: blueShades.blue300
   }
 ]
