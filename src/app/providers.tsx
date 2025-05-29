@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { ToastContainer } from 'react-toastify'
-import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from 'next-themes'
 
 export const queryClient = new QueryClient({
@@ -28,7 +27,7 @@ function Providers({ children }: React.PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <ChakraProvider>{children}</ChakraProvider>
+        {children}
         <ToastContainer theme="dark" />
         <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>

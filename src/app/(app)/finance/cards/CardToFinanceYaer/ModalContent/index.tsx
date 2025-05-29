@@ -57,86 +57,78 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <form
-        onSubmit={handleSubmit((values) => {
-          onSubmit({
-            ...values,
-            year: initialValues?.year,
-            id: initialValues?.id
-          })
-        })}
-        className="bg-gray-700 rounded-lg shadow-xl w-full max-w-2xl"
-      >
-        <div className="border-b border-gray-600 px-6 pt-6 pb-2">
-          <h3 className="text-2xl font-semibold text-white">
-            Atualizar Valores
-          </h3>
+    <form
+      onSubmit={handleSubmit((values) => {
+        onSubmit({
+          ...values,
+          year: initialValues?.year,
+          id: initialValues?.id
+        })
+      })}
+    >
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputTypeMoney
+            control={control}
+            name="investments"
+            required
+            label={`Investimentos (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors.investments?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            required
+            labelHint="Se o campo estiver desabilitado ele está considerando o total do ano anterior na reserva."
+            name="reserve"
+            label={`Reserva (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.reserve?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            required
+            name="monthlyContributions"
+            label={`Aporte Mensal (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.monthlyContributions?.message}
+          />
+          <NumberInput
+            label="Período do Aporte"
+            name="periodContributions"
+            placeholder="12"
+            type="number"
+            register={register}
+            required
+            errors={errors?.periodContributions?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            required
+            name="receivables"
+            label={`Aporte Extra (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.receivables?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            required
+            name="deduction"
+            label={`Dedução (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.deduction?.message}
+          />
         </div>
-        <div className="flex flex-col gap-6 px-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputTypeMoney
-              control={control}
-              name="investments"
-              required
-              label={`Investimentos (${optionsLabelCurrencyKeyAndValue[currency]})`}
-              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-              errors={errors.investments?.message}
-            />
-            <InputTypeMoney
-              control={control}
-              required
-              labelHint="Se o campo estiver desabilitado ele está considerando o total do ano anterior na reserva."
-              name="reserve"
-              label={`Reserva (${optionsLabelCurrencyKeyAndValue[currency]})`}
-              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-              errors={errors?.reserve?.message}
-            />
-            <InputTypeMoney
-              control={control}
-              required
-              name="monthlyContributions"
-              label={`Aporte Mensal (${optionsLabelCurrencyKeyAndValue[currency]})`}
-              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-              errors={errors?.monthlyContributions?.message}
-            />
-            <NumberInput
-              label="Período do Aporte"
-              name="periodContributions"
-              placeholder="12"
-              type="number"
-              register={register}
-              required
-              errors={errors?.periodContributions?.message}
-            />
-            <InputTypeMoney
-              control={control}
-              required
-              name="receivables"
-              label={`Aporte Extra (${optionsLabelCurrencyKeyAndValue[currency]})`}
-              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-              errors={errors?.receivables?.message}
-            />
-            <InputTypeMoney
-              control={control}
-              required
-              name="deduction"
-              label={`Dedução (${optionsLabelCurrencyKeyAndValue[currency]})`}
-              placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-              errors={errors?.deduction?.message}
-            />
-          </div>
-        </div>
-        <div className="border-t border-gray-600 px-6 py-6 flex flex-col md:flex-row justify-center md:justify-end items-center gap-3">
-          <Button type="button" variant="cancel" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button type="submit" variant="primary">
-            Salvar
-          </Button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <div className="flex flex-col md:flex-row justify-center md:justify-end items-center gap-3 mt-4">
+        <Button type="button" variant="cancel" onClick={onClose}>
+          Cancelar
+        </Button>
+        <Button type="submit" variant="confirm">
+          Salvar
+        </Button>
+      </div>
+    </form>
   )
 }
 

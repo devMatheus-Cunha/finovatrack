@@ -101,7 +101,7 @@ export const calculateInvestmentData = (
   const totalInvestedAndGains =
     totalAppreciationValue + dividends + totalInterest
   const totalInvestedAndGainsPercentage =
-    (totalInvestedAndGains / investedValue) * 100
+    (totalInvestedAndGains / Number(totalAccountValue)) * 100
 
   return {
     totalAccountValue,

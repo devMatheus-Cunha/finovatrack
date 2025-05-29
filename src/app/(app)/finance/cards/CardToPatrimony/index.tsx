@@ -36,7 +36,6 @@ const PatrimonyLevelsBar = ({
     ...level,
     blueShade: blueShades[blueShadeKeys[idx % blueShadeKeys.length]]
   }))
-
   return (
     <div className="w-full flex flex-col items-center">
       <div className="mb-1 flex flex-col items-center">
@@ -92,7 +91,7 @@ const CardToPatrimony = ({
     },
     {
       label: 'Investimentos',
-      value: investments?.invested || 0,
+      value: investments?.pies?.result?.priceAvgValue || 0,
       color: 'bg-green-500'
     },
     {

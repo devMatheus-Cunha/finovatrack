@@ -1,5 +1,6 @@
+'use client'
+
 import React, { useState } from 'react'
-import { AccordionFinanceYear } from './AccordionFinanceYear'
 import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import {
@@ -8,11 +9,9 @@ import {
 } from '@/utils/formatNumber'
 import useUpdateFinancialPlaningYear from '@/hooks/finance/useUpdateFinancialPlaningYear'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import useCustomDisclosure from '@/hooks/globalStates/useCustomDisclosure'
-import Modal from '@/components/common/Modal'
+import { useCustomDisclosure } from '@/hooks/globalStates'
+import { Accordion, AccordionFinanceYear, Card, Modal } from '@/components'
 import ModalContent from './ModalContent'
-import { Accordion } from '@chakra-ui/react'
-import { Card } from '@/components'
 
 interface CardToFinanceYaerProps {
   investimentsData?: IInvestmentsProps
@@ -93,32 +92,49 @@ const CardToFinanceYaer = ({
       title="Finanças"
       isLoading={isLoadingInvestimentsData}
       hasData={!!financialPlanningYear}
-      className=" min-h-[433px] max-h-[433px]"
+      className="min-h-[423px] max-h-[433px] overflow-hidden"
     >
-      <div className="pt-4">
-        <Accordion allowMultiple>
-          {calcTotalsLaterYear(financialPlanningYear) &&
-            calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
-              <AccordionFinanceYear.Root key={item.year}>
-                <AccordionFinanceYear.Button year={item.year} />
-                <AccordionFinanceYear.Panel
-                  data={item}
-                  onOpen={() => onOpenModal(item)}
-                  userData={userData}
-                  isVisibilityData={isVisibilityData}
-                  year={item.year}
-                />
-              </AccordionFinanceYear.Root>
+      <div className="overflow-y-auto">
+        {financialPlanningYear && financialPlanningYear.length > 0 ? (
+          <Accordion allowMultiple className="overflow-y-auto max-h-[360px] ">
+            {calcTotalsLaterYear(financialPlanningYear)?.map((item) => (
+              <Accordion.Item
+                key={item.year}
+                id={item.year}
+                className="border-b border-gray-600 last:border-b-0"
+              >
+                <Accordion.Button className="hover:bg-gray-600/30 transition-colors">
+                  <AccordionFinanceYear.Button year={item.year} />
+                </Accordion.Button>
+                <Accordion.Panel>
+                  <AccordionFinanceYear.Panel
+                    data={item}
+                    onOpen={() => onOpenModal(item)}
+                    userData={userData}
+                    isVisibilityData={isVisibilityData}
+                    year={item.year}
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
             ))}
-          <Modal isOpen={isOpen} onClose={onCloseModal} size="2xl" isCentered>
-            <ModalContent
-              onClose={onCloseModal}
-              onSubmit={handleSubmit}
-              initialValues={selectedData}
-              currency={userData.primary_currency}
-            />
-          </Modal>
-        </Accordion>
+          </Accordion>
+        ) : null}
+      </div>
+      <div className="px-0 py-6 flex justify-end gap-3">
+        <Modal
+          isOpen={isOpen}
+          onClose={onCloseModal}
+          size="2xl"
+          isCentered
+          title="Atualizar Valores"
+        >
+          <ModalContent
+            onClose={onCloseModal}
+            onSubmit={handleSubmit}
+            initialValues={selectedData}
+            currency={userData.primary_currency}
+          />
+        </Modal>
       </div>
     </Card>
   )

@@ -12,11 +12,6 @@
     "fixPrettier": "yarn prettier src/ --write"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.1.1",
-    "@chakra-ui/next-js": "^2.1.5",
-    "@chakra-ui/react": "^2.8.1",
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
     "@firebase/auth": "^0.22.0",
     "@firebase/firestore": "^3.10.0",
     "@hookform/resolvers": "^3.1.0",
