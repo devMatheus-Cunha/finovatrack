@@ -48,7 +48,7 @@ export default function Select<T extends FieldValues>({
     <div className="w-full">
       <label
         htmlFor={name as string}
-        className="mb-2 text-sm font-medium text-white block flex gap-1 items-center"
+        className="mb-2 text-sm font-medium text-white  gap-1 items-center"
       >
         {isRequired ? `${label} *` : label}
         {labelHint && (
@@ -96,7 +96,6 @@ export default function Select<T extends FieldValues>({
             </option>
           ))}
         </select>
-        {/* Ícone de seta para baixo, igual ao input do Tailwind padrão */}
         <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
           <svg
             className="w-4 h-4"

@@ -1,5 +1,4 @@
 import './globals.css'
-import 'react-datepicker/dist/react-datepicker.css'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import Providers from './providers'

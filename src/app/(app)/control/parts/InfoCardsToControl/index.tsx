@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import Slider from 'react-slick'
 import { InfoCardMoney } from '@/components'
+import SimpleSlider from '@/components/common/SimpleSlider'
 import useFetchEntrysData from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { generateCardsData, settings } from './utils'
+import { generateCardsData } from './utils'
 
 interface IInfoCardsToControl {
   totalEntrys: number
@@ -41,13 +41,13 @@ function InfoCardsToControl({
   })
 
   return (
-    <Slider {...settings} className="w-full h-[100px] lg:h-[124.5px]">
+    <SimpleSlider className="w-full h-[100px] lg:h-[124.5px]" itemsToShow={4}>
       {cardsData?.map((card, index) => (
         <div key={index} className="p-2 lg:p-4 rounded-md">
           <InfoCardMoney {...card} />
         </div>
       ))}
-    </Slider>
+    </SimpleSlider>
   )
 }
 

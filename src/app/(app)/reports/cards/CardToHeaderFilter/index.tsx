@@ -1,6 +1,5 @@
-import { Card } from '@/components'
+import { Card, YearPicker } from '@/components'
 import { useMemo } from 'react'
-import DatePicker from 'react-datepicker'
 
 interface CardToHeaderFilterProps {
   selectedDate: Date
@@ -60,17 +59,11 @@ const CardToHeaderFilter = ({
         </div>
 
         <div className="flex items-center">
-          <DatePicker
+          <YearPicker
             selected={selectedDate}
-            showYearPicker
-            dateFormat="yyyy"
-            onChange={(date: Date) => setSelectedDate(date)}
-            customInput={
-              <input
-                className="border-b border-gray-400 bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white text-center py-1"
-                readOnly
-              />
-            }
+            onChange={(date) => setSelectedDate(date)}
+            minYear={1970}
+            maxYear={new Date().getFullYear()}
           />
         </div>
       </div>

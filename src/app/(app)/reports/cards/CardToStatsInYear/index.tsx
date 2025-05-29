@@ -1,6 +1,6 @@
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import Slider from 'react-slick'
+import SimpleSlider from '@/components/common/SimpleSlider'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
 import { useFetchReportsData } from '@/hooks/reports'
 import { Card } from '@/components'
@@ -44,33 +44,6 @@ const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
     }
   ]
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    arrows: false,
-    arrowsPadding: 0,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          arrows: true,
-          slidesToShow: 3
-        }
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          arrows: true,
-          slidesToShow: 2,
-          slidesToScroll: 2
-        }
-      }
-    ]
-  }
-
   return (
     <Card
       title="Relatorio Anual"
@@ -79,7 +52,7 @@ const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
       hasData={!!reportDataToYear}
       className="h-40"
     >
-      <Slider {...settings} className="w-full">
+      <SimpleSlider className="w-full" itemsToShow={4}>
         {summaryItems.map((card, index) => (
           <div key={index} className="p-2 lg:p-1">
             <div className="flex w-full items-center bg-gray-700 rounded-md py-4 px-2 lg:px-4">
@@ -116,7 +89,7 @@ const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
             </div>
           </div>
         ))}
-      </Slider>
+      </SimpleSlider>
     </Card>
   )
 }

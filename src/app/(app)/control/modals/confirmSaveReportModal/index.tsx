@@ -20,8 +20,10 @@ function ConfirmSaveReportModal({
 }: ConfirmSaveReportModalProps) {
   const [selectedPeriod, setSelectedPeriod] = useState(new Date())
 
-  function onChangeDate(date: Date) {
-    setSelectedPeriod(date)
+  function onChangeDate(date: Date | null) {
+    if (date) {
+      setSelectedPeriod(date)
+    }
   }
 
   const formattedDate = new Date(selectedPeriod).toLocaleDateString('pt-BR', {

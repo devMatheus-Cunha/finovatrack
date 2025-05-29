@@ -125,7 +125,13 @@ const CardToStatsInMonth = ({ selectedDate }: CardToStatsInMonthProps) => {
         </div>
       </Card>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="xl"
+        title=" Detalhes das Entradas"
+      >
         <EntrysModal onClose={onClose} entrys={reportData?.entrys || []} />
       </Modal>
     </>
