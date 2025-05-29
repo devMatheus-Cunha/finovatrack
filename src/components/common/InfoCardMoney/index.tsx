@@ -49,7 +49,7 @@ function InfoCardMoney({
     <>
       {infoData ? (
         <div
-          className={`flex w-full items-center bg-gray-700 rounded-md py-5 px-2 lg:px-4`}
+          className="bg-gray-700 rounded-xl p-4 w-full min-w-[260px] max-w-[4220px] flex flex-col items-center justify-center mx-auto "
           onClick={actionCard}
           style={{ cursor: contentAction ? 'pointer' : 'default' }}
         >

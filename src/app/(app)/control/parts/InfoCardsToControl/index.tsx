@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { InfoCardMoney } from '@/components'
-import SimpleSlider from '@/components/common/SimpleSlider'
 import useFetchEntrysData from '@/hooks/entrys/useFetchEntrysData'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { generateCardsData } from './utils'
@@ -41,13 +40,9 @@ function InfoCardsToControl({
   })
 
   return (
-    <SimpleSlider className="w-full h-[100px] lg:h-[124.5px]" itemsToShow={4}>
-      {cardsData?.map((card, index) => (
-        <div key={index} className="p-2 lg:p-4 rounded-md">
-          <InfoCardMoney {...card} />
-        </div>
-      ))}
-    </SimpleSlider>
+    <div className="w-full flex gap-3 mt-3 overflow-x-auto no-scrollbar">
+      {cardsData?.map((card, index) => <InfoCardMoney key={index} {...card} />)}
+    </div>
   )
 }
 
