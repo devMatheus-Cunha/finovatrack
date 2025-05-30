@@ -3,29 +3,41 @@
 import React from 'react'
 import { blueShades } from '@/utils/colors'
 import { Card } from '@/components'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { useIsVisibilityDatas } from '@/hooks/globalStates'
 
-const goals = [
-  {
-    name: 'Comprr Casa',
-    current: 16814.61,
-    target: 42000,
-    color: blueShades.blue500
-  },
-  {
-    name: 'Renda fixa',
-    current: 16400.00,
-    target: 30000,
-    color: blueShades.blue700
-  },
-  {
-    name: 'Investimentos',
-    current:  1206.29,
-    target: 10000,
-    color: blueShades.blue300
-  }
-]
+interface CardToGoalsProps {
+  investimentsData: IInvestimentsData | undefined
+}
 
-const CardToGoals = () => {
+const CardToGoals = ({ investimentsData }: CardToGoalsProps) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+
+  const goals = [
+    {
+      name: '2027',
+      current: investimentsData?.patrimonioTotal,
+      target: 42000,
+      color: blueShades.blue500
+    },
+    {
+      name: 'Renda fixa',
+      current:
+        investimentsData &&
+        investimentsData?.reserva &&
+        investimentsData?.totalNaoInvestido + investimentsData?.reserva,
+      target: 30000,
+      color: blueShades.blue700
+    },
+    {
+      name: 'Investimentos',
+      current: investimentsData?.totalInvestido,
+      target: 12000,
+      color: blueShades.blue300
+    }
+  ]
+
   return (
     <Card
       title="Seus Objetivos"
@@ -33,17 +45,17 @@ const CardToGoals = () => {
     >
       <div className="flex flex-row justify-between items-end gap-2 w-full px-1">
         {goals.map((goal) => {
-          const percent = Math.min((goal.current / goal.target) * 100, 100)
+          const percent = Math.min(
+            (Number(goal.current || 0) / goal.target) * 100,
+            100
+          )
           return (
             <div
               key={goal.name}
               className="flex flex-col items-center flex-1 bg-gray-800/70 rounded-xl shadow-lg p-2 border border-gray-700 min-w-[70px] max-w-[90px] w-full"
             >
               <span className="text-[10px] text-gray-300 mb-1 font-medium whitespace-nowrap">
-                {goal.target.toLocaleString('pt-PT', {
-                  style: 'currency',
-                  currency: 'EUR'
-                })}
+                {formatCurrencyMoney(goal.target, 'EUR', isVisibilityData)}
               </span>
               <div className="relative flex flex-col justify-end h-32 w-6 bg-gray-900 rounded-lg overflow-hidden shadow-inner border border-gray-700">
                 <div
@@ -55,10 +67,11 @@ const CardToGoals = () => {
                 </span>
               </div>
               <span className="text-[10px] text-gray-200 mt-1 font-semibold whitespace-nowrap">
-                {goal.current.toLocaleString('pt-PT', {
-                  style: 'currency',
-                  currency: 'EUR'
-                })}
+                {formatCurrencyMoney(
+                  goal.current || 0,
+                  'EUR',
+                  isVisibilityData
+                )}
               </span>
               <span className="text-[10px] text-gray-400 mt-1 text-center max-w-[60px]">
                 {goal.name}

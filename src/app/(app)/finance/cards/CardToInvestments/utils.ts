@@ -1,8 +1,5 @@
 import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
-import {
-  IInvestimentsData,
-  IInvestmentsProps
-} from '@/hooks/finance/useFetchInvestiments'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { blueHexShades } from '@/utils/colors'
 
 export interface IFormatDataToStats {
@@ -11,29 +8,9 @@ export interface IFormatDataToStats {
   percentage?: string
 }
 
-interface CalculatedInvestmentData {
-  assetAppreciation: number
-  totalAppreciationValue: number
-  investedValue: number
-  dividends: number
-  appreciationPercentage: number
-  totalInvestedAndGains: number
-  totalInvestedAndGainsPercentage: number
-  totalAccountValue?: number
-  totalInterest: number
-}
-
 export const createChartConfig = (
-  investimentsData: IInvestmentsProps | undefined,
-  investedValue: number,
-  assetAppreciation: number,
-  dividends: number,
-  totalInvestedAndGains: number,
-  isVisibilityData: boolean,
-  appreciationPercentage: number,
-  totalInvestedAndGainsPercentage: number,
-  totalAppreciationValue: number,
-  totalInterest: number
+  investimentsData: IInvestimentsData | undefined,
+  isVisibilityData: boolean
 ): {
   chartData: PieChartCircleData[]
   formatDataToStats: IFormatDataToStats[]
@@ -41,79 +18,51 @@ export const createChartConfig = (
   const chartData: PieChartCircleData[] = [
     {
       label: 'Disponível',
-      value: investimentsData?.free || 0,
+      value: investimentsData?.totalNaoInvestido || 0,
       color: blueHexShades.blue600
     },
     {
       label: 'Aplicado',
-      value: investedValue || 0,
+      value: investimentsData?.totalInvestido || 0,
       color: blueHexShades.blue400
     },
     {
       label: 'Dividendos',
-      value: dividends,
+      value: investimentsData?.totalDividendos || 0,
       color: blueHexShades.blue300
     }
   ]
 
   const formatDataToStats: IFormatDataToStats[] = [
-    { label: 'Disponível', value: investimentsData?.free || 0 },
-    { label: 'Aplicado', value: investedValue },
+    { label: 'Disponível', value: investimentsData?.totalNaoInvestido || 0 },
+    { label: 'Aplicado', value: investimentsData?.totalInvestido || 0 },
     {
       label: 'Valorização Ativos',
-      value: assetAppreciation
+      value: investimentsData?.investEValorizacao || 0
     },
     {
       label: 'Valor Valorização',
-      value: totalAppreciationValue,
-      percentage: isVisibilityData ? `(${appreciationPercentage}%)` : '****'
+      value: investimentsData?.valorValorizacaoInvest || 0,
+      percentage: isVisibilityData
+        ? `(${investimentsData?.porcValorizacaoInv}%)`
+        : '****'
     },
     {
       label: 'Valor Juros',
-      value: totalInterest
+      value: investimentsData?.totalJurosValorLivre.atual || 0
     },
-    { label: 'Valor Dividendos', value: dividends },
+    {
+      label: 'Valor Dividendos',
+      value: investimentsData?.totalDividendos || 0
+    },
     {
       label: 'Valorizações + Div',
-      value: totalInvestedAndGains,
+      value: investimentsData?.totalValoriEJuros || 0,
       percentage: isVisibilityData
-        ? `(${totalInvestedAndGainsPercentage}%)`
+        ? `(${investimentsData?.porcLucroTotal}%)`
         : '****'
     }
   ]
 
   return { chartData, formatDataToStats }
-}
-
-export const calculateInvestmentData = (
-  investimentsData: IInvestimentsData | undefined
-): CalculatedInvestmentData => {
-  const totalAccountValue = investimentsData?.total
-  const assetAppreciation = investimentsData?.pies?.result?.priceAvgValue || 0
-  const totalAppreciationValue = investimentsData?.ppl || 0
-  const investedValue =
-    investimentsData?.pies?.result?.priceAvgInvestedValue || 0
-  const dividends =
-    (investimentsData?.pies?.dividendDetails?.gained || 0) + 0.37
-  const totalInterest = investimentsData?.totalInterest.actual || 0
-
-  const appreciationPercentage = (totalAppreciationValue / investedValue) * 100
-  const totalInvestedAndGains =
-    totalAppreciationValue + dividends + totalInterest
-  const totalInvestedAndGainsPercentage =
-    (totalInvestedAndGains / Number(totalAccountValue)) * 100
-
-  return {
-    totalAccountValue,
-    assetAppreciation,
-    totalInterest: totalInterest,
-    totalAppreciationValue,
-    investedValue,
-    dividends,
-    appreciationPercentage: Number(appreciationPercentage.toFixed(2)),
-    totalInvestedAndGains,
-    totalInvestedAndGainsPercentage: Number(
-      totalInvestedAndGainsPercentage.toFixed(2)
-    )
-  }
 }

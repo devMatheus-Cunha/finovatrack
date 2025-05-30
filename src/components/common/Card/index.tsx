@@ -1,3 +1,4 @@
+import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 import React from 'react'
 
 interface CardProps {
@@ -9,6 +10,7 @@ interface CardProps {
   hasData?: boolean
   skeleton?: React.ReactNode
   empty?: React.ReactNode
+  action?: () => void
 }
 
 const defaultEmpty = (
@@ -30,7 +32,8 @@ const Card: React.FC<CardProps> = ({
   isLoading = false,
   hasData = true,
   skeleton,
-  empty
+  empty,
+  action
 }) => {
   if (isLoading && skeleton) {
     return <>{skeleton}</>
@@ -53,9 +56,25 @@ const Card: React.FC<CardProps> = ({
       } ${className}`}
     >
       <div className="flex flex-col ">
-        {!isLoading && (
-          <h1 className="text-lg font-semibold text-white mb-2">{title}</h1>
-        )}
+        <div className="flex items-center justify-between">
+          {!isLoading && (
+            <h1 className="text-lg font-semibold text-white mb-2">{title}</h1>
+          )}
+          {!isLoading && action && (
+            <button
+              type="button"
+              onClick={action}
+              className="hover:text-gray-400 transition-colors bg-red"
+            >
+              <ArrowsCounterClockwise
+                size={20}
+                color="#fff"
+                className="hover:opacity-75 p-0 m-0"
+              />
+            </button>
+          )}
+        </div>
+
         {subtitle && !isLoading && (
           <span className="text-gray-400 text-sm">{subtitle}</span>
         )}

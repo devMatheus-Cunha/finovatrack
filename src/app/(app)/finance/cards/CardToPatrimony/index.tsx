@@ -10,55 +10,69 @@ interface CardToPatrimonyProps {
   investments?: IInvestimentsData
 }
 
-const PatrimonyLevelsBar = ({
-  levels,
-  currency,
-  isVisibilityData
-}: {
-  levels: { label: string; value: number }[]
-  currency: string
-  isVisibilityData: boolean
-}) => {
-  const total = levels.reduce((acc, l) => acc + l.value, 0)
-  const sortedLevels = [...levels].sort((a, b) => b.value - a.value)
-  const blueShadeKeys = [
-    'blue900',
-    'blue800',
-    'blue700',
-    'blue600',
-    'blue500',
-    'blue400',
-    'blue300',
-    'blue200',
-    'blue100'
-  ] as const
-  const levelColors = sortedLevels.map((level, idx) => ({
-    ...level,
-    blueShade: blueShades[blueShadeKeys[idx % blueShadeKeys.length]]
-  }))
+const CardToPatrimony = ({
+  investments,
+  isLoadingInvestimentsData
+}: CardToPatrimonyProps) => {
+  const { financialPlanningActualYear, isLoadingFinancialPlanningYear } =
+    useFetchFinancialPlaningYear()
+  const { userData } = useUserData()
+  const { isVisibilityData } = useIsVisibilityDatas()
+
+  const currency = userData.primary_currency || 'BRL'
+
+  const levels = [
+    {
+      label: 'Reserva',
+      value: investments?.reserva || 0,
+      color: blueShades.blue600
+    },
+    {
+      label: 'Investimentos',
+      value: investments?.investEValorizacao || 0,
+      color: blueShades.blue700
+    },
+    {
+      label: 'Livre',
+      value: investments?.totalNaoInvestido || 0,
+      color: blueShades.blue800
+    }
+  ]
+
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="mb-1 flex flex-col items-center">
+    <Card
+      isLoading={isLoadingFinancialPlanningYear || isLoadingInvestimentsData}
+      hasData={!!financialPlanningActualYear || !!investments}
+      className="w-full h-[170px] rounded-md flex flex-col items-center justify-center"
+    >
+      <div className="mb-2 flex flex-col items-center">
         <span className="text-xs text-gray-400">Património Total</span>
         <span className="text-lg font-bold text-white tracking-tight bg-gray-700 rounded px-2 py-0.5 shadow-sm">
-          {formatCurrencyMoney(total, currency, isVisibilityData)}
+          {formatCurrencyMoney(
+            investments?.patrimonioTotal,
+            currency,
+            isVisibilityData
+          )}
         </span>
       </div>
       <div className="flex w-full h-3 rounded overflow-hidden bg-gray-600">
-        {levelColors.map((level) => (
+        {levels.map((level) => (
           <div
             key={level.label}
-            className={`${level.blueShade} h-full`}
-            style={{ width: total ? `${(level.value / total) * 100}%` : '0%' }}
+            className={`${level.color} h-full`}
+            style={{
+              width: `${levels.reduce((acc, l) => acc + l.value, 0) ? (level.value / levels.reduce((acc, l) => acc + l.value, 0)) * 100 : 0}%`
+            }}
             title={level.label}
           />
         ))}
       </div>
-      <div className="flex justify-between gap-1 mt-1 text-xs text-gray-300 w-full">
-        {levelColors.map((level) => (
+      {/* Exibe os valores de cada variável nova */}
+      <div className="flex justify-between gap-1 mt-2 text-xs text-gray-300 w-full">
+        {levels.map((level) => (
           <div key={level.label} className="flex items-center gap-1">
             <span
-              className={`inline-block w-2 h-2 rounded ${level.blueShade}`}
+              className={`inline-block w-2 h-2 rounded ${level.color}`}
             ></span>
             <span>
               {level.label}:{' '}
@@ -69,49 +83,6 @@ const PatrimonyLevelsBar = ({
           </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-const CardToPatrimony = ({
-  investments,
-  isLoadingInvestimentsData
-}: CardToPatrimonyProps) => {
-  const { financialPlanningActualYear, isLoadingFinancialPlanningYear } =
-    useFetchFinancialPlaningYear()
-  const { userData } = useUserData()
-  const { isVisibilityData } = useIsVisibilityDatas()
-  const currency = userData.primary_currency || 'BRL'
-
-  const levels = [
-    {
-      label: 'Reserva',
-      value: Number(financialPlanningActualYear?.reserve) || 0,
-      color: 'bg-blue-500'
-    },
-    {
-      label: 'Investimentos',
-      value: investments?.pies?.result?.priceAvgValue || 0,
-      color: 'bg-green-500'
-    },
-    {
-      label: 'Livre',
-      value: investments?.free || 0,
-      color: 'bg-yellow-500'
-    }
-  ]
-
-  return (
-    <Card
-      isLoading={isLoadingFinancialPlanningYear || isLoadingInvestimentsData}
-      hasData={!!financialPlanningActualYear || !!investments}
-      className="w-full h-[130px] rounded-md flex items-center justify-center"
-    >
-      <PatrimonyLevelsBar
-        levels={levels}
-        currency={currency}
-        isVisibilityData={isVisibilityData}
-      />
     </Card>
   )
 }

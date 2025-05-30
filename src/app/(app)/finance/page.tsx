@@ -57,7 +57,7 @@ const Finance = () => {
         </div>
       </div>
       <div>
-        <CardToGoals />
+        <CardToGoals investimentsData={investimentsData} />
       </div>
     </div>
   )

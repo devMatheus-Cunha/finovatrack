@@ -5,6 +5,7 @@ import {
   updateOrCreateDoc
 } from '@/services/finance/getInvestiments'
 import { useQuery } from '@tanstack/react-query'
+import { useFetchFinancialPlaningYear } from '@/hooks/finance/useFetchFinancialPlaningYear'
 
 export interface IInvestmentsProps {
   blocked: number
@@ -41,17 +42,34 @@ export interface TransactionListProps {
   dateTime: string
 }
 
-export interface IInvestimentsData extends IInvestmentsProps {
-  pies?: IGetAllPies
+export interface IInvestimentsData {
   totalListaData: TransactionListProps[]
-  totalInterest: {
-    actual: number
-    old: number
+  totalJurosValorLivre: {
+    atual: number
+    antigo: number
   }
+  totalNaoInvestido: number
+  reserva?: number
+  totalPortifolioTranding: number
+  totalInvestido: number
+  investEValorizacao: number
+  totalDividendos: number
+  porcValorizacaoInv: number
+  lucroTotal: number
+  porcLucroTotal: number
+  valorValorizacaoInvest: number
+  totalValoriEJuros: number
+  patrimonioTotal: number
 }
 
 export const useFetchInvestiments = () => {
   const { userData } = useUserData()
+  const { financialPlanningActualYear } = useFetchFinancialPlaningYear()
+
+  // Corrige o tipo de reserve para number
+  const reserveNumber = financialPlanningActualYear?.reserve
+    ? Number(financialPlanningActualYear.reserve)
+    : 0
 
   const {
     data: investimentsDataRequestRaw,
@@ -67,8 +85,8 @@ export const useFetchInvestiments = () => {
   const refetchInvestimentsData = async () => {
     try {
       const investiments = await getCombinedData(
-        userData.id,
-        investimentsDataRequestRaw
+        investimentsDataRequestRaw,
+        reserveNumber
       )
       await updateOrCreateDoc(userData.id!, investiments)
       refetch()
@@ -78,7 +96,9 @@ export const useFetchInvestiments = () => {
   }
 
   const isLoading = isFetching || !isFetched
-  const investimentsData = isLoading ? undefined : investimentsDataRequestRaw
+  const investimentsData: IInvestimentsData = isLoading
+    ? undefined
+    : investimentsDataRequestRaw
 
   return {
     investimentsData,

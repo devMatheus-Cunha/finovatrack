@@ -8,9 +8,9 @@ import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 
 export const getCombinedData = async (
-  userId: string,
-  investimentsData: IInvestimentsData | undefined
-): Promise<IInvestimentsData> => {
+  investimentsData: IInvestimentsData | undefined,
+  reserve?: number
+): Promise<any> => {
   const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
@@ -60,12 +60,12 @@ export const getCombinedData = async (
       apiTransactionList.items as TransactionListProps[]
 
     let previousTransactions: TransactionListProps[] = []
-    let previousTotalInterest = { actual: 0, old: 0 }
+    let previousTotalInterest = { atual: 0, antigo: 0 }
 
     previousTransactions = investimentsData?.totalListaData || []
-    previousTotalInterest = investimentsData?.totalInterest || {
-      actual: 0,
-      old: 0
+    previousTotalInterest = investimentsData?.totalJurosValorLivre || {
+      atual: 0,
+      antigo: 0
     }
 
     const previousTransactionDates = new Set(
@@ -77,17 +77,44 @@ export const getCombinedData = async (
 
     const newInterestTotal = newDeposits.reduce(
       (sum, transaction) => sum + transaction.amount,
-      previousTotalInterest.actual
+      previousTotalInterest.atual
     )
 
+    const pies = piesData[0]
+    const totalPortifolioTranding = investmentsData?.total || 0
+    const totalInvestido = investmentsData?.invested || 0
+    const valorValorizacaoInvest = investmentsData?.ppl || 0
+    const investEValorizacao = totalInvestido + valorValorizacaoInvest || 0
+    const totalDividendos = (pies?.dividendDetails?.gained || 0) + 0.37
+
+    const porcValorizacaoInv = totalInvestido
+      ? (valorValorizacaoInvest / totalInvestido) * 100
+      : 0
+    const lucroTotal =
+      valorValorizacaoInvest + totalDividendos + newInterestTotal || 0
+    const porcLucroTotal = totalPortifolioTranding
+      ? (lucroTotal / totalPortifolioTranding) * 100
+      : 0
+
     return {
-      ...investmentsData,
+      totalNaoInvestido: investmentsData?.free || 0,
+      totalValoriEJuros:
+        newInterestTotal + valorValorizacaoInvest + totalDividendos || 0,
       totalListaData: transactionListData,
-      totalInterest: {
-        actual: newInterestTotal,
-        old: previousTotalInterest.actual
+      totalJurosValorLivre: {
+        atual: newInterestTotal || 0,
+        antigo: previousTotalInterest.atual || 0
       },
-      pies: piesData[0]
+      reserva: reserve || 0,
+      totalPortifolioTranding: totalPortifolioTranding || 0,
+      totalInvestido: totalInvestido || 0,
+      investEValorizacao: investEValorizacao || 0,
+      totalDividendos: totalDividendos || 0,
+      porcValorizacaoInv: Number(porcValorizacaoInv.toFixed(2)) || 0,
+      lucroTotal: lucroTotal || 0,
+      porcLucroTotal: Number(porcLucroTotal.toFixed(2)) || 0,
+      valorValorizacaoInvest: valorValorizacaoInvest || 0,
+      patrimonioTotal: (totalPortifolioTranding || 0) + (reserve || 0)
     }
   } catch (error) {
     console.error('Error fetching data from API:', error)
@@ -110,12 +137,12 @@ export const updateOrCreateDoc = async (
 
 export const getInvestmentData = async (
   userId: string
-): Promise<IInvestimentsData | undefined> => {
+): Promise<any | undefined> => {
   const docRef = doc(db, 'users', userId, 'finance', 'investiments')
   try {
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
-      return docSnap.data() as IInvestimentsData
+      return docSnap.data()
     }
   } catch (error) {
     console.error('Error fetching document:', error)
