@@ -149,7 +149,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
       <button
         aria-label="Edit values"
         onClick={onOpen}
-        className="p-2 border border-gray-600 rounded hover:bg-gray-700"
+        className="p-2 border border-gray-600/50  rounded hover:bg-gray-700"
       >
         <PencilSimpleLine size={20} className="text-gray-300" />
       </button>

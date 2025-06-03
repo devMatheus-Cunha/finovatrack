@@ -86,7 +86,9 @@ const AccordionItem = ({
 
   return (
     <ItemContext.Provider value={{ isOpen, id }}>
-      <div className={`border-b border-gray-600 ${className}`}>{children}</div>
+      <div className={`border-b border-gray-600/50  ${className}`}>
+        {children}
+      </div>
     </ItemContext.Provider>
   )
 }

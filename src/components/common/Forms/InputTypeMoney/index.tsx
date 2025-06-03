@@ -66,7 +66,7 @@ function InputTypeMoney<T extends FieldValues>({
             type="text"
             className={`w-full px-3 py-2 bg-transparent border rounded-md border-[#4A5568] text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-150 placeholder-gray-400 appearance-none ${
               disabled
-                ? 'bg-gray-700 border-gray-600 text-gray-300 cursor-not-allowed'
+                ? 'bg-gray-700 border-gray-600/50  text-gray-300 cursor-not-allowed'
                 : 'hover:border-blue-500'
             }`}
             allowNegative={false}

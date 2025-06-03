@@ -101,7 +101,7 @@ const CardToFinanceYaer = ({
               <Accordion.Item
                 key={item.year}
                 id={item.year}
-                className="border-b border-gray-600 last:border-b-0"
+                className="border-b border-gray-600/50  last:border-b-0"
               >
                 <Accordion.Button className="hover:bg-gray-600/30 transition-colors">
                   <AccordionFinanceYear.Button year={item.year} />

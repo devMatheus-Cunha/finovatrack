@@ -51,14 +51,14 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`bg-gray-700 rounded-md shadow-none w-full p-4${
+      className={`bg-gray-700 rounded-md shadow-sm w-full border border-gray-600/50 p-2.5${
         isLoading ? ' animate-pulse' : ''
       } ${className}`}
     >
       <div className="flex flex-col ">
         <div className="flex items-center justify-between">
           {!isLoading && (
-            <h1 className="text-lg font-semibold text-white mb-2">{title}</h1>
+            <h1 className="text-lg font-semibold text-white">{title}</h1>
           )}
           {!isLoading && action && (
             <button

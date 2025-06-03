@@ -19,7 +19,7 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   return (
     <table className="min-w-full">
-      <thead className="border-b border-gray-600">
+      <thead className="border-b border-gray-600/50 ">
         <tr>
           {columns.map((column) => (
             <th

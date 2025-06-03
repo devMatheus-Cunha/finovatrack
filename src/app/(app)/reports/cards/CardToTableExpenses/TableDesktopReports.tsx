@@ -13,13 +13,13 @@ interface ITableReportsProps {
 const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
   return (
     <ShowAndHide displayLg="initial" displayBase="none">
-      <table className="min-w-full text-left">
+      <table className="w-full lg:w-[500px] text-left align-middle">
         <thead>
           <tr>
             {columns.map((column) => (
               <th
                 key={column.field}
-                className="px-6 py-4 text-gray-300 font-semibold text-sm border-b border-gray-600"
+                className="text-gray-300 font-medium text-xs md:text-sm border-b border-gray-600/50 px-2 py-3 align-middle whitespace-nowrap"
               >
                 {column.header}
               </th>
@@ -30,7 +30,7 @@ const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
           {data.map((row: TableRow, rowIndex) => (
             <tr
               key={rowIndex}
-              className="border-b border-gray-600 last:border-b-0"
+              className="border-b border-gray-600/50 last:border-b-0 align-middle"
             >
               {columns.map((column) => {
                 const cellStyles = column.styles
@@ -45,7 +45,7 @@ const TableReports: React.FC<ITableReportsProps> = ({ data, columns }) => {
                 return (
                   <td
                     key={column.field}
-                    className="px-6 py-4 font-medium whitespace-nowrap text-white"
+                    className="px-2 py-3 font-normal text-sm  whitespace-nowrap text-white align-middle"
                     style={cellStyles}
                   >
                     {cellContent}

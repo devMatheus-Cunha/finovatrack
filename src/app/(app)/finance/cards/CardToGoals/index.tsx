@@ -140,7 +140,7 @@ const CardToGoals = ({
       className="max-w-md h-[570px] flex flex-col gap-2"
       isLoading={!investimentsData}
     >
-      <div className="flex flex-col gap-1.5 rounded-xl p-3 border bg-gray-800/70 border-gray-700">
+      <div className="flex flex-col gap-1 rounded-xl p-3 border bg-gray-800/70 border-gray-700">
         <MetaInfo metaInfo={metaInfo} />
         <ProgressBar
           percentualAtual={percentualAtual}

@@ -12,6 +12,8 @@ interface InfoCardProps {
   icon: React.ElementType // Aceita apenas componente, não elemento pronto
   iconColor: string
   isVisibilityData: boolean
+  showEyeIcon?: boolean // novo: controla se mostra o olhinho (default true)
+  percentageInfo?: ReactNode // novo: info extra ao lado do valor
 }
 
 const InfoOutlineSvg = ({
@@ -43,24 +45,28 @@ function InfoCardMoney({
   currency,
   icon: IconComponent,
   iconColor,
-  actionCard
+  actionCard,
+  showEyeIcon = true,
+  percentageInfo
 }: InfoCardProps) {
   return (
     <>
       {infoData ? (
         <div
-          className="bg-gray-700 rounded-xl p-4 w-full min-w-[260px] max-w-[4220px] flex flex-col items-center justify-center mx-auto "
+          className="bg-gray-700 rounded-xl shadow-sm p-4 w-full min-w-[220px] max-w-[340px] flex flex-row items-center justify-between mx-auto border border-gray-600/50  hover:shadow-md transition-shadow duration-200"
           onClick={actionCard}
           style={{ cursor: contentAction ? 'pointer' : 'default' }}
         >
-          <div className="flex-1">
-            <div className="flex items-center text-xs text-gray-500 font-medium mb-1">
-              <span>{title}</span>
-              {contentAction && <span className="ml-1">{contentAction}</span>}
-              {infoAction && (
+          <div className="flex flex-col justify-center flex-1 min-w-0">
+            <div className="flex items-center text-gray-400 font-medium mb-1 text-xs gap-1">
+              <span className="truncate">{title}</span>
+              {contentAction && (
+                <span className="ml-1 text-xs">{contentAction}</span>
+              )}
+              {infoAction && showEyeIcon && (
                 <Button
                   variant="ghost"
-                  className="ml-1 text-cyan-500 hover:text-cyan-600 p-0"
+                  className="text-cyan-500 hover:text-cyan-600 p-0 ml-1"
                   onClick={(
                     e?: React.MouseEvent<HTMLButtonElement, MouseEvent>
                   ) => {
@@ -73,26 +79,28 @@ function InfoCardMoney({
                 </Button>
               )}
             </div>
-            <div className="flex items-center">
-              <span className="text-lg lg:text-[23px] font-bold mr-1">
+            <div className="flex items-center gap-1">
+              <span className="text-lg md:text-xl font-semibold text-white leading-tight truncate">
                 {formatCurrencyMoney(infoData, currency, isVisibilityData)}
               </span>
+              {percentageInfo && (
+                <span className="flex items-center text-green-400 text-xs font-semibold ml-1">
+                  {percentageInfo}
+                </span>
+              )}
             </div>
           </div>
-          <div className="ml-4 flex-shrink-0 flex items-center">
+          <div className="flex-shrink-0 flex items-center justify-center ml-3">
             {IconComponent && typeof IconComponent === 'function' ? (
               <IconComponent
-                className="w-7 md:w-8 lg:w-10 h-7 md:h-8 lg:h-10"
+                className="w-6 h-6 md:w-7 md:h-7"
                 style={{ color: iconColor }}
               />
             ) : null}
           </div>
         </div>
       ) : (
-        <div
-          className="w-full rounded-lg bg-gray-700 animate-pulse"
-          style={{ height: '92.5px', minHeight: '85px' }}
-        />
+        <div className="w-full rounded-xl bg-gray-700 animate-pulse shadow-sm border border-gray-600/50  h-[86px]" />
       )}
     </>
   )

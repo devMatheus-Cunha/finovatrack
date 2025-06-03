@@ -40,7 +40,7 @@ function InfoCardsToControl({
   })
 
   return (
-    <div className="w-full flex gap-3 mt-3 overflow-x-auto no-scrollbar">
+    <div className="w-full flex gap-3 overflow-x-auto no-scrollbar">
       {cardsData?.map((card, index) => <InfoCardMoney key={index} {...card} />)}
     </div>
   )
