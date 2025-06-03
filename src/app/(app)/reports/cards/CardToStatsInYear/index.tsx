@@ -1,5 +1,4 @@
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
 import { useFetchReportsData } from '@/hooks/reports'
 import { Card, InfoCardMoney } from '@/components'

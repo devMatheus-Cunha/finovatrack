@@ -6,9 +6,9 @@ import { z } from 'zod'
 import { InputTypeMoney, Button } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { ITypeModalExpense } from '../../hooks/useControlModal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUserData } from '@/hooks/globalStates'
+import { ITypeModalExpense } from '@/app/(app)/control/hooks/useControlModal'
 
 type FormData = {
   value: string

@@ -8,13 +8,14 @@ import { Input, InputTypeMoney, Select, Button } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatToCustomFormat } from '@/utils/formatNumber'
-import {
-  IHandleControlModalExpenseFunction,
-  ITypeModalExpense
-} from '../../hooks/useControlModal'
+
 import { Trash } from '@phosphor-icons/react'
 import { categoryOptions, paymentsOptions } from './utilts'
 import { useUserData } from '@/hooks/globalStates'
+import {
+  IHandleControlModalExpenseFunction,
+  ITypeModalExpense
+} from '@/app/(app)/control/hooks/useControlModal'
 
 const schema = z.object({
   description: z.string({ required_error: 'Campo obrigatorio' }),

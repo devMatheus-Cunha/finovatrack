@@ -5,9 +5,9 @@ import {
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import React from 'react'
-import { ITypeModalExpense } from '../../../hooks/useControlModal'
 import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { Empty } from '@/components'
+import { ITypeModalExpense } from '@/app/(app)/control/hooks/useControlModal'
 
 interface IMobileTableProps {
   calculationSumValues: ExpenseData[]
