@@ -31,12 +31,11 @@ import {
   useGetTotalsFree
 } from './utils'
 
-import HeaderDataTableToControl from './parts/HeaderDataTableToControl'
-import InfoCardsToControl from './parts/InfoCardsToControl'
-import TableMobileAndDesktop from './parts/TableMobileAndDesktop'
-
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { ModalsControl } from './modals'
+import HeaderDataTableToControl from '@/components/control/HeaderDataTableToControl'
+import InfoCardsToControl from '@/components/control/InfoCardsToControl'
+import TableMobileAndDesktop from '@/components/control/TableMobileAndDesktop'
+import { ModalsControl } from '@/components/control/modals'
 
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()

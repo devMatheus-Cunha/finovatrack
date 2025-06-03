@@ -43,7 +43,7 @@ const CardToPatrimony = ({
     <Card
       isLoading={isLoadingFinancialPlanningYear || isLoadingInvestimentsData}
       hasData={!!financialPlanningActualYear || !!investments}
-      className="w-full h-[170px] rounded-md flex flex-col items-center justify-center"
+      className="w-full h-[130px] rounded-md flex flex-col items-center justify-center"
     >
       <div className="mb-2 flex flex-col items-center">
         <span className="text-xs text-gray-400">Património Total</span>

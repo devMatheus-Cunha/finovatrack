@@ -6,7 +6,6 @@ import {
   useFetchFinancialPlaningYear
 } from '@/hooks/finance'
 import {
-  CardToDividends,
   CardToFinanceYaer,
   CardToGoals,
   CardToInvestments,
@@ -53,11 +52,11 @@ const Finance = () => {
             isLoadingAllPies={isLoadingInvestimentsData}
             refetchInvestimentsData={refetchInvestimentsData}
           />
-          <CardToDividends />
+          <CardToGoals
+            investimentsData={investimentsData}
+            financialPlanningYear={financialPlanningYear}
+          />
         </div>
-      </div>
-      <div>
-        <CardToGoals investimentsData={investimentsData} />
       </div>
     </div>
   )

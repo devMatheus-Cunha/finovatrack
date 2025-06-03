@@ -30,10 +30,10 @@ const CardToInvestments = ({
       title="Investimentos Trading 212"
       isLoading={isLoadingAllPies || isLoadingInvestimentsData}
       hasData={!!investimentsData}
-      className="w-full lg:max-w-md min-h-[570px] max-h-[570px] flex flex-col"
+      className="w-full lg:max-w-md h-[570px] flex flex-col"
       action={refetchInvestimentsData}
     >
-      <div className="flex-1 gap-3 flex flex-col ">
+      <div className="flex-1 gap-3 flex flex-col">
         <Charts.PieChartCircle
           data={chartData}
           total={Number(investimentsData?.totalPortifolioTranding)}

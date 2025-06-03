@@ -1,86 +1,174 @@
 'use client'
 
 import React from 'react'
-import { blueShades } from '@/utils/colors'
+import { blueShades, blueHexShades } from '@/utils/colors'
 import { Card } from '@/components'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { useIsVisibilityDatas } from '@/hooks/globalStates'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
+import {
+  calcularPrevisaoComExtrasEDeducoes,
+  calcularMesesRestantes,
+  calcularValorGuardadoMes,
+  GOAL_TARGET,
+  GOAL_DEADLINE,
+  GOAL_INTEREST_RATE
+} from './utils'
+import { MetaInfo, ProgressBar, ResumoInfo, GoalsList } from './parts'
 
 interface CardToGoalsProps {
   investimentsData: IInvestimentsData | undefined
+  financialPlanningYear?: IFinancialPlanningProps[]
 }
 
-const CardToGoals = ({ investimentsData }: CardToGoalsProps) => {
+const CardToGoals = ({
+  investimentsData,
+  financialPlanningYear
+}: CardToGoalsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
+  const currency = userData.primary_currency
 
+  // Previsão
+  const valorAtual = investimentsData?.patrimonioTotal ?? 18000
+  const mesesRestantes = calcularMesesRestantes(GOAL_DEADLINE)
+  const valorGuardadoMes = calcularValorGuardadoMes(
+    financialPlanningYear,
+    GOAL_DEADLINE
+  )
+  // Previsão considerando aportes extras e deduções
+  const previsao = calcularPrevisaoComExtrasEDeducoes(
+    financialPlanningYear,
+    GOAL_DEADLINE,
+    GOAL_INTEREST_RATE,
+    valorAtual
+  )
+  const diferenca = previsao - GOAL_TARGET
+  // Calcular total aportado (sem juros)
+  let totalAportado = valorAtual
+  if (financialPlanningYear && financialPlanningYear.length > 0) {
+    const hoje = new Date()
+    const anoAtual = hoje.getFullYear()
+    const mesAtual = hoje.getMonth() // 0-indexed
+    const anoAlvo = GOAL_DEADLINE.year
+    const mesAlvo = GOAL_DEADLINE.month
+    for (let ano = anoAtual; ano <= anoAlvo; ano++) {
+      const planning = financialPlanningYear.find((y) => Number(y.year) === ano)
+      if (!planning) continue
+      let mesesNoAno = 12
+      if (ano === anoAtual) {
+        mesesNoAno = (ano === anoAlvo ? mesAlvo : 11) - mesAtual + 1
+      } else if (ano === anoAlvo) {
+        mesesNoAno = mesAlvo + 1
+      }
+      const mensal = Number(planning.monthlyContributions)
+      const extra = Number(planning.receivables || 0)
+      const deducao = Number(planning.deduction || 0)
+      totalAportado += mesesNoAno * mensal + extra - deducao
+    }
+  }
+  const totalJuros = Math.max(previsao - totalAportado, 0)
+  const percentualAtual = Math.min((valorAtual / GOAL_TARGET) * 100, 100)
+  const percentualPrevisto = Math.min((previsao / GOAL_TARGET) * 100, 100)
+
+  // Objetivos
   const goals = [
     {
-      name: '2027',
-      current: investimentsData?.patrimonioTotal,
-      target: 42000,
-      color: blueShades.blue500
-    },
-    {
       name: 'Renda fixa',
-      current:
-        investimentsData &&
-        investimentsData?.reserva &&
-        investimentsData?.totalNaoInvestido + investimentsData?.reserva,
+      current: investimentsData?.totalNaoInvestido ?? 0,
       target: 30000,
       color: blueShades.blue700
     },
     {
       name: 'Investimentos',
-      current: investimentsData?.totalInvestido,
-      target: 12000,
+      current: investimentsData?.totalInvestido ?? 0,
+      target: 6000,
       color: blueShades.blue300
+    },
+    {
+      name: 'Reserva',
+      current: investimentsData?.reserva ?? 0,
+      target: 6000,
+      color: blueShades.blue600
+    }
+  ]
+
+  const metaInfo = [
+    {
+      label: 'Meta 2027:',
+      value: formatCurrencyMoney(GOAL_TARGET, currency, isVisibilityData),
+      valueClass: 'text-md font-bold text-gray-100',
+      key: 'meta'
+    },
+    {
+      label: 'Previsão até 2027:',
+      value: formatCurrencyMoney(previsao, currency, isVisibilityData),
+      valueClass: 'text-sm font-bold',
+      valueStyle: { color: previsao >= GOAL_TARGET ? '#22c55e' : '#f87171' },
+      key: 'previsao'
+    },
+    {
+      label: 'Valor aportado:',
+      value: formatCurrencyMoney(totalAportado, currency, isVisibilityData),
+      valueClass: 'text-sm font-semibold',
+      valueStyle: { color: blueHexShades.blue400 },
+      key: 'aportado'
+    },
+    {
+      label: 'Juros gerado:',
+      value: formatCurrencyMoney(totalJuros, currency, isVisibilityData),
+      valueClass: 'text-sm font-medium text-green-400',
+      key: 'juros'
+    },
+    {
+      label: diferenca >= 0 ? 'Acima da meta:' : 'Faltando:',
+      value: formatCurrencyMoney(
+        Math.abs(diferenca),
+        currency,
+        isVisibilityData
+      ),
+      valueClass: 'text-sm font-medium',
+      valueStyle: { color: diferenca >= 0 ? '#22c55e' : '#f87171' },
+      key: 'diferenca'
     }
   ]
 
   return (
     <Card
-      title="Seus Objetivos"
-      className="max-w-md min-h-[320px] mb-2 lg:mb-4"
+      title="Objetivos"
+      className="max-w-md h-[570px] flex flex-col gap-2"
+      isLoading={!investimentsData}
     >
-      <div className="flex flex-row justify-between items-end gap-2 w-full px-1">
-        {goals.map((goal) => {
-          const percent = Math.min(
-            (Number(goal.current || 0) / goal.target) * 100,
-            100
-          )
-          return (
-            <div
-              key={goal.name}
-              className="flex flex-col items-center flex-1 bg-gray-800/70 rounded-xl shadow-lg p-2 border border-gray-700 min-w-[70px] max-w-[90px] w-full"
-            >
-              <span className="text-[10px] text-gray-300 mb-1 font-medium whitespace-nowrap">
-                {formatCurrencyMoney(goal.target, 'EUR', isVisibilityData)}
-              </span>
-              <div className="relative flex flex-col justify-end h-32 w-6 bg-gray-900 rounded-lg overflow-hidden shadow-inner border border-gray-700">
-                <div
-                  className={`absolute bottom-0 left-0 w-full rounded-b-lg transition-all duration-700 ${goal.color} shadow-lg`}
-                  style={{ height: `${percent}%` }}
-                />
-                <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] text-white font-bold drop-shadow">
-                  {percent.toFixed(0)}%
-                </span>
-              </div>
-              <span className="text-[10px] text-gray-200 mt-1 font-semibold whitespace-nowrap">
-                {formatCurrencyMoney(
-                  goal.current || 0,
-                  'EUR',
-                  isVisibilityData
-                )}
-              </span>
-              <span className="text-[10px] text-gray-400 mt-1 text-center max-w-[60px]">
-                {goal.name}
-              </span>
-            </div>
-          )
-        })}
+      <div className="flex flex-col gap-1.5 rounded-xl p-3 border bg-gray-800/70 border-gray-700">
+        <MetaInfo metaInfo={metaInfo} />
+        <ProgressBar
+          percentualAtual={percentualAtual}
+          percentualPrevisto={percentualPrevisto}
+          valorAtual={valorAtual}
+          currency={currency}
+          isVisibilityData={isVisibilityData}
+          formatCurrencyMoney={formatCurrencyMoney}
+          blueShades={blueShades}
+          blueHexShades={blueHexShades}
+        />
+        <ResumoInfo
+          valorGuardadoMes={valorGuardadoMes}
+          mesesRestantes={mesesRestantes}
+          GOAL_INTEREST_RATE={GOAL_INTEREST_RATE}
+          currency={currency}
+          isVisibilityData={isVisibilityData}
+          formatCurrencyMoney={formatCurrencyMoney}
+        />
       </div>
+      <GoalsList
+        goals={goals}
+        currency={currency}
+        isVisibilityData={isVisibilityData}
+        formatCurrencyMoney={formatCurrencyMoney}
+      />
     </Card>
   )
 }
+
 export default CardToGoals

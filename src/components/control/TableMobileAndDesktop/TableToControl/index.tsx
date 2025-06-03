@@ -8,7 +8,7 @@ import { Filter } from '@/hooks/expenses/useFetchExpensesData'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import Table, { TableColumn } from '@/components/common/Table'
 import { optionsCurrencyKeyAndValue } from '@/utils/configCurrency'
-import { ITypeModalExpense } from '../../../hooks/useControlModal'
+import { ITypeModalExpense } from '@/app/(app)/control/hooks/useControlModal'
 
 interface ITableToControl {
   calculationSumValues: ExpenseData[]
@@ -98,7 +98,7 @@ function TableToControl({
   }
 
   return (
-    <div className="overflow-y-auto rounded-md h-[63vh] bg-[#2D3748]">
+    <div className="bg-gray-700 h-[67vh] rounded-md overflow-y-auto w-full">
       {calculationSumValues?.length > 0 ? (
         <Table columns={columsHeadProps()} data={calculationSumValues} />
       ) : (

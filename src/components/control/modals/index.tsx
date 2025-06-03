@@ -6,7 +6,7 @@ import ExpenseModalContent from './expenseModalContent'
 import ConfirmSaveReportModal from './confirmSaveReportModal'
 import DeleteModalContent from './deleteModal'
 import ContentTotalEntrys from './totalEntrysModal'
-import { validateTextToModal } from '../utils'
+import { validateTextToModal } from '@/app/(app)/control/utils'
 
 export const ModalsControl = ({
   controlModals,

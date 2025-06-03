@@ -89,10 +89,10 @@ const CardToFinanceYaer = ({
 
   return (
     <Card
-      title="Finanças"
+      title="Planejamento Financeiro"
       isLoading={isLoadingInvestimentsData}
       hasData={!!financialPlanningYear}
-      className="min-h-[423px] max-h-[433px] overflow-hidden"
+      className="h-[433px] overflow-hidden"
     >
       <div className="overflow-y-auto">
         {financialPlanningYear && financialPlanningYear.length > 0 ? (
