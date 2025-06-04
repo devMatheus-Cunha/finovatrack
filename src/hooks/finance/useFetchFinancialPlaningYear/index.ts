@@ -18,7 +18,7 @@ export const useFetchFinancialPlaningYear = () => {
   } = useQuery({
     queryKey: ['financial_planning_year_data', userData.id],
     queryFn: async () => await getFinancialPlanningYear(userData.id),
-    enabled: !!userData.id && userData.admin
+    enabled: !!userData.id // permite para qualquer usuário logado
   })
   const currentYear = new Date().getFullYear()
 

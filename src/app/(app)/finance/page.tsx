@@ -12,12 +12,9 @@ import {
   CardToPatrimony,
   CardToEmergencyReserveMonths
 } from './cards'
-import { useUserData } from '@/hooks/globalStates'
-import { redirect } from 'next/navigation'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
 
 const Finance = () => {
-  const { userData } = useUserData()
   const currentYear = new Date().getFullYear().toString()
   const { reportDataToYear, isLoading: isLoadingReportDataToYear } =
     useFetchReportsToYearData(currentYear)
@@ -28,14 +25,10 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
+
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
 
-  if (userData.id) {
-    if (!userData.admin) {
-      redirect('/control')
-    }
-  }
 
   const currentMonth = new Date().getMonth() + 1 // Janeiro = 0, então soma 1
   const totalExpensesAjustado = reportDataToYear?.totalExpenses

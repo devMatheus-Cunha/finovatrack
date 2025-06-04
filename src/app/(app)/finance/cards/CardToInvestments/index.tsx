@@ -31,7 +31,7 @@ const CardToInvestments = ({
       isLoading={isLoadingAllPies || isLoadingInvestimentsData}
       hasData={!!investimentsData}
       className="w-full lg:max-w-md h-[570px] flex flex-col"
-      action={refetchInvestimentsData}
+      {...(userData.admin ? { action: refetchInvestimentsData } : {})}
     >
       <div className="flex-1 gap-3 flex flex-col">
         <Charts.PieChartCircle

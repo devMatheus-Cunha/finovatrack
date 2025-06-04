@@ -1,7 +1,7 @@
 import { Card } from '@/components'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { ShieldCheck, CalendarClock } from 'lucide-react'
+import {CalendarClock } from 'lucide-react'
 
 interface CardToEmergencyReserveMonthsProps {
   isLoading: boolean

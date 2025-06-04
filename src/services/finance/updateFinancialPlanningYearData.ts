@@ -1,4 +1,4 @@
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { IFinancialPlanningProps } from './getFinancialPlanningYear'
 
@@ -13,5 +13,6 @@ export async function updateFinancialPlanningYearData(
     'financial_planning_year',
     data.id
   ) as any
-  await updateDoc(docRef, { ...data })
+  // Usa setDoc para criar ou sobrescrever o documento
+  await setDoc(docRef, { ...data })
 }

@@ -79,7 +79,7 @@ export const useFetchInvestiments = () => {
   } = useQuery({
     queryKey: ['investiments_data', userData.id],
     queryFn: () => getInvestmentData(userData.id!),
-    enabled: !!userData.id && userData.admin
+    enabled: !!userData.id // Removido o filtro por admin
   })
 
   const refetchInvestimentsData = async () => {

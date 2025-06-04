@@ -6,6 +6,7 @@ import {
 } from '@/hooks/finance/useFetchInvestiments'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
+import { fakeInvestiments } from './fakeData'
 
 export const getCombinedData = async (
   investimentsData: IInvestimentsData | undefined,
@@ -138,6 +139,11 @@ export const updateOrCreateDoc = async (
 export const getInvestmentData = async (
   userId: string
 ): Promise<any | undefined> => {
+  const mainUserId = process.env.NEXT_PUBLIC_USER_ID
+  if (userId !== mainUserId) {
+    return fakeInvestiments
+  }
+
   const docRef = doc(db, 'users', userId, 'finance', 'investiments')
   try {
     const docSnap = await getDoc(docRef)
