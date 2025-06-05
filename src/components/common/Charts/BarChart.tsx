@@ -88,7 +88,7 @@ const BarChart = ({ chartData, tickFormatter, className }: BarChartProps) => {
         })}
         {tooltip && (
           <div
-            className="fixed z-50 px-2 py-1 rounded bg-gray-800 text-white text-xs shadow pointer-events-none"
+            className="fixed z-50 px-2 py-1 rounded bg-gray-800/50 text-white text-xs shadow pointer-events-none"
             style={{ left: tooltip.x, top: tooltip.y - 36 }}
           >
             <span className="font-bold">{tooltip.label}</span>:{' '}

@@ -5,7 +5,7 @@ import {
   query,
   updateDoc,
   where
-} from 'firebase/firestore'
+} from '@firebase/firestore'
 import { db } from '../firebase'
 import { IReportData } from './getReport'
 

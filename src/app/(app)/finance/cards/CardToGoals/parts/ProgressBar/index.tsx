@@ -26,7 +26,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   blueHexShades
 }) => (
   <div className="mt-2">
-    <div className="relative h-4 bg-gray-900 rounded-full overflow-hidden border border-gray-700">
+    <div className="relative h-4 bg-gray-800/50 rounded-full overflow-hidden border border-gray-700">
       <div
         className={`absolute left-0 top-0 h-full ${blueShades.blue500} rounded-full transition-all duration-500`}
         style={{ width: `${percentualAtual}%`, zIndex: 1, opacity: 0.95 }}

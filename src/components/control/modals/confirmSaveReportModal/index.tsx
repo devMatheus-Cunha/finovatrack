@@ -34,7 +34,7 @@ function ConfirmSaveReportModal({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-center">
-        <div className="bg-gray-700/50 p-3 rounded-full mb-4">
+        <div className="bg-gray-800/50 p-3 rounded-full mb-4">
           <FolderPlus size={48} className="text-blue-400" weight="duotone" />
         </div>
         <p className="text-base font-normal text-gray-300 text-center mb-2">

@@ -1,4 +1,4 @@
-import { deleteDoc, doc } from 'firebase/firestore'
+import { deleteDoc, doc } from '@firebase/firestore'
 import { db } from '../firebase'
 import { ExpenseData } from './getExpenses'
 

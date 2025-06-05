@@ -112,7 +112,7 @@ const PieChartCircle = ({
         </svg>
         {showTooltip && tooltip && (
           <div
-            className="absolute z-10 px-2 py-1 rounded bg-gray-800 text-white text-xs font-semibold shadow-lg pointer-events-none"
+            className="absolute z-10 px-2 py-1 rounded bg-gray-800/50 text-white text-xs font-semibold shadow-lg pointer-events-none"
             style={{
               left: tooltip.x - 40,
               top: tooltip.y - 30,

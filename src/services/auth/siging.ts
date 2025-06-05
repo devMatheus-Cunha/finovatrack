@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from '@firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { auth, db } from '../firebase'

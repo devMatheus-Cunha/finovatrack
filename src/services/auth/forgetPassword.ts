@@ -1,4 +1,4 @@
-import { sendPasswordResetEmail } from 'firebase/auth'
+import { sendPasswordResetEmail } from '@firebase/auth'
 import { auth } from '../firebase'
 
 export interface LogoutProps {

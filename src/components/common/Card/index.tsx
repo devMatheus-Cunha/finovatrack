@@ -11,6 +11,8 @@ interface CardProps {
   skeleton?: React.ReactNode
   empty?: React.ReactNode
   action?: () => void
+  actionIcon?: React.ReactNode
+  actionTooltip?: string
 }
 
 const defaultEmpty = (
@@ -33,7 +35,9 @@ const Card: React.FC<CardProps> = ({
   hasData = true,
   skeleton,
   empty,
-  action
+  action,
+  actionIcon,
+  actionTooltip
 }) => {
   if (isLoading && skeleton) {
     return <>{skeleton}</>
@@ -64,13 +68,16 @@ const Card: React.FC<CardProps> = ({
             <button
               type="button"
               onClick={action}
-              className="hover:text-gray-400 transition-colors bg-red"
+              className="hover:text-gray-400 transition-colors"
+              title={actionTooltip || 'Ação'}
             >
-              <ArrowsCounterClockwise
-                size={20}
-                color="#fff"
-                className="hover:opacity-75 p-0 m-0"
-              />
+              {actionIcon || (
+                <ArrowsCounterClockwise
+                  size={20}
+                  color="#fff"
+                  className="hover:opacity-75 p-0 m-0"
+                />
+              )}
             </button>
           )}
         </div>

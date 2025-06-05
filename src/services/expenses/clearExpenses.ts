@@ -1,4 +1,4 @@
-import { collection, deleteDoc, getDocs } from 'firebase/firestore'
+import { collection, deleteDoc, getDocs } from '@firebase/firestore'
 import { db } from '../firebase'
 
 export async function clearExpenses(id: string) {

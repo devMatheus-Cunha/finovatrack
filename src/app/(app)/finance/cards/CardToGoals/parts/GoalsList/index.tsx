@@ -34,7 +34,7 @@ const GoalsList: React.FC<GoalsListProps> = ({
         return (
           <div
             key={goal.name}
-            className="flex flex-row items-center justify-between bg-gray-800/70 rounded-xl shadow-lg p-2 border border-gray-700 w-full min-h-[60px] gap-2"
+            className="flex flex-row items-center justify-between bg-gray-800/50/70 rounded-xl shadow-lg p-2 border border-gray-700 w-full min-h-[60px] gap-2"
           >
             <div className="flex flex-col items-start flex-1">
               <span className="text-[10px] text-gray-400 font-medium mb-1">
@@ -52,7 +52,7 @@ const GoalsList: React.FC<GoalsListProps> = ({
                 {formatCurrencyMoney(goal.target, currency, isVisibilityData)}
               </span>
             </div>
-            <div className="relative flex flex-col justify-end h-10 w-24 bg-gray-900 rounded-lg overflow-hidden shadow-inner border border-gray-700 mx-2">
+            <div className="relative flex flex-col justify-end h-10 w-24 bg-gray-800/50 rounded-lg overflow-hidden shadow-inner border border-gray-700 mx-2">
               <div
                 className={`absolute bottom-0 left-0 h-full rounded-b-lg transition-all duration-700 ${goal.color} shadow-lg`}
                 style={{ width: `${percent}%` }}

@@ -1,12 +1,19 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { blueShades, blueHexShades } from '@/utils/colors'
-import { Card } from '@/components'
+import { Card, Modal } from '@/components'
 import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
+import {
+  useIsVisibilityDatas,
+  useUserData,
+  useCustomDisclosure
+} from '@/hooks/globalStates'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
+import { ISaveGoalProps, IGoalsProps } from '@/services/finance/goals'
+import { useGoals, useSaveGoal } from '@/hooks/finance'
+import { PencilSimpleLine, Plus } from '@phosphor-icons/react'
 import {
   calcularPrevisaoComExtrasEDeducoes,
   calcularMesesRestantes,
@@ -16,6 +23,7 @@ import {
   GOAL_INTEREST_RATE
 } from './utils'
 import { MetaInfo, ProgressBar, ResumoInfo, GoalsList } from './parts'
+import GoalsModal from './GoalsModal'
 
 interface CardToGoalsProps {
   investimentsData: IInvestimentsData | undefined
@@ -28,31 +36,64 @@ const CardToGoals = ({
 }: CardToGoalsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
+  const { goal } = useGoals()
+  const { mutateGoal } = useSaveGoal()
+  const { isOpen, onOpen, onClose } = useCustomDisclosure()
+  const [selectedGoal, setSelectedGoal] = useState<IGoalsProps | undefined>(
+    undefined
+  )
   const currency = userData.primary_currency
+  const handleOpenModal = (goal?: IGoalsProps) => {
+    setSelectedGoal(goal)
+    onOpen()
+  }
 
-  // Previsão
+  const handleCloseModal = () => {
+    setSelectedGoal(undefined)
+    onClose()
+  }
+
+  const handleSubmitGoal = async (data: ISaveGoalProps) => {
+    try {
+      await mutateGoal(data)
+      handleCloseModal()
+    } catch (error) {
+      console.error('Error saving goal:', error)
+    }
+  } // Previsão
   const valorAtual = investimentsData?.patrimonioTotal ?? 18000
-  const mesesRestantes = calcularMesesRestantes(GOAL_DEADLINE)
+  const goalDeadline = goal?.meta_year || GOAL_DEADLINE
+  const mesesRestantes = calcularMesesRestantes(goalDeadline)
   const valorGuardadoMes = calcularValorGuardadoMes(
     financialPlanningYear,
-    GOAL_DEADLINE
+    goalDeadline
   )
+
+  // Função para formatar mês/ano no formato MM/YYYY
+  const formatMonthYear = (metaYear: { year: number; month: number }) => {
+    const month = String(metaYear.month + 1).padStart(2, '0') // +1 porque JavaScript months são 0-based
+    return `${month}/${metaYear.year}`
+  }
+
   // Previsão considerando aportes extras e deduções
   const previsao = calcularPrevisaoComExtrasEDeducoes(
     financialPlanningYear,
-    GOAL_DEADLINE,
+    goalDeadline,
     GOAL_INTEREST_RATE,
     valorAtual
   )
-  const diferenca = previsao - GOAL_TARGET
+
+  const targetValue = goal?.meta_value_to_year || GOAL_TARGET
+  const diferenca = previsao - targetValue
+
   // Calcular total aportado (sem juros)
   let totalAportado = valorAtual
   if (financialPlanningYear && financialPlanningYear.length > 0) {
     const hoje = new Date()
     const anoAtual = hoje.getFullYear()
     const mesAtual = hoje.getMonth() // 0-indexed
-    const anoAlvo = GOAL_DEADLINE.year
-    const mesAlvo = GOAL_DEADLINE.month
+    const anoAlvo = goalDeadline.year
+    const mesAlvo = goalDeadline.month
     for (let ano = anoAtual; ano <= anoAlvo; ano++) {
       const planning = financialPlanningYear.find((y) => Number(y.year) === ano)
       if (!planning) continue
@@ -69,43 +110,42 @@ const CardToGoals = ({
     }
   }
   const totalJuros = Math.max(previsao - totalAportado, 0)
-  const percentualAtual = Math.min((valorAtual / GOAL_TARGET) * 100, 100)
-  const percentualPrevisto = Math.min((previsao / GOAL_TARGET) * 100, 100)
-
+  const percentualAtual = Math.min((valorAtual / targetValue) * 100, 100)
+  const percentualPrevisto = Math.min((previsao / targetValue) * 100, 100)
   // Objetivos
-  const goals = [
+  const goalItems = [
     {
       name: 'Renda fixa',
       current: investimentsData?.totalNaoInvestido ?? 0,
-      target: 30000,
+      target: goal?.meta_renda_fixa || 30000,
       color: blueShades.blue700
     },
     {
       name: 'Investimentos',
       current: investimentsData?.totalInvestido ?? 0,
-      target: 6000,
+      target: goal?.meta_investimentos || 6000,
       color: blueShades.blue300
     },
     {
       name: 'Reserva',
       current: investimentsData?.reserva ?? 0,
-      target: 6000,
+      target: goal?.meta_reserva || 6000,
       color: blueShades.blue600
     }
   ]
 
   const metaInfo = [
     {
-      label: 'Meta 2027:',
-      value: formatCurrencyMoney(GOAL_TARGET, currency, isVisibilityData),
+      label: `Meta ${goal?.meta_year ? formatMonthYear(goal.meta_year) : formatMonthYear(GOAL_DEADLINE)}:`,
+      value: formatCurrencyMoney(targetValue, currency, isVisibilityData),
       valueClass: 'text-md font-bold text-gray-100',
       key: 'meta'
     },
     {
-      label: 'Previsão até 2027:',
+      label: `Previsão até ${goal?.meta_year ? formatMonthYear(goal.meta_year) : formatMonthYear(GOAL_DEADLINE)}:`,
       value: formatCurrencyMoney(previsao, currency, isVisibilityData),
       valueClass: 'text-sm font-bold',
-      valueStyle: { color: previsao >= GOAL_TARGET ? '#22c55e' : '#f87171' },
+      valueStyle: { color: previsao >= targetValue ? '#22c55e' : '#f87171' },
       key: 'previsao'
     },
     {
@@ -133,14 +173,22 @@ const CardToGoals = ({
       key: 'diferenca'
     }
   ]
-
   return (
     <Card
       title="Objetivos"
       className="max-w-md h-[570px] flex flex-col gap-2"
       isLoading={!investimentsData}
+      action={() => handleOpenModal(goal)}
+      actionIcon={
+        goal?.id ? (
+          <PencilSimpleLine size={20} color="#fff" />
+        ) : (
+          <Plus size={20} color="#fff" />
+        )
+      }
+      actionTooltip={goal?.id ? 'Editar meta' : 'Adicionar meta'}
     >
-      <div className="flex flex-col gap-1 rounded-xl p-3 border bg-gray-800/70 border-gray-700">
+      <div className="flex flex-col gap-1 rounded-xl p-3 border bg-gray-800/50/70 border-gray-700">
         <MetaInfo metaInfo={metaInfo} />
         <ProgressBar
           percentualAtual={percentualAtual}
@@ -161,12 +209,28 @@ const CardToGoals = ({
           formatCurrencyMoney={formatCurrencyMoney}
         />
       </div>
+
       <GoalsList
-        goals={goals}
+        goals={goalItems}
         currency={currency}
         isVisibilityData={isVisibilityData}
         formatCurrencyMoney={formatCurrencyMoney}
       />
+
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        size="xl"
+        isCentered
+        title={selectedGoal ? 'Editar Meta' : 'Criar Nova Meta'}
+      >
+        <GoalsModal
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitGoal}
+          initialValues={selectedGoal}
+          currency={currency}
+        />
+      </Modal>
     </Card>
   )
 }

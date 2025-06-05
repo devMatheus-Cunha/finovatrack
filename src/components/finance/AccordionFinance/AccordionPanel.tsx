@@ -78,7 +78,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
           Contrib Mensal
           <span className="group relative">
             <Info size={18} className="text-orange-500" />
-            <span className="absolute -top-10 left-0 hidden group-hover:block bg-gray-800 text-white text-xs p-2 rounded">
+            <span className="absolute -top-10 left-0 hidden group-hover:block bg-gray-800/50 text-white text-xs p-2 rounded">
               Contribuição fixa todo mês
             </span>
           </span>

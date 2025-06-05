@@ -35,7 +35,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
       }}
     >
       {years.map((year) => (
-        <option key={year} value={year} className="bg-gray-900 text-white">
+        <option key={year} value={year} className="bg-gray-800/50 text-white">
           {year}
         </option>
       ))}

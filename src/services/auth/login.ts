@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, updateEmail } from 'firebase/auth'
+import { signInWithEmailAndPassword, updateEmail } from '@firebase/auth'
 import { doc, updateDoc } from '@firebase/firestore'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { auth, db } from '../firebase'

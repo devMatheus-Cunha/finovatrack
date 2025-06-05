@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs } from '@firebase/firestore'
 import { db } from '../firebase'
 import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 

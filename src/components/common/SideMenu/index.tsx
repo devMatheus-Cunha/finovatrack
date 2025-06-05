@@ -7,6 +7,7 @@ import {
   ClipboardText,
   Eye,
   EyeSlash,
+  ShoppingCart,
   SignOut,
   User
 } from '@phosphor-icons/react'
@@ -58,9 +59,17 @@ export const SideMenu = () => {
       id: 'finance',
       label: 'Finanças',
       route: 'finance',
-      disabled:false,
+      disabled: false,
       icon: <ChartLineUp size={21} />,
       action: () => router.push(`/finance`)
+    },
+    {
+      id: 'shopping',
+      label: 'Compras',
+      route: 'shopping',
+      disabled: false,
+      icon: <ShoppingCart size={21} />,
+      action: () => router.push(`/shopping`)
     },
     {
       id: 'myProfile',
