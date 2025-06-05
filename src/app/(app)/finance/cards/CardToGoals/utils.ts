@@ -2,9 +2,9 @@ import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
 import { blueHexShades } from '@/utils/colors'
 
 // Centralized goal target and deadline for easier maintenance
-export const GOAL_TARGET = 15000
+export const GOAL_TARGET = 41000
 export const GOAL_DEADLINE = { year: 2026, month: 11 } // December 2026 (0-indexed)
-export const GOAL_INTEREST_RATE = 0.05
+export const GOAL_INTEREST_RATE = 0.015
 
 // Calculate months remaining from now until the goal deadline
 export function calcularMesesRestantes(goalDeadline = GOAL_DEADLINE) {
