@@ -2,6 +2,9 @@ import React from 'react'
 import { Home, PlusCircle } from 'lucide-react'
 import { IItem } from '../types'
 import { ItemCard } from './ItemCard'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
+import useUserData from '@/hooks/globalStates/useUserData'
+import useIsVisibilityDatas from '@/hooks/globalStates/useIsVisibilityDatas'
 
 interface ItemsListProps {
   itemsByRoom: { [key: string]: { items: IItem[]; totalValue: number } }
@@ -20,6 +23,9 @@ export function ItemsList({
   onDeleteItem,
   viewMode = false
 }: ItemsListProps) {
+  const { userData } = useUserData()
+  const { isVisibilityData } = useIsVisibilityDatas()
+
   return (
     <section className="bg-gray-700 shadow-lg rounded-xl p-6">
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
@@ -58,7 +64,11 @@ export function ItemsList({
                 <p className="text-md font-semibold text-gray-200 mb-3">
                   Valor Estimado do Cômodo:{' '}
                   <span className="text-blue-300">
-                    R$ {itemsByRoom[roomName].totalValue.toFixed(2)}
+                    {formatCurrencyMoney(
+                      itemsByRoom[roomName].totalValue,
+                      userData?.primary_currency,
+                      isVisibilityData
+                    )}
                   </span>
                 </p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
