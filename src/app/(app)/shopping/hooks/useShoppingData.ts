@@ -60,12 +60,12 @@ export function useShoppingData(items: IItem[], filters: FilterState) {
   ])
 
   const totalUniqueItems = useMemo(() => {
-    return countUniqueItems(items, includeBoughtInCalculations)
-  }, [items, includeBoughtInCalculations])
+    return countUniqueItems(filteredItems, includeBoughtInCalculations)
+  }, [filteredItems, includeBoughtInCalculations])
 
   const totalOverallValue = useMemo(() => {
-    return calculateTotalValue(items, includeBoughtInCalculations)
-  }, [items, includeBoughtInCalculations])
+    return calculateTotalValue(filteredItems, includeBoughtInCalculations)
+  }, [filteredItems, includeBoughtInCalculations])
 
   const itemsByRoom = useMemo(() => {
     const grouped: { [key: string]: { items: IItem[]; totalValue: number } } =
