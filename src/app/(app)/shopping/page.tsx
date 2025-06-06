@@ -28,6 +28,8 @@ export default function ShoppingPage() {
     setSelectedCategory,
     setSelectedBoughtStatus,
     setIncludeBoughtInCalculations,
+    setOrderByField,
+    setOrderDirection,
     handleResetFilters,
     handlePriorityFilterChange
   } = useShoppingFilters()
@@ -122,6 +124,8 @@ export default function ShoppingPage() {
             onIncludeBoughtChange={setIncludeBoughtInCalculations}
             onPriorityChange={handlePriorityFilterChange}
             onResetFilters={handleResetFilters}
+            onOrderByFieldChange={setOrderByField}
+            onOrderDirectionChange={setOrderDirection}
           />
         </div>
       </div>

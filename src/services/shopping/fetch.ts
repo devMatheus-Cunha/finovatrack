@@ -1,6 +1,6 @@
 // Serviço para buscar itens da lista de compras do Firebase, com suporte a filtros
 import { db } from '../firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import type { IItem } from '@/app/(app)/shopping/types'
 
 const SHOPPING_COLLECTION = 'shoppingItems'
@@ -10,13 +10,37 @@ export interface ShoppingItemFilters {
   category?: string
   boughtStatus?: 'Todos' | 'Comprado' | 'Nao Comprado'
   priorities?: string[]
+  orderByField?: 'price' | 'name'
+  orderDirection?: 'asc' | 'desc'
 }
 
 export async function fetchShoppingItems(
   userId: string,
   filters: ShoppingItemFilters = {}
 ): Promise<IItem[]> {
-  const q = collection(db, 'users', userId, SHOPPING_COLLECTION)
+  // Monta a query de ordenação dinâmica
+  let orderField = 'price'
+  let orderDir: 'asc' | 'desc' = 'desc'
+  if (filters.orderByField) orderField = filters.orderByField
+  if (filters.orderDirection) orderDir = filters.orderDirection
+  // Ajusta o campo para Firestore
+  let firestoreField = 'price'
+  if (orderField === 'name') {
+    firestoreField = 'name'
+  }
+  let q
+  try {
+    q = query(
+      collection(db, 'users', userId, SHOPPING_COLLECTION),
+      orderBy(firestoreField, orderDir)
+    )
+  } catch (e) {
+    // fallback para price caso o campo de nome não exista no Firestore
+    q = query(
+      collection(db, 'users', userId, SHOPPING_COLLECTION),
+      orderBy('price', orderDir)
+    )
+  }
   const snapshot = await getDocs(q)
   // Corrige para garantir que cada item tenha a estrutura .properties
   let items = snapshot.docs.map((doc) => {
@@ -74,7 +98,9 @@ export function calculateTotalValue(items: IItem[], includeBought: boolean) {
     .filter((item) => includeBought || !item.properties.Comprado.checkbox)
     .reduce(
       (acc, item) =>
-        acc + (item.properties.Preco.number || 0) * (item.properties.Quantidade?.number || 1),
+        acc +
+        (item.properties.Preco.number || 0) *
+          (item.properties.Quantidade?.number || 1),
       0
     )
 }

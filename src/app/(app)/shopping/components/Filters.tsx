@@ -20,6 +20,8 @@ interface FiltersProps {
   onIncludeBoughtChange: (include: boolean) => void
   onPriorityChange: (priority: string) => void
   onResetFilters: () => void
+  onOrderByFieldChange: (field: 'price' | 'name') => void
+  onOrderDirectionChange: (dir: 'asc' | 'desc') => void
 }
 
 export function Filters({
@@ -29,14 +31,18 @@ export function Filters({
   onBoughtStatusChange,
   onIncludeBoughtChange,
   onPriorityChange,
-  onResetFilters
+  onResetFilters,
+  onOrderByFieldChange,
+  onOrderDirectionChange
 }: FiltersProps) {
   const {
     selectedRoom,
     selectedCategory,
     selectedBoughtStatus,
     selectedPriorities,
-    includeBoughtInCalculations
+    includeBoughtInCalculations,
+    orderByField,
+    orderDirection
   } = filters
 
   return (
@@ -55,7 +61,7 @@ export function Filters({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
         {/* Filtro por Cômodo */}
         <div>
           <label
@@ -126,36 +132,63 @@ export function Filters({
         </div>
       </div>
 
-      {/* Filtro por Prioridade */}
-      <div className="mt-4">
-        <label className="text-sm font-medium text-gray-200 mb-1 flex items-center">
-          <Flag className="inline-block w-4 h-4 mr-1 text-gray-400" />
-          Filtrar por Prioridade:
-        </label>
-        <div className="flex flex-wrap gap-3 mt-2">
-          {PRIORITY_OPTIONS.map((priority) => (
+      {/* Filtro por Prioridade, Checkbox e Ordenação em linha, label do ordenar no início */}
+      <div className="w-full mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex-1">
+          <label className="text-sm font-medium text-gray-200 mb-1 flex items-center">
+            <Flag className="inline-block w-4 h-4 mr-1 text-gray-400" />
+            Filtrar por Prioridade:
+          </label>
+          <div className="flex flex-wrap gap-3 mt-2">
+            {PRIORITY_OPTIONS.map((priority) => (
+              <CustomCheckbox
+                key={`priority-${priority}`}
+                id={`priority-${priority}`}
+                checked={selectedPriorities.includes(priority)}
+                onChange={() => onPriorityChange(priority)}
+                label={priority}
+                labelClassName={getPriorityTextColorClass(priority)}
+              />
+            ))}
+          </div>
+          <div className="flex items-center mt-2">
             <CustomCheckbox
-              key={`priority-${priority}`}
-              id={`priority-${priority}`}
-              checked={selectedPriorities.includes(priority)}
-              onChange={() => onPriorityChange(priority)}
-              label={priority}
-              labelClassName={getPriorityTextColorClass(priority)}
+              id="includeBoughtInCalculations"
+              checked={includeBoughtInCalculations}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onIncludeBoughtChange(e.target.checked)
+              }
+              label="Incluir itens comprados nos cálculos de valor"
             />
-          ))}
+          </div>
         </div>
-      </div>
-
-      {/* Checkbox para incluir comprados nos cálculos */}
-      <div className="flex items-center mt-4">
-        <CustomCheckbox
-          id="includeBoughtInCalculations"
-          checked={includeBoughtInCalculations}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onIncludeBoughtChange(e.target.checked)
-          }
-          label="Incluir itens comprados nos cálculos de valor"
-        />
+        <div className="flex flex-col  w-full sm:w-auto">
+          <label className="block text-sm font-medium text-gray-200 mb-1 sm:mb-0 sm:mr-2">
+            Ordenar por:
+          </label>
+          <div className="flex sm:flex-row items-center w-full sm:w-auto">
+            <select
+              value={orderByField}
+              onChange={(e) =>
+                onOrderByFieldChange(e.target.value as 'price' | 'name')
+              }
+              className="block w-full pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm"
+            >
+              <option value="price">Preço</option>
+              <option value="name">Nome</option>
+            </select>
+            <select
+              value={orderDirection}
+              onChange={(e) =>
+                onOrderDirectionChange(e.target.value as 'asc' | 'desc')
+              }
+              className="block w-full pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm ml-0 sm:ml-2"
+            >
+              <option value="desc">Decrescer</option>
+              <option value="asc">Ascendente</option>
+            </select>
+          </div>
+        </div>
       </div>
     </section>
   )
