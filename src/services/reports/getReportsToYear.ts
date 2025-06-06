@@ -8,6 +8,8 @@ export interface IReportToYearData {
   totalEntrys: number
   totalExpenses: number
   totalExpenseEurToReal: number
+  mediaExpenses: number
+  mediaExpenseToCategory: Record<string, number>
 }
 
 function parseAndSum(values: string | number): number {
@@ -41,7 +43,9 @@ export async function getReportsToYear(
     totalFree: 0,
     totalEntrys: 0,
     totalExpenses: 0,
-    totalExpenseEurToReal: 0
+    totalExpenseEurToReal: 0,
+    mediaExpenses: 0,
+    mediaExpenseToCategory: {}
   }
 
   const sum = docsArray.reduce<IReportToYearData>(
@@ -57,11 +61,44 @@ export async function getReportsToYear(
           accumulator.totalExpenses + parseAndSum(currentValue.totalExpenses),
         totalExpenseEurToReal:
           accumulator.totalExpenseEurToReal +
-          parseAndSum(currentValue.totalExpenseEurToReal)
+          parseAndSum(currentValue.totalExpenseEurToReal),
+        mediaExpenses: accumulator.mediaExpenses,
+        mediaExpenseToCategory: accumulator.mediaExpenseToCategory
       }
     },
     initialValue
   )
 
-  return sum
+  const now = new Date()
+  const currentMonth = now.getMonth() + 1 // Janeiro = 0
+  const totalExpenses = docsArray.reduce(
+    (acc, curr) => acc + parseAndSum(curr.totalExpenses),
+    0
+  )
+  const totalExpensesForAverage = totalExpenses - 1000
+  const categoryTotals: Record<string, number> = {}
+  docsArray.forEach((report) => {
+    if (Array.isArray(report.data)) {
+      report.data.forEach((expense: any) => {
+        if (expense.category === 'Investimentos') return
+        const valor = Number(expense.value_primary_currency)
+        categoryTotals[expense.category] =
+          (categoryTotals[expense.category] || 0) + valor
+      })
+    }
+  })
+  const mediaExpenses =
+    currentMonth > 0 ? totalExpensesForAverage / currentMonth : 0
+  const mediaExpenseToCategory: Record<string, number> = {}
+  Object.keys(categoryTotals).forEach((cat) => {
+    mediaExpenseToCategory[cat] = categoryTotals[cat] / currentMonth
+  })
+
+  console.log({ docsArray })
+
+  return {
+    ...sum,
+    mediaExpenses,
+    mediaExpenseToCategory
+  }
 }

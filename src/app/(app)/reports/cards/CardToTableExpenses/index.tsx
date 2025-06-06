@@ -57,10 +57,10 @@ const CardToTableExpenses = ({ selectedDate }: CardToTableExpensesProps) => {
 
   return (
     <Card
-      title="Gastos"
+      title="Lista de Gastos"
       isLoading={isLoading}
       hasData={!!reportData?.data}
-      className="h-[45vh] overflow-x-auto w-full max-w-2xl xl:h-[48vh]"
+      className="h-[45vh] w-full lg:h-[567px] overflow-x-auto"
     >
       <>
         <TableDesktopReports

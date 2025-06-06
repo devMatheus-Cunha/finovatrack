@@ -18,7 +18,8 @@ export const useFetchEntrysData = () => {
   } = useQuery({
     queryKey: ['entrys_data', userId],
     queryFn: async () => await getEntrys(userId),
-    enabled: !!userId
+    enabled: !!userId,
+    placeholderData: (previous) => previous
   })
 
   const sumTotalEntry =

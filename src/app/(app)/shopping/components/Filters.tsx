@@ -162,7 +162,7 @@ export function Filters({
             />
           </div>
         </div>
-        <div className="flex flex-col  w-full sm:w-auto">
+        <div className="flex flex-col w-full sm:w-auto">
           <label className="block text-sm font-medium text-gray-200 mb-1 sm:mb-0 sm:mr-2">
             Ordenar por:
           </label>
@@ -184,7 +184,7 @@ export function Filters({
               }
               className="block w-full pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-800/50 text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm ml-0 sm:ml-2"
             >
-              <option value="desc">Decrescer</option>
+              <option value="desc">Decrescete</option>
               <option value="asc">Ascendente</option>
             </select>
           </div>

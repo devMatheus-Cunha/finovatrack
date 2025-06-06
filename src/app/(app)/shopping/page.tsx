@@ -11,7 +11,6 @@ import {
 
 // Componentes organizados
 import {
-  ShoppingHeader,
   StatsOverview,
   Filters,
   ItemsList,
@@ -33,8 +32,7 @@ export default function ShoppingPage() {
     handleResetFilters,
     handlePriorityFilterChange
   } = useShoppingFilters()
-  const { items, isLoading, error, addItem, editItem } =
-    useShoppingItems(filters)
+  const { items, error, addItem, editItem } = useShoppingItems(filters)
 
   const { totalUniqueItems, totalOverallValue, itemsByRoom } = useShoppingData(
     items,
@@ -104,8 +102,6 @@ export default function ShoppingPage() {
 
   return (
     <div className="p-2 lg:p-0 min-h-screen flex flex-col gap-4">
-      {/* Cabeçalho */}
-      <ShoppingHeader />
       {/* Estatísticas gerais + Filtros lado a lado */}
       <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">
         <div className="w-full lg:w-[70%] h-full flex">
@@ -131,27 +127,21 @@ export default function ShoppingPage() {
       </div>
       {/* Lista de itens */}
       <div className="relative min-h-[200px]">
-        {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10 rounded-xl">
-            <span className="text-blue-400 text-2xl">Carregando itens...</span>
-          </div>
-        ) : (
-          <ItemsList
-            itemsByRoom={itemsByRoom}
-            onAddItem={openAddModal}
-            onEditItem={openEditModal}
-            onViewItem={openViewModal}
-            onDeleteItem={
-              editingItem
-                ? () => {
-                    closeItemModal()
-                    handleDeleteItem(editingItem)
-                  }
-                : () => {}
-            }
-            viewMode
-          />
-        )}
+        <ItemsList
+          itemsByRoom={itemsByRoom}
+          onAddItem={openAddModal}
+          onEditItem={openEditModal}
+          onViewItem={openViewModal}
+          onDeleteItem={
+            editingItem
+              ? () => {
+                  closeItemModal()
+                  handleDeleteItem(editingItem)
+                }
+              : () => {}
+          }
+          viewMode
+        />
       </div>
       <ConfirmDeleteModal
         isOpen={deleteModalOpen}
@@ -170,7 +160,7 @@ export default function ShoppingPage() {
         mode={modalMode}
         onEditClick={switchToEditMode}
         onViewPriceHistory={openPriceHistoryModal}
-        onDelete={editingItem ? () => handleDeleteItem(editingItem) : undefined}
+        onDelete={() => handleDeleteItem(editingItem)}
         isDeleting={isDeletingItem}
       />
       {/* Modal de histórico de preços */}

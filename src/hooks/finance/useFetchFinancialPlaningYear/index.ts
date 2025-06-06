@@ -18,13 +18,16 @@ export const useFetchFinancialPlaningYear = () => {
   } = useQuery({
     queryKey: ['financial_planning_year_data', userData.id],
     queryFn: async () => await getFinancialPlanningYear(userData.id),
-    enabled: !!userData.id // permite para qualquer usuário logado
+    enabled: !!userData.id,
+    placeholderData: (previous) => previous // permite para qualquer usuário logado
   })
   const currentYear = new Date().getFullYear()
 
   // Só libera os dados após o fetching acabar
   const isLoading = isFetching || !isFetched
-  const financialPlanningYearRequest = isLoading ? undefined : financialPlanningYearRequestRaw
+  const financialPlanningYearRequest = isLoading
+    ? undefined
+    : financialPlanningYearRequestRaw
 
   const financialPlanningData = useMemo<
     IFinancialPlanningProps | undefined

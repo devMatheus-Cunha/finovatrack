@@ -188,7 +188,7 @@ const CardToGoals = ({
       }
       actionTooltip={goal?.id ? 'Editar meta' : 'Adicionar meta'}
     >
-      <div className="flex flex-col gap-1 rounded-xl p-3 border bg-gray-800/50/70 border-gray-700">
+      <div className="flex flex-col gap-1 rounded-xl p-3 border bg-gray-800/50 border-gray-700">
         <MetaInfo metaInfo={metaInfo} />
         <ProgressBar
           percentualAtual={percentualAtual}

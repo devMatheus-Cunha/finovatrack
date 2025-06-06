@@ -40,21 +40,15 @@ const CardToCategoryExpense = ({
     }))
   }
 
-  const blueHexKeys = [
-    'blue900',
-    'blue800',
-    'blue700',
-    'blue600',
-    'blue500',
-    'blue400',
-    'blue300',
-    'blue200',
-    'blue100'
-  ] as const
+  // Usar as chaves do objeto blueHexShades para gerar as cores dinamicamente
+  const blueHexKeys = Object.keys(blueHexShades)
   const chartData = sumToCategory(data).map((category, index) => ({
     label: category.label,
     value: category.value,
-    color: blueHexShades[blueHexKeys[index % blueHexKeys.length]]
+    color:
+      blueHexShades[
+        blueHexKeys[index % blueHexKeys.length] as keyof typeof blueHexShades
+      ]
   }))
 
   return (
@@ -62,7 +56,7 @@ const CardToCategoryExpense = ({
       title="Gastos por Categoria"
       isLoading={isLoading}
       hasData={!!data}
-      className="w-full lg:max-w-xs h-full min-h-96"
+      className="w-full h-full min-h-96"
     >
       <Charts.PieChartCircle
         data={chartData}

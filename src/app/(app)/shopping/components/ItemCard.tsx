@@ -114,7 +114,7 @@ export function ItemCard({
               e.stopPropagation()
               onEdit(item)
             }}
-            className="p-1 rounded-full bg-blue-700 text-blue-200 hover:bg-blue-600 transition duration-150 ease-in-out"
+            className="p-1 rounded-full text-gray-200 hover:text-blue-600 transition duration-150 ease-in-out"
             title="Editar Item"
           >
             <Edit className="w-4 h-4" />
@@ -124,7 +124,7 @@ export function ItemCard({
               e.stopPropagation()
               onDelete(item)
             }}
-            className="p-1 rounded-full bg-red-700 text-red-200 hover:bg-red-600 transition duration-150 ease-in-out"
+            className="p-1 rounded-full text-gray-200 hover:text-red-600 transition duration-150 ease-in-out"
             title="Deletar Item"
           >
             <Trash2 className="w-4 h-4" />

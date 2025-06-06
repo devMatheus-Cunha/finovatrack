@@ -12,7 +12,7 @@ import {
   CardToPatrimony,
   CardToEmergencyReserveMonths
 } from './cards'
-import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 
 const Finance = () => {
   const currentYear = new Date().getFullYear().toString()
@@ -25,19 +25,8 @@ const Finance = () => {
     refetchInvestimentsData
   } = useFetchInvestiments()
 
-
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
-
-
-  const currentMonth = new Date().getMonth() + 1 // Janeiro = 0, então soma 1
-  const totalExpensesAjustado = reportDataToYear?.totalExpenses
-    ? reportDataToYear.totalExpenses - 1000
-    : 0
-  const mediaGastoMensalTotal =
-    totalExpensesAjustado && currentMonth > 0
-      ? totalExpensesAjustado / currentMonth
-      : 0
 
   return (
     <div className="flex flex-col gap-2 h-[95vh] w-full px-2 lg:px-0 ">
@@ -52,9 +41,11 @@ const Finance = () => {
             </div>
             <div className="w-full sm:w-[35%]">
               <CardToEmergencyReserveMonths
-                isLoading={isLoadingInvestimentsData || isLoadingReportDataToYear}
+                isLoading={
+                  isLoadingInvestimentsData || isLoadingReportDataToYear
+                }
                 valorReservaEmergencia={investimentsData?.reserva}
-                mediaGastoMensalTotal={mediaGastoMensalTotal}
+                mediaGastoMensalTotal={reportDataToYear?.mediaExpenses}
               />
             </div>
           </div>

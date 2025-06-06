@@ -24,7 +24,8 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
     useQuery({
       queryKey: ['last_quotation_data', userId],
       queryFn: async () => await getLastQuotationData(userId),
-      enabled: !!userId
+      enabled: !!userId,
+      placeholderData: (previous) => previous
     })
 
   const { mutateAsync: addLastQuotation } = useMutation({
@@ -35,6 +36,7 @@ const useFetchQuatationEur = (userData: UserData, amount = 0) => {
 
   const { refetch: refetchQuationData } = useQuery({
     queryKey: ['quatation_data'],
+    placeholderData: (previous) => previous,
     queryFn: async () => {
       if (toastId.current === null) {
         toastId.current = toast('Atualizando Cotação...', { autoClose: false })

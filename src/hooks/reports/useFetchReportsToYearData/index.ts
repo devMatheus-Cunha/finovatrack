@@ -15,7 +15,8 @@ export default function useFetchReportsToYearData(year: string) {
   } = useQuery<IReportToYearData>({
     queryKey: ['report_data_to_year', year, userId],
     queryFn: () => getReportsToYear(userId, year),
-    enabled: !!userId
+    enabled: !!userId,
+    placeholderData: (previous) => previous
   })
 
   const isLoading = isFetching || !isFetched

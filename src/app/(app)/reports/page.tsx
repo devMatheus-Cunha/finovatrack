@@ -1,11 +1,11 @@
 'use client'
 
 import {
-  CardToCategoryExpense,
+  CardToStatsAndCategory,
   CardToHeaderFilter,
-  CardToStatsInMonth,
   CardToStatsInYear,
-  CardToTableExpenses
+  CardToTableExpenses,
+  CardToStatsAverageAllHistory
 } from './cards'
 import { useState } from 'react'
 
@@ -15,17 +15,20 @@ function Reports() {
   return (
     <div className="flex flex-col w-full p-2 gap-3">
       <CardToStatsInYear selectedDate={selectedDate} />
+      <div className="flex flex-col md:flex-row gap-2">
+        <CardToStatsAverageAllHistory selectedDate={selectedDate} />
+        <CardToStatsAverageAllHistory selectedDate={selectedDate} />
+      </div>
       <CardToHeaderFilter
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
 
-      <div className="flex flex-col lg:flex-row gap-2">
-        <div className="flex flex-col gap-2">
-          <CardToStatsInMonth selectedDate={selectedDate} />
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
+          <CardToStatsAndCategory selectedDate={selectedDate} />
           <CardToTableExpenses selectedDate={selectedDate} />
         </div>
-        <CardToCategoryExpense selectedDate={selectedDate} />
       </div>
     </div>
   )

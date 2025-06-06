@@ -23,7 +23,8 @@ export function useShoppingItems(filters?: any) {
   } = useQuery<IItem[], Error>({
     queryKey: ['shoppingItems', filters, userId],
     queryFn: fetchItems,
-    enabled: !!userId
+    enabled: !!userId,
+    placeholderData: (previous) => previous 
   })
 
   const addItemMutation = useMutation<IItem, Error, IFormData>({

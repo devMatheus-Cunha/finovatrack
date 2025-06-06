@@ -10,6 +10,7 @@ export const categoryOptions = [
   { label: 'Carro', value: 'Carro' },
   { label: 'Educação', value: 'Educação' },
   { label: 'Financiamento', value: 'Financiamento' },
+  { label: 'Férias', value: 'Férias' },
   { label: 'Gastos Pessoais', value: 'Gastos Pessoais' },
   { label: 'Investimentos', value: 'Investimentos' },
   { label: 'Lazer', value: 'Lazer' },

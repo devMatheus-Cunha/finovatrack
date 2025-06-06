@@ -31,6 +31,7 @@ const useUserData = () => {
     queryKey: ['user_data', userId],
     queryFn: () => checkAuthState(userId),
     staleTime: Infinity,
+    placeholderData: (previous) => previous,
     enabled: !!userId
   })
 

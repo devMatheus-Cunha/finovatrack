@@ -30,7 +30,8 @@ export const useFetchDividends = () => {
   } = useQuery({
     queryKey: ['dividends_data', 50, userData.id],
     queryFn: () => getDividendData(userData.id!, 50),
-    enabled: !!userData.id && userData.admin
+    enabled: !!userData.id && userData.admin,
+    placeholderData: (previous) => previous
   })
 
   const refetchDividendsData = async () => {

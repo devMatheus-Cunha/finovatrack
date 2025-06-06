@@ -1,5 +1,5 @@
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData_'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 import { useFetchReportsData } from '@/hooks/reports'
 import { Card, InfoCardMoney } from '@/components'
 import {
@@ -63,7 +63,7 @@ const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
       subtitle={`Ano ${year}`}
       isLoading={isLoading}
       hasData={!!reportDataToYear}
-      className="h-50"
+      className="h-50 bg-transparent border-none"
     >
       <div className="w-full flex gap-3 mt-3 overflow-x-auto no-scrollbar">
         {summaryItems.map((card, index) => (

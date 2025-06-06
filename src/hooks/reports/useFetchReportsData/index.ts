@@ -16,7 +16,8 @@ export default function useFetchReportsData(selectedDate: Date) {
   } = useQuery<IReportData | null>({
     queryKey: ['report_data', month, year, userId],
     queryFn: () => getReport(userId, formattedDate),
-    enabled: !!userId
+    enabled: !!userId,
+    placeholderData: (previous) => previous
   })
 
   const isLoading = isFetching || !isFetched

@@ -16,11 +16,12 @@ interface CardProps {
 }
 
 const defaultEmpty = (
-  <div className="flex flex-col items-center justify-center p-4">
-    <span className="font-bold text-lg lg:text-2xl text-white">
+  <div className="flex flex-1 flex-col items-center justify-center p-4 min-h-[120px] w-full h-full">
+    <span className="font-bold text-lg lg:text-2xl text-white text-center">
       Nenhum dado encontrado
+      <br />
     </span>
-    <span className="mt-2 text-sm lg:text-md text-gray-300">
+    <span className="mt-2 text-sm lg:text-md text-gray-300 text-center">
       Faça uma nova busca.
     </span>
   </div>
@@ -48,7 +49,11 @@ const Card: React.FC<CardProps> = ({
       return null
     }
     if (!hasData) {
-      return empty || defaultEmpty
+      return (
+        <div className="flex flex-1 items-center justify-center min-h-[120px] w-full h-full">
+          {empty || defaultEmpty}
+        </div>
+      )
     }
     return children
   }
