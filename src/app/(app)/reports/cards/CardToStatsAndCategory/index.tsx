@@ -20,13 +20,6 @@ interface ProcessedCategory {
   subcategories: { [name: string]: number }
 }
 
-// --- ALTERAÇÃO 1: Nova interface para o detalhe da subcategoria ---
-interface SubcategoryDetail {
-  parentLabel: string
-  subLabel: string
-  expenses: any[]
-}
-
 const CardToStatsAndCategory = ({
   selectedDate
 }: CardToStatsAndCategoryProps) => {
@@ -44,10 +37,6 @@ const CardToStatsAndCategory = ({
   // Modal de detalhes da Categoria (mostra subcategorias)
   const [selectedCategory, setSelectedCategory] =
     useState<ProcessedCategory | null>(null)
-
-  // --- ALTERAÇÃO 2: Novo estado para o modal de despesas da subcategoria ---
-  const [subcategoryDetails, setSubcategoryDetails] =
-    useState<SubcategoryDetail | null>(null)
 
   const summaryItems = [
     {
@@ -133,18 +122,7 @@ const CardToStatsAndCategory = ({
     }))
   }
 
-  // --- ALTERAÇÃO 3: Nova função para abrir o modal de detalhes da subcategoria ---
-  const handleSubcategoryClick = (parentLabel: string, subLabel: string) => {
-    const relevantExpenses = data.filter(
-      (expense) =>
-        expense.category === parentLabel &&
-        expense.subcategory?.label === subLabel
-    )
-    setSubcategoryDetails({ parentLabel, subLabel, expenses: relevantExpenses })
-  }
-
   const processedCategories = sumToCategory(data)
-
   const blueHexKeys = Object.keys(blueHexShades)
   const chartData = processedCategories.map((category, index) => ({
     label: category.label,

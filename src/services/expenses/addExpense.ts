@@ -3,7 +3,7 @@ import { db } from '../firebase'
 import { ExpenseData } from './getExpenses'
 
 export async function addExpenseService(
-  { id, ...rest }: ExpenseData,
+  { ...rest }: ExpenseData,
   idUser: string
 ) {
   const dataToSubmit = { ...rest }
