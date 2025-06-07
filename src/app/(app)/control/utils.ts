@@ -51,7 +51,7 @@ export const columsHeadProps = (
   typeAccount: string,
   isVisibilityData: boolean
 ): TableColumn[] => {
-  const columns = [
+  const baseColumns = [
     {
       header: 'Descrição',
       field: 'description'
@@ -63,7 +63,19 @@ export const columsHeadProps = (
         !isVisibilityData || !value
           ? '-'
           : formatCurrencyMoney(value, primaryCurrency)
-    },
+    }
+  ]
+
+  const secondaryCurrencyColumn = {
+    header: optionsCurrencyKeyAndValue[secondaryCurrency],
+    field: 'value_secondary_currency',
+    modifier: (value: number) =>
+      !isVisibilityData || !value
+        ? '-'
+        : formatCurrencyMoney(value, secondaryCurrency)
+  }
+
+  const remainingColumns = [
     {
       header: 'Tipo',
       field: 'type'
@@ -71,6 +83,11 @@ export const columsHeadProps = (
     {
       header: 'Categoria',
       field: 'category'
+    },
+    {
+      header: 'Subcategoria',
+      field: 'subcategory',
+      modifier: (value: string) => value || '-'
     },
     {
       header: 'Status',
@@ -85,16 +102,11 @@ export const columsHeadProps = (
     }
   ]
 
-  if (typeAccount === 'hybrid') {
-    columns.splice(2, 0, {
-      header: optionsCurrencyKeyAndValue[secondaryCurrency],
-      field: 'value_secondary_currency',
-      modifier: (value: number) =>
-        !isVisibilityData || !value
-          ? '-'
-          : formatCurrencyMoney(value, secondaryCurrency)
-    })
-  }
+  const columns = [
+    ...baseColumns,
+    ...(typeAccount === 'hybrid' ? [secondaryCurrencyColumn] : []),
+    ...remainingColumns
+  ]
 
   return columns
 }
@@ -104,6 +116,7 @@ export const initialDataSelectedData: ExpenseData = {
   category: '',
   description: '',
   value: '',
+  subcategory: undefined,
   value_primary_currency: 0,
   value_secondary_currency: 0,
   typeMoney: '',

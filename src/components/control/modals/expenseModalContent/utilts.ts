@@ -1,4 +1,12 @@
-export const categoryOptions = [
+interface CategoryWithSubcategories {
+  label: string
+  value: string
+  disabled?: boolean
+  selected?: boolean
+  subcategories?: Array<{ label: string; value: string; category: string }>
+}
+
+export const categoryOptions: CategoryWithSubcategories[] = [
   {
     label: 'Ex: Alimentação',
     value: '',
@@ -6,7 +14,22 @@ export const categoryOptions = [
     selected: true
   },
   { label: 'Alimentação', value: 'Alimentação' },
-  { label: 'Contas Casa', value: 'Contas Casa' },
+  {
+    label: 'Contas Casa',
+    value: 'Contas Casa',
+    subcategories: [
+      {
+        label: 'Nenhuma',
+        category: '',
+        value: 'Nenhuma'
+      },
+      { label: 'Água', value: 'Água', category: 'Contas Casa' },
+      { label: 'Gás', value: 'Gás', category: 'Contas Casa' },
+      { label: 'Energia', value: 'Energia', category: 'Contas Casa' },
+      { label: 'Internet', value: 'Internet', category: 'Contas Casa' },
+      { label: 'Extras', value: 'Extras', category: 'Contas Casa' }
+    ]
+  },
   { label: 'Carro', value: 'Carro' },
   { label: 'Educação', value: 'Educação' },
   { label: 'Financiamento', value: 'Financiamento' },

@@ -2,7 +2,7 @@ import { ArrowsCounterClockwise } from '@phosphor-icons/react'
 import React from 'react'
 
 interface CardProps {
-  title?: string
+  title?: string | React.ReactNode
   subtitle?: React.ReactNode
   children?: React.ReactNode
   className?: string
@@ -58,6 +58,14 @@ const Card: React.FC<CardProps> = ({
     return children
   }
 
+  function renderTitle() {
+    if (isLoading) return null
+    if (typeof title === 'string') {
+      return <h1 className="text-lg font-semibold text-white">{title}</h1>
+    }
+    return title
+  }
+
   return (
     <div
       className={`bg-gray-700 rounded-md shadow-sm w-full border border-gray-600/50 p-2.5${
@@ -66,9 +74,7 @@ const Card: React.FC<CardProps> = ({
     >
       <div className="flex flex-col ">
         <div className="flex items-center justify-between">
-          {!isLoading && (
-            <h1 className="text-lg font-semibold text-white">{title}</h1>
-          )}
+          {renderTitle()}
           {!isLoading && action && (
             <button
               type="button"

@@ -1,7 +1,7 @@
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 import { useFetchReportsData } from '@/hooks/reports'
-import { Card, InfoCardMoney } from '@/components'
+import { Card, InfoCardMoney, YearPicker } from '@/components'
 import {
   ArrowCircleUp,
   ArrowCircleDown,
@@ -11,9 +11,13 @@ import {
 
 interface CardToStatsInYearProps {
   selectedDate: Date
+  setSelectedDate: (date: Date) => void
 }
 
-const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
+const CardToStatsInYear = ({
+  selectedDate,
+  setSelectedDate
+}: CardToStatsInYearProps) => {
   const { userData } = useUserData()
   const { year } = useFetchReportsData(selectedDate)
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -59,8 +63,19 @@ const CardToStatsInYear = ({ selectedDate }: CardToStatsInYearProps) => {
 
   return (
     <Card
-      title="Relatorio Anual"
-      subtitle={`Ano ${year}`}
+      title={
+        <div className="flex justify-between items-center w-full">
+          <h1 className="text-lg font-semibold text-white">Relatório Anual</h1>
+          <div className="ml-4">
+            <YearPicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              maxYear={new Date().getFullYear()}
+              className="bg-transparent px-2"
+            />
+          </div>
+        </div>
+      }
       isLoading={isLoading}
       hasData={!!reportDataToYear}
       className="h-50 bg-transparent border-none"

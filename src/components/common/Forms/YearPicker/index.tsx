@@ -19,7 +19,7 @@ const getYears = (min: number, max: number) => {
 const YearPicker: React.FC<YearPickerProps> = ({
   selected,
   onChange,
-  minYear = 1970,
+  minYear = 2024,
   maxYear = new Date().getFullYear(),
   className = ''
 }) => {
@@ -27,7 +27,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
 
   return (
     <select
-      className={`border-b border-gray-400 bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white text-center py-1 ${className}`}
+      className={`border-b border-gray-400 cursor-pointer bg-transparent w-24 focus:outline-none focus:border-blue-500 text-white  py-1 ${className}`}
       value={selected.getFullYear()}
       onChange={(e) => {
         const year = parseInt(e.target.value, 10)
@@ -35,7 +35,11 @@ const YearPicker: React.FC<YearPickerProps> = ({
       }}
     >
       {years.map((year) => (
-        <option key={year} value={year} className="bg-gray-800/50 text-white">
+        <option
+          key={year}
+          value={year}
+          className="bg-gray-800 text-white cursor-pointer"
+        >
           {year}
         </option>
       ))}

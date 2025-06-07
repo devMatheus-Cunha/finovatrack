@@ -1,4 +1,4 @@
-import { Card, YearPicker } from '@/components'
+import { Card } from '@/components'
 import { useMemo } from 'react'
 
 interface CardToHeaderFilterProps {
@@ -36,8 +36,8 @@ const CardToHeaderFilter = ({
   )
 
   return (
-    <Card title="Relatorio Mensal" subtitle="Veja todas os dados por mês">
-      <div className=" flex justify-between items-center mt-6 overflow-auto">
+    <Card title="Selecione o Mês">
+      <div className="flex justify-center mt-6 overflow-auto">
         <div className="flex border-b-2 border-gray-700">
           {months.map((month, idx) => (
             <button
@@ -56,15 +56,6 @@ const CardToHeaderFilter = ({
               {month.month}
             </button>
           ))}
-        </div>
-
-        <div className="flex items-center">
-          <YearPicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            minYear={1970}
-            maxYear={new Date().getFullYear()}
-          />
         </div>
       </div>
     </Card>

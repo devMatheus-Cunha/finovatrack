@@ -34,8 +34,7 @@ const CardToTableExpenses = ({ selectedDate }: CardToTableExpensesProps) => {
       },
       {
         header: 'Categoria',
-        field: 'category',
-        modifier: (value: string) => value ?? '-'
+        field: 'category'
       }
     ]
 

@@ -5,7 +5,8 @@ import {
   CardToHeaderFilter,
   CardToStatsInYear,
   CardToTableExpenses,
-  CardToStatsAverageAllHistory
+  CardToStatsAverageAllHistory,
+  CardToStatsAverageAllHistorySubcategories
 } from './cards'
 import { useState } from 'react'
 
@@ -14,10 +15,15 @@ function Reports() {
 
   return (
     <div className="flex flex-col w-full p-2 gap-3">
-      <CardToStatsInYear selectedDate={selectedDate} />
+      <CardToStatsInYear
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
       <div className="flex flex-col md:flex-row gap-2">
         <CardToStatsAverageAllHistory selectedDate={selectedDate} />
-        <CardToStatsAverageAllHistory selectedDate={selectedDate} />
+        <CardToStatsAverageAllHistorySubcategories
+          selectedDate={selectedDate}
+        />
       </div>
       <CardToHeaderFilter
         selectedDate={selectedDate}

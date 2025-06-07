@@ -1,15 +1,30 @@
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useFetchReportsData } from '@/hooks/reports'
-import { Card, Charts } from '@/components'
+import { Button, Card, Charts } from '@/components'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { blueHexShades } from '@/utils/colors'
 import { Eye } from 'lucide-react'
 import EntrysModal from './EntrysModal'
 import Modal from '@/components/common/Modal'
 import { useCustomDisclosure } from '@/hooks/globalStates'
+import { useState } from 'react'
 
 interface CardToStatsAndCategoryProps {
   selectedDate: Date
+}
+
+interface ProcessedCategory {
+  value: number
+  label: string
+  hasSubcategory: boolean
+  subcategories: { [name: string]: number }
+}
+
+// --- ALTERAÇÃO 1: Nova interface para o detalhe da subcategoria ---
+interface SubcategoryDetail {
+  parentLabel: string
+  subLabel: string
+  expenses: any[]
 }
 
 const CardToStatsAndCategory = ({
@@ -18,7 +33,21 @@ const CardToStatsAndCategory = ({
   const { reportData, isLoading } = useFetchReportsData(selectedDate)
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
-  const { isOpen, onOpen, onClose } = useCustomDisclosure()
+
+  // Modal de Entradas (existente)
+  const {
+    isOpen: isEntrysModalOpen,
+    onOpen: onEntrysModalOpen,
+    onClose: onEntrysModalClose
+  } = useCustomDisclosure()
+
+  // Modal de detalhes da Categoria (mostra subcategorias)
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProcessedCategory | null>(null)
+
+  // --- ALTERAÇÃO 2: Novo estado para o modal de despesas da subcategoria ---
+  const [subcategoryDetails, setSubcategoryDetails] =
+    useState<SubcategoryDetail | null>(null)
 
   const summaryItems = [
     {
@@ -67,24 +96,57 @@ const CardToStatsAndCategory = ({
   }
 
   const data = reportData?.data ?? []
-  function sumToCategory(expenses: any[]): { value: number; label: string }[] {
-    const result: { [category: string]: number } = {}
+
+  function sumToCategory(expenses: any[]): ProcessedCategory[] {
+    const result: {
+      [category: string]: {
+        total: number
+        subcategories: { [name: string]: number }
+      }
+    } = {}
+
     for (const expense of expenses) {
       if (expense.category === 'Investimentos') continue
-      const { category, value_primary_currency } = expense
-      if (result[category]) {
-        result[category] += value_primary_currency
-      } else {
-        result[category] = value_primary_currency
+
+      const { category, value_primary_currency, subcategory } = expense
+
+      if (!result[category]) {
+        result[category] = { total: 0, subcategories: {} }
+      }
+
+      result[category].total += value_primary_currency
+
+      if (subcategory && subcategory.label) {
+        const subLabel = subcategory.label
+        if (!result[category].subcategories[subLabel]) {
+          result[category].subcategories[subLabel] = 0
+        }
+        result[category].subcategories[subLabel] += value_primary_currency
       }
     }
+
     return Object.keys(result).map((category) => ({
-      value: result[category],
-      label: category
+      value: result[category].total,
+      label: category,
+      subcategories: result[category].subcategories,
+      hasSubcategory: Object.keys(result[category].subcategories).length > 0
     }))
   }
+
+  // --- ALTERAÇÃO 3: Nova função para abrir o modal de detalhes da subcategoria ---
+  const handleSubcategoryClick = (parentLabel: string, subLabel: string) => {
+    const relevantExpenses = data.filter(
+      (expense) =>
+        expense.category === parentLabel &&
+        expense.subcategory?.label === subLabel
+    )
+    setSubcategoryDetails({ parentLabel, subLabel, expenses: relevantExpenses })
+  }
+
+  const processedCategories = sumToCategory(data)
+
   const blueHexKeys = Object.keys(blueHexShades)
-  const chartData = sumToCategory(data).map((category, index) => ({
+  const chartData = processedCategories.map((category, index) => ({
     label: category.label,
     value: category.value,
     color:
@@ -103,7 +165,7 @@ const CardToStatsAndCategory = ({
         {card.showEntrysIcon && (reportData?.entrys?.length ?? 0) > 0 && (
           <button
             type="button"
-            onClick={onOpen}
+            onClick={onEntrysModalOpen}
             className="ml-2 text-cyan-400 hover:text-cyan-300 focus:outline-none transition-colors duration-200"
           >
             <Eye size={18} />
@@ -172,13 +234,26 @@ const CardToStatsAndCategory = ({
               </div>
               <div className="w-full">
                 <div className="flex flex-wrap justify-around gap-3">
-                  {sumToCategory(data).map((item) => (
+                  {processedCategories.map((item) => (
                     <div
                       key={item.label}
                       className="text-white bg-gray-800/50 rounded-xl px-3 py-2.5 shadow-md flex-1 min-w-[115px] max-w-[220px]"
                     >
                       <div className="flex flex-col">
-                        <span className="text-xs opacity-70">{item.label}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs opacity-70">
+                            {item.label}
+                          </span>
+                          {item.hasSubcategory && (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedCategory(item)}
+                              className="ml-2 text-cyan-400 hover:text-cyan-300 focus:outline-none transition-colors duration-200"
+                            >
+                              <Eye size={18} />
+                            </button>
+                          )}
+                        </div>
                         <div className="flex items-center gap-1">
                           <span className="text-base lg:text-md font-semibold">
                             {formatCurrencyMoney(
@@ -197,14 +272,52 @@ const CardToStatsAndCategory = ({
           </div>
         </div>
       </Card>
+
       <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isEntrysModalOpen}
+        onClose={onEntrysModalClose}
         isCentered
         size="xl"
         title="Detalhes das Entradas"
       >
-        <EntrysModal onClose={onClose} entrys={reportData?.entrys || []} />
+        <EntrysModal
+          onClose={onEntrysModalClose}
+          entrys={reportData?.entrys || []}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={!!selectedCategory}
+        onClose={() => setSelectedCategory(null)}
+        isCentered
+        size="lg"
+        title={`Detalhes de: ${selectedCategory?.label || ''}`}
+      >
+        <div className="flex flex-wrap gap-3 py-2">
+          {selectedCategory &&
+            Object.entries(selectedCategory.subcategories).map(
+              ([subLabel, subValue]) => (
+                <div
+                  key={subLabel}
+                  className="flex flex-col bg-gray-800/50 rounded-xl p-3 shadow-md flex-1 min-w-[140px] text-left"
+                >
+                  <span className="text-sm text-gray-300 mb-1">{subLabel}</span>
+                  <span className="text-md text-white font-bold">
+                    {formatCurrencyMoney(
+                      Number(subValue),
+                      userData.primary_currency,
+                      isVisibilityData
+                    )}
+                  </span>
+                </div>
+              )
+            )}
+        </div>
+        <div className="px-0 py-6 flex justify-end gap-3">
+          <Button variant="cancel" onClick={() => setSelectedCategory(null)}>
+            Fechar
+          </Button>
+        </div>
       </Modal>
     </>
   )

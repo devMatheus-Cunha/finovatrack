@@ -24,6 +24,7 @@ const schema = z.object({
     .string({ required_error: 'Campo obrigatorio' })
     .min(0.01, 'O valor deve ser maior que zero'),
   category: z.string().min(1, 'A categoria é obrigatória'),
+  subcategory: z.string().optional(),
   payment: z.string().min(1, 'A forma de pagamento é obrigatória')
 })
 
@@ -55,6 +56,7 @@ const ExpenseModalContent = ({
       typeModal !== 'add'
         ? {
             ...initialData,
+            subcategory: initialData?.subcategory?.value as any,
             value:
               userData.typeAccount === 'oneCurrency'
                 ? formatToCustomFormat(initialData?.value_primary_currency)
@@ -70,12 +72,34 @@ const ExpenseModalContent = ({
     if (type === 'cancel') handleOpenModal('cancel')
   }
 
+  const onFormSubmit = (data: any) => {
+    const selectedCategory = categoryOptions.find(
+      (cat) => cat.value === data.category
+    )
+    let subcategoryData = undefined
+
+    if (selectedCategory?.subcategories?.length && data.subcategory) {
+      const subcat = selectedCategory.subcategories.find(
+        (sub) => sub.value === data.subcategory
+      )
+      if (subcat) {
+        subcategoryData = {
+          value: subcat.value,
+          label: subcat.label,
+          category: subcat.category
+        }
+      }
+    }
+
+    onSubmit({
+      ...data,
+      id: initialData?.id ?? '',
+      subcategory: subcategoryData
+    })
+  }
+
   return (
-    <form
-      onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, id: initialData?.id ?? '' })
-      )}
-    >
+    <form onSubmit={handleSubmit(onFormSubmit)}>
       <div className="flex flex-col flex-wrap gap-6 p-0">
         <Input
           label="Descrição"
@@ -95,6 +119,22 @@ const ExpenseModalContent = ({
             register={register}
             errors={errors.category?.message}
           />
+          {categoryOptions.find((cat) => cat.value === watch('category'))
+            ?.subcategories && (
+            <Select
+              label="Subcategoria (Opcional)"
+              name="subcategory"
+              isRequired={false}
+              disabled={false}
+              options={[
+                ...(categoryOptions.find(
+                  (cat) => cat.value === watch('category')
+                )?.subcategories || [])
+              ]}
+              register={register}
+              errors={errors.subcategory?.message}
+            />
+          )}
           <Select
             label="Status de Pagamento"
             name="payment"

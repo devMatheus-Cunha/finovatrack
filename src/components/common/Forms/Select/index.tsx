@@ -48,12 +48,11 @@ export default function Select<T extends FieldValues>({
     <div className="w-full">
       <label
         htmlFor={name as string}
-        className="mb-2 text-sm font-medium text-white  gap-1 items-center"
+        className="mb-2 text-sm font-medium text-white gap-1 items-center"
       >
         {isRequired ? `${label} *` : label}
         {labelHint && (
           <span className="text-orange-400 cursor-pointer" title={labelHint}>
-            {/* Info icon SVG inline */}
             <svg
               className="w-4 h-4 inline"
               fill="none"
@@ -73,15 +72,11 @@ export default function Select<T extends FieldValues>({
           id={name as string}
           {...register(name, rules)}
           disabled={isDisabled}
-          className={`w-full px-3 py-2 bg-transparent border rounded-md border-[#4A5568] text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 transition-colors duration-150 appearance-none ${
-            isDisabled
-              ? 'bg-gray-700 border-gray-600/50  text-gray-300 cursor-not-allowed'
-              : 'hover:border-blue-500'
-          } ${className || ''}`}
+          className={`w-full px-3 curs py-2 border rounded-md focus:outline-none transition-colors duration-150 appearance-none bg-gray-700 border-[#4A5568] hover:bg-gray-700/50 text-white focus:ring-1 ${className || ''}`}
           {...props}
         >
           {placeholder && (
-            <option value="" disabled>
+            <option value="" disabled className="text-gray-400">
               {placeholder}
             </option>
           )}
@@ -91,12 +86,15 @@ export default function Select<T extends FieldValues>({
               value={value}
               disabled={disabled}
               selected={selected}
+              className={disabled ? 'text-gray-400' : ''}
             >
               {label}
             </option>
           ))}
         </select>
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+        <span
+          className={`pointer-events-none absolute inset-y-0 right-3 flex items-center ${isDisabled ? 'text-gray-500' : 'text-gray-400'}`}
+        >
           <svg
             className="w-4 h-4"
             fill="none"
