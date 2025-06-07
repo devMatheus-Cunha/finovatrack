@@ -8,6 +8,11 @@ import {
   MoneyWavy,
   Bank
 } from '@phosphor-icons/react'
+import { useFetchFinancialPlaningYear, useGoals } from '@/hooks/finance'
+import {
+  calcularValorGuardadoMes,
+  GOAL_DEADLINE
+} from '@/app/(app)/finance/cards/CardToGoals/utils'
 
 interface CardToStatsInYearProps {
   selectedDate: Date
@@ -23,6 +28,14 @@ const CardToStatsInYear = ({
   const { isVisibilityData } = useIsVisibilityDatas()
   const { reportDataToYear, isLoading } = useFetchReportsToYearData(
     String(year)
+  )
+  const { goal } = useGoals()
+  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
+    useFetchFinancialPlaningYear()
+  const goalDeadline = goal?.meta_year || GOAL_DEADLINE
+  const valorGuardadoMes = calcularValorGuardadoMes(
+    financialPlanningYear,
+    goalDeadline
   )
 
   const investmentPercentage =
@@ -57,7 +70,8 @@ const CardToStatsInYear = ({
       value: reportDataToYear?.totalInvestments,
       icon: Bank,
       iconColor: 'cyan',
-      percentageInfo: `${investmentPercentage}%`
+      percentageInfo: `${investmentPercentage}%`,
+      valorGuardadoMes: valorGuardadoMes
     }
   ]
 
@@ -92,6 +106,7 @@ const CardToStatsInYear = ({
             isVisibilityData={isVisibilityData}
             showEyeIcon={card.showEyeIcon}
             percentageInfo={card.percentageInfo}
+            valorGuardadoMes={card.valorGuardadoMes}
           />
         ))}
       </div>

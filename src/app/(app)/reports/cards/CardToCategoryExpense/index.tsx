@@ -26,7 +26,7 @@ const CardToCategoryExpense = ({
   function sumToCategory(expenses: ExpenseData[]): Resultcategory[] {
     const result: { [category: string]: number } = {}
     for (const expense of expenses) {
-      if (expense.category === 'Investimentos') continue
+      if (expense.category === 'Investimentos e Finanças') continue
       const { category, value_primary_currency } = expense
       if (result[category]) {
         result[category] += value_primary_currency

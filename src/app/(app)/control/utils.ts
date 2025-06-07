@@ -129,7 +129,7 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
 
     const calculation = expensesData.reduce(
       (acumulador, objetoAtual) => {
-        if (objetoAtual.category !== 'Investimentos') {
+        if (objetoAtual.category !== 'Investimentos e Finanças') {
           acumulador.value_primary_currency =
             (acumulador.value_primary_currency ?? 0) +
             Number(objetoAtual.value_primary_currency)

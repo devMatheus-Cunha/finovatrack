@@ -95,7 +95,7 @@ const CardToStatsAndCategory = ({
     } = {}
 
     for (const expense of expenses) {
-      if (expense.category === 'Investimentos') continue
+      if (expense.category === 'Investimentos e Finanças') continue
 
       const { category, value_primary_currency, subcategory } = expense
 

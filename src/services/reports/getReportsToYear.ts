@@ -64,14 +64,12 @@ export async function getReportsToYear(
   docsArray.forEach((report) => {
     if (Array.isArray(report.data)) {
       report.data.forEach((expense: any) => {
-        if (expense.category === 'Investimentos') return
+        if (expense.category === 'Investimentos e Finanças') return
         const valor = Number(expense.value_primary_currency)
 
         categoryTotals[expense.category] =
           (categoryTotals[expense.category] || 0) + valor
 
-        // <-- AQUI ESTÁ A LINHA ALTERADA -->
-        // Garante que só calculamos a subcategoria se ela for um objeto válido com a propriedade 'value'.
         if (expense.subcategory && expense.subcategory.value) {
           if (!subcategoryTotals[expense.category]) {
             subcategoryTotals[expense.category] = {}
@@ -84,18 +82,15 @@ export async function getReportsToYear(
     }
   })
 
-  // Calculate averages
   const mediaExpenses =
     currentMonth > 0 ? totalExpensesForAverage / currentMonth : 0
   const mediaExpenseToCategory: Record<string, number> = {}
   const mediaExpenseToSubcategory: Record<string, Record<string, number>> = {}
 
-  // Category averages
   Object.keys(categoryTotals).forEach((cat) => {
     mediaExpenseToCategory[cat] = categoryTotals[cat] / currentMonth
   })
 
-  // Subcategory averages
   Object.keys(subcategoryTotals).forEach((cat) => {
     mediaExpenseToSubcategory[cat] = {}
     Object.keys(subcategoryTotals[cat]).forEach((subcat) => {

@@ -5,7 +5,7 @@ export const useInvestmentMetrics = (
   totalEntrys: number
 ) => {
   const totalInvestments = transactions.reduce((acc, transaction) => {
-    return transaction.category === 'Investimentos'
+    return transaction.category === 'Investimentos e Finanças'
       ? acc + transaction.value_primary_currency
       : acc
   }, 0)

@@ -14,6 +14,7 @@ interface InfoCardProps {
   isVisibilityData: boolean
   showEyeIcon?: boolean // novo: controla se mostra o olhinho (default true)
   percentageInfo?: ReactNode // novo: info extra ao lado do valor
+  valorGuardadoMes?: any // novo: info extra ao lado do valor
 }
 
 const InfoOutlineSvg = ({
@@ -47,7 +48,8 @@ function InfoCardMoney({
   iconColor,
   actionCard,
   showEyeIcon = true,
-  percentageInfo
+  percentageInfo,
+  valorGuardadoMes
 }: InfoCardProps) {
   return (
     <>
@@ -80,14 +82,28 @@ function InfoCardMoney({
               )}
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-lg md:text-xl font-semibold text-white leading-tight truncate">
-                {formatCurrencyMoney(infoData, currency, isVisibilityData)}
-              </span>
-              {percentageInfo && (
-                <span className="flex items-center text-green-400 text-xs font-semibold ml-1">
-                  {percentageInfo}
-                </span>
-              )}
+              <div className="flex flex-col ">
+                <div className="flex gap-1 items-center">
+                  <span className="text-lg md:text-xl font-semibold text-white leading-tight truncate">
+                    {formatCurrencyMoney(infoData, currency, isVisibilityData)}
+                  </span>
+                  {percentageInfo && (
+                    <span className="flex items-center text-green-400 text-xs font-semibold ml-1">
+                      {percentageInfo}
+                    </span>
+                  )}
+                </div>
+                {valorGuardadoMes && (
+                  <span className="mt-1 text-xs flex items-center gap-1">
+                    <span className="text-gray-300"> Media Mensal: </span>
+                    {formatCurrencyMoney(
+                      valorGuardadoMes,
+                      currency,
+                      isVisibilityData
+                    )}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex-shrink-0 flex items-center justify-center ml-3">
