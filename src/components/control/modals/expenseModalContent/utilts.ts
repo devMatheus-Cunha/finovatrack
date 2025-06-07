@@ -62,6 +62,11 @@ export const categoryOptions: CategoryWithSubcategories[] = [
         value: 'Energia Elétrica',
         category: 'Contas de Consumo'
       },
+      {
+        label: 'Contas Gerais',
+        value: 'Contas Gerais',
+        category: 'Contas de Consumo'
+      },
       { label: 'Gás', value: 'Gás', category: 'Contas de Consumo' },
       { label: 'Internet', value: 'Internet', category: 'Contas de Consumo' },
       {
@@ -200,18 +205,8 @@ export const categoryOptions: CategoryWithSubcategories[] = [
     subcategories: [
       { label: 'Nenhuma', value: 'Nenhuma', category: 'Educação' },
       {
-        label: 'Mensalidade Escolar/Faculdade',
-        value: 'Mensalidade Escolar/Faculdade',
-        category: 'Educação'
-      },
-      {
         label: 'Cursos (Idiomas, Profissionalizantes)',
         value: 'Cursos',
-        category: 'Educação'
-      },
-      {
-        label: 'Livros e Materiais',
-        value: 'Livros e Materiais',
         category: 'Educação'
       }
     ]
