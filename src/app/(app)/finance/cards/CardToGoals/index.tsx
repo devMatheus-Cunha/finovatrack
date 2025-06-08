@@ -112,7 +112,6 @@ const CardToGoals = ({
   const totalJuros = Math.max(previsao - totalAportado, 0)
   const percentualAtual = Math.min((valorAtual / targetValue) * 100, 100)
   const percentualPrevisto = Math.min((previsao / targetValue) * 100, 100)
-  // Objetivos
   const goalItems = [
     {
       name: 'Renda fixa',
@@ -138,7 +137,7 @@ const CardToGoals = ({
     {
       label: `Meta ${goal?.meta_year ? formatMonthYear(goal.meta_year) : formatMonthYear(GOAL_DEADLINE)}:`,
       value: formatCurrencyMoney(targetValue, currency, isVisibilityData),
-      valueClass: 'text-md font-bold text-gray-100',
+      valueClass: 'text-md font-bold text-white',
       key: 'meta'
     },
     {

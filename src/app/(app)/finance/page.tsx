@@ -49,11 +49,15 @@ const Finance = () => {
               />
             </div>
           </div>
-          <CardToFinanceYaer
-            financialPlanningYear={financialPlanningYear}
-            isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
-          />
+
+          <div className="hidden lg:block">
+            <CardToFinanceYaer
+              financialPlanningYear={financialPlanningYear}
+              isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
+            />
+          </div>
         </div>
+
         <div className="flex w-full lg:w-[55%] gap-2 flex-col md:flex-row lg:flex-col xl:flex-row">
           <CardToInvestments
             investimentsData={investimentsData}
@@ -66,6 +70,13 @@ const Finance = () => {
             financialPlanningYear={financialPlanningYear}
           />
         </div>
+      </div>
+
+      <div className="block lg:hidden">
+        <CardToFinanceYaer
+          financialPlanningYear={financialPlanningYear}
+          isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
+        />
       </div>
     </div>
   )

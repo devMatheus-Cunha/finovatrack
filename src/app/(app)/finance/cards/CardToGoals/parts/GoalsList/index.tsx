@@ -37,17 +37,17 @@ const GoalsList: React.FC<GoalsListProps> = ({
             className="flex flex-row items-center justify-between bg-gray-800/50 rounded-xl shadow-lg p-2 border border-gray-700 w-full min-h-[60px] gap-2"
           >
             <div className="flex flex-col items-start flex-1">
-              <span className="text-[10px] text-gray-400 font-medium mb-1">
+              <span className="text-[10px] text-gray-300 font-medium mb-1">
                 {goal.name}
               </span>
-              <span className="text-[15px] text-gray-300 font-semibold">
+              <span className="text-[15px] text-gray-100 font-semibold">
                 {formatCurrencyMoney(
                   goal.current || 0,
                   currency,
                   isVisibilityData
                 )}
               </span>
-              <span className="text-[10px] text-gray-400">
+              <span className="text-[10px] text-gray-200">
                 Meta:{' '}
                 {formatCurrencyMoney(goal.target, currency, isVisibilityData)}
               </span>

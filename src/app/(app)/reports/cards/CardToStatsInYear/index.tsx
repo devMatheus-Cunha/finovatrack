@@ -30,8 +30,7 @@ const CardToStatsInYear = ({
     String(year)
   )
   const { goal } = useGoals()
-  const { financialPlanningYear, isLoadingFinancialPlanningYear } =
-    useFetchFinancialPlaningYear()
+  const { financialPlanningYear } = useFetchFinancialPlaningYear()
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
   const valorGuardadoMes = calcularValorGuardadoMes(
     financialPlanningYear,

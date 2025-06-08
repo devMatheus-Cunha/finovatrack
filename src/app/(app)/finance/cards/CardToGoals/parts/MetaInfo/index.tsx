@@ -16,7 +16,7 @@ const MetaInfo: React.FC<MetaInfoProps> = ({ metaInfo }) => (
   <>
     {metaInfo.map((item) => (
       <div key={item.key} className="flex justify-between items-center">
-        <span className="text-[14.5px] font-medium text-gray-300">
+        <span className="text-[14.5px] font-medium text-white">
           {item.label}
         </span>
         <span className={item.valueClass} style={item.valueStyle}>

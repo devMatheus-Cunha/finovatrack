@@ -21,15 +21,18 @@ const DescriptionChart = ({
   const { isVisibilityData } = useIsVisibilityDatas()
 
   return (
-    <div className="grid grid-cols-2 gap-4 overflow-y-auto h-fit">
+    <div className="grid grid-cols-2 gap-3 overflow-y-auto h-fit ">
       {dataStats.map((item) => (
-        <div key={item.label} className="text-white">
+        <div
+          key={item.label}
+          className="text-white bg-gray-800/50 rounded-xl px-3 py-2.5 shadow-md flex-1 min-w-[115px] max-w-[200px]"
+        >
           <div className="flex flex-col">
-            <span className="text-xs opacity-70">
+            <span className="text-[10px] opacity-70">
               {formatLabel ? formatLabel(item.label) : item.label}
             </span>
             <div className="flex items-center gap-1">
-              <span className="text-base lg:text-lg font-semibold">
+              <span className="text-md font-semibold">
                 {formatCurrencyMoney(
                   Number(item.value),
                   userData.primary_currency,
