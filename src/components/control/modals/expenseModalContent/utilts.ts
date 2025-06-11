@@ -7,7 +7,6 @@ interface CategoryWithSubcategories {
 }
 
 export const categoryOptions: CategoryWithSubcategories[] = [
-  // --- NOVAS CATEGORIAS DETALHADAS ---
   {
     label: 'Moradia',
     value: 'Moradia',
@@ -154,6 +153,12 @@ export const categoryOptions: CategoryWithSubcategories[] = [
     value: 'Lazer e Hobbies',
     subcategories: [
       { label: 'Nenhuma', value: 'Nenhuma', category: 'Lazer e Hobbies' },
+      // --- SUBCATEGORIA ADICIONADA PARA O GASTO LIVRE ---
+      {
+        label: 'Gastos Livres / Diversos',
+        value: 'Gastos Livres / Diversos',
+        category: 'Lazer e Hobbies'
+      },
       {
         label: 'Saídas e Eventos',
         value: 'Saídas e Eventos',
@@ -230,6 +235,35 @@ export const categoryOptions: CategoryWithSubcategories[] = [
       }
     ]
   },
+  // --- NOVA CATEGORIA ADICIONADA PARA METAS ---
+  {
+    label: 'Metas e Objetivos',
+    value: 'Metas e Objetivos',
+    subcategories: [
+      { label: 'Nenhuma', value: 'Nenhuma', category: 'Metas e Objetivos' },
+      {
+        label: 'Eletrônicos (PS5, TV, etc.)',
+        value: 'Eletrônicos (PS5, TV, etc.)',
+        category: 'Metas e Objetivos'
+      },
+      { label: 'Viagem', value: 'Viagem', category: 'Metas e Objetivos' },
+      {
+        label: 'Móveis e Decoração',
+        value: 'Móveis e Decoração',
+        category: 'Metas e Objetivos'
+      },
+      {
+        label: 'Reserva de Emergência',
+        value: 'Reserva de Emergência',
+        category: 'Metas e Objetivos'
+      },
+      {
+        label: 'Outra Meta',
+        value: 'Outra Meta',
+        category: 'Metas e Objetivos'
+      }
+    ]
+  },
   {
     label: 'Investimentos e Finanças',
     value: 'Investimentos e Finanças',
@@ -242,21 +276,6 @@ export const categoryOptions: CategoryWithSubcategories[] = [
       {
         label: 'Aporte Regular',
         value: 'Aporte Regular',
-        category: 'Investimentos e Finanças'
-      },
-      {
-        label: 'Aporte Extra (sobras do mês)',
-        value: 'Aporte Extra (sobras do mês)',
-        category: 'Investimentos e Finanças'
-      },
-      {
-        label: 'Dividendos Recebidos',
-        value: 'Dividendos Recebidos',
-        category: 'Investimentos e Finanças'
-      },
-      {
-        label: 'Juros e Rendimentos',
-        value: 'Juros e Rendimentos',
         category: 'Investimentos e Finanças'
       },
       {
@@ -276,61 +295,8 @@ export const categoryOptions: CategoryWithSubcategories[] = [
       }
     ]
   },
-  {
-    label: 'Outros Gastos',
-    value: 'Outros Gastos',
-    subcategories: [
-      { label: 'Nenhuma', value: 'Nenhuma', category: 'Outros Gastos' },
-      { label: 'Presentes', value: 'Presentes', category: 'Outros Gastos' },
-      { label: 'Doações', value: 'Doações', category: 'Outros Gastos' },
-      {
-        label: 'Serviços (Cartório, contador)',
-        value: 'Serviços',
-        category: 'Outros Gastos'
-      },
-      {
-        label: 'Impostos (Imposto de Renda)',
-        value: 'Impostos',
-        category: 'Outros Gastos'
-      },
-      { label: 'Emergências', value: 'Emergências', category: 'Outros Gastos' }
-    ]
-  },
-  { label: 'Salário e Rendas', value: 'Salário e Rendas' }, // Categoria para entradas de dinheiro
-
-  // --- CATEGORIAS ANTIGAS (PARA MIGRAÇÃO) ---
-  {
-    label: 'Contas Casa (antiga)',
-    value: 'Contas Casa',
-    subcategories: [
-      { label: 'Nenhuma', category: '', value: 'Nenhuma' },
-      { label: 'Água', value: 'Água', category: 'Contas Casa' },
-      { label: 'Gás', value: 'Gás', category: 'Contas Casa' },
-      { label: 'Energia', value: 'Energia', category: 'Contas Casa' },
-      { label: 'Internet', value: 'Internet', category: 'Contas Casa' },
-      {
-        label: 'Financiamento',
-        value: 'Financiamento',
-        category: 'Contas Casa'
-      },
-      { label: 'Extras', value: 'Extras', category: 'Contas Casa' }
-    ]
-  },
-  {
-    label: 'Carro (antiga)',
-    value: 'Carro',
-    subcategories: [
-      { label: 'Nenhuma', category: '', value: 'Nenhuma' },
-      { label: 'Combusitvel', value: 'Combusitvel', category: 'Carro' },
-      { label: 'Seguro', value: 'Seguro', category: 'Carro' },
-      { label: 'Financiamento', value: 'Financiamento', category: 'Carro' }
-    ]
-  },
-  { label: 'Férias (antiga)', value: 'Férias' },
-  { label: 'Gastos Pessoais (antiga)', value: 'Gastos Pessoais' },
-  { label: 'Investimentos (antiga)', value: 'Investimentos' },
-  { label: 'Lazer (antiga)', value: 'Lazer' },
-  { label: 'Viagens (antiga)', value: 'Viagens' }
+  // A CATEGORIA "OUTROS GASTOS" FOI REMOVIDA
+  { label: 'Salário e Rendas', value: 'Salário e Rendas' } // Categoria para entradas de dinheiro
 ]
 
 export const paymentsOptions = [

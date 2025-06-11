@@ -120,7 +120,6 @@ export async function getReportsToYear(
     },
     initialValue
   )
-
   return {
     ...sum,
     mediaExpenses,

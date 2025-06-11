@@ -2,20 +2,30 @@ import { doc, updateDoc, deleteField, FieldValue } from '@firebase/firestore'
 import { db } from '../firebase'
 import { ExpenseData } from './getExpenses'
 
-export async function updatedExpenseService(data: ExpenseData, idUser: string) {
-  const { id, subcategory, ...rest } = data
-  const docRef = doc(db, 'users', idUser, 'expenses', id)
+/**
+ * Atualiza uma despesa existente no Firestore.
+ */
+export async function updatedExpenseService(
+  expenseData: ExpenseData,
+  userId: string
+): Promise<void> {
+  if (!userId || !expenseData.id) {
+    throw new Error('ID do usuário ou da despesa é inválido.')
+  }
+
+  const { id, ...dataToUpdate } = expenseData
+  const docRef = doc(db, 'users', userId, 'expenses', id)
 
   const updatePayload: { [key: string]: any | FieldValue } = {
-    ...rest
+    ...dataToUpdate
   }
 
-  if (!subcategory || subcategory.value === 'Nenhuma') {
+  if (
+    !dataToUpdate.subcategory ||
+    dataToUpdate.subcategory.value === 'Nenhuma'
+  ) {
     updatePayload.subcategory = deleteField()
-  } else {
-    updatePayload.subcategory = subcategory
   }
 
-  // Executa a atualização no Firestore
   await updateDoc(docRef, updatePayload)
 }
