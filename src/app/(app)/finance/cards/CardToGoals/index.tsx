@@ -14,16 +14,10 @@ import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanning
 import { ISaveGoalProps, IGoalsProps } from '@/services/finance/goals'
 import { useGoals, useSaveGoal } from '@/hooks/finance'
 import { PencilSimpleLine, Plus } from '@phosphor-icons/react'
-import {
-  calcularPrevisaoComExtrasEDeducoes,
-  calcularMesesRestantes,
-  calcularValorGuardadoMes,
-  GOAL_TARGET,
-  GOAL_DEADLINE,
-  GOAL_INTEREST_RATE
-} from './utils'
 import { MetaInfo, ProgressBar, ResumoInfo, GoalsList } from './parts'
 import GoalsModal from './GoalsModal'
+import { calculateProjection } from '@/utils/calculateFinancialProjection'
+import { GOAL_DEADLINE, GOAL_TARGET, GOAL_INTEREST_RATE } from '../utils'
 
 interface CardToGoalsProps {
   investimentsData: IInvestimentsData | undefined
@@ -43,6 +37,7 @@ const CardToGoals = ({
     undefined
   )
   const currency = userData.primary_currency
+
   const handleOpenModal = (goal?: IGoalsProps) => {
     setSelectedGoal(goal)
     onOpen()
@@ -60,58 +55,41 @@ const CardToGoals = ({
     } catch (error) {
       console.error('Error saving goal:', error)
     }
-  } // Previsão
+  }
+
   const valorAtual = investimentsData?.patrimonioTotal ?? 18000
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
-  const mesesRestantes = calcularMesesRestantes(goalDeadline)
-  const valorGuardadoMes = calcularValorGuardadoMes(
-    financialPlanningYear,
-    goalDeadline
-  )
+  const targetValue = goal?.meta_value_to_year || GOAL_TARGET
 
-  // Função para formatar mês/ano no formato MM/YYYY
+  const projectionResults = calculateProjection({
+    principal: valorAtual,
+    annualRate: GOAL_INTEREST_RATE,
+    goalDate: goalDeadline,
+    financialPlanningYear: financialPlanningYear || []
+  })
+
+  // 2. Extração dos resultados principais
+  const finalProjection =
+    projectionResults.length > 0
+      ? projectionResults[projectionResults.length - 1]
+      : null
+
+  const previsao = finalProjection?.endValue ?? valorAtual
+  const totalAportado = finalProjection?.totalInvested ?? valorAtual
+  const totalJuros = finalProjection?.interestGenerated ?? 0
+  const diferenca = previsao - targetValue
+
+  const valorGuardadoMes =
+    projectionResults[0]?.contributionDetails.monthly || 0
+
   const formatMonthYear = (metaYear: { year: number; month: number }) => {
-    const month = String(metaYear.month + 1).padStart(2, '0') // +1 porque JavaScript months são 0-based
+    const month = String(metaYear.month).padStart(2, '0')
     return `${month}/${metaYear.year}`
   }
 
-  // Previsão considerando aportes extras e deduções
-  const previsao = calcularPrevisaoComExtrasEDeducoes(
-    financialPlanningYear,
-    goalDeadline,
-    GOAL_INTEREST_RATE,
-    valorAtual
-  )
-
-  const targetValue = goal?.meta_value_to_year || GOAL_TARGET
-  const diferenca = previsao - targetValue
-
-  // Calcular total aportado (sem juros)
-  let totalAportado = valorAtual
-  if (financialPlanningYear && financialPlanningYear.length > 0) {
-    const hoje = new Date()
-    const anoAtual = hoje.getFullYear()
-    const mesAtual = hoje.getMonth() // 0-indexed
-    const anoAlvo = goalDeadline.year
-    const mesAlvo = goalDeadline.month
-    for (let ano = anoAtual; ano <= anoAlvo; ano++) {
-      const planning = financialPlanningYear.find((y) => Number(y.year) === ano)
-      if (!planning) continue
-      let mesesNoAno = 12
-      if (ano === anoAtual) {
-        mesesNoAno = (ano === anoAlvo ? mesAlvo : 11) - mesAtual + 1
-      } else if (ano === anoAlvo) {
-        mesesNoAno = mesAlvo + 1
-      }
-      const mensal = Number(planning.monthlyContributions)
-      const extra = Number(planning.receivables || 0)
-      const deducao = Number(planning.deduction || 0)
-      totalAportado += mesesNoAno * mensal + extra - deducao
-    }
-  }
-  const totalJuros = Math.max(previsao - totalAportado, 0)
   const percentualAtual = Math.min((valorAtual / targetValue) * 100, 100)
   const percentualPrevisto = Math.min((previsao / targetValue) * 100, 100)
+
   const goalItems = [
     {
       name: 'Renda fixa',
@@ -135,13 +113,13 @@ const CardToGoals = ({
 
   const metaInfo = [
     {
-      label: `Meta ${goal?.meta_year ? formatMonthYear(goal.meta_year) : formatMonthYear(GOAL_DEADLINE)}:`,
+      label: `Meta ${formatMonthYear(goalDeadline)}:`,
       value: formatCurrencyMoney(targetValue, currency, isVisibilityData),
       valueClass: 'text-md font-bold text-white',
       key: 'meta'
     },
     {
-      label: `Previsão até ${goal?.meta_year ? formatMonthYear(goal.meta_year) : formatMonthYear(GOAL_DEADLINE)}:`,
+      label: `Previsão até ${formatMonthYear(goalDeadline)}:`,
       value: formatCurrencyMoney(previsao, currency, isVisibilityData),
       valueClass: 'text-sm font-bold',
       valueStyle: { color: previsao >= targetValue ? '#22c55e' : '#f87171' },
@@ -201,7 +179,7 @@ const CardToGoals = ({
         />
         <ResumoInfo
           valorGuardadoMes={valorGuardadoMes}
-          mesesRestantes={mesesRestantes}
+          mesesRestantes={finalProjection?.monthsRemaining}
           GOAL_INTEREST_RATE={GOAL_INTEREST_RATE}
           currency={currency}
           isVisibilityData={isVisibilityData}

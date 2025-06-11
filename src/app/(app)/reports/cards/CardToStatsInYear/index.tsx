@@ -10,9 +10,9 @@ import {
 } from '@phosphor-icons/react'
 import { useFetchFinancialPlaningYear, useGoals } from '@/hooks/finance'
 import {
-  calcularValorGuardadoMes,
-  GOAL_DEADLINE
-} from '@/app/(app)/finance/cards/CardToGoals/utils'
+  GOAL_DEADLINE,
+  calcularValorGuardadoMes
+} from '@/app/(app)/finance/cards/utils'
 
 interface CardToStatsInYearProps {
   selectedDate: Date

@@ -10,7 +10,8 @@ import {
   CardToGoals,
   CardToInvestments,
   CardToPatrimony,
-  CardToEmergencyReserveMonths
+  CardToEmergencyReserveMonths,
+  CardProjecao
 } from './cards'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 
@@ -76,6 +77,13 @@ const Finance = () => {
         <CardToFinanceYaer
           financialPlanningYear={financialPlanningYear}
           isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
+        />
+      </div>
+      <div className="w-full lg:w-[60%]">
+        <CardProjecao
+          financialPlanningYear={financialPlanningYear}
+          investimentsData={investimentsData}
+          isLoadingInvestimentsData={isLoadingInvestimentsData}
         />
       </div>
     </div>

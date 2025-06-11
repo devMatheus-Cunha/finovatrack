@@ -2,7 +2,7 @@ import React from 'react'
 
 interface ResumoInfoProps {
   valorGuardadoMes: number
-  mesesRestantes: number
+  mesesRestantes?: number
   GOAL_INTEREST_RATE: number
   currency: string
   isVisibilityData: boolean
@@ -34,7 +34,7 @@ const ResumoInfo: React.FC<ResumoInfoProps> = ({
     </div>
     <div className="flex flex-col items-center">
       <span className="font-medium">Juros estimado</span>
-      <span>{(GOAL_INTEREST_RATE * 100).toFixed(1)}% a.a.</span>
+      <span>{GOAL_INTEREST_RATE.toFixed(1)}% a.a.</span>
     </div>
   </div>
 )

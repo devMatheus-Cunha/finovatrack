@@ -17,8 +17,6 @@ interface AccordionPanelProps {
   year: string
 }
 
-const MONTHS_IN_YEAR = 12
-
 export function monthsLeftUntilEndOfYear() {
   const currentDate = new Date()
   const currentMonth = currentDate.getMonth()
@@ -34,11 +32,6 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
 }) => {
   const yearContributions =
     Number(data.periodContributions) * Number(data.monthlyContributions)
-  const contributedMonths = MONTHS_IN_YEAR - Number(data.periodContributions)
-  const fixedContribution =
-    contributedMonths * Number(data.monthlyContributions)
-  const totalFixedAndExtraContribution =
-    fixedContribution + Number(data.receivables)
 
   const reserveAmount = currentAndPreviousYearValidity(data.year)
     ? data.reserve
@@ -115,7 +108,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
           )}
         </p>
       </div>
-      <div className="w-max">
+      {/* <div className="w-max">
         <h3 className="text-sm font-semibold">Total Contrib</h3>
         <p className="text-md">
           {formatCurrencyMoney(
@@ -124,7 +117,7 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
             isVisibilityData
           )}
         </p>
-      </div>
+      </div> */}
       <div className="w-max">
         <h3 className="text-sm font-semibold">Dedução</h3>
         <p className="text-md">
