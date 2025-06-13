@@ -38,35 +38,62 @@ export interface IGetAllPies {
 export interface TransactionListProps {
   type: string
   amount: number
-  reference: string
+  reference?: string // Tornando opcional, pois não usamos
   dateTime: string
 }
 
 export interface IInvestimentsData {
-  totalListaData: TransactionListProps[]
-  totalJurosValorLivre: {
-    atual: number
-    antigo: number
+  patrimonio: {
+    total: number
+    reservaExterna: number
+    totalNaCorretora: number
   }
-  totalNaoInvestido: number
-  reserva?: number
-  totalPortifolioTranding: number
-  totalInvestido: number
-  investEValorizacao: number
-  totalDividendos: number
-  porcValorizacaoInv: number
-  lucroTotal: number
-  porcLucroTotal: number
-  valorValorizacaoInvest: number
-  totalValoriEJuros: number
-  patrimonioTotal: number
+  composicaoPortfolio: {
+    valorInvestido: number
+    valorNaoInvestido: number
+    valorizacaoAtual: number
+    totalInvestidoComValorizacao: number
+  }
+  rendimentos: {
+    lucroTotal: number
+    porcentagemLucroTotal: number
+    detalhes: {
+      jurosSobreCaixa: {
+        totalRecebido: number
+        taxaAnual: number
+        rendimentoHistoricoPercentual: number
+      }
+      valorizacaoInvestimentos: {
+        valor: number
+        porcentagem: number
+      }
+      dividendos: {
+        totalRecebido: number
+        // NOVOS CAMPOS ADICIONADOS DA API:
+        reinvestidos: number // Total de dividendos que foram reinvestidos automaticamente
+        recebidosEmCaixa: number // Total de dividendos que caíram como dinheiro livre
+      }
+    }
+  }
+  projecoes: {
+    jurosSobreCaixa: {
+      projecaoDiaria: number
+      projecaoMensal: number
+      projecaoAnual: number
+    }
+    dividendos: {
+      projecaoAnualEstimada: number
+      yieldHistorico: number
+    }
+  }
+  dadosBrutos: {
+    transacoesRecentes: TransactionListProps[]
+  }
 }
-
 export const useFetchInvestiments = () => {
   const { userData } = useUserData()
   const { financialPlanningActualYear } = useFetchFinancialPlaningYear()
 
-  // Corrige o tipo de reserve para number
   const reserveNumber = financialPlanningActualYear?.reserve
     ? Number(financialPlanningActualYear.reserve)
     : 0

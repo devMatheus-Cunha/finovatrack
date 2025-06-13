@@ -18,7 +18,7 @@ export default function Logo({
   return (
     <h1 className={`font-bold text-white ${fontSizeClass}`}>
       Finova
-      <span className="text-cyan-600">Tranck</span>
+      <span className="text-blue-600">Tranck</span>
     </h1>
   )
 }

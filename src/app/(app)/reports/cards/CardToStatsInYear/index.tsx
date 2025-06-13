@@ -62,13 +62,13 @@ const CardToStatsInYear = ({
       label: 'Total Livre',
       value: reportDataToYear?.totalFree,
       icon: MoneyWavy,
-      iconColor: 'cyan'
+      iconColor: 'blue'
     },
     {
       label: 'Total Investido',
       value: reportDataToYear?.totalInvestments,
       icon: Bank,
-      iconColor: 'cyan',
+      iconColor: 'blue',
       percentageInfo: `${investmentPercentage}%`,
       valorGuardadoMes: valorGuardadoMes
     }

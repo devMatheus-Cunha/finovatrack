@@ -68,7 +68,7 @@ function InfoCardMoney({
               {infoAction && showEyeIcon && (
                 <Button
                   variant="ghost"
-                  className="text-cyan-500 hover:text-cyan-600 p-0 ml-1"
+                  className="text-blue-500 hover:text-blue-600 p-0 ml-1"
                   onClick={(
                     e?: React.MouseEvent<HTMLButtonElement, MouseEvent>
                   ) => {

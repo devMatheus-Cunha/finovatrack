@@ -32,7 +32,7 @@ const Finance = () => {
   return (
     <div className="flex flex-col gap-2 h-[95vh] w-full px-2 lg:px-0 ">
       <div className="flex flex-col lg:flex-row gap-2">
-        <div className="w-full lg:w-[45%] flex flex-col gap-2">
+        <div className="w-full lg:w-[55%] flex flex-col gap-2">
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="w-full sm:w-[65%]">
               <CardToPatrimony
@@ -45,7 +45,9 @@ const Finance = () => {
                 isLoading={
                   isLoadingInvestimentsData || isLoadingReportDataToYear
                 }
-                valorReservaEmergencia={investimentsData?.reserva}
+                valorReservaEmergencia={
+                  investimentsData?.patrimonio?.reservaExterna
+                }
                 mediaGastoMensalTotal={reportDataToYear?.mediaExpenses}
               />
             </div>
@@ -66,10 +68,6 @@ const Finance = () => {
             isLoadingAllPies={isLoadingInvestimentsData}
             refetchInvestimentsData={refetchInvestimentsData}
           />
-          <CardToGoals
-            investimentsData={investimentsData}
-            financialPlanningYear={financialPlanningYear}
-          />
         </div>
       </div>
 
@@ -79,11 +77,15 @@ const Finance = () => {
           isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
         />
       </div>
-      <div className="w-full lg:w-[60%]">
+      <div className="flex w-full gap-2 flex-col md:flex-row lg:flex-col xl:flex-row">
         <CardProjecao
           financialPlanningYear={financialPlanningYear}
           investimentsData={investimentsData}
           isLoadingInvestimentsData={isLoadingInvestimentsData}
+        />
+        <CardToGoals
+          investimentsData={investimentsData}
+          financialPlanningYear={financialPlanningYear}
         />
       </div>
     </div>

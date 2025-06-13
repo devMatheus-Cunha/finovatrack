@@ -57,7 +57,7 @@ const CardToGoals = ({
     }
   }
 
-  const valorAtual = investimentsData?.patrimonioTotal ?? 18000
+  const valorAtual = investimentsData?.patrimonio?.total ?? 18000
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
   const targetValue = goal?.meta_value_to_year || GOAL_TARGET
 
@@ -83,7 +83,7 @@ const CardToGoals = ({
     projectionResults[0]?.contributionDetails.monthly || 0
 
   const formatMonthYear = (metaYear: { year: number; month: number }) => {
-    const month = String(metaYear.month).padStart(2, '0')
+    const month = String(metaYear.month + 1).padStart(2, '0')
     return `${month}/${metaYear.year}`
   }
 
@@ -93,19 +93,19 @@ const CardToGoals = ({
   const goalItems = [
     {
       name: 'Renda fixa',
-      current: investimentsData?.totalNaoInvestido ?? 0,
+      current: investimentsData?.patrimonio?.totalNaCorretora ?? 0,
       target: goal?.meta_renda_fixa || 30000,
       color: blueShades.blue700
     },
     {
       name: 'Investimentos',
-      current: investimentsData?.totalInvestido ?? 0,
+      current: investimentsData?.composicaoPortfolio?.valorInvestido ?? 0,
       target: goal?.meta_investimentos || 6000,
       color: blueShades.blue300
     },
     {
       name: 'Reserva',
-      current: investimentsData?.reserva ?? 0,
+      current: investimentsData?.patrimonio?.reservaExterna ?? 0,
       target: goal?.meta_reserva || 6000,
       color: blueShades.blue600
     }
@@ -153,7 +153,7 @@ const CardToGoals = ({
   return (
     <Card
       title="Objetivos"
-      className="max-w-md h-[570px] flex flex-col gap-2"
+      className="w-full lg:w-[50%]  h-[570px] flex flex-col gap-2"
       isLoading={!investimentsData}
       action={() => handleOpenModal(goal)}
       actionIcon={

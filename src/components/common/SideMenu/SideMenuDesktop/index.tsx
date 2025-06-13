@@ -31,7 +31,7 @@ const SideMenuDesktop: React.FC<SideMenuDesktopProps> = ({
             const itemTextColor = item.disabled
               ? 'text-gray-500'
               : isActive
-                ? 'text-cyan-400'
+                ? 'text-blue-400'
                 : 'text-white'
 
             if (item.id === 'eye' || item.id === 'logout') {

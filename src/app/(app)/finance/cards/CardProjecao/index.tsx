@@ -17,7 +17,7 @@ export default function LongTermProjectionCard({
   isLoadingInvestimentsData: boolean
 }) {
   const initialCurrentValue = Number(
-    investimentsData?.patrimonioTotal.toFixed(2)
+    investimentsData?.patrimonio?.total.toFixed(2)
   )
 
   const { projectionData, summaryData } = useFinancialProjections(
@@ -29,7 +29,7 @@ export default function LongTermProjectionCard({
   return (
     <Card
       title=" Projeção de Longo Prazo"
-      className="w-full min-h-[433px]"
+      className="w-full lg:w-[50%] min-h-[433px]"
       hasData={!!investimentsData}
       isLoading={isLoadingInvestimentsData}
     >

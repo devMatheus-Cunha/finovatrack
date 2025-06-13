@@ -34,6 +34,5 @@ export async function getExpenses(idUser: string, filter: any) {
   querySnapshot.forEach((doc) => {
     docsArray.push({ id: doc.id, ...(doc.data() as any) } as any)
   })
-  console.log(docsArray)
   return docsArray
 }

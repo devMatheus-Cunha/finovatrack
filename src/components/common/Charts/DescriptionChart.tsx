@@ -41,7 +41,7 @@ const DescriptionChart = ({
               </span>
               {item.percentage && (
                 <span
-                  className={`text-sm mb-0 flex items-center gap-1 ${
+                  className={`text-xs mb-0 flex items-center gap- ${
                     item.value > 0 ? 'text-green-400' : 'text-red-400'
                   }`}
                 >

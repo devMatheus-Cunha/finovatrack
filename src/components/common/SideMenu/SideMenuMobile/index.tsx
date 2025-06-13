@@ -73,7 +73,7 @@ const SideMenuMobile: React.FC<{
                   <Button
                     key={item.id}
                     onClick={() => handleNavigation(item.route, item.action)}
-                    className={`w-full justify-start text-left ${pathname?.includes(item.route) ? 'text-cyan-500' : 'text-white'}`}
+                    className={`w-full justify-start text-left ${pathname?.includes(item.route) ? 'text-blue-500' : 'text-white'}`}
                     variant="ghost"
                     disabled={item.disabled}
                     leftIcon={

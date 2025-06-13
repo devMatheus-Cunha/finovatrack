@@ -14,7 +14,7 @@ function Loading({ children, loading }: LoadingProps) {
         <div className="flex h-screen w-full items-center justify-center">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-blue-500 animate-spin"></div>
-            <div className="absolute inset-2 rounded-full border-4 border-t-transparent border-cyan-500 animate-spin animation-delay-150"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-t-transparent border-blue-500 animate-spin animation-delay-150"></div>
           </div>
         </div>
       ) : (

@@ -144,7 +144,7 @@ const CardToStatsAndCategory = ({
           <button
             type="button"
             onClick={onEntrysModalOpen}
-            className="ml-2 text-cyan-400 hover:text-cyan-300 focus:outline-none transition-colors duration-200"
+            className="ml-2 text-blue-400 hover:text-blue-300 focus:outline-none transition-colors duration-200"
           >
             <Eye size={18} />
           </button>
@@ -226,7 +226,7 @@ const CardToStatsAndCategory = ({
                             <button
                               type="button"
                               onClick={() => setSelectedCategory(item)}
-                              className="ml-2 text-cyan-400 hover:text-cyan-300 focus:outline-none transition-colors duration-200"
+                              className="ml-2 text-blue-400 hover:text-blue-300 focus:outline-none transition-colors duration-200"
                             >
                               <Eye size={18} />
                             </button>

@@ -34,13 +34,13 @@ export const SummaryTable: FC<{ data: SummaryDataPoint[] | null }> = ({
               className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors"
             >
               <td className="py-3 px-4 font-semibold">{item.name}</td>
-              <td className="py-3 px-4 text-cyan-400 font-mono">
+              <td className="py-3 px-4 text-blue-400 font-mono">
                 {formatCurrency(item.projection)}
               </td>
-              <td className="py-3 px-4 text-amber-400 font-mono">
+              <td className="py-3 px-4 text-orange-400 font-mono">
                 {formatCurrency(item.totalInvested)}
               </td>
-              <td className="py-3 px-4 text-emerald-400 font-mono">
+              <td className="py-3 px-4 text-green-400 font-mono">
                 {formatCurrency(item.interestGenerated)}
               </td>
             </tr>

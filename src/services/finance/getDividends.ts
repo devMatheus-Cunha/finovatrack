@@ -1,4 +1,3 @@
-import { fakeDividends } from './fakeData'
 import {
   IDividendProps,
   IDividendsProps
@@ -23,11 +22,6 @@ export const getDividendData = async (
   userId: string,
   size?: number
 ): Promise<IDividendsProps> => {
-  const mainUserId = process.env.NEXT_PUBLIC_USER_ID
-  if (userId !== mainUserId) {
-    return size ? fakeDividends.slice(0, size) : fakeDividends
-  }
-
   let query = doc(db, 'users', userId, 'finance', 'dividends')
 
   if (size) {

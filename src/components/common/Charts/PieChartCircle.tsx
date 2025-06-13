@@ -128,18 +128,17 @@ const PieChartCircle = ({
         )}
       </div>
       {showDescription && (
-        <div className="flex gap-1 w-full">
+        <div className="flex w-fit gap-4 flex-wrap ">
           {slices.map((slice, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-2 text-xs text-gray-300"
-            >
+            <div key={idx} className="flex items-center gap-2 text-sm">
               <span
                 className="inline-block w-3 h-3 rounded-full"
                 style={{ background: slice.color }}
               ></span>
+              <span className="text-gray-300 font-semibold">
+                {slice.label}:
+              </span>
               <span className="font-bold text-white">
-                {slice.label}:{' '}
                 {formatCurrencyMoney(slice.value, currency, isVisibilityData)}
               </span>
             </div>

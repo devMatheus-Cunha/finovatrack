@@ -47,7 +47,7 @@ export const generateCardsData = ({
         entrysData?.length > 0 ? (
           <Eye
             size={20}
-            className="text-cyan-400 cursor-pointer ml-1"
+            className="text-blue-400 cursor-pointer ml-1"
             onClick={onOpenTotalEntrys}
           />
         ) : null
@@ -59,7 +59,7 @@ export const generateCardsData = ({
             infoAction,
             isVisibilityData,
             icon: Wallet,
-            iconColor: 'cyan',
+            iconColor: 'blue',
             currency: userData.secondary_currency,
             title: `Gastos ${userData.secondary_currency}`
           }
@@ -80,7 +80,7 @@ export const generateCardsData = ({
         (investments?.totalInvestments || 0),
       currency: userData.primary_currency,
       icon: MoneyWavy,
-      iconColor: 'cyan',
+      iconColor: 'blue',
       title: 'Livre',
       isVisibilityData
     },
@@ -88,7 +88,7 @@ export const generateCardsData = ({
       infoData: investments?.totalInvestments,
       currency: userData.primary_currency,
       icon: Bank,
-      iconColor: 'cyan',
+      iconColor: 'blue',
       title: 'Investimentos',
       isVisibilityData
     }

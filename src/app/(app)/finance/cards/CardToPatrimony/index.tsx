@@ -24,17 +24,17 @@ const CardToPatrimony = ({
   const levels = [
     {
       label: 'Reserva',
-      value: investments?.reserva || 0,
+      value: investments?.patrimonio?.reservaExterna || 0,
       color: blueShades.blue600
     },
     {
       label: 'Investimentos',
-      value: investments?.investEValorizacao || 0,
+      value: investments?.composicaoPortfolio?.valorInvestido || 0,
       color: blueShades.blue700
     },
     {
       label: 'Livre',
-      value: investments?.totalNaoInvestido || 0,
+      value: investments?.composicaoPortfolio.valorNaoInvestido || 0,
       color: blueShades.blue800
     }
   ]
@@ -50,11 +50,7 @@ const CardToPatrimony = ({
       <div className="mb-2 flex flex-col items-center">
         <span className="text-xs text-gray-400">Património Total</span>
         <span className="text-lg font-bold text-white tracking-tight bg-gray-700 rounded px-2 py-0.5 shadow-sm">
-          {formatCurrencyMoney(
-            patrimonioTotal,
-            currency,
-            isVisibilityData
-          )}
+          {formatCurrencyMoney(patrimonioTotal, currency, isVisibilityData)}
         </span>
       </div>
       <div className="flex w-full h-3 rounded overflow-hidden bg-gray-600">
