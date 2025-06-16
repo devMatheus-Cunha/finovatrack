@@ -35,6 +35,11 @@ const CardToTableExpenses = ({ selectedDate }: CardToTableExpensesProps) => {
       {
         header: 'Categoria',
         field: 'category'
+      },
+      {
+        header: 'Subcategoria',
+        field: 'subcategory',
+        modifier: (_: string, obj: any) => obj.subcategory.label
       }
     ]
 

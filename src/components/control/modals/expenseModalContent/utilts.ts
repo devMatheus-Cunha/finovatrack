@@ -235,7 +235,6 @@ export const categoryOptions: CategoryWithSubcategories[] = [
       }
     ]
   },
-  // --- NOVA CATEGORIA ADICIONADA PARA METAS ---
   {
     label: 'Metas e Objetivos',
     value: 'Metas e Objetivos',
@@ -279,24 +278,17 @@ export const categoryOptions: CategoryWithSubcategories[] = [
         category: 'Investimentos e Finanças'
       },
       {
-        label: 'Pagamento de Empréstimos',
-        value: 'Pagamento de Empréstimos',
+        label: 'Aporte Extra (sobras do mês)',
+        value: 'Aporte Extra (sobras do mês)',
         category: 'Investimentos e Finanças'
       },
       {
-        label: 'Pagamento de Fatura do Cartão',
-        value: 'Pagamento de Fatura do Cartão',
-        category: 'Investimentos e Finanças'
-      },
-      {
-        label: 'Previdência Privada',
-        value: 'Previdência Privada',
+        label: 'Juros e Rendimentos',
+        value: 'Juros e Rendimentos',
         category: 'Investimentos e Finanças'
       }
     ]
-  },
-  // A CATEGORIA "OUTROS GASTOS" FOI REMOVIDA
-  { label: 'Salário e Rendas', value: 'Salário e Rendas' } // Categoria para entradas de dinheiro
+  }
 ]
 
 export const paymentsOptions = [
