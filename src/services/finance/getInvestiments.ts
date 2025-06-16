@@ -1,7 +1,7 @@
 import {
   IInvestimentsData,
   IGetAllPies,
-  IInvestmentsProps,
+  IInvestimentsData,
   TransactionListProps
 } from '@/hooks/finance/useFetchInvestiments'
 import { doc, setDoc, getDoc } from '@firebase/firestore'
@@ -57,7 +57,7 @@ export const getCombinedData = async (
     }
 
     const apiInvestmentsData =
-      (await investmentsResponse.json()) as IInvestmentsProps
+      (await investmentsResponse.json()) as IInvestimentsData
     const piesData = (await piesResponse.json()) as IGetAllPies[]
     const apiTransactionList = await transactionListResponse.json()
     const transactionListData =

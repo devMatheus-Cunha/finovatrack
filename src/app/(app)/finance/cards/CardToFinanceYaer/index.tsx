@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { IInvestmentsProps } from '@/hooks/finance/useFetchInvestiments'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 import {
   currentAndPreviousYearValidity,
@@ -14,7 +14,7 @@ import { Accordion, AccordionFinanceYear, Card, Modal } from '@/components'
 import ModalContent from './ModalContent'
 
 interface CardToFinanceYaerProps {
-  investimentsData?: IInvestmentsProps
+  investimentsData?: IInvestimentsData
   isLoadingInvestimentsData?: boolean
   financialPlanningYear?: IFinancialPlanningProps[]
 }
