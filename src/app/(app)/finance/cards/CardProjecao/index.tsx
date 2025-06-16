@@ -13,7 +13,7 @@ export default function LongTermProjectionCard({
   isLoadingInvestimentsData
 }: {
   financialPlanningYear: IFinancialPlanningProps[] | undefined
-  investimentsData: IInvestimentsData
+  investimentsData?: IInvestimentsData
   isLoadingInvestimentsData: boolean
 }) {
   const initialCurrentValue = Number(

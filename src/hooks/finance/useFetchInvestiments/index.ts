@@ -11,17 +11,6 @@ import { useFetchFinancialPlaningYear } from '@/hooks/finance/useFetchFinancialP
 // == TIPAGENS DA API (Sem alterações) ==
 // ============================================================================
 
-/** Dados brutos da API sobre o caixa da conta */
-export interface IInvestmentsProps {
-  blocked: number
-  free: number
-  invested: number
-  pieCash: number
-  ppl: number
-  result: number
-  total: number
-}
-
 /** Dados brutos da API sobre as 'Pies' (carteiras) */
 export interface IGetAllPies {
   id: number
