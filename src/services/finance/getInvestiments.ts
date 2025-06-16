@@ -7,17 +7,26 @@ import {
 import { doc, setDoc, getDoc } from '@firebase/firestore'
 import { db } from '../firebase'
 
+// Função auxiliar para calcular a diferença de dias entre duas datas
+const diffInDays = (date1: Date, date2: Date): number => {
+  const diffTime = Math.abs(date2.getTime() - date1.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  return diffDays > 0 ? diffDays : 1
+}
+
 export const getCombinedData = async (
-  investimentsData: IInvestimentsData | any, // Usando 'any' para aceitar o formato antigo e novo durante a transição
+  investimentsData: IInvestimentsData | any,
   reserve?: number
-): Promise<any> => {
+): Promise<IInvestimentsData | undefined> => {
   const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
   }
 
   try {
-    // --- 1. BUSCA DE DADOS NA API ---
+    // ============================================================================
+    // == 1. BUSCA E VALIDAÇÃO DOS DADOS DA API
+    // ============================================================================
     const [investmentsResponse, piesResponse, transactionListResponse] =
       await Promise.all([
         fetch(
@@ -54,64 +63,101 @@ export const getCombinedData = async (
     const transactionListData =
       apiTransactionList.items as TransactionListProps[]
 
-    // --- 2. CÁLCULOS PRINCIPAIS ---
-
+    // ============================================================================
+    // == 2. EXTRAÇÃO E DEFINIÇÃO DAS VARIÁVEIS BASE
+    // ============================================================================
     const totalPortfolio = apiInvestmentsData?.total || 0
     const valorInvestido = apiInvestmentsData?.invested || 0
     const valorNaoInvestido = apiInvestmentsData?.free || 0
     const valorizacaoInvestimentos = apiInvestmentsData?.ppl || 0
-    const totalDividendos = (piesData[0]?.dividendDetails?.gained || 0) + 0.37
+    const totalDividendos = (piesData[0]?.dividendDetails?.gained || 0) + 0.65
 
-    // --- CÁLCULO DE JUROS CORRIGIDO E SEGURO ---
+    // ============================================================================
+    // == 3. CÁLCULO DE NOVOS JUROS ACUMULADOS (LÓGICA FINAL)
+    // ============================================================================
     const jurosAnteriores =
       investimentsData?.rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido ||
-      investimentsData?.totalJurosValorLivre?.atual ||
       0
 
-    const transacoesAnteriores = new Set(
+    const transacoesAnterioresRefs = new Set(
       investimentsData?.dadosBrutos?.transacoesRecentes.map(
-        (t: any) => t.dateTime
+        (t: TransactionListProps) => t.reference
       ) || []
     )
 
     const novasTransacoes = transactionListData.filter(
-      (t) => !transacoesAnteriores.has(t.dateTime)
+      (t) => !transacoesAnterioresRefs.has(t.reference)
     )
 
-    // Filtra as novas transações para pegar APENAS as que são de juros.
+    // Filtra as novas transações para pegar APENAS as que são de juros,
+    // seguindo as suas novas regras.
     const novasTransacoesDeJuros = novasTransacoes.filter(
-      (t) => t.type === 'Interest'
+      (t) => t.type === 'Interest' || (t.type === 'DEPOSIT' && t.amount < 2)
     )
 
-    // A soma agora usa a lista filtrada, contendo apenas os juros.
+    // A soma agora usa a lista filtrada corretamente.
     const totalJurosRecebidos = novasTransacoesDeJuros.reduce(
       (soma, transacao) => soma + transacao.amount,
       jurosAnteriores
     )
 
+    // ============================================================================
+    // == 4. CÁLCULO DE RENDIMENTOS E PERFORMANCE HISTÓRICA
+    // ============================================================================
     const lucroTotal =
       valorizacaoInvestimentos + totalDividendos + totalJurosRecebidos
 
-    console.log(lucroTotal)
     const porcLucroTotal = totalPortfolio
       ? (lucroTotal / totalPortfolio) * 100
       : 0
-    const porcValorizacaoInv = valorInvestido
+    const porcValorizacaoSobreInvestido = valorInvestido
       ? (valorizacaoInvestimentos / valorInvestido) * 100
       : 0
-    const rendimentoHistoricoJuros = totalPortfolio
-      ? (totalJurosRecebidos / totalPortfolio) * 100
+    const porcDividendosSobreInvestido = valorInvestido
+      ? (totalDividendos / valorInvestido) * 100
+      : 0
+    const porcJurosSobreCaixaLivre = valorNaoInvestido
+      ? (totalJurosRecebidos / valorNaoInvestido) * 100
       : 0
 
-    // --- 4. CÁLCULOS PARA PROJEÇÕES ---
-    const taxaJurosAnual = 2.2
-    const projecaoAnualJuros = valorNaoInvestido * (taxaJurosAnual / 100)
+    // ============================================================================
+    // == 5. CÁLCULO DE PROJEÇÕES FUTURAS
+    // ============================================================================
+    const hoje = new Date()
+    const fimDoAno = new Date(hoje.getFullYear(), 11, 31)
+    // Taxas ajustadas para a realidade
+    const taxaAtual = 2.37
+    const taxaFutura = 2.2
+    const dataMudancaTaxa = new Date(hoje.getFullYear(), 5, 16) // 16 de Junho
+
+    let ganhosFuturosDeJuros = 0
+    if (hoje < dataMudancaTaxa) {
+      const diasComTaxaAtual = diffInDays(hoje, dataMudancaTaxa)
+      ganhosFuturosDeJuros +=
+        diasComTaxaAtual * (valorNaoInvestido * (taxaAtual / 100 / 365))
+      const diasComTaxaFutura = diffInDays(dataMudancaTaxa, fimDoAno)
+      ganhosFuturosDeJuros +=
+        diasComTaxaFutura * (valorNaoInvestido * (taxaFutura / 100 / 365))
+    } else {
+      const diasRestantes = diffInDays(hoje, fimDoAno)
+      ganhosFuturosDeJuros =
+        diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
+    }
+
+    // Projeção final usa o novo 'totalJurosRecebidos' como base
+    const projecaoJurosFimDeAno = totalJurosRecebidos + ganhosFuturosDeJuros
+    const projecaoDiariaDeJurosAtual =
+      valorNaoInvestido *
+      ((hoje < dataMudancaTaxa ? taxaAtual : taxaFutura) / 100 / 365)
+
     const dividendYieldHistorico = valorInvestido
       ? totalDividendos / valorInvestido
       : 0
     const projecaoAnualDividendos = valorInvestido * dividendYieldHistorico
 
-    // --- 5. MONTAGEM DO OBJETO DE RETORNO FINAL ---
+    // ============================================================================
+    // == 6. MONTAGEM DO OBJETO DE RETORNO FINAL
+    // ============================================================================
     return {
       patrimonio: {
         total: parseFloat((totalPortfolio + (reserve || 0)).toFixed(2)),
@@ -132,14 +178,14 @@ export const getCombinedData = async (
         detalhes: {
           jurosSobreCaixa: {
             totalRecebido: parseFloat(totalJurosRecebidos.toFixed(2)),
-            taxaAnual: taxaJurosAnual,
+            taxaAnual: hoje < dataMudancaTaxa ? taxaAtual : taxaFutura,
             rendimentoHistoricoPercentual: parseFloat(
-              rendimentoHistoricoJuros.toFixed(2)
+              porcJurosSobreCaixaLivre.toFixed(2)
             )
           },
           valorizacaoInvestimentos: {
             valor: parseFloat(valorizacaoInvestimentos.toFixed(2)),
-            porcentagem: parseFloat(porcValorizacaoInv.toFixed(2))
+            porcentagem: parseFloat(porcValorizacaoSobreInvestido.toFixed(2))
           },
           dividendos: {
             totalRecebido: parseFloat(totalDividendos.toFixed(2)),
@@ -148,15 +194,20 @@ export const getCombinedData = async (
             ),
             recebidosEmCaixa: parseFloat(
               (piesData[0]?.dividendDetails?.inCash || 0).toFixed(2)
+            ),
+            porcentagemSobreTotal: parseFloat(
+              porcDividendosSobreInvestido.toFixed(2)
             )
           }
         }
       },
       projecoes: {
         jurosSobreCaixa: {
-          projecaoDiaria: parseFloat((projecaoAnualJuros / 365).toFixed(4)),
-          projecaoMensal: parseFloat((projecaoAnualJuros / 12).toFixed(2)),
-          projecaoAnual: parseFloat(projecaoAnualJuros.toFixed(2))
+          projecaoDiaria: parseFloat(projecaoDiariaDeJurosAtual.toFixed(4)),
+          projecaoAnual: parseFloat(projecaoJurosFimDeAno.toFixed(2)),
+          projecaoMensal: parseFloat(
+            (projecaoDiariaDeJurosAtual * 30).toFixed(2)
+          )
         },
         dividendos: {
           projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2)),

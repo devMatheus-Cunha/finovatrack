@@ -99,7 +99,9 @@ const CardToGoals = ({
     },
     {
       name: 'Investimentos',
-      current: investimentsData?.composicaoPortfolio?.valorInvestido ?? 0,
+      current:
+        investimentsData?.composicaoPortfolio?.totalInvestidoComValorizacao ??
+        0,
       target: goal?.meta_investimentos || 6000,
       color: blueShades.blue300
     },

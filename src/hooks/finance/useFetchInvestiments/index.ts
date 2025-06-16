@@ -7,6 +7,11 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { useFetchFinancialPlaningYear } from '@/hooks/finance/useFetchFinancialPlaningYear'
 
+// ============================================================================
+// == TIPAGENS DA API (Sem alterações) ==
+// ============================================================================
+
+/** Dados brutos da API sobre o caixa da conta */
 export interface IInvestmentsProps {
   blocked: number
   free: number
@@ -17,6 +22,7 @@ export interface IInvestmentsProps {
   total: number
 }
 
+/** Dados brutos da API sobre as 'Pies' (carteiras) */
 export interface IGetAllPies {
   id: number
   cash: number
@@ -35,13 +41,17 @@ export interface IGetAllPies {
   status: null
 }
 
+/** Dados de uma única transação da API */
 export interface TransactionListProps {
   type: string
   amount: number
-  reference?: string // Tornando opcional, pois não usamos
+  reference?: string
   dateTime: string
 }
 
+// ============================================================================
+// == INTERFACE PRINCIPAL DOS DADOS PROCESSADOS (Sem alterações) ==
+// ============================================================================
 export interface IInvestimentsData {
   patrimonio: {
     total: number
@@ -69,9 +79,9 @@ export interface IInvestimentsData {
       }
       dividendos: {
         totalRecebido: number
-        // NOVOS CAMPOS ADICIONADOS DA API:
-        reinvestidos: number // Total de dividendos que foram reinvestidos automaticamente
-        recebidosEmCaixa: number // Total de dividendos que caíram como dinheiro livre
+        porcentagemSobreTotal: number
+        reinvestidos: number
+        recebidosEmCaixa: number
       }
     }
   }
@@ -90,6 +100,16 @@ export interface IInvestimentsData {
     transacoesRecentes: TransactionListProps[]
   }
 }
+
+// ============================================================================
+// == HOOK OTIMIZADO ==
+// ============================================================================
+
+/**
+ * Hook customizado para buscar, processar e gerenciar os dados de investimentos.
+ * Ele busca os dados do Firestore, permite o recarregamento manual
+ * e atualiza os dados automaticamente em segundo plano.
+ */
 export const useFetchInvestiments = () => {
   const { userData } = useUserData()
   const { financialPlanningActualYear } = useFetchFinancialPlaningYear()
@@ -106,24 +126,36 @@ export const useFetchInvestiments = () => {
   } = useQuery({
     queryKey: ['investiments_data', userData.id],
     queryFn: () => getInvestmentData(userData.id!),
-    enabled: !!userData.id // Removido o filtro por admin
+    enabled: !!userData.id,
+    // OTIMIZAÇÃO: Mantém os dados "frescos" por 5 minutos, evitando re-fetches desnecessários
+    staleTime: 1000 * 60 * 5, // 5 minutos
+    // OTIMIZAÇÃO: Atualiza os dados automaticamente a cada 5 minutos em segundo plano
+    refetchInterval: 1000 * 60 * 5
   })
 
+  /**
+   * Função para forçar uma atualização: busca os dados mais recentes da API,
+   * processa com getCombinedData, salva no Firestore e re-renderiza o componente.
+   */
   const refetchInvestimentsData = async () => {
     try {
       const investiments = await getCombinedData(
         investimentsDataRequestRaw,
         reserveNumber
       )
-      await updateOrCreateDoc(userData.id!, investiments)
-      refetch()
+      if (investiments) {
+        await updateOrCreateDoc(userData.id!, investiments)
+      }
+      refetch() // Re-busca os dados do Firestore para atualizar a UI
     } catch (error) {
       console.error('Error refetching investments:', error)
     }
   }
 
   const isLoading = isFetching || !isFetched
-  const investimentsData: IInvestimentsData = isLoading
+
+  // CORREÇÃO DE TIPAGEM: A constante agora aceita ser 'undefined' durante o carregamento.
+  const investimentsData: IInvestimentsData | undefined = isLoading
     ? undefined
     : investimentsDataRequestRaw
 

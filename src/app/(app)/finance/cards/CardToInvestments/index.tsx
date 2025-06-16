@@ -204,7 +204,7 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
     },
     {
       label: 'Aplicado',
-      value: composicaoPortfolio?.valorInvestido || 0,
+      value: composicaoPortfolio?.totalInvestidoComValorizacao || 0,
       color: blueHexShades.blue500
     },
     {
@@ -258,12 +258,16 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         label: 'Dividendos',
         value: rendimentos?.detalhes?.dividendos?.totalRecebido || 0,
         icon: iconMap['Dividendos'],
+        percentage: rendimentos.detalhes.dividendos.porcentagemSobreTotal || 0,
         subValue: `Reinvestidos: ${formatCurrencyMoney(rendimentos?.detalhes?.dividendos?.reinvestidos || 0)}`
       },
       {
         label: 'Juros',
         value: rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido || 0,
         icon: iconMap['Juros'],
+        percentage:
+          rendimentos.detalhes.jurosSobreCaixa.rendimentoHistoricoPercentual ||
+          0,
         subValue: `Taxa Atual: ${rendimentos?.detalhes?.jurosSobreCaixa?.taxaAnual || 0}%`
       }
     ],
