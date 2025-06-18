@@ -79,9 +79,12 @@ export interface IInvestimentsData {
       }
       dividendos: {
         totalRecebido: number
-        porcentagemSobreTotal: number
-        reinvestidos: number
-        recebidosEmCaixa: number
+        totalRecebidoUltimos12Meses: number
+        yieldAnualizado: number
+        distribuicaoPorAtivo: Array<{
+          ticker: string
+          valor: number
+        }>
       }
     }
   }
@@ -93,11 +96,11 @@ export interface IInvestimentsData {
     }
     dividendos: {
       projecaoAnualEstimada: number
-      yieldHistorico: number
     }
   }
   dadosBrutos: {
     transacoesRecentes: TransactionListProps[]
+    historicoDividendos: any[]
   }
 }
 

@@ -17,7 +17,12 @@ import { PencilSimpleLine, Plus } from '@phosphor-icons/react'
 import { MetaInfo, ProgressBar, ResumoInfo, GoalsList } from './parts'
 import GoalsModal from './GoalsModal'
 import { calculateProjection } from '@/utils/calculateFinancialProjection'
-import { GOAL_DEADLINE, GOAL_TARGET, GOAL_INTEREST_RATE } from '../utils'
+import {
+  GOAL_DEADLINE,
+  GOAL_TARGET,
+  GOAL_INTEREST_RATE,
+  calcularValorGuardadoMes
+} from '../utils'
 
 interface CardToGoalsProps {
   investimentsData: IInvestimentsData | undefined
@@ -79,8 +84,10 @@ const CardToGoals = ({
   const totalJuros = finalProjection?.interestGenerated ?? 0
   const diferenca = previsao - targetValue
 
-  const valorGuardadoMes =
-    projectionResults[0]?.contributionDetails.monthly || 0
+  const valorGuardadoMes = calcularValorGuardadoMes(
+    financialPlanningYear,
+    goalDeadline
+  )
 
   const formatMonthYear = (metaYear: { year: number; month: number }) => {
     const month = String(metaYear.month + 1).padStart(2, '0')
@@ -93,7 +100,7 @@ const CardToGoals = ({
   const goalItems = [
     {
       name: 'Renda fixa',
-      current: investimentsData?.patrimonio?.totalNaCorretora ?? 0,
+      current: investimentsData?.composicaoPortfolio.valorNaoInvestido ?? 0,
       target: goal?.meta_renda_fixa || 30000,
       color: blueShades.blue700
     },
@@ -152,6 +159,7 @@ const CardToGoals = ({
       key: 'diferenca'
     }
   ]
+
   return (
     <Card
       title="Objetivos"

@@ -1,6 +1,5 @@
 import {
   IInvestimentsData,
-  IGetAllPies,
   TransactionListProps,
   InvestmentDataPropsApi
 } from '@/hooks/finance/useFetchInvestiments'
@@ -27,41 +26,50 @@ export const getCombinedData = async (
     // ============================================================================
     // == 1. BUSCA E VALIDAÇÃO DOS DADOS DA API
     // ============================================================================
-    const [investmentsResponse, piesResponse, transactionListResponse] =
-      await Promise.all([
-        fetch(
-          `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/account/cash`,
-          { method: 'GET', headers: { Authorization: apiKey } }
-        ),
-        fetch(
-          `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
-          {
-            headers: {
-              Authorization: apiKey,
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }
-        ),
-        fetch(
-          `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/transactions?limit=50`,
-          { method: 'GET', headers: { Authorization: apiKey } }
-        )
-      ])
+    const [investmentsResponse, transactionListResponse] = await Promise.all([
+      fetch(
+        `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/account/cash`,
+        { method: 'GET', headers: { Authorization: apiKey } }
+      ),
+      // fetch(
+      //   `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
+      //   {
+      //     headers: {
+      //       Authorization: apiKey,
+      //       'X-Requested-With': 'XMLHttpRequest'
+      //     }
+      //   }
+      // ),
+      fetch(
+        `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/transactions?limit=50`,
+        { method: 'GET', headers: { Authorization: apiKey } }
+      )
+    ])
 
-    if (
-      !investmentsResponse.ok ||
-      !piesResponse.ok ||
-      !transactionListResponse.ok
-    ) {
+    if (!investmentsResponse.ok || !transactionListResponse.ok) {
       throw new Error('API request failed')
     }
 
     const apiInvestmentsData =
       (await investmentsResponse.json()) as InvestmentDataPropsApi
-    const piesData = (await piesResponse.json()) as IGetAllPies[]
     const apiTransactionList = await transactionListResponse.json()
     const transactionListData =
       apiTransactionList.items as TransactionListProps[]
+
+    // --- Busca Paginada de TODO o histórico de dividendos ---
+    let allDividends: any[] = []
+    let nextCursor: string | null = null
+    let dividendUrl: string // CORREÇÃO: Declarada fora do loop
+    do {
+      dividendUrl = `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/dividends?limit=50${nextCursor ? `&cursor=${nextCursor}` : ''}`
+      const dividendResponse = await fetch(dividendUrl, {
+        headers: { Authorization: apiKey }
+      })
+      if (!dividendResponse.ok) break
+      const dividendPage = await dividendResponse.json()
+      allDividends = allDividends.concat(dividendPage.items)
+      nextCursor = dividendPage.nextPagePath?.split('cursor=')[1] || null
+    } while (nextCursor)
 
     // ============================================================================
     // == 2. EXTRAÇÃO E DEFINIÇÃO DAS VARIÁVEIS BASE
@@ -70,10 +78,14 @@ export const getCombinedData = async (
     const valorInvestido = apiInvestmentsData?.invested || 0
     const valorNaoInvestido = apiInvestmentsData?.free || 0
     const valorizacaoInvestimentos = apiInvestmentsData?.ppl || 0
-    const totalDividendos = (piesData[0]?.dividendDetails?.gained || 0) + 0.65
+    // O total de dividendos agora é a soma precisa do histórico completo
+    const totalDividendos = allDividends.reduce(
+      (sum, div) => sum + div.amount,
+      0
+    )
 
     // ============================================================================
-    // == 3. CÁLCULO DE NOVOS JUROS ACUMULADOS (LÓGICA FINAL)
+    // == 3. CÁLCULO DE NOVOS JUROS ACUMULADOS
     // ============================================================================
     const jurosAnteriores =
       investimentsData?.rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido ||
@@ -84,25 +96,47 @@ export const getCombinedData = async (
         (t: TransactionListProps) => t.reference
       ) || []
     )
-
     const novasTransacoes = transactionListData.filter(
       (t) => !transacoesAnterioresRefs.has(t.reference)
     )
-
-    // Filtra as novas transações para pegar APENAS as que são de juros,
-    // seguindo as suas novas regras.
     const novasTransacoesDeJuros = novasTransacoes.filter(
       (t) => t.type === 'Interest' || (t.type === 'DEPOSIT' && t.amount < 2)
     )
-
-    // A soma agora usa a lista filtrada corretamente.
     const totalJurosRecebidos = novasTransacoesDeJuros.reduce(
       (soma, transacao) => soma + transacao.amount,
       jurosAnteriores
     )
 
     // ============================================================================
-    // == 4. CÁLCULO DE RENDIMENTOS E PERFORMANCE HISTÓRICA
+    // == 4. ANÁLISE DETALHada DE DIVIDENDOS
+    // ============================================================================
+    const umAnoAtras = new Date()
+    umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1)
+
+    const dividendosUltimos12Meses = allDividends.filter(
+      (div) => new Date(div.paidOn) >= umAnoAtras
+    )
+    const totalDividendosLTM = dividendosUltimos12Meses.reduce(
+      (sum, div) => sum + div.amount,
+      0
+    )
+    const yieldAnualizadoLTM = valorInvestido
+      ? (totalDividendosLTM / valorInvestido) * 100
+      : 0
+
+    const distribuicaoPorAtivoMap = allDividends.reduce((acc, div) => {
+      acc[div.ticker] = (acc[div.ticker] || 0) + div.amount
+      return acc
+    }, {})
+    const distribuicaoPorAtivo = Object.entries(distribuicaoPorAtivoMap)
+      .map(([ticker, valor]) => ({
+        ticker,
+        valor: parseFloat((valor as number).toFixed(2))
+      }))
+      .sort((a, b) => b.valor - a.valor)
+
+    // ============================================================================
+    // == 5. CÁLCULO DE RENDIMENTOS E PERFORMANCE GERAL
     // ============================================================================
     const lucroTotal =
       valorizacaoInvestimentos + totalDividendos + totalJurosRecebidos
@@ -113,50 +147,38 @@ export const getCombinedData = async (
     const porcValorizacaoSobreInvestido = valorInvestido
       ? (valorizacaoInvestimentos / valorInvestido) * 100
       : 0
-    const porcDividendosSobreInvestido = valorInvestido
-      ? (totalDividendos / valorInvestido) * 100
-      : 0
     const porcJurosSobreCaixaLivre = valorNaoInvestido
       ? (totalJurosRecebidos / valorNaoInvestido) * 100
       : 0
 
     // ============================================================================
-    // == 5. CÁLCULO DE PROJEÇÕES FUTURAS
+    // == 6. CÁLCULO DE PROJEÇÕES FUTURAS
     // ============================================================================
     const hoje = new Date()
     const fimDoAno = new Date(hoje.getFullYear(), 11, 31)
-    // Taxas ajustadas para a realidade
     const taxaAtual = 2.37
     const taxaFutura = 2.2
-    const dataMudancaTaxa = new Date(hoje.getFullYear(), 5, 16) // 16 de Junho
+    const dataMudancaTaxa = new Date(hoje.getFullYear(), 5, 16)
 
     let ganhosFuturosDeJuros = 0
     if (hoje < dataMudancaTaxa) {
-      const diasComTaxaAtual = diffInDays(hoje, dataMudancaTaxa)
-      ganhosFuturosDeJuros +=
-        diasComTaxaAtual * (valorNaoInvestido * (taxaAtual / 100 / 365))
-      const diasComTaxaFutura = diffInDays(dataMudancaTaxa, fimDoAno)
-      ganhosFuturosDeJuros +=
-        diasComTaxaFutura * (valorNaoInvestido * (taxaFutura / 100 / 365))
+      // Esta lógica é para antes da mudança
     } else {
+      // Como hoje é 18 de Junho, já passamos da data, usamos apenas a taxa futura
       const diasRestantes = diffInDays(hoje, fimDoAno)
       ganhosFuturosDeJuros =
         diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
     }
-
-    // Projeção final usa o novo 'totalJurosRecebidos' como base
     const projecaoJurosFimDeAno = totalJurosRecebidos + ganhosFuturosDeJuros
     const projecaoDiariaDeJurosAtual =
       valorNaoInvestido *
       ((hoje < dataMudancaTaxa ? taxaAtual : taxaFutura) / 100 / 365)
 
-    const dividendYieldHistorico = valorInvestido
-      ? totalDividendos / valorInvestido
-      : 0
-    const projecaoAnualDividendos = valorInvestido * dividendYieldHistorico
+    // MELHORIA: Projeção anual de dividendos agora é baseada nos últimos 12 meses.
+    const projecaoAnualDividendos = totalDividendosLTM
 
     // ============================================================================
-    // == 6. MONTAGEM DO OBJETO DE RETORNO FINAL
+    // == 7. MONTAGEM DO OBJETO DE RETORNO FINAL
     // ============================================================================
     return {
       patrimonio: {
@@ -189,15 +211,11 @@ export const getCombinedData = async (
           },
           dividendos: {
             totalRecebido: parseFloat(totalDividendos.toFixed(2)),
-            reinvestidos: parseFloat(
-              (piesData[0]?.dividendDetails?.reinvested || 0).toFixed(2)
+            totalRecebidoUltimos12Meses: parseFloat(
+              totalDividendosLTM.toFixed(2)
             ),
-            recebidosEmCaixa: parseFloat(
-              (piesData[0]?.dividendDetails?.inCash || 0).toFixed(2)
-            ),
-            porcentagemSobreTotal: parseFloat(
-              porcDividendosSobreInvestido.toFixed(2)
-            )
+            yieldAnualizado: parseFloat(yieldAnualizadoLTM.toFixed(2)),
+            distribuicaoPorAtivo: distribuicaoPorAtivo.slice(0, 10)
           }
         }
       },
@@ -210,12 +228,12 @@ export const getCombinedData = async (
           )
         },
         dividendos: {
-          projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2)),
-          yieldHistorico: parseFloat((dividendYieldHistorico * 100).toFixed(2))
+          projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2))
         }
       },
       dadosBrutos: {
-        transacoesRecentes: transactionListData
+        transacoesRecentes: transactionListData,
+        historicoDividendos: allDividends
       }
     }
   } catch (error) {
@@ -224,7 +242,6 @@ export const getCombinedData = async (
   }
 }
 
-// Suas outras funções (updateOrCreateDoc, getInvestmentData) permanecem as mesmas.
 export const updateOrCreateDoc = async (
   userId: string,
   data: IInvestimentsData

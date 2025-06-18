@@ -258,8 +258,7 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         label: 'Dividendos',
         value: rendimentos?.detalhes?.dividendos?.totalRecebido || 0,
         icon: iconMap['Dividendos'],
-        percentage: rendimentos.detalhes.dividendos.porcentagemSobreTotal || 0,
-        subValue: `Reinvestidos: ${formatCurrencyMoney(rendimentos?.detalhes?.dividendos?.reinvestidos || 0)}`
+        percentage: rendimentos.detalhes.dividendos.yieldAnualizado || 0
       },
       {
         label: 'Juros',
