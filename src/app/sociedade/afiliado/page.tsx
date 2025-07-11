@@ -173,6 +173,12 @@ const App: React.FC = () => {
             </div>
             <div className="hidden md:flex space-x-6 sm:space-x-8">
               <a
+                href="/sociedade"
+                className="nav-link text-slate-300 hover:text-teal-400 transition-colors duration-300"
+              >
+                Home
+              </a>
+              <a
                 href="#mercado"
                 className="nav-link text-slate-300 hover:text-teal-400 transition-colors duration-300"
               >
