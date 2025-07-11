@@ -616,28 +616,40 @@ const Page = () => {
             Clique em um modelo para ver o plano de ação, uso de IA, desafios e
             métricas chave.
           </p>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
             {modelKeys.map((key) => (
-              <button
-                key={key}
-                className={`model-selector-btn text-xs sm:text-base md:text-lg font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 shadow-md ${selectedModel === key ? 'bg-teal-600 text-white' : 'bg-slate-900 text-teal-400 border border-teal-400'}`}
-                onClick={() => setSelectedModel(key)}
-              >
-                {reportData.models[key].name}
-              </button>
+              <div key={key} className="flex items-center">
+                <button
+                  className={`model-selector-btn text-base md:text-lg font-semibold py-3 px-6 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 shadow-md ${selectedModel === key ? 'bg-teal-600 text-white' : 'bg-slate-900 text-teal-400 border border-teal-400'}`}
+                  onClick={() => setSelectedModel(key)}
+                >
+                  {reportData.models[key].name}
+                </button>
+              </div>
             ))}
           </div>
           <div
             id="model-details-container"
-            className="bg-slate-800 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg min-h-[400px] sm:min-h-[500px]"
+            className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-lg min-h-[500px]"
           >
             <div className="content-fade-in">
-              <h4 className="text-xl sm:text-3xl font-bold text-center mb-2 text-teal-400">
+              <h4 className="text-3xl font-bold text-center mb-2 text-teal-400">
                 {model.name}
               </h4>
-              <p className="text-center text-slate-300 mb-4 sm:mb-8 max-w-full sm:max-w-2xl mx-auto text-sm sm:text-base">
+              <p className="text-center text-slate-300 mb-8 max-w-2xl mx-auto">
                 {model.description}
               </p>
+              {selectedModel === 'afiliados' && (
+                <div className="flex justify-center mb-8">
+                  <a
+                    href="/sociedade/afiliado"
+                    className="bg-teal-600 text-white px-6 py-3 rounded-full font-semibold shadow hover:bg-teal-700 transition-colors duration-300 text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
+                    aria-label="Ver mais sobre Marketing de Afiliados"
+                  >
+                    Ver mais sobre Marketing de Afiliados
+                  </a>
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div>
                   <h5 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 text-slate-100 border-b-2 border-teal-400 pb-1 sm:pb-2">
