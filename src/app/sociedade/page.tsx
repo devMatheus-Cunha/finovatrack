@@ -62,7 +62,6 @@ const TvIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke=
 const ShirtIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>;
 const HomeDecorIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9"></path><path d="M9 22V12h6v10M2 8.5l10-6 10 6"></path></svg>;
 const SparkleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L9.1 8.5 2 10l6.2 5.9L6.4 22 12 18l5.6 4-1.8-6.1L22 10l-7.1-1.5z"></path></svg>;
-// Ícones para o Footer
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
 const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M22 2 11 13H2l2.65-9.36L22 2zm0 0-7 18-3.5-7-7-3.5L22 2z"></path></svg>;
 
@@ -90,7 +89,7 @@ function Header() {
           <nav className="hidden md:flex items-center space-x-2">
             {navLinks.map((link) => (
               <a key={link.name} href={link.href} className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-amber-100 transition-all duration-300 font-medium">
-                <link.icon className="w-5 h-5" />
+                <link.icon className="w-5 h-5 text-amber-500" />
                 <span>{link.name}</span>
               </a>
             ))}
@@ -102,18 +101,19 @@ function Header() {
           </div>
         </div>
       </div>
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100">
-          <nav className="flex flex-col items-start space-y-2 p-4">
-            {navLinks.map((link) => (
-              <a key={link.name} href={link.href} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-amber-100 transition-all duration-300 font-medium text-lg" onClick={() => setIsMenuOpen(false)}>
-                <link.icon className="w-6 h-6 text-amber-500" />
-                <span>{link.name}</span>
-              </a>
-            ))}
-          </nav>
+      {/* Menu Mobile com Animação */}
+      <div className={`transition-all duration-300 ease-in-out overflow-hidden md:hidden ${isMenuOpen ? 'max-h-96' : 'max-h-0'}`}>
+        <div className="bg-white border-t border-gray-100">
+            <nav className="flex flex-col items-start space-y-2 p-4">
+                {navLinks.map((link) => (
+                <a key={link.name} href={link.href} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-amber-100 transition-all duration-300 font-medium text-lg" onClick={() => setIsMenuOpen(false)}>
+                    <link.icon className="w-6 h-6 text-amber-500" />
+                    <span>{link.name}</span>
+                </a>
+                ))}
+            </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }
@@ -150,12 +150,12 @@ function FeaturedSlider({ products = [] }: { products?: Product[] }) {
         <div className="flex h-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
           {products.map((product) => (
             <div key={product.id} className="relative w-full flex-shrink-0 h-full grid grid-cols-1 md:grid-cols-2">
-              <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left p-8 text-white z-10">
+              <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left p-6 sm:p-8 text-white z-10">
                 <p className="text-sm text-amber-300 mb-2 font-semibold">Oferta em Destaque</p>
-                <h2 className="text-2xl font-bold mb-3 line-clamp-3">{product.title}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold mb-3 line-clamp-3">{product.title}</h2>
                 <div className="flex items-baseline gap-3 mb-5">
-                  <p className="text-3xl font-extrabold text-amber-400">{product.price}</p>
-                  <p className="text-md line-through opacity-60">{product.price_from}</p>
+                  <p className="text-2xl sm:text-3xl font-extrabold text-amber-400">{product.price}</p>
+                  <p className="text-sm sm:text-md line-through opacity-60">{product.price_from}</p>
                 </div>
                 <a href={product.link} target="_blank" rel="noopener noreferrer" className="self-center md:self-start bg-amber-400 text-gray-900 font-bold py-2 px-5 rounded-lg hover:bg-amber-300 transition-colors text-sm">
                   Eu Quero!
@@ -259,9 +259,9 @@ function StoreSection({ title, products }: { title: string, products: Product[] 
                 )}
             </div>
             <div className="relative">
-                <div ref={scrollRef} className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
+                <div ref={scrollRef} className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
                     {products.map(product => (
-                        <div key={product.id} className="flex-shrink-0 w-3/4 sm:w-2/5 md:w-1/3 lg:w-[calc(25%-1.125rem)]" style={{ scrollSnapAlign: 'start' }}>
+                        <div key={product.id} className="flex-shrink-0 w-4/5 sm:w-2/5 md:w-1/3 lg:w-[calc(25%-0.75rem)]" style={{ scrollSnapAlign: 'start' }}>
                            <ProductCard product={product} />
                         </div>
                     ))}
@@ -271,13 +271,13 @@ function StoreSection({ title, products }: { title: string, products: Product[] 
     )
 }
 
-// --- NOVO COMPONENTE: FOOTER ---
+
+// --- FOOTER COMPONENT ---
 function Footer() {
     return (
         <footer className="bg-gray-800 text-white">
             <div className="container mx-auto px-8 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    {/* Coluna da Marca */}
                     <div className="mb-6 md:mb-0">
                         <a href="/" className="flex items-center gap-2 text-2xl font-extrabold">
                             <TagIcon className="w-7 h-7 text-amber-400"/>
@@ -285,7 +285,6 @@ function Footer() {
                         </a>
                         <p className="mt-4 text-gray-400 text-sm">As melhores ofertas e cupons da internet, selecionados para você.</p>
                     </div>
-                    {/* Coluna de Navegação */}
                     <div>
                         <h3 className="font-bold text-lg mb-4">Navegação</h3>
                         <ul className="space-y-2 text-gray-400">
@@ -294,7 +293,6 @@ function Footer() {
                             <li><a href="/lojas" className="hover:text-amber-400 transition-colors">Lojas</a></li>
                         </ul>
                     </div>
-                    {/* Coluna Legal */}
                     <div>
                         <h3 className="font-bold text-lg mb-4">Legal</h3>
                         <ul className="space-y-2 text-gray-400">
@@ -302,7 +300,6 @@ function Footer() {
                             <li><a href="/politica-de-privacidade" className="hover:text-amber-400 transition-colors">Política de Privacidade</a></li>
                         </ul>
                     </div>
-                    {/* Coluna Redes Sociais */}
                     <div>
                         <h3 className="font-bold text-lg mb-4">Siga-nos</h3>
                         <div className="flex space-x-4">
