@@ -1,868 +1,419 @@
-'use client'
-import React, { useState } from 'react'
+// src/app/page.tsx
+"use client";
 
-// Type definitions for dynamic access
-interface Model {
-  name: string
-  description: string
-  plan: { step: string; detail: string }[]
-  ai: { stage: string; detail: string }[]
-  challenges: { title: string; detail: string }[]
-  metrics: string[]
-}
-interface ComparisonMetric {
-  label: string
-  data: number[]
-  note: string
-}
-interface ReportData {
-  models: { [key: string]: Model }
-  comparisonMetrics: { [key: string]: ComparisonMetric }
-  meiCompatibility: { model: string; compatible: string; notes: string }[]
-  tools: { category: string; items: string[] }[]
+import React, { useState, useEffect, useRef } from 'react';
+
+// --- DEFINIÇÃO DE TIPO ---
+export interface Product {
+  id: number;
+  title: string;
+  image: string;
+  price_from: string;
+  price: string;
+  link: string;
+  coupon?: string | null;
+  seller: string;
 }
 
-const reportData: ReportData = {
-  models: {
-    afiliados: {
-      name: 'Marketing de Afiliados',
-      description:
-        'Gere renda promovendo produtos de terceiros. Você ganha comissões por vendas ou ações realizadas através de seus links, sem precisar criar um produto ou gerenciar estoque. O foco é na criação de conteúdo e na geração de tráfego.',
-      plan: [
-        {
-          step: '1. Pesquisa de Nicho e Produto',
-          detail:
-            "Use Google Trends e explore plataformas como Hotmart e Shopee para encontrar nichos e produtos com alta demanda e boa comissão. **Exemplos de nichos com demanda:** produtos para pets (especialmente nichos como 'alimentação natural para cães'), sustentabilidade (ex: 'produtos de limpeza ecológicos'), tecnologia (ex: 'acessórios para casa inteligente'), ou hobbies específicos (ex: 'materiais para aquarismo marinho'). Analise a concorrência e as avaliações dos produtos."
-        },
-        {
-          step: '2. Criação de Plataforma',
-          detail:
-            'Crie um blog (WordPress) ou perfis em redes sociais (TikTok, Instagram) focados no nicho. O conteúdo deve ser anônimo (reviews, tutoriais).'
-        },
-        {
-          step: '3. Geração de Tráfego',
-          detail:
-            'Foque em SEO para tráfego orgânico. Com o orçamento de R$500, invista em Google Ads ou Facebook Ads para acelerar as primeiras vendas.'
-        },
-        {
-          step: '4. Otimização',
-          detail:
-            'Analise quais links convertem mais e otimize seu conteúdo e campanhas para maximizar o ROI.'
-        }
-      ],
-      ai: [
-        {
-          stage: 'Pesquisa de Mercado',
-          detail:
-            'Use ChatGPT/Bard para analisar tendências e identificar lacunas de mercado, otimizando seu tempo.'
-        },
-        {
-          stage: 'Criação de Conteúdo',
-          detail:
-            'Gere roteiros, textos para posts e e-mails. Use Leonardo.AI para criar visuais sem precisar de habilidades de design.'
-        },
-        {
-          stage: 'Otimização',
-          detail:
-            'Use ferramentas de SEO com IA (Ahrefs/Semrush) para análise de palavras-chave e integre chatbots para suporte básico.'
-        }
-      ],
-      challenges: [
-        {
-          title: 'NÃO é MEI',
-          detail:
-            'A atividade (CNAE 7490-1/04) não é permitida no MEI. Você pode começar como Pessoa Física (PF) e atuar nessa modalidade até que seu faturamento se aproxime do limite de isenção do Imposto de Renda para PF (atualmente cerca de R$ 28.559,70 anuais). Após isso, ou ao atingir um volume que justifique, será necessário abrir uma Microempresa (ME).'
-        },
-        {
-          title: 'Alta Concorrência',
-          detail:
-            'Diferencie-se focando em um sub-nicho específico e criando conteúdo de altíssima qualidade.'
-        },
-        {
-          title: 'Complexidade Fiscal',
-          detail:
-            'Ao se tornar ME, a carga tributária e a burocracia aumentam. Contrate um contador especializado em negócios digitais.'
-        }
-      ],
-      metrics: [
-        'Retorno sobre Investimento (ROI)',
-        'Taxa de Conversão de Cliques',
-        'Custo por Aquisição (CAC)',
-        'Tráfego do Site/Página'
-      ]
-    },
-    infoprodutos: {
-      name: 'Criação e Venda de Infoprodutos',
-      description:
-        'Transforme seu conhecimento em um ativo digital. Crie e venda eBooks, cursos online, templates ou planilhas. O modelo oferece alta margem de lucro e escalabilidade.',
-      plan: [
-        {
-          step: '1. Validação da Ideia',
-          detail:
-            "Identifique um problema que seu conhecimento pode resolver. Use Google Forms ou SurveyMonkey para validar a demanda com seu público-alvo. **Exemplos de mercados com demanda:** 'Marketing Digital para Pequenas Empresas Locais', 'Finanças Pessoais para Jovens Adultos', 'Dominando o Excel para Iniciantes', 'Criação de Conteúdo para Redes Sociais', 'Receitas Veganas Rápidas e Saudáveis'."
-        },
-        {
-          step: '2. Criação do Produto',
-          detail:
-            'Use Canva ou Adobe Express para criar eBooks e templates. Grave aulas com um bom roteiro (sem aparecer) e edite com CapCut ou DaVinci Resolve.'
-        },
-        {
-          step: '3. Estrutura de Vendas',
-          detail:
-            'Use plataformas como Hotmart ou Kiwify (que cobram por venda) ou crie sua loja na Nuvemshop (plano gratuito).'
-        },
-        {
-          step: '4. Lançamento',
-          detail:
-            'Divulgue nas redes sociais com conteúdo de valor, colete depoimentos e considere parcerias com microinfluenciadores.'
-        }
-      ],
-      ai: [
-        {
-          stage: 'Validação de Ideia',
-          detail:
-            'Analise respostas de questionários com IA para identificar padrões e refinar a ideia do seu produto.'
-        },
-        {
-          stage: 'Criação de Conteúdo',
-          detail:
-            'Estruture o conteúdo, gere rascunhos de texto e crie os visuais do seu infoproduto e marketing com IA generativa.'
-        },
-        {
-          stage: 'Marketing',
-          detail:
-            'Otimize títulos e descrições para SEO nas plataformas e crie campanhas de e-mail marketing personalizadas.'
-        }
-      ],
-      challenges: [
-        {
-          title: 'SIM, é MEI (com atenção)',
-          detail:
-            'Pode ser MEI (CNAE de Edição de Livros ou Treinamento), mas a meta de R$10.000/mês (R$120k/ano) ultrapassa o limite de R$81k/ano. Você pode começar como Pessoa Física (PF) e atuar nessa modalidade até que seu faturamento se aproxime do limite de isenção do Imposto de Renda para PF (atualmente cerca de R$ 28.559,70 anuais), ou então iniciar como MEI e planejar a transição para ME ao se aproximar do limite de R$ 81.000,00 anuais.'
-        },
-        {
-          title: 'Qualidade do Conteúdo',
-          detail:
-            'O sucesso depende da qualidade e da transformação que seu produto gera. Invista tempo em pesquisa e estruturação.'
-        },
-        {
-          title: 'Marketing e Vendas',
-          detail:
-            'Ter um bom produto não é suficiente. Estude marketing de conteúdo e estratégias de lançamento para alcançar seu público.'
-        }
-      ],
-      metrics: [
-        'Taxa de Conversão de Vendas',
-        'Custo por Aquisição (CAC)',
-        'Receita Mensal Recorrente (MRR)',
-        'Taxa de Conclusão (Cursos)'
-      ]
-    },
-    dropshipping: {
-      name: 'Dropshipping',
-      description:
-        'Venda produtos físicos online sem ter estoque. Você cria a loja, atrai os clientes, e o fornecedor cuida do armazenamento e envio direto ao consumidor final.',
-      plan: [
-        {
-          step: '1. Pesquisa de Nicho/Produto',
-          detail:
-            "Use Google Trends e ferramentas de IA para encontrar produtos em alta com boa margem de lucro. Analise a concorrência. **Exemplos de nichos com demanda:** 'Produtos Ecológicos para Casa', 'Acessórios para Organização de Escritório Home Office', 'Equipamentos de Fitness para Pequenos Espaços', 'Brinquedos Educativos para Crianças', 'Acessórios para Carros Elétricos'."
-        },
-        {
-          step: '2. Criação da Loja Virtual',
-          detail:
-            'Crie sua loja na Nuvemshop (plano gratuito) ou Shopify (teste gratuito). Integre com aplicativos de dropshipping.'
-        },
-        {
-          step: '3. Seleção de Fornecedores',
-          detail:
-            'Pesquise e valide fornecedores confiáveis (nacionais ou internacionais) que garantam qualidade e prazos de entrega razoáveis.'
-        },
-        {
-          step: '4. Marketing e Vendas',
-          detail:
-            'Invista o orçamento inicial (até R$500) em tráfego pago (Facebook Ads, TikTok Ads) para direcionar clientes qualificados para a loja.'
-        }
-      ],
-      ai: [
-        {
-          stage: 'Pesquisa de Produto',
-          detail:
-            'Use IA para identificar produtos vencedores, analisar tendências de mercado e otimizar a precificação em tempo real.'
-        },
-        {
-          stage: 'Criação da Loja',
-          detail:
-            'Gere descrições de produtos otimizadas para SEO e crie imagens e vídeos de marketing atraentes.'
-        },
-        {
-          stage: 'Atendimento ao Cliente',
-          detail:
-            'Implemente chatbots com IA para responder perguntas frequentes 24/7, melhorando a experiência do cliente.'
-        }
-      ],
-      challenges: [
-        {
-          title: 'NÃO é MEI',
-          detail:
-            'A atividade de intermediação de negócios/comércio não é permitida no MEI. Você pode começar como Pessoa Física (PF) e atuar nessa modalidade até que seu faturamento se aproxime do limite de isenção do Imposto de Renda para PF (atualmente cerca de R$ 28.559,70 anuais). Após isso, ou ao atingir um volume que justifique, será necessário abrir uma Microempresa (ME).'
-        },
-        {
-          title: 'Dependência de Fornecedores',
-          detail:
-            'A qualidade e o prazo de entrega estão fora do seu controle direto. Valide os fornecedores rigorosamente para proteger sua reputação.'
-        },
-        {
-          title: 'Margens de Lucro',
-          detail:
-            'A concorrência é alta e as margens podem ser apertadas. O sucesso depende do volume de vendas e da otimização dos custos de marketing.'
-        }
-      ],
-      metrics: [
-        'Custo por Aquisição (CAC)',
-        'Taxa de Conversão da Loja',
-        'Lucro Líquido por Venda',
-        'Taxa de Retenção de Clientes'
-      ]
-    },
-    freelancer: {
-      name: 'Serviços Digitais como Freelancer',
-      description:
-        'Ofereça suas habilidades (edição de vídeo, redação, gestão de redes sociais, assistência virtual) para empresas e empreendedores. O investimento é seu tempo e conhecimento.',
-      plan: [
-        {
-          step: '1. Definição do Serviço e Nicho',
-          detail:
-            "Avalie suas habilidades e pesquise em plataformas como Workana e Fiverr quais serviços têm alta demanda e boa remuneração. **Exemplos de serviços e nichos com demanda:** 'Edição de Vídeos para YouTubers de Games', 'Gestão de Redes Sociais para Pequenos Restaurantes', 'Redação de Conteúdo SEO para Blogs de Tecnologia', 'Assistência Virtual para Coaches de Vida', 'Design de Apresentações para Startups'."
-        },
-        {
-          step: '2. Criação de Portfólio',
-          detail:
-            'Crie projetos fictícios ou use trabalhos pessoais para montar um portfólio profissional no Canva ou Notion, mostrando o que você pode fazer.'
-        },
-        {
-          step: '3. Captação de Clientes',
-          detail:
-            'Crie perfis otimizados nas plataformas de freelancers. Use suas próprias redes sociais para postar dicas e atrair clientes organicamente.'
-        },
-        {
-          step: '4. Entrega e Fidelização',
-          detail:
-            'Entregue um trabalho de altíssima qualidade, cumpra os prazos e mantenha uma excelente comunicação para conseguir avaliações positivas e clientes recorrentes.'
-        }
-      ],
-      ai: [
-        {
-          stage: 'Pesquisa de Mercado',
-          detail:
-            'Analise tendências de serviços em alta para direcionar seu foco e aprimorar as habilidades mais requisitadas.'
-        },
-        {
-          stage: 'Marketing Pessoal',
-          detail:
-            'Gere ideias e textos para seu portfólio, descrições de serviços e posts para redes sociais, construindo uma marca profissional.'
-        },
-        {
-          stage: 'Automação de Tarefas',
-          detail:
-            'Use IA para automatizar tarefas repetitivas (agendamento, pesquisa, rascunhos de e-mail), aumentando sua produtividade.'
-        }
-      ],
-      challenges: [
-        {
-          title: 'MEI Depende do Serviço',
-          detail:
-            'Alguns serviços são MEI (Editor de Vídeo), outros não (Redator, Web Designer) e alguns são ambíguos (Assistente Virtual). Para atividades não permitidas no MEI, você pode começar como Pessoa Física (PF) e atuar nessa modalidade até que seu faturamento se aproxime do limite de isenção do Imposto de Renda para PF (atualmente cerca de R$ 28.559,70 anuais). Após isso, ou ao atingir um volume que justifique, será necessário abrir uma Microempresa (ME). Verifique o CNAE específico e consulte um contador para sua atividade exata.'
-        },
-        {
-          title: 'Concorrência e Precificação',
-          detail:
-            'O mercado é competitivo. Especialize-se em um nicho para se destacar e justificar preços mais altos.'
-        },
-        {
-          title: 'Inconstância de Renda',
-          detail:
-            'No início, o fluxo de clientes pode ser irregular. Construa um bom relacionamento com os clientes para garantir trabalhos recorrentes.'
-        }
-      ],
-      metrics: [
-        'Lucro Líquido Mensal',
-        'Número de Clientes Ativos',
-        'Valor/Hora Efetivo',
-        'Taxa de Conversão de Propostas'
-      ]
-    },
-    shortVideoMonetization: {
-      name: 'Monetização de Vídeos Curtos (TikTok/YouTube Shorts)',
-      description:
-        'Crie e poste vídeos curtos em plataformas que pagam diretamente por visualizações ou engajamento, sem depender de parcerias ou vendas diretas. O foco é na produção de conteúdo viral e na construção de audiência.',
-      plan: [
-        {
-          step: '1. Pesquisa de Tendências e Nicho',
-          detail:
-            "Identifique formatos e temas que viralizam nas plataformas (TikTok Creative Center, YouTube Trends). Use ferramentas de análise de tendências para encontrar lacunas. **Exemplos de nichos com demanda:** 'Receitas Culinárias Rápidas (sem mostrar o rosto)', 'Dicas de Organização Doméstica (visual apenas)', 'Fatos Históricos Curiosos (com animações)', 'Experimentos Científicos Simples (visual)', 'Tutoriais de DIY (Faça Você Mesmo) de Artesanato'."
-        },
-        {
-          step: '2. Criação de Conteúdo (Sem Aparecer)',
-          detail:
-            'Produza vídeos curtos (tutoriais, curiosidades, animações, narrações, compilações) sem mostrar o rosto. Foque na qualidade do áudio e da edição.'
-        },
-        {
-          step: '3. Publicação e Engajamento',
-          detail:
-            'Poste consistentemente, use hashtags e áudios em alta, e interaja com a comunidade nos comentários para aumentar o alcance e a retenção.'
-        },
-        {
-          step: '4. Otimização e Escalabilidade',
-          detail:
-            'Analise o desempenho dos vídeos (visualizações, tempo de retenção, engajamento) e refine a estratégia para maximizar as visualizações e a monetização (ex: TikTok Creativity Program Beta, YouTube Shorts Fund).'
-        }
-      ],
-      ai: [
-        {
-          stage: 'Pesquisa de Tendências',
-          detail:
-            'Use IA para analisar vídeos virais, identificar temas e formatos de sucesso, e gerar ideias de roteiros e ganchos para vídeos.'
-        },
-        {
-          stage: 'Criação de Conteúdo',
-          detail:
-            'Gere roteiros, legendas, dublagens (com IA de voz), e edite vídeos com ferramentas de IA que automatizam cortes, adicionam efeitos e geram trilhas sonoras.'
-        },
-        {
-          stage: 'Otimização e Engajamento',
-          detail:
-            'Use IA para otimizar horários de postagem, analisar métricas de engajamento, identificar padrões de audiência e sugerir interações com o público.'
-        }
-      ],
-      challenges: [
-        {
-          title: 'NÃO é MEI',
-          detail:
-            'A monetização direta de conteúdo por plataformas (ex: receita de anúncios) geralmente se enquadra como intermediação de publicidade ou atividades não permitidas para MEI. Você pode começar como Pessoa Física (PF) e atuar nessa modalidade até que seu faturamento se aproxime do limite de isenção do Imposto de Renda para PF (atualmente cerca de R$ 28.559,70 anuais). Após isso, ou ao atingir um volume que justifique, será necessário abrir uma Microempresa (ME).'
-        },
-        {
-          title: 'Algoritmo e Volatilidade',
-          detail:
-            'A dependência dos algoritmos das plataformas pode levar a oscilações significativas na renda. É crucial diversificar o conteúdo e, se possível, as plataformas.'
-        },
-        {
-          title: 'Qualidade e Volume',
-          detail:
-            'Manter a qualidade e a frequência de postagens é desafiador, mas essencial para sustentar o crescimento e a monetização. A IA pode ajudar a otimizar este processo.'
-        }
-      ],
-      metrics: [
-        'Visualizações Totais',
-        'Tempo Médio de Visualização',
-        'Engajamento (curtidas, comentários, compartilhamentos)',
-        'Receita por Mil Visualizações (RPM)',
-        'Crescimento de Seguidores'
-      ]
-    }
-  },
-  comparisonMetrics: {
-    potencialRenda: {
-      label: 'Potencial de Renda',
-      data: [4, 5, 4, 3, 4],
-      note: 'Escala de 1 (Baixo) a 5 (Muito Alto). Potencial refere-se à escalabilidade do modelo.'
-    },
-    investimentoInicial: {
-      label: 'Investimento Inicial (R$)',
-      data: [1, 1, 2, 1, 1],
-      note: 'Escala de 1 (Até R$100) a 5 (Acima de R$1000). Valores desconsideram custos de formalização.'
-    },
-    complexidadeBurocratica: {
-      label: 'Complexidade Burocrática',
-      data: [4, 2, 4, 3, 4],
-      note: 'Escala de 1 (Muito Baixa - MEI simples) a 5 (Alta - Requer ME desde o início).'
-    },
-    necessidadeExposicao: {
-      label: 'Necessidade de Exposição Pessoal',
-      data: [1, 1, 1, 1, 1],
-      note: 'Escala de 1 (Nenhuma) a 5 (Muito Alta). Todos os modelos foram selecionados por terem baixa necessidade.'
-    }
-  },
-  meiCompatibility: [
-    {
-      model: 'Marketing de Afiliados',
-      compatible: 'NÃO',
-      notes:
-        'CNAE 7490-1/04 (Intermediação) não permitido. Requer ME para escalar. Pode iniciar como PF.'
-    },
-    {
-      model: 'Infoprodutor (Cursos/eBooks)',
-      compatible: 'SIM',
-      notes:
-        'CNAEs de Edição de Livros/Treinamento são permitidos, mas o faturamento anual (R$81k) é uma limitação. Pode iniciar como PF ou MEI.'
-    },
-    {
-      model: 'Dropshipping',
-      compatible: 'NÃO',
-      notes:
-        'Atividade de intermediação/comércio sem estoque físico não se enquadra no MEI. Requer ME. Pode iniciar como PF.'
-    },
-    {
-      model: 'Assistente Virtual',
-      compatible: 'AMBÍGUO',
-      notes:
-        'CNAE 8211-3/00 é controverso. Depende da interpretação e da legislação local. Consulta contábil é essencial. Pode iniciar como PF.'
-    },
-    {
-      model: 'Editor de Vídeo',
-      compatible: 'SIM',
-      notes:
-        'CNAE 5912-0/99 (Pós-produção de vídeos) é permitido. Pode iniciar como PF ou MEI.'
-    },
-    {
-      model: 'Redator / Web Designer',
-      compatible: 'NÃO',
-      notes:
-        'Atividades consideradas intelectuais/criativas não são permitidas no MEI. Requerem ME. Pode iniciar como PF.'
-    },
-    {
-      model: 'Monetização de Vídeos Curtos',
-      compatible: 'NÃO',
-      notes:
-        'A monetização direta de conteúdo por plataformas (ex: receita de anúncios) geralmente se enquadra como intermediação de publicidade ou atividades não permitidas para MEI. Requer ME. Pode iniciar como PF.'
-    }
-  ],
-  tools: [
-    {
-      category: 'Pesquisa e Validação',
-      items: [
-        'Google Trends',
-        'SurveyMonkey',
-        'ChatGPT/Bard (IA)',
-        'Ahrefs/Semrush (IA)',
-        'TikTok Creative Center',
-        'YouTube Trends'
-      ]
-    },
-    {
-      category: 'Criação de Conteúdo/Produto',
-      items: [
-        'Canva',
-        'Adobe Express',
-        'CapCut',
-        'Leonardo.AI (IA)',
-        'Figma',
-        'Ferramentas de IA para Voz/Dublagem'
-      ]
-    },
-    {
-      category: 'Marketing e Divulgação',
-      items: [
-        'Buffer/Metricool (IA)',
-        'Google Ads',
-        'Facebook Ads',
-        'Adsterra (Rede de Ads)'
-      ]
-    },
-    {
-      category: 'Plataformas de Venda',
-      items: ['Hotmart', 'Kiwify', 'Nuvemshop', 'Shopify', 'Workana', 'Fiverr']
-    },
-    {
-      category: 'Otimização e Automação',
-      items: ['Google Analytics', 'Chatbots com IA', 'Toolzz OS (IA)']
-    },
-    {
-      category: 'Gestão e Burocracia',
-      items: ['Portal do Empreendedor', 'Contadores Online']
-    }
-  ]
+// --- ÍCONES ---
+const TagIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+);
+const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+);
+const TicketIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 15v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2M10 12h4"></path><path d="M10 5v14"></path></svg>
+);
+const UsersIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+);
+const InfoIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+);
+const MenuIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>
+);
+const CloseIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+);
+const StorefrontIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 21h16M8 21V11h8v10M4 7h16M8 7V3h8v4m-4 4h0"></path></svg>
+);
+const ShoppingCartIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+);
+const ChevronLeftIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="15 18 9 12 15 6"></polyline></svg>
+);
+const ChevronRightIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"></polyline></svg>
+);
+const SaleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+        <line x1="19" y1="5" x2="5" y2="19"></line>
+        <circle cx="6.5" cy="6.5" r="2.5"></circle>
+        <circle cx="17.5" cy="17.5" r="2.5"></circle>
+    </svg>
+);
+const SmartphoneIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>;
+const LaptopIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.29 2.58A2 2 0 0 1 19.7 21H4.3a2 2 0 0 1-1.6-2.42L4 16"></path></svg>;
+const TvIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>;
+const ShirtIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>;
+const HomeDecorIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9"></path><path d="M9 22V12h6v10M2 8.5l10-6 10 6"></path></svg>;
+const SparkleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L9.1 8.5 2 10l6.2 5.9L6.4 22 12 18l5.6 4-1.8-6.1L22 10l-7.1-1.5z"></path></svg>;
+// Ícones para o Footer
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
+const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M22 2 11 13H2l2.65-9.36L22 2zm0 0-7 18-3.5-7-7-3.5L22 2z"></path></svg>;
+
+
+// --- HEADER COMPONENT ---
+function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navLinks = [
+    { name: 'Início', href: '/', icon: HomeIcon },
+    { name: 'Cupons', href: '/cupons', icon: TicketIcon },
+    { name: 'Grupos', href: '/grupos', icon: UsersIcon },
+    { name: 'Sobre Nós', href: '/sobre', icon: InfoIcon },
+  ];
+  return (
+    <header className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="bg-amber-400 text-center py-2 px-4 text-sm font-semibold text-gray-800">
+        🔥 As melhores ofertas da semana estão aqui! 🔥
+      </div>
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-20">
+          <a href="/" className="flex items-center gap-2 text-2xl font-extrabold text-gray-800 transition-transform transform hover:scale-105">
+            <TagIcon className="w-7 h-7 text-amber-500"/>
+            <span>Achado<span className="text-amber-500">Certo</span></span>
+          </a>
+          <nav className="hidden md:flex items-center space-x-2">
+            {navLinks.map((link) => (
+              <a key={link.name} href={link.href} className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-600 hover:text-gray-900 hover:bg-amber-100 transition-all duration-300 font-medium">
+                <link.icon className="w-5 h-5" />
+                <span>{link.name}</span>
+              </a>
+            ))}
+          </nav>
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-600 hover:text-amber-500 focus:outline-none transition-colors">
+              {isMenuOpen ? <CloseIcon className="w-8 h-8" /> : <MenuIcon className="w-8 h-8" />}
+            </button>
+          </div>
+        </div>
+      </div>
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100">
+          <nav className="flex flex-col items-start space-y-2 p-4">
+            {navLinks.map((link) => (
+              <a key={link.name} href={link.href} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-amber-100 transition-all duration-300 font-medium text-lg" onClick={() => setIsMenuOpen(false)}>
+                <link.icon className="w-6 h-6 text-amber-500" />
+                <span>{link.name}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+    </header>
+  );
 }
 
-const modelKeys = Object.keys(reportData.models)
 
-function getChallengeColor(title: string): string {
-  if (title.includes('NÃO')) return 'red'
-  if (title.includes('SIM')) return 'emerald'
-  return 'amber'
-}
+// --- FEATURED SLIDER COMPONENT ---
+function FeaturedSlider({ products = [] }: { products?: Product[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const hasProducts = Array.isArray(products) && products.length > 0;
 
-const Page = () => {
-  const [selectedMetric, setSelectedMetric] = useState<string>('potencialRenda')
-  const [selectedModel, setSelectedModel] = useState<string>('afiliados')
+  const goToPrevious = () => {
+    if (!hasProducts) return;
+    const newIndex = currentIndex === 0 ? products.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+  };
 
-  const metricData = reportData.comparisonMetrics[selectedMetric]
-  const maxValue = Math.max(...metricData.data)
-  const modelNames = modelKeys.map((k) => reportData.models[k].name)
+  const goToNext = () => {
+    if (!hasProducts) return;
+    const newIndex = currentIndex === products.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+  };
 
-  const model = reportData.models[selectedModel]
+  useEffect(() => {
+    if (!hasProducts) return;
+    const timer = setTimeout(goToNext, 5000);
+    return () => clearTimeout(timer);
+  }, [currentIndex, hasProducts]);
+
+  if (!hasProducts) return null;
 
   return (
-    <div className="bg-slate-900 text-slate-100 min-h-screen">
-      <header className="bg-slate-800 shadow-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-teal-400 mb-2 sm:mb-0">
-            Navegador Digital
-          </h1>
-          <ul className="flex flex-wrap justify-center space-x-2 sm:space-x-4 md:space-x-8 text-xs sm:text-sm md:text-base">
-            <li>
-              <a
-                href="#comparativo"
-                className="font-medium hover:text-teal-400 transition-colors duration-300 text-slate-100"
-              >
-                Comparativo
-              </a>
-            </li>
-            <li>
-              <a
-                href="#modelos"
-                className="font-medium hover:text-teal-400 transition-colors duration-300 text-slate-100"
-              >
-                Modelos
-              </a>
-            </li>
-            <li>
-              <a
-                href="#juridico"
-                className="font-medium hover:text-teal-400 transition-colors duration-300 text-slate-100"
-              >
-                Jurídico
-              </a>
-            </li>
-            <li>
-              <a
-                href="#ferramentas"
-                className="font-medium hover:text-teal-400 transition-colors duration-300 text-slate-100"
-              >
-                Ferramentas
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main className="container mx-auto px-2 sm:px-4 md:px-6 py-8 sm:py-12">
-        <section className="text-center mb-10 sm:mb-16">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-slate-100 mb-3 sm:mb-4">
-            Explore seu Potencial no Empreendedorismo Digital
-          </h2>
-          <p className="max-w-full sm:max-w-3xl mx-auto text-base sm:text-lg text-slate-300 px-2">
-            Esta ferramenta interativa traduz um guia completo em um painel
-            prático. Compare modelos de negócio, entenda os aspectos legais e
-            descubra as ferramentas para iniciar sua jornada no Brasil, com foco
-            em baixo investimento e sem exposição pessoal.
-          </p>
-        </section>
-        <section id="comparativo" className="mb-12 sm:mb-20 scroll-mt-20">
-          <div className="bg-slate-800 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg">
-            <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-slate-100">
-              Comparativo Rápido de Modelos
-            </h3>
-            <p className="text-center text-slate-300 mb-4 sm:mb-6 text-sm sm:text-base">
-              Selecione uma métrica para comparar os modelos de negócio e
-              identificar qual se alinha melhor ao seu perfil e objetivos.
-            </p>
-            <div className="flex justify-center mb-4 sm:mb-6">
-              <select
-                className="p-2 border border-slate-700 bg-slate-900 text-slate-100 rounded-lg shadow-sm focus:ring-2 focus:ring-teal-400 focus:border-teal-400 w-full max-w-xs"
-                value={selectedMetric}
-                onChange={(e) => setSelectedMetric(e.target.value)}
-              >
-                <option value="potencialRenda">Potencial de Renda</option>
-                <option value="investimentoInicial">
-                  Investimento Inicial
-                </option>
-                <option value="complexidadeBurocratica">
-                  Complexidade Burocrática
-                </option>
-                <option value="necessidadeExposicao">
-                  Necessidade de Exposição
-                </option>
-              </select>
-            </div>
-            <div className="w-full max-w-full sm:max-w-2xl mx-auto">
-              <div className="space-y-3 sm:space-y-4">
-                {modelNames.map((name, idx) => {
-                  const value = metricData.data[idx]
-                  const percent = (value / maxValue) * 100
-                  return (
-                    <div
-                      key={name}
-                      className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4"
-                    >
-                      <div className="w-full sm:w-40 text-right pr-2 text-slate-300 text-xs sm:text-sm font-medium">
-                        {name}
-                      </div>
-                      <div className="flex-1 w-full">
-                        <div className="relative h-8 flex items-center">
-                          <div
-                            className="bg-teal-400 rounded-lg h-8 transition-all duration-300"
-                            style={{ width: `${percent}%` }}
-                          />
-                          <span className="absolute right-2 text-xs font-bold text-teal-200">
-                            {value}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
+    <div className="relative w-full mb-12 group">
+      <div className="relative h-72 md:h-64 w-full overflow-hidden rounded-2xl shadow-2xl bg-gray-900">
+        <div className="flex h-full transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+          {products.map((product) => (
+            <div key={product.id} className="relative w-full flex-shrink-0 h-full grid grid-cols-1 md:grid-cols-2">
+              <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left p-8 text-white z-10">
+                <p className="text-sm text-amber-300 mb-2 font-semibold">Oferta em Destaque</p>
+                <h2 className="text-2xl font-bold mb-3 line-clamp-3">{product.title}</h2>
+                <div className="flex items-baseline gap-3 mb-5">
+                  <p className="text-3xl font-extrabold text-amber-400">{product.price}</p>
+                  <p className="text-md line-through opacity-60">{product.price_from}</p>
+                </div>
+                <a href={product.link} target="_blank" rel="noopener noreferrer" className="self-center md:self-start bg-amber-400 text-gray-900 font-bold py-2 px-5 rounded-lg hover:bg-amber-300 transition-colors text-sm">
+                  Eu Quero!
+                </a>
               </div>
-              <div className="mt-2 text-xs text-slate-400 text-center">
-                {metricData.note}
+              <div className="hidden md:flex relative items-center justify-center">
+                 <SaleIcon className="w-28 h-28 text-amber-400" />
               </div>
             </div>
-          </div>
-        </section>
-        <section id="modelos" className="mb-12 sm:mb-20 scroll-mt-20">
-          <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-slate-100">
-            Análise Detalhada dos Modelos de Negócio
-          </h3>
-          <p className="text-center text-slate-300 mb-4 sm:mb-8 text-sm sm:text-base">
-            Clique em um modelo para ver o plano de ação, uso de IA, desafios e
-            métricas chave.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {modelKeys.map((key) => (
-              <div key={key} className="flex items-center">
-                <button
-                  className={`model-selector-btn text-base md:text-lg font-semibold py-3 px-6 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 shadow-md ${selectedModel === key ? 'bg-teal-600 text-white' : 'bg-slate-900 text-teal-400 border border-teal-400'}`}
-                  onClick={() => setSelectedModel(key)}
-                >
-                  {reportData.models[key].name}
-                </button>
-              </div>
-            ))}
-          </div>
-          <div
-            id="model-details-container"
-            className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-lg min-h-[500px]"
-          >
-            <div className="content-fade-in">
-              <h4 className="text-3xl font-bold text-center mb-2 text-teal-400">
-                {model.name}
-              </h4>
-              <p className="text-center text-slate-300 mb-8 max-w-2xl mx-auto">
-                {model.description}
-              </p>
-              {selectedModel === 'afiliados' && (
-                <div className="flex justify-center mb-8">
-                  <a
-                    href="/sociedade/afiliado"
-                    className="bg-teal-600 text-white px-6 py-3 rounded-full font-semibold shadow hover:bg-teal-700 transition-colors duration-300 text-base focus:outline-none focus:ring-2 focus:ring-teal-400"
-                    aria-label="Ver mais sobre Marketing de Afiliados"
-                  >
-                    Ver mais sobre Marketing de Afiliados
-                  </a>
-                </div>
-              )}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                <div>
-                  <h5 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 text-slate-100 border-b-2 border-teal-400 pb-1 sm:pb-2">
-                    Plano de Ação
-                  </h5>
-                  <div className="space-y-3 sm:space-y-4">
-                    {model.plan.map((p, idx) => (
-                      <div key={idx} className="relative pl-6 sm:pl-8">
-                        <div className="absolute left-0 top-0 h-full w-0.5 bg-slate-700" />
-                        <div className="absolute left-[-5px] top-2 h-3 w-3 rounded-full bg-teal-400" />
-                        <p className="font-semibold text-slate-100 text-xs sm:text-base">
-                          {p.step}
-                        </p>
-                        <p className="text-slate-300 text-xs sm:text-sm">
-                          {p.detail}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 text-slate-100 border-b-2 border-teal-400 pb-1 sm:pb-2">
-                    Desafios Principais
-                  </h5>
-                  <div className="space-y-2 sm:space-y-3">
-                    {model.challenges.map((c, idx) => {
-                      const color = getChallengeColor(c.title)
-                      const bgColor =
-                        color === 'red'
-                          ? 'bg-red-900'
-                          : color === 'emerald'
-                            ? 'bg-emerald-900'
-                            : 'bg-amber-900'
-                      const borderColor =
-                        color === 'red'
-                          ? 'border-red-400'
-                          : color === 'emerald'
-                            ? 'border-emerald-400'
-                            : 'border-amber-400'
-                      const textColor =
-                        color === 'red'
-                          ? 'text-red-300'
-                          : color === 'emerald'
-                            ? 'text-emerald-300'
-                            : 'text-amber-300'
-                      const detailColor =
-                        color === 'red'
-                          ? 'text-red-400'
-                          : color === 'emerald'
-                            ? 'text-emerald-400'
-                            : 'text-amber-400'
-                      return (
-                        <div
-                          key={idx}
-                          className={`${bgColor} border-l-4 ${borderColor} p-3 sm:p-4 mb-2 sm:mb-3 rounded-r-lg`}
-                        >
-                          <p
-                            className={`font-bold ${textColor} text-xs sm:text-base`}
-                          >
-                            {c.title}
-                          </p>
-                          <p className={`text-xs sm:text-sm ${detailColor}`}>
-                            {c.detail}
-                          </p>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <h5 className="text-base sm:text-xl font-semibold mt-4 sm:mt-6 mb-3 sm:mb-4 text-slate-100 border-b-2 border-teal-400 pb-1 sm:pb-2">
-                    Métricas para Acompanhar
-                  </h5>
-                  <ul className="space-y-1 sm:space-y-2 text-slate-300">
-                    {model.metrics.map((m, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center text-xs sm:text-base"
-                      >
-                        <span className="text-teal-400 mr-2">✔</span>
-                        {m}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-6 sm:mt-8">
-                <h5 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 text-slate-100 border-b-2 border-teal-400 pb-1 sm:pb-2">
-                  Como Usar Inteligência Artificial 🤖
-                </h5>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                  {model.ai.map((a, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-slate-900 p-3 sm:p-4 rounded-lg"
-                    >
-                      <p className="font-semibold text-slate-100 text-xs sm:text-base">
-                        {a.stage}
-                      </p>
-                      <p className="text-slate-300 text-xs sm:text-sm">
-                        {a.detail}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section id="juridico" className="mb-12 sm:mb-20 scroll-mt-20">
-          <div className="bg-slate-800 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg">
-            <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-slate-100">
-              Guia de Formalização (MEI)
-            </h3>
-            <p className="text-center text-slate-300 mb-4 sm:mb-8 text-sm sm:text-base">
-              A formalização como MEI é ideal para começar, mas nem todos os
-              modelos são compatíveis. Veja um resumo da viabilidade de cada um
-              para evitar surpresas e planejar o crescimento do seu negócio.
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                <thead>
-                  <tr>
-                    <th className="py-2 sm:py-3 px-2 sm:px-4 bg-slate-900 font-bold uppercase text-xs sm:text-sm text-slate-300 border-b border-slate-700">
-                      Modelo de Negócio
-                    </th>
-                    <th className="py-2 sm:py-3 px-2 sm:px-4 bg-slate-900 font-bold uppercase text-xs sm:text-sm text-slate-300 border-b border-slate-700 text-center">
-                      Compatível com MEI?
-                    </th>
-                    <th className="py-2 sm:py-3 px-2 sm:px-4 bg-slate-900 font-bold uppercase text-xs sm:text-sm text-slate-300 border-b border-slate-700">
-                      Observações / Limitações
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-slate-300">
-                  {reportData.meiCompatibility.map((item, idx) => {
-                    let statusClass = ''
-                    let statusText = ''
-                    if (item.compatible === 'SIM') {
-                      statusClass = 'bg-emerald-900 text-emerald-300'
-                      statusText = 'Sim'
-                    } else if (item.compatible === 'NÃO') {
-                      statusClass = 'bg-red-900 text-red-300'
-                      statusText = 'Não'
-                    } else {
-                      statusClass = 'bg-amber-900 text-amber-300'
-                      statusText = 'Ambíguo'
-                    }
-                    return (
-                      <tr key={idx} className="hover:bg-slate-900">
-                        <td className="py-2 sm:py-3 px-2 sm:px-4 border-b border-slate-700">
-                          {item.model}
-                        </td>
-                        <td className="py-2 sm:py-3 px-2 sm:px-4 border-b border-slate-700 text-center">
-                          <span
-                            className={`px-2 sm:px-3 py-1 text-xs font-semibold rounded-full ${statusClass}`}
-                          >
-                            {statusText}
-                          </span>
-                        </td>
-                        <td className="py-2 sm:py-3 px-2 sm:px-4 border-b border-slate-700 text-xs sm:text-sm">
-                          {item.notes}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-        <section id="ferramentas" className="scroll-mt-20">
-          <div className="bg-slate-800 p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg">
-            <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-center mb-1 sm:mb-2 text-slate-100">
-              Caixa de Ferramentas do Empreendedor
-            </h3>
-            <p className="text-center text-slate-300 mb-4 sm:mb-8 text-sm sm:text-base">
-              Uma seleção de ferramentas essenciais (gratuitas ou de baixo
-              custo) e como a Inteligência Artificial pode acelerar cada etapa
-              do seu novo negócio.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-              {reportData.tools.map((cat, idx) => (
-                <div
-                  key={idx}
-                  className="bg-slate-900 p-3 sm:p-4 rounded-lg border border-slate-700"
-                >
-                  <h4 className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-slate-100">
-                    {cat.category}
-                  </h4>
-                  <ul className="space-y-1 text-xs sm:space-y-1.5 sm:text-sm text-slate-300">
-                    {cat.items.map((item, iidx) => (
-                      <li key={iidx} className="flex items-start">
-                        <span className="text-teal-400 mr-2 mt-1">🔧</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-      <footer className="bg-slate-900 text-slate-400 mt-12 sm:mt-20">
-        <div className="container mx-auto px-2 sm:px-6 py-6 sm:py-8 text-center text-xs sm:text-base">
-          <p>Gerado para auxiliar empreendedores digitais no Brasil.</p>
-          <p className="text-xs sm:text-sm text-slate-500 mt-2">
-            Uma aplicação interativa baseada no &quot;Guia Estratégico para
-            Empreendedorismo Digital&quot;.
-          </p>
+          ))}
         </div>
-      </footer>
+      </div>
+      <button onClick={goToPrevious} className="absolute top-1/2 left-3 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 rounded-full p-1 md:p-2 transition-all opacity-0 group-hover:opacity-100"><ChevronLeftIcon className="w-6 h-6 text-white" /></button>
+      <button onClick={goToNext} className="absolute top-1/2 right-3 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 rounded-full p-1 md:p-2 transition-all opacity-0 group-hover:opacity-100"><ChevronRightIcon className="w-6 h-6 text-white" /></button>
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {products.map((_, index) => (<button key={index} onClick={() => setCurrentIndex(index)} className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentIndex === index ? 'bg-amber-400 w-6' : 'bg-white/50 hover:bg-white/80'}`}></button>))}
+      </div>
+    </div>
+  );
+}
+
+
+// --- CATEGORY NAVIGATION COMPONENT ---
+function CategoryNavigation() {
+    const categories = [
+        { name: 'Celulares', href: '/categorias/celulares', icon: SmartphoneIcon },
+        { name: 'Notebooks', href: '/categorias/notebooks', icon: LaptopIcon },
+        { name: 'TVs e Vídeo', href: '/categorias/tvs', icon: TvIcon },
+        { name: 'Moda', href: '/categorias/moda', icon: ShirtIcon },
+        { name: 'Casa', href: '/categorias/casa', icon: HomeDecorIcon },
+        { name: 'Beleza', href: '/categorias/beleza', icon: SparkleIcon },
+    ];
+
+    return (
+        <section className="mb-12">
+            <h2 className="text-2xl font-extrabold text-gray-800 mb-4">Navegue por Categorias</h2>
+            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                {categories.map((category) => (
+                    <a key={category.name} href={category.href} className="flex flex-col items-center justify-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                        <div className="flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-3">
+                            <category.icon className="w-8 h-8 text-amber-500" />
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700 text-center">{category.name}</span>
+                    </a>
+                ))}
+            </div>
+        </section>
+    );
+}
+
+
+// --- PRODUCT CARD COMPONENT ---
+function ProductCard({ product }: { product: Product }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg shadow-md flex flex-col overflow-hidden">
+      <div className="relative w-full" style={{paddingBottom: '100%'}}>
+        <img src={product.image} alt={product.title} className="absolute top-0 left-0 w-full h-full object-contain p-4" loading="lazy" />
+        {product.coupon && (<div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">CUPOM</div>)}
+      </div>
+      <div className="p-4 flex flex-col flex-grow">
+        <h2 className="text-gray-700 font-semibold text-sm flex-grow mb-4" style={{ minHeight: '3rem' }}>{product.title}</h2>
+        <div className="text-right mb-4"><p className="text-gray-400 line-through text-xs">{product.price_from}</p><p className="text-gray-800 text-2xl font-extrabold">{product.price}</p></div>
+        {product.coupon && (<div className="text-center bg-amber-100 border-2 border-dashed border-amber-400 text-amber-600 font-bold py-1 px-2 rounded-lg mb-4">Use o cupom: {product.coupon}</div>)}
+        <a href={product.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full flex items-center justify-center gap-2 text-center bg-amber-400 text-gray-900 font-bold py-3 px-4 rounded-lg hover:bg-amber-500 transition-colors"><ShoppingCartIcon className="w-5 h-5"/><span>Pegar Oferta</span></a>
+        <p className="text-center text-gray-400 text-xs mt-3">Vendido por <span className="font-semibold">{product.seller}</span></p>
+      </div>
     </div>
   )
 }
 
-export default Page
+// --- STORE SECTION COMPONENT ---
+function StoreSection({ title, products }: { title: string, products: Product[] }) {
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            const scrollAmount = scrollRef.current.clientWidth * 0.8;
+            scrollRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
+    
+    if (!products || products.length === 0) return null;
+
+    const showNavigation = products.length > 4;
+
+    return (
+        <section className="mb-12">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="flex items-center gap-3 text-2xl font-extrabold text-gray-800">
+                    <StorefrontIcon className="w-8 h-8 text-amber-500" />
+                    <span>{title}</span>
+                </h2>
+                {showNavigation && (
+                    <div className="hidden md:flex gap-2">
+                        <button onClick={() => scroll('left')} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"><ChevronLeftIcon className="w-6 h-6" /></button>
+                        <button onClick={() => scroll('right')} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"><ChevronRightIcon className="w-6 h-6" /></button>
+                    </div>
+                )}
+            </div>
+            <div className="relative">
+                <div ref={scrollRef} className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
+                    {products.map(product => (
+                        <div key={product.id} className="flex-shrink-0 w-3/4 sm:w-2/5 md:w-1/3 lg:w-[calc(25%-1.125rem)]" style={{ scrollSnapAlign: 'start' }}>
+                           <ProductCard product={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+
+// --- NOVO COMPONENTE: FOOTER ---
+function Footer() {
+    return (
+        <footer className="bg-gray-800 text-white">
+            <div className="container mx-auto px-8 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    {/* Coluna da Marca */}
+                    <div className="mb-6 md:mb-0">
+                        <a href="/" className="flex items-center gap-2 text-2xl font-extrabold">
+                            <TagIcon className="w-7 h-7 text-amber-400"/>
+                            <span>Achado<span className="text-amber-400">Certo</span></span>
+                        </a>
+                        <p className="mt-4 text-gray-400 text-sm">As melhores ofertas e cupons da internet, selecionados para você.</p>
+                    </div>
+                    {/* Coluna de Navegação */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-4">Navegação</h3>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><a href="/cupons" className="hover:text-amber-400 transition-colors">Cupons</a></li>
+                            <li><a href="/categorias" className="hover:text-amber-400 transition-colors">Categorias</a></li>
+                            <li><a href="/lojas" className="hover:text-amber-400 transition-colors">Lojas</a></li>
+                        </ul>
+                    </div>
+                    {/* Coluna Legal */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-4">Legal</h3>
+                        <ul className="space-y-2 text-gray-400">
+                            <li><a href="/termos-de-uso" className="hover:text-amber-400 transition-colors">Termos de Uso</a></li>
+                            <li><a href="/politica-de-privacidade" className="hover:text-amber-400 transition-colors">Política de Privacidade</a></li>
+                        </ul>
+                    </div>
+                    {/* Coluna Redes Sociais */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-4">Siga-nos</h3>
+                        <div className="flex space-x-4">
+                            <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors"><InstagramIcon className="w-6 h-6" /></a>
+                            <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors"><TelegramIcon className="w-6 h-6" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-12 border-t border-gray-700 pt-8">
+                    <p className="text-sm text-gray-500 text-center">
+                        © {new Date().getFullYear()} Achado Certo. Todos os direitos reservados.
+                    </p>
+                    <p className="text-xs text-gray-600 text-center mt-4 max-w-3xl mx-auto">
+                        Aviso de Afiliado: O Achado Certo pode receber comissões por compras realizadas através dos nossos links. Isso não gera custos adicionais para você e ajuda-nos a manter o site. Os preços e a disponibilidade dos produtos são precisos na data e hora da publicação e estão sujeitos a alterações.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    );
+}
+
+
+// --- LAYOUT COMPONENT ---
+function Layout({ children }: { children: React.ReactNode }) {
+    return (
+        <div className="flex flex-col min-h-screen">
+            <style>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
+            <Header />
+            <main className="flex-grow container mx-auto p-4">
+                {children}
+            </main>
+            <Footer />
+        </div>
+    )
+}
+
+
+// --- PAGE COMPONENT ---
+export default function Home() {
+  const [productsByStore, setProductsByStore] = useState<Record<string, Product[]>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const mockProducts: Product[] = [
+        // Amazon
+        { id: 25079518, title: "Lysoform Original, Desinfetante Líquido, 4 Unidades de 1L", image: "https://m.media-amazon.com/images/I/41tkF1Xpy+L._SL500_.jpg", price_from: "R$ 54,99", price: "R$ 35,00", link: "#", seller: "Amazon" },
+        { id: 25139150, title: "Fritadeira Airfryer Série 3000, Philips Walita, 6.2L", image: "https://m.media-amazon.com/images/I/31CmZZDqXWL._SL500_.jpg", price_from: "R$ 509,90", price: "R$ 328,94", link: "#", coupon: "10CASA", seller: "Amazon" },
+        { id: 25175421, title: "Vichy Shampoo Estimulante Antiqueda Energy+ Dercos 400g", image: "https://m.media-amazon.com/images/I/31PPXVQKESL._SL500_.jpg", price_from: "R$ 129,84", price: "R$ 79,00", link: "#", coupon: "FINALPRIME20", seller: "Amazon" },
+        { id: 25121474, title: "Wella Professionals Nutri Enrich Shampoo 1000 ml", image: "https://m.media-amazon.com/images/I/31z6oFoGuoL._SL500_.jpg", price_from: "R$ 140,90", price: "R$ 118,65", link: "#", seller: "Amazon" },
+        { id: 25139481, title: "WOLFF - Garrafa Térmica de Aço Inox Parede Dupla Ice 500ml", image: "https://m.media-amazon.com/images/I/21BXztKTpRL._SL500_.jpg", price_from: "R$ 59,00", price: "R$ 50,15", link: "#", seller: "Amazon" },
+        // Magazine Luiza
+        { id: 30000001, title: "Smart TV 50\" UHD 4K Samsung 50CU7700", image: "https://m.media-amazon.com/images/I/71f-d242eEL._AC_SL1500_.jpg", price_from: "R$ 2.499,00", price: "R$ 2.180,00", link: "#", seller: "Magazine Luiza" },
+        { id: 30000002, title: "iPhone 14 Apple 128GB Meia-noite", image: "https://m.media-amazon.com/images/I/61cMQeXl65L._AC_SL1500_.jpg", price_from: "R$ 5.999,00", price: "R$ 4.899,00", link: "#", coupon: "IPHONE10", seller: "Magazine Luiza" },
+        { id: 30000003, title: "Geladeira/Refrigerador Brastemp Frost Free Duplex 375L", image: "https://m.media-amazon.com/images/I/51X2i2q22JL._AC_SL1000_.jpg", price_from: "R$ 3.199,00", price: "R$ 2.899,00", link: "#", seller: "Magazine Luiza" },
+        // Americanas
+        { id: 40000001, title: "Notebook Lenovo IdeaPad 3i Intel Core i5", image: "https://m.media-amazon.com/images/I/61q-83VdkGL._AC_SL1500_.jpg", price_from: "R$ 3.500,00", price: "R$ 3.150,00", link: "#", seller: "Americanas" },
+        { id: 40000002, title: "Cadeira Gamer Profissional TGC12 Preta ThunderX3", image: "https://m.media-amazon.com/images/I/616P2-YI60L._AC_SL1000_.jpg", price_from: "R$ 1.200,00", price: "R$ 999,90", link: "#", seller: "Americanas" },
+    ];
+    
+    const groupedProducts = mockProducts.reduce((acc, product) => {
+        const store = product.seller;
+        if (!acc[store]) {
+            acc[store] = [];
+        }
+        acc[store].push(product);
+        return acc;
+    }, {} as Record<string, Product[]>);
+
+    const timer = setTimeout(() => {
+        setProductsByStore(groupedProducts);
+        setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+        <Layout>
+            <div className="text-center p-10">Carregando ofertas...</div>
+        </Layout>
+    );
+  }
+
+  const featuredProducts = Object.values(productsByStore).flat().slice(0, 3);
+  const storeOrder = ["Amazon", "Magazine Luiza", "Americanas"];
+
+  return (
+    <Layout>
+      <FeaturedSlider products={featuredProducts} />
+      
+      <CategoryNavigation />
+
+      <div className="space-y-12">
+        {storeOrder.map(storeName => (
+            productsByStore[storeName] && (
+                <StoreSection 
+                    key={storeName}
+                    title={`Ofertas ${storeName}`} 
+                    products={productsByStore[storeName]} 
+                />
+            )
+        ))}
+      </div>
+    </Layout>
+  );
+}
