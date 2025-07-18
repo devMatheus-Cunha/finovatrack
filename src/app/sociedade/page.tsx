@@ -457,7 +457,6 @@ export default function Home() {
     <Layout>
       <FeaturedSlider products={featuredProducts} />
       <CategoryNavigation />
-      <CommunityCallToAction />
       
       <ContentSlider 
         title="Últimos Achados Adicionados"
@@ -474,6 +473,7 @@ export default function Home() {
         seeMoreLink="/cupons"
         renderItem={(coupon: Coupon) => <CouponCard coupon={coupon} />}
       />
+       <CommunityCallToAction />
     </Layout>
   );
 }
