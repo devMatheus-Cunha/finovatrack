@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-// --- DEFINIÇÃO DE TIPO ---
+// --- DEFINIÇÕES DE TIPO ---
 export interface Product {
   id: number;
   title: string;
@@ -13,6 +13,14 @@ export interface Product {
   link: string;
   coupon?: string | null;
   seller: string;
+}
+
+export interface Coupon {
+    id: number;
+    store: string;
+    code: string;
+    description: string;
+    link: string;
 }
 
 // --- ÍCONES ---
@@ -36,9 +44,6 @@ const MenuIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 const CloseIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
-);
-const StorefrontIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 21h16M8 21V11h8v10M4 7h16M8 7V3h8v4m-4 4h0"></path></svg>
 );
 const ShoppingCartIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -64,6 +69,10 @@ const HomeDecorIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} 
 const SparkleIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L9.1 8.5 2 10l6.2 5.9L6.4 22 12 18l5.6 4-1.8-6.1L22 10l-7.1-1.5z"></path></svg>;
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
 const TelegramIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M22 2 11 13H2l2.65-9.36L22 2zm0 0-7 18-3.5-7-7-3.5L22 2z"></path></svg>;
+const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>;
+const CopyIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>;
+const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>;
+const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
 
 
 // --- HEADER COMPONENT ---
@@ -101,7 +110,6 @@ function Header() {
           </div>
         </div>
       </div>
-      {/* Menu Mobile com Animação */}
       <div className={`transition-all duration-300 ease-in-out overflow-hidden md:hidden ${isMenuOpen ? 'max-h-96' : 'max-h-0'}`}>
         <div className="bg-white border-t border-gray-100">
             <nav className="flex flex-col items-start space-y-2 p-4">
@@ -154,8 +162,8 @@ function FeaturedSlider({ products = [] }: { products?: Product[] }) {
                 <p className="text-sm text-amber-300 mb-2 font-semibold">Oferta em Destaque</p>
                 <h2 className="text-xl sm:text-2xl font-bold mb-3 line-clamp-3">{product.title}</h2>
                 <div className="flex items-baseline gap-3 mb-5">
-                  <p className="text-2xl sm:text-3xl font-extrabold text-amber-400">{product.price}</p>
-                  <p className="text-sm sm:text-md line-through opacity-60">{product.price_from}</p>
+                  <p className="text-3xl sm:text-4xl font-extrabold text-amber-400">{product.price}</p>
+                  <p className="text-md line-through opacity-60">{product.price_from}</p>
                 </div>
                 <a href={product.link} target="_blank" rel="noopener noreferrer" className="self-center md:self-start bg-amber-400 text-gray-900 font-bold py-2 px-5 rounded-lg hover:bg-amber-300 transition-colors text-sm">
                   Eu Quero!
@@ -206,6 +214,27 @@ function CategoryNavigation() {
     );
 }
 
+// --- COMMUNITY CALL TO ACTION COMPONENT ---
+function CommunityCallToAction() {
+    return (
+        <section className="bg-gray-800 text-white rounded-2xl p-8 md:p-12 mb-12 text-center">
+            <h2 className="text-3xl font-extrabold mb-3">Receba as Ofertas em Primeira Mão!</h2>
+            <p className="max-w-2xl mx-auto text-gray-300 mb-6">
+                Junte-se aos nossos grupos exclusivos e nunca mais perca uma promoção relâmpago.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#" className="flex items-center justify-center gap-3 w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <TelegramIcon className="w-6 h-6" />
+                    <span>Entrar no Telegram</span>
+                </a>
+                <a href="#" className="flex items-center justify-center gap-3 w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    <WhatsappIcon className="w-6 h-6" />
+                    <span>Entrar no WhatsApp</span>
+                </a>
+            </div>
+        </section>
+    );
+}
 
 // --- PRODUCT CARD COMPONENT ---
 function ProductCard({ product }: { product: Product }) {
@@ -226,49 +255,81 @@ function ProductCard({ product }: { product: Product }) {
   )
 }
 
-// --- STORE SECTION COMPONENT ---
-function StoreSection({ title, products }: { title: string, products: Product[] }) {
+// --- CONTENT SLIDER COMPONENT (NAVEGAÇÃO EXTERNA E AJUSTADA) ---
+function ContentSlider({ title, icon: TitleIcon, items, seeMoreLink, renderItem }: { title: string, icon: React.ElementType, items: any[], seeMoreLink: string, renderItem: (item: any) => React.ReactNode }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
-            const scrollAmount = scrollRef.current.clientWidth * 0.8;
-            scrollRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
+            const scrollAmount = scrollRef.current.clientWidth;
+            scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
         }
     };
     
-    if (!products || products.length === 0) return null;
+    if (!items || items.length === 0) return null;
 
-    const showNavigation = products.length > 4;
+    const showNavigation = items.length > 4;
 
     return (
         <section className="mb-12">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="flex items-center gap-3 text-2xl font-extrabold text-gray-800">
-                    <StorefrontIcon className="w-8 h-8 text-amber-500" />
+                    <TitleIcon className="w-8 h-8 text-amber-500" />
                     <span>{title}</span>
                 </h2>
-                {showNavigation && (
-                    <div className="hidden md:flex gap-2">
-                        <button onClick={() => scroll('left')} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"><ChevronLeftIcon className="w-6 h-6" /></button>
-                        <button onClick={() => scroll('right')} className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"><ChevronRightIcon className="w-6 h-6" /></button>
-                    </div>
-                )}
+                <a href={seeMoreLink} className="flex items-center gap-2 bg-amber-100 text-amber-700 font-bold py-2 px-4 rounded-full text-sm hover:bg-amber-200 transition-colors">
+                    <span>Ver Tudo</span>
+                    <ArrowRightIcon className="w-4 h-4" />
+                </a>
             </div>
-            <div className="relative">
-                <div ref={scrollRef} className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
-                    {products.map(product => (
-                        <div key={product.id} className="flex-shrink-0 w-4/5 sm:w-2/5 md:w-1/3 lg:w-[calc(25%-0.75rem)]" style={{ scrollSnapAlign: 'start' }}>
-                           <ProductCard product={product} />
+            <div className="relative flex items-center gap-2">
+                {showNavigation && (
+                    <button onClick={() => scroll('left')} className="hidden md:flex bg-white hover:bg-gray-100 rounded-full p-2 shadow-md transition-colors self-center z-10">
+                        <ChevronLeftIcon className="w-6 h-6 text-gray-800" />
+                    </button>
+                )}
+                <div ref={scrollRef} className="flex-grow flex space-x-4 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
+                    {items.map(item => (
+                        <div key={item.id} className="flex-shrink-0 w-4/5 sm:w-2/5 md:w-1/3 lg:w-[calc(25%-0.75rem)]" style={{ scrollSnapAlign: 'start' }}>
+                           {renderItem(item)}
                         </div>
                     ))}
                 </div>
+                {showNavigation && (
+                     <button onClick={() => scroll('right')} className="hidden md:flex bg-white hover:bg-gray-100 rounded-full p-2 shadow-md transition-colors self-center z-10">
+                        <ChevronRightIcon className="w-6 h-6 text-gray-800" />
+                    </button>
+                )}
             </div>
         </section>
     )
+}
+
+// --- COUPON CARD COMPONENT ---
+function CouponCard({ coupon }: { coupon: Coupon }) {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(coupon.code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col text-center h-full">
+            <h3 className="font-bold text-lg text-gray-800">{coupon.store}</h3>
+            <p className="text-sm text-gray-500 my-2 flex-grow">{coupon.description}</p>
+            <div className="my-4">
+                <button onClick={handleCopy} className="w-full border-2 border-dashed border-amber-400 text-amber-600 font-bold py-2 px-4 rounded-lg hover:bg-amber-100 transition-colors">
+                    {coupon.code}
+                </button>
+            </div>
+            <a href={coupon.link} target="_blank" rel="noopener noreferrer" onClick={handleCopy} className="mt-auto w-full flex items-center justify-center gap-2 text-center bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-900 transition-colors">
+                {copied ? <CheckIcon className="w-5 h-5 text-green-400" /> : <CopyIcon className="w-5 h-5" />}
+                <span>{copied ? 'Copiado!' : 'Copiar e Ir para Loja'}</span>
+            </a>
+        </div>
+    );
 }
 
 
@@ -347,37 +408,36 @@ function Layout({ children }: { children: React.ReactNode }) {
 
 // --- PAGE COMPONENT ---
 export default function Home() {
-  const [productsByStore, setProductsByStore] = useState<Record<string, Product[]>>({});
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allCoupons, setAllCoupons] = useState<Coupon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const mockProducts: Product[] = [
-        // Amazon
         { id: 25079518, title: "Lysoform Original, Desinfetante Líquido, 4 Unidades de 1L", image: "https://m.media-amazon.com/images/I/41tkF1Xpy+L._SL500_.jpg", price_from: "R$ 54,99", price: "R$ 35,00", link: "#", seller: "Amazon" },
         { id: 25139150, title: "Fritadeira Airfryer Série 3000, Philips Walita, 6.2L", image: "https://m.media-amazon.com/images/I/31CmZZDqXWL._SL500_.jpg", price_from: "R$ 509,90", price: "R$ 328,94", link: "#", coupon: "10CASA", seller: "Amazon" },
         { id: 25175421, title: "Vichy Shampoo Estimulante Antiqueda Energy+ Dercos 400g", image: "https://m.media-amazon.com/images/I/31PPXVQKESL._SL500_.jpg", price_from: "R$ 129,84", price: "R$ 79,00", link: "#", coupon: "FINALPRIME20", seller: "Amazon" },
         { id: 25121474, title: "Wella Professionals Nutri Enrich Shampoo 1000 ml", image: "https://m.media-amazon.com/images/I/31z6oFoGuoL._SL500_.jpg", price_from: "R$ 140,90", price: "R$ 118,65", link: "#", seller: "Amazon" },
         { id: 25139481, title: "WOLFF - Garrafa Térmica de Aço Inox Parede Dupla Ice 500ml", image: "https://m.media-amazon.com/images/I/21BXztKTpRL._SL500_.jpg", price_from: "R$ 59,00", price: "R$ 50,15", link: "#", seller: "Amazon" },
-        // Magazine Luiza
         { id: 30000001, title: "Smart TV 50\" UHD 4K Samsung 50CU7700", image: "https://m.media-amazon.com/images/I/71f-d242eEL._AC_SL1500_.jpg", price_from: "R$ 2.499,00", price: "R$ 2.180,00", link: "#", seller: "Magazine Luiza" },
         { id: 30000002, title: "iPhone 14 Apple 128GB Meia-noite", image: "https://m.media-amazon.com/images/I/61cMQeXl65L._AC_SL1500_.jpg", price_from: "R$ 5.999,00", price: "R$ 4.899,00", link: "#", coupon: "IPHONE10", seller: "Magazine Luiza" },
         { id: 30000003, title: "Geladeira/Refrigerador Brastemp Frost Free Duplex 375L", image: "https://m.media-amazon.com/images/I/51X2i2q22JL._AC_SL1000_.jpg", price_from: "R$ 3.199,00", price: "R$ 2.899,00", link: "#", seller: "Magazine Luiza" },
-        // Americanas
         { id: 40000001, title: "Notebook Lenovo IdeaPad 3i Intel Core i5", image: "https://m.media-amazon.com/images/I/61q-83VdkGL._AC_SL1500_.jpg", price_from: "R$ 3.500,00", price: "R$ 3.150,00", link: "#", seller: "Americanas" },
         { id: 40000002, title: "Cadeira Gamer Profissional TGC12 Preta ThunderX3", image: "https://m.media-amazon.com/images/I/616P2-YI60L._AC_SL1000_.jpg", price_from: "R$ 1.200,00", price: "R$ 999,90", link: "#", seller: "Americanas" },
     ];
     
-    const groupedProducts = mockProducts.reduce((acc, product) => {
-        const store = product.seller;
-        if (!acc[store]) {
-            acc[store] = [];
-        }
-        acc[store].push(product);
-        return acc;
-    }, {} as Record<string, Product[]>);
+    const mockCoupons: Coupon[] = [
+        { id: 1, store: 'Amazon', code: 'PRIME15', description: '15% OFF em livros selecionados para membros Prime.', link: '#' },
+        { id: 2, store: 'Magazine Luiza', code: 'MAGALU10', description: '10% de desconto em todo o site, exceto smartphones.', link: '#' },
+        { id: 3, store: 'Americanas', code: 'PEGA100', description: 'R$100 de desconto em compras acima de R$1000.', link: '#' },
+        { id: 4, store: 'Amazon', code: 'FRETEGRATIS', description: 'Receba o seu produto com frete grátis em todo o Brasil.', link: '#' },
+        { id: 5, store: 'Magazine Luiza', code: 'APP10', description: '10% de desconto na primeira compra pelo app.', link: '#' },
+        { id: 6, store: 'Americanas', code: 'VOLTEI', description: 'R$20 de desconto para clientes selecionados.', link: '#' },
+    ];
 
     const timer = setTimeout(() => {
-        setProductsByStore(groupedProducts);
+        setAllProducts(mockProducts);
+        setAllCoupons(mockCoupons);
         setIsLoading(false);
     }, 500);
     return () => clearTimeout(timer);
@@ -391,26 +451,29 @@ export default function Home() {
     );
   }
 
-  const featuredProducts = Object.values(productsByStore).flat().slice(0, 3);
-  const storeOrder = ["Amazon", "Magazine Luiza", "Americanas"];
+  const featuredProducts = allProducts.slice(0, 3);
 
   return (
     <Layout>
       <FeaturedSlider products={featuredProducts} />
-      
       <CategoryNavigation />
+      <CommunityCallToAction />
+      
+      <ContentSlider 
+        title="Últimos Achados Adicionados"
+        icon={TagIcon}
+        items={allProducts}
+        seeMoreLink="/produtos"
+        renderItem={(product: Product) => <ProductCard product={product} />}
+      />
 
-      <div className="space-y-12">
-        {storeOrder.map(storeName => (
-            productsByStore[storeName] && (
-                <StoreSection 
-                    key={storeName}
-                    title={`Ofertas ${storeName}`} 
-                    products={productsByStore[storeName]} 
-                />
-            )
-        ))}
-      </div>
+      <ContentSlider 
+        title="Cupons Populares"
+        icon={TicketIcon}
+        items={allCoupons}
+        seeMoreLink="/cupons"
+        renderItem={(coupon: Coupon) => <CouponCard coupon={coupon} />}
+      />
     </Layout>
   );
 }
