@@ -255,7 +255,7 @@ function ProductCard({ product }: { product: Product }) {
   )
 }
 
-// --- CONTENT SLIDER COMPONENT (NAVEGAÇÃO EXTERNA E AJUSTADA) ---
+// --- CONTENT SLIDER COMPONENT ---
 function ContentSlider({ title, icon: TitleIcon, items, seeMoreLink, renderItem }: { title: string, icon: React.ElementType, items: any[], seeMoreLink: string, renderItem: (item: any) => React.ReactNode }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -386,7 +386,7 @@ function Footer() {
 // --- LAYOUT COMPONENT ---
 function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen">
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
                     display: none;
