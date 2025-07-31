@@ -287,6 +287,13 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         label: 'Projeção Dividendos (Anual)',
         value: projecoes?.dividendos?.projecaoAnualEstimada || 0,
         icon: iconMap['Projeção Dividendos (Anual)'],
+        subValue: `Yield Projetado: ${projecoes?.dividendos?.yieldProjetado.toFixed(2)}%`
+      },
+      // --- ADICIONADO ---
+      {
+        label: 'Projeção Dividendos (Mensal)',
+        value: projecoes?.dividendos?.projecaoMensalEstimada || 0,
+        icon: iconMap['Projeção Dividendos (Anual)'], // Reutilizando ícone
         subValue: 'Estimativa'
       }
     ]

@@ -94,8 +94,12 @@ export interface IInvestimentsData {
       projecaoMensal: number
       projecaoAnual: number
     }
+    // A tipagem abaixo foi atualizada para corresponder aos novos dados
     dividendos: {
       projecaoAnualEstimada: number
+      projecaoMensalEstimada: number // Adicionado
+      projecaoDiariaEstimada: number // Adicionado
+      yieldProjetado: number // Adicionado
     }
   }
   dadosBrutos: {

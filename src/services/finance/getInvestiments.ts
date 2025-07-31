@@ -31,15 +31,6 @@ export const getCombinedData = async (
         `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/account/cash`,
         { method: 'GET', headers: { Authorization: apiKey } }
       ),
-      // fetch(
-      //   `https://cors.redoc.ly/https://live.trading212.com/api/v0/equity/pies`,
-      //   {
-      //     headers: {
-      //       Authorization: apiKey,
-      //       'X-Requested-With': 'XMLHttpRequest'
-      //     }
-      //   }
-      // ),
       fetch(
         `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/transactions?limit=50`,
         { method: 'GET', headers: { Authorization: apiKey } }
@@ -59,7 +50,7 @@ export const getCombinedData = async (
     // --- Busca Paginada de TODO o histórico de dividendos ---
     let allDividends: any[] = []
     let nextCursor: string | null = null
-    let dividendUrl: string // CORREÇÃO: Declarada fora do loop
+    let dividendUrl: string
     do {
       dividendUrl = `https://cors.redoc.ly/https://live.trading212.com/api/v0/history/dividends?limit=50${nextCursor ? `&cursor=${nextCursor}` : ''}`
       const dividendResponse = await fetch(dividendUrl, {
@@ -78,7 +69,6 @@ export const getCombinedData = async (
     const valorInvestido = apiInvestmentsData?.invested || 0
     const valorNaoInvestido = apiInvestmentsData?.free || 0
     const valorizacaoInvestimentos = apiInvestmentsData?.ppl || 0
-    // O total de dividendos agora é a soma precisa do histórico completo
     const totalDividendos = allDividends.reduce(
       (sum, div) => sum + div.amount,
       0
@@ -108,7 +98,7 @@ export const getCombinedData = async (
     )
 
     // ============================================================================
-    // == 4. ANÁLISE DETALHada DE DIVIDENDOS
+    // == 4. ANÁLISE DETALHADA DE DIVIDENDOS
     // ============================================================================
     const umAnoAtras = new Date()
     umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1)
@@ -162,9 +152,8 @@ export const getCombinedData = async (
 
     let ganhosFuturosDeJuros = 0
     if (hoje < dataMudancaTaxa) {
-      // Esta lógica é para antes da mudança
+      // Lógica futura aqui
     } else {
-      // Como hoje é 18 de Junho, já passamos da data, usamos apenas a taxa futura
       const diasRestantes = diffInDays(hoje, fimDoAno)
       ganhosFuturosDeJuros =
         diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
@@ -174,8 +163,17 @@ export const getCombinedData = async (
       valorNaoInvestido *
       ((hoje < dataMudancaTaxa ? taxaAtual : taxaFutura) / 100 / 365)
 
-    // MELHORIA: Projeção anual de dividendos agora é baseada nos últimos 12 meses.
-    const projecaoAnualDividendos = totalDividendosLTM
+    // <-- ALTERAÇÃO AQUI -->
+    // NOVA MELHORIA: Projeção anual de dividendos baseada no Yield projetado (Forward Yield).
+    // Este valor (2.92%) veio de uma plataforma externa e tende a ser mais preciso para o futuro.
+    const yieldProjetado = 2.92 / 100 // Converte a porcentagem para decimal
+
+    // A nova projeção é o seu valor investido atual multiplicado pelo yield projetado.
+    const projecaoAnualDividendos = valorInvestido * yieldProjetado
+
+    // Podemos também calcular as projeções mensais e diárias com base neste novo valor anual.
+    const projecaoMensalDividendos = projecaoAnualDividendos / 12
+    const projecaoDiariaDividendos = projecaoAnualDividendos / 365
 
     // ============================================================================
     // == 7. MONTAGEM DO OBJETO DE RETORNO FINAL
@@ -214,11 +212,12 @@ export const getCombinedData = async (
             totalRecebidoUltimos12Meses: parseFloat(
               totalDividendosLTM.toFixed(2)
             ),
-            yieldAnualizado: parseFloat(yieldAnualizadoLTM.toFixed(2)),
+            yieldAnualizado: parseFloat(yieldAnualizadoLTM.toFixed(2)), // Este é o yield histórico (real)
             distribuicaoPorAtivo: distribuicaoPorAtivo.slice(0, 10)
           }
         }
       },
+      // <-- ALTERAÇÃO AQUI -->
       projecoes: {
         jurosSobreCaixa: {
           projecaoDiaria: parseFloat(projecaoDiariaDeJurosAtual.toFixed(4)),
@@ -228,7 +227,15 @@ export const getCombinedData = async (
           )
         },
         dividendos: {
-          projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2))
+          // Os novos dados que você forneceu serão calculados dinamicamente com base no seu valor investido.
+          projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2)),
+          projecaoMensalEstimada: parseFloat(
+            projecaoMensalDividendos.toFixed(2)
+          ),
+          projecaoDiariaEstimada: parseFloat(
+            projecaoDiariaDividendos.toFixed(2)
+          ),
+          yieldProjetado: parseFloat((yieldProjetado * 100).toFixed(2)) // Guardamos o yield usado para a projeção
         }
       },
       dadosBrutos: {
