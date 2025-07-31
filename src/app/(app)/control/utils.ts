@@ -129,10 +129,7 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
 
     const calculation = expensesData.reduce(
       (acumulador, objetoAtual) => {
-        if (
-          objetoAtual.category !== 'Investimentos e Finanças' &&
-          objetoAtual.subcategory?.label !== 'Gastos Livres / Diversos'
-        ) {
+        if (objetoAtual.category !== 'Investimentos e Finanças') {
           acumulador.value_primary_currency =
             (acumulador.value_primary_currency ?? 0) +
             Number(objetoAtual.value_primary_currency)
@@ -161,7 +158,8 @@ export const useCalculationSumValues = (expensesData: ExpenseData[]) => {
   }
 }
 
-export const useGetTotalsFree = (calculationSumValues: ExpenseData[]) => {
+export const useGetTotals = (calculationSumValues: ExpenseData[]) => {
+  console.log(calculationSumValues)
   const getTotals: ExpenseData = useMemo(() => {
     const result = calculationSumValues.find(
       (item) => item.description === 'Totais'

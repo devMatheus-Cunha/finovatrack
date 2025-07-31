@@ -28,7 +28,7 @@ import {
 import {
   formattedValuesSubmitExpense,
   useCalculationSumValues,
-  useGetTotalsFree
+  useGetTotals
 } from './utils'
 
 import { ExpenseData } from '@/services/expenses/getExpenses'
@@ -64,7 +64,7 @@ export default function Control() {
     calculationSumValues,
     sumTotalEntry
   )
-  const { getTotals } = useGetTotalsFree(calculationSumValues)
+  const { getTotals } = useGetTotals(calculationSumValues)
   const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
     userData,
     getTotals?.value_secondary_currency
@@ -114,6 +114,14 @@ export default function Control() {
     oneCurrency: getTotals?.value_primary_currency
   }
 
+  const calculateTotalFree = () => {
+    const entry = sumTotalEntry || 0
+    const expenses = validateExpenseData[typeAccount] || 0
+    const investmentsTotal = investments.totalInvestments || 0
+
+    return entry - expenses - investmentsTotal
+  }
+
   const onAddExpense: SubmitHandler<ExpenseData> = async (data) => {
     const formattedData = formattedValuesSubmitExpense(data, userData)
 
@@ -153,11 +161,8 @@ export default function Control() {
     saveReport({
       data,
       period,
-      entrys: entrysData || [], // Adicionando array de entradas
-      totalFree:
-        sumTotalEntry -
-        (validateExpenseData[typeAccount] || 0) -
-        investments.totalInvestments,
+      entrys: entrysData || [],
+      totalFree: calculateTotalFree(),
       investments: investments,
       totalEntrys: sumTotalEntry,
       totalExpenses: validateExpenseData[typeAccount],
@@ -177,6 +182,7 @@ export default function Control() {
           totalExpensesEurToReal={calculationTotalExpensesEurToReal}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
           investments={investments}
+          totalFree={calculateTotalFree()}
         />
       </div>
 

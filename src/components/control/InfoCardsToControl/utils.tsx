@@ -12,6 +12,7 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 export interface CardDataProps {
   totalEntrys: number
   totalExpensesEurToReal: number
+  totalFree: number
   totalExpensesEurSumRealToReal: number
   investments?: { totalInvestments: number }
   entrysData?: IEntrysData[]
@@ -30,7 +31,8 @@ export const generateCardsData = ({
   userData,
   isVisibilityData,
   onOpenTotalEntrys,
-  infoAction
+  infoAction,
+  totalFree
 }: CardDataProps) => {
   if (!entrysData) return
   return [
@@ -74,10 +76,7 @@ export const generateCardsData = ({
       currency: userData.primary_currency
     },
     {
-      infoData:
-        totalEntrys -
-        totalExpensesEurSumRealToReal -
-        (investments?.totalInvestments || 0),
+      infoData: totalFree,
       currency: userData.primary_currency,
       icon: MoneyWavy,
       iconColor: 'blue',

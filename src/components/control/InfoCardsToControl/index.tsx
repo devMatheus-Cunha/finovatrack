@@ -13,6 +13,7 @@ interface IInfoCardsToControl {
   infoAction?: () => void
   onOpenTotalEntrys: any
   investments?: any
+  totalFree: number
 }
 
 function InfoCardsToControl({
@@ -21,7 +22,8 @@ function InfoCardsToControl({
   totalExpensesEurSumRealToReal,
   infoAction,
   onOpenTotalEntrys,
-  investments
+  investments,
+  totalFree
 }: IInfoCardsToControl) {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
@@ -36,7 +38,8 @@ function InfoCardsToControl({
     userData,
     isVisibilityData,
     onOpenTotalEntrys,
-    infoAction
+    infoAction,
+    totalFree
   })
 
   return (
