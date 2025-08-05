@@ -29,7 +29,8 @@ const CardToPatrimony = ({
     },
     {
       label: 'Investimentos',
-      value: investments?.composicaoPortfolio?.valorInvestido || 0,
+      value:
+        investments?.composicaoPortfolio?.totalInvestidoComValorizacao || 0,
       color: blueShades.blue700
     },
     {
