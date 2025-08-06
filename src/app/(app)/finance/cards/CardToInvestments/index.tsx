@@ -6,7 +6,6 @@ import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { blueHexShades } from '@/utils/colors'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 
-// Interface para formatar os dados para exibição
 interface IDisplayStat {
   label: string
   value: number
@@ -16,9 +15,6 @@ interface IDisplayStat {
   unit?: '%' | 'currency'
 }
 
-// ============================================================================
-// == LÓGICA DE DADOS AJUSTADA PARA 3 ABAS DENTRO DA SUA ESTRUTURA ==
-// ============================================================================
 const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
   if (!investimentsData) {
     return {
@@ -245,7 +241,6 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         percentage: rendimentos?.porcentagemLucroTotal || 0
       }
     ],
-    // 'Detalhes' foi renomeado para 'Rendimentos' para maior clareza
     Rendimentos: [
       {
         label: 'Valorização',
@@ -258,7 +253,8 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         label: 'Dividendos',
         value: rendimentos?.detalhes?.dividendos?.totalRecebido || 0,
         icon: iconMap['Dividendos'],
-        percentage: rendimentos.detalhes.dividendos.yieldAnualizado || 0
+        percentage: rendimentos.detalhes.dividendos.yieldAnualizado || 0,
+        subValue: `Yield Atual: ${projecoes?.dividendos?.yieldProjetado.toFixed(2)}%`
       },
       {
         label: 'Juros',
@@ -270,7 +266,6 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         subValue: `Taxa Atual: ${rendimentos?.detalhes?.jurosSobreCaixa?.taxaAnual || 0}%`
       }
     ],
-    // Nova aba dedicada para as projeções
     Projeções: [
       {
         label: 'Projeção Juros (Anual)',
@@ -306,9 +301,6 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
   }
 }
 
-// ============================================================================
-// == COMPONENTE PRINCIPAL (VIEW) ATUALIZADO PARA 3 ABAS ==
-// ============================================================================
 interface ICardToInvestmentsProps {
   investimentsData: IInvestimentsData | undefined
   isLoadingInvestimentsData: boolean
@@ -330,8 +322,9 @@ const CardToInvestments = ({
     [investimentsData]
   )
 
-  // A constante de abas agora reflete a nova estrutura
   const TABS = ['Visão Geral', 'Rendimentos', 'Projeções']
+
+  console.log(isLoadingInvestimentsData)
 
   return (
     <Card

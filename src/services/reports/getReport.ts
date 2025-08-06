@@ -4,7 +4,7 @@ import { ExpenseData } from '../expenses/getExpenses'
 
 export interface IReportData {
   data: ExpenseData[]
-  entrys: { value: number }[] // Array de entradas
+  entrys: { value: number }[]
   investments: {
     totalInvestments: number
     investmentPercentageFormat: string
@@ -13,10 +13,8 @@ export interface IReportData {
   totalFree: number
   totalEntrys: number
   totalExpenses: number
-  totalExpenseEurToReal: number
   period?: string
   year?: string
-  quatation: number | undefined
   id?: string
 }
 

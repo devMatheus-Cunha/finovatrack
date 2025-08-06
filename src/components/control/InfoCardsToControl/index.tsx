@@ -8,8 +8,7 @@ import { generateCardsData } from './utils'
 
 interface IInfoCardsToControl {
   totalEntrys: number
-  totalExpensesEurToReal: number
-  totalExpensesEurSumRealToReal: number
+  totalExpenses: number
   infoAction?: () => void
   onOpenTotalEntrys: any
   investments?: any
@@ -18,8 +17,7 @@ interface IInfoCardsToControl {
 
 function InfoCardsToControl({
   totalEntrys,
-  totalExpensesEurToReal,
-  totalExpensesEurSumRealToReal,
+  totalExpenses,
   infoAction,
   onOpenTotalEntrys,
   investments,
@@ -31,8 +29,7 @@ function InfoCardsToControl({
 
   const cardsData = generateCardsData({
     totalEntrys,
-    totalExpensesEurToReal,
-    totalExpensesEurSumRealToReal,
+    totalExpenses,
     investments,
     entrysData,
     userData,

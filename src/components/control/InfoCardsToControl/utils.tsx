@@ -11,9 +11,8 @@ import { IEntrysData } from '@/hooks/entrys/useFetchEntrysData'
 
 export interface CardDataProps {
   totalEntrys: number
-  totalExpensesEurToReal: number
   totalFree: number
-  totalExpensesEurSumRealToReal: number
+  totalExpenses: number
   investments?: { totalInvestments: number }
   entrysData?: IEntrysData[]
   userData: UserData
@@ -24,8 +23,7 @@ export interface CardDataProps {
 
 export const generateCardsData = ({
   totalEntrys,
-  totalExpensesEurToReal,
-  totalExpensesEurSumRealToReal,
+  totalExpenses,
   investments,
   entrysData,
   userData,
@@ -54,21 +52,8 @@ export const generateCardsData = ({
           />
         ) : null
     },
-    ...(userData.typeAccount === 'hybrid'
-      ? [
-          {
-            infoData: totalExpensesEurToReal,
-            infoAction,
-            isVisibilityData,
-            icon: Wallet,
-            iconColor: 'blue',
-            currency: userData.secondary_currency,
-            title: `Gastos ${userData.secondary_currency}`
-          }
-        ]
-      : []),
     {
-      infoData: totalExpensesEurSumRealToReal,
+      infoData: totalExpenses,
       title: 'Gastos',
       icon: ArrowCircleDown,
       iconColor: 'red',

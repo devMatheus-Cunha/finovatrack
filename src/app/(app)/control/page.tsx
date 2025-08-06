@@ -15,21 +15,13 @@ import {
   useClearExpenses
 } from '@/hooks/expenses'
 import { useInvestmentMetrics } from './hooks/useInvestmentMetrics'
-import { useFetchQuatationEur } from '@/hooks/quatation'
 
 import { useSaveReport } from '@/hooks/reports'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { useControlModals } from './hooks/useControlModal'
 
-import {
-  convertEurToReal,
-  formatToJavaScriptNumber
-} from '@/utils/formatNumber'
-import {
-  formattedValuesSubmitExpense,
-  useCalculationSumValues,
-  useGetTotals
-} from './utils'
+import { formatToJavaScriptNumber } from '@/utils/formatNumber'
+import { formattedValuesSubmitExpense } from './utils'
 
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import HeaderDataTableToControl from '@/components/control/HeaderDataTableToControl'
@@ -40,34 +32,29 @@ import { ModalsControl } from '@/components/control/modals'
 export default function Control() {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
-  const { typeAccount } = userData
 
   const { addExpense, isLoadingAddExpense } = useAddExpense()
   const {
-    expensesData = [],
+    expensesData,
+    calculationSumValues,
     setFilter,
     filter,
-    isLoadingExpensesData
+    isLoadingExpensesData,
+    getTotals
   } = useFetchExpensesData()
   const { deletedExpense } = useDeletedExpense()
   const { updatedExpense } = useUpdatedExpense()
+  const { clearExpensesData } = useClearExpenses()
 
-  const { entrysData = [], sumTotalEntry } = useFetchEntrysData()
+  const { entrysData = [], totalEntrys } = useFetchEntrysData()
   const { addEntry } = useAddEntrys()
   const { deletedEntry } = useDeletedEntry()
 
-  const { clearExpensesData } = useClearExpenses()
   const { saveReport } = useSaveReport()
 
-  const { calculationSumValues } = useCalculationSumValues(expensesData)
   const { investments } = useInvestmentMetrics(
     calculationSumValues,
-    sumTotalEntry
-  )
-  const { getTotals } = useGetTotals(calculationSumValues)
-  const { lastQuatationData, refetchQuationData } = useFetchQuatationEur(
-    userData,
-    getTotals?.value_secondary_currency
+    totalEntrys
   )
 
   const {
@@ -91,32 +78,11 @@ export default function Control() {
     handleControlModalExpense
   }
 
-  const calculationTotalExpensesEurSumRealToReal = useMemo(
-    () =>
-      convertEurToReal(
-        lastQuatationData?.current_quotation,
-        Number(getTotals?.value_secondary_currency)
-      ) + (getTotals?.value_primary_currency || 0),
-    [lastQuatationData, getTotals]
-  )
-
-  const calculationTotalExpensesEurToReal = useMemo(
-    () =>
-      convertEurToReal(
-        lastQuatationData?.current_quotation,
-        Number(getTotals?.value_secondary_currency)
-      ),
-    [lastQuatationData, getTotals]
-  )
-
-  const validateExpenseData: any = {
-    hybrid: calculationTotalExpensesEurSumRealToReal,
-    oneCurrency: getTotals?.value_primary_currency
-  }
+  const totalExpenses = getTotals?.value_primary_currency || 0
 
   const calculateTotalFree = () => {
-    const entry = sumTotalEntry || 0
-    const expenses = validateExpenseData[typeAccount] || 0
+    const entry = totalEntrys || 0
+    const expenses = totalExpenses
     const investmentsTotal = investments.totalInvestments || 0
 
     return entry - expenses - investmentsTotal
@@ -163,11 +129,9 @@ export default function Control() {
       period,
       entrys: entrysData || [],
       totalFree: calculateTotalFree(),
-      investments: investments,
-      totalEntrys: sumTotalEntry,
-      totalExpenses: validateExpenseData[typeAccount],
-      totalExpenseEurToReal: calculationTotalExpensesEurToReal ?? 0,
-      quatation: lastQuatationData?.current_quotation ?? 0
+      investments,
+      totalEntrys,
+      totalExpenses
     })
     controlModalSaveReport.onClose()
   }
@@ -177,9 +141,8 @@ export default function Control() {
       <div className="w-[93%] lg:w-[97%] mx-auto">
         <InfoCardsToControl
           infoAction={controlModalInfoCard.onOpen}
-          totalEntrys={sumTotalEntry}
-          totalExpensesEurSumRealToReal={validateExpenseData[typeAccount]}
-          totalExpensesEurToReal={calculationTotalExpensesEurToReal}
+          totalEntrys={totalEntrys}
+          totalExpenses={totalExpenses}
           onOpenTotalEntrys={controlModalTotalEntrys.onOpen}
           investments={investments}
           totalFree={calculateTotalFree()}
@@ -188,10 +151,8 @@ export default function Control() {
 
       <div className="flex flex-col gap-4 w-full">
         <HeaderDataTableToControl
-          currentQuotation={lastQuatationData?.current_quotation}
           filter={filter}
           onFilter={onFilter}
-          refetchQuationData={refetchQuationData}
           onOpenAddEntry={controlModalAddEntry.onOpen}
           onOpenSaveReport={controlModalSaveReport.onOpen}
           onOpenDeleteExpenses={controlModalDeleteExpenses.onOpen}

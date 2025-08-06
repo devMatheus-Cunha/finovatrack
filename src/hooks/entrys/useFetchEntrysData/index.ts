@@ -22,12 +22,12 @@ export const useFetchEntrysData = () => {
     placeholderData: (previous) => previous
   })
 
-  const sumTotalEntry =
+  const totalEntrys =
     entrysData && entrysData.reduce((acc, item) => acc + Number(item.value), 0)
 
   return {
     entrysData,
-    sumTotalEntry: sumTotalEntry || 0,
+    totalEntrys: totalEntrys || 0,
     isLoadingEntrysData,
     statusEntrysData,
     refetchEntrysData

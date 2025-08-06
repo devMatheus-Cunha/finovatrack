@@ -68,7 +68,6 @@ const CardToPatrimony = ({
           />
         ))}
       </div>
-      {/* Exibe os valores de cada variável nova */}
       <div className="flex justify-between gap-1 mt-2 text-xs text-gray-300 w-full">
         {levels.map((level) => (
           <div key={level.label} className="flex items-center gap-1">

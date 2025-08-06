@@ -8,7 +8,6 @@ import {
   ArrowsCounterClockwise,
   Plus
 } from '@phosphor-icons/react'
-import { RefetchQuationDataType } from '@/hooks/quatation/useFetchQuatationEur'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { DropdownFilter, ShowAndHide, Button } from '@/components'
 import { useUserData } from '@/hooks/globalStates'
@@ -17,21 +16,17 @@ import { IHandleControlModalExpenseFunction } from '@/app/(app)/control/hooks/us
 import { optionsFilterCategory } from '@/app/(app)/control/utils'
 
 interface IHeaderDataTableToControl {
-  currentQuotation: number | undefined
   filter: string
   onOpenAddEntry: () => void
   onOpenDeleteExpenses: () => void
   onOpenSaveReport: () => void
   handleControlModalExpense: IHandleControlModalExpenseFunction
   onFilter: (filter: any) => void
-  refetchQuationData: RefetchQuationDataType
 }
 
 function HeaderDataTableToControl({
-  currentQuotation,
   filter,
   onFilter,
-  refetchQuationData,
   onOpenAddEntry,
   onOpenSaveReport,
   onOpenDeleteExpenses,
@@ -115,24 +110,6 @@ function HeaderDataTableToControl({
           onFilter={onFilter}
           label="Filtrar Categoria"
         />
-        {userData.typeAccount === 'hybrid' && (
-          <>
-            <p className="text-sm md:text-md italic">
-              {`${userData.secondary_currency}: ${formatCurrencyMoney(
-                currentQuotation ?? 0,
-                userData.primary_currency
-              )}`}
-            </p>
-            <Button
-              onClick={() => refetchQuationData()}
-              className="ml-2"
-              leftIcon={<ArrowsCounterClockwise size={20} color="white" />}
-              aria-label="Refresh"
-            >
-              Atualizar
-            </Button>
-          </>
-        )}
       </div>
     </div>
   )
