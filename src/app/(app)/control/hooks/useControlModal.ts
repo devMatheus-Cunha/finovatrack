@@ -1,8 +1,7 @@
 import { ExpenseData } from '@/services/expenses/getExpenses'
-import { initialDataSelectedData } from '../utils'
 import { useState } from 'react'
 import { useCustomDisclosure } from '@/hooks/globalStates'
-
+import { initialDataSelectedData } from '@/hooks/expenses/useFetchExpensesData'
 
 export type ITypeModalExpense =
   | 'cancel'

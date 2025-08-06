@@ -1,5 +1,3 @@
-'use client'
-
 import { TableColumn } from '@/components/common/Table'
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import { ExpenseData } from '@/services/expenses/getExpenses'
@@ -8,7 +6,6 @@ import {
   formatCurrencyMoney,
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
-import { useMemo } from 'react'
 
 export const validateTextToModal: any = {
   add: {

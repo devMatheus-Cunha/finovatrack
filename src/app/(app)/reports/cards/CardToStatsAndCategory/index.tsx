@@ -71,19 +71,6 @@ const CardToStatsAndCategory = ({
     }
   ]
 
-  if (userData?.typeAccount === 'hybrid') {
-    summaryItems.push(
-      {
-        label: `gastos em ${userData?.secondary_currency}`,
-        value: formatCurrencyMoney(
-          reportData?.totalExpenseEurToReal,
-          userData?.secondary_currency
-        )
-      },
-      { label: 'Cotação Usada', value: String(reportData?.quatation ?? '') }
-    )
-  }
-
   const data = reportData?.data ?? []
 
   function sumToCategory(expenses: any[]): ProcessedCategory[] {

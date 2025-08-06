@@ -1,6 +1,5 @@
 import { UserData } from '@/hooks/entrys/useDeletedEntry/auth/useAuth/types'
 import {
-  Wallet,
   Eye,
   MoneyWavy,
   ArrowCircleDown,
@@ -29,7 +28,6 @@ export const generateCardsData = ({
   userData,
   isVisibilityData,
   onOpenTotalEntrys,
-  infoAction,
   totalFree
 }: CardDataProps) => {
   if (!entrysData) return

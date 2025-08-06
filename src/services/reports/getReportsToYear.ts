@@ -7,7 +7,6 @@ export interface IReportToYearData {
   totalFree: number
   totalEntrys: number
   totalExpenses: number
-  totalExpenseEurToReal: number
   mediaExpenses: number
   mediaExpenseToCategory: Record<string, number>
   mediaExpenseToSubcategory: Record<string, Record<string, number>>
@@ -44,7 +43,6 @@ export async function getReportsToYear(
     totalFree: 0,
     totalEntrys: 0,
     totalExpenses: 0,
-    totalExpenseEurToReal: 0,
     mediaExpenses: 0,
     mediaExpenseToCategory: {},
     mediaExpenseToSubcategory: {}
@@ -110,9 +108,6 @@ export async function getReportsToYear(
           accumulator.totalEntrys + parseAndSum(currentValue.totalEntrys),
         totalExpenses:
           accumulator.totalExpenses + parseAndSum(currentValue.totalExpenses),
-        totalExpenseEurToReal:
-          accumulator.totalExpenseEurToReal +
-          parseAndSum(currentValue.totalExpenseEurToReal),
         mediaExpenses,
         mediaExpenseToCategory,
         mediaExpenseToSubcategory

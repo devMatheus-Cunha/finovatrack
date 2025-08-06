@@ -37,7 +37,8 @@ export const useFetchExpensesData = () => {
     enabled: !!userId,
     placeholderData: (previous) => previous
   })
-  const expensesData = data || []
+
+  const expensesData = useMemo(() => data || [], [data])
 
   const calculationSumValues = useMemo(() => {
     if (expensesData.length <= 0) return []

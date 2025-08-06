@@ -5,12 +5,9 @@ import {
   HandCoins,
   Broom,
   FolderOpen,
-  ArrowsCounterClockwise,
   Plus
 } from '@phosphor-icons/react'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { DropdownFilter, ShowAndHide, Button } from '@/components'
-import { useUserData } from '@/hooks/globalStates'
 import { useState } from 'react'
 import { IHandleControlModalExpenseFunction } from '@/app/(app)/control/hooks/useControlModal'
 import { optionsFilterCategory } from '@/app/(app)/control/utils'
@@ -32,7 +29,6 @@ function HeaderDataTableToControl({
   onOpenDeleteExpenses,
   handleControlModalExpense
 }: IHeaderDataTableToControl) {
-  const { userData } = useUserData()
   const [showMenu, setShowMenu] = useState(false)
 
   const buttonData = [
