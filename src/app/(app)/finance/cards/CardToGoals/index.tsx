@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { blueShades, blueHexShades } from '@/utils/colors'
 import { Card, Modal } from '@/components'
-import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import {
   useIsVisibilityDatas,
@@ -23,6 +22,7 @@ import {
   GOAL_INTEREST_RATE,
   calcularValorGuardadoMes
 } from '../utils'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments/types'
 
 interface CardToGoalsProps {
   investimentsData: IInvestimentsData | undefined

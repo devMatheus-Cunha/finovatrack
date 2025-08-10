@@ -1,4 +1,4 @@
-import { ArrowsCounterClockwise } from '@phosphor-icons/react'
+import { ArrowsCounterClockwise, CircleNotch } from '@phosphor-icons/react'
 import React from 'react'
 
 interface CardProps {
@@ -8,6 +8,7 @@ interface CardProps {
   className?: string
   isLoading?: boolean
   hasData?: boolean
+  isLoadingIcon?: boolean // Prop que será validada
   skeleton?: React.ReactNode
   empty?: React.ReactNode
   action?: () => void
@@ -33,6 +34,7 @@ const Card: React.FC<CardProps> = ({
   children,
   className = '',
   isLoading = false,
+  isLoadingIcon = false, // Valor padrão definido como false
   hasData = true,
   skeleton,
   empty,
@@ -75,21 +77,34 @@ const Card: React.FC<CardProps> = ({
       <div className="flex flex-col ">
         <div className="flex items-center justify-between">
           {renderTitle()}
-          {!isLoading && action && (
-            <button
-              type="button"
-              onClick={action}
-              className="hover:text-gray-400 transition-colors"
-              title={actionTooltip || 'Ação'}
-            >
-              {actionIcon || (
-                <ArrowsCounterClockwise
-                  size={20}
-                  color="#fff"
-                  className="hover:opacity-75 p-0 m-0"
-                />
+
+          {/* --- LÓGICA VALIDADA AQUI --- */}
+          {/* Só mostra algo no canto se não estiver no loading principal */}
+          {!isLoading && (
+            <div>
+              {isLoadingIcon ? (
+                // Se isLoadingIcon for true, mostra o ícone de carregamento girando
+                <CircleNotch size={20} color="#fff" className="animate-spin" />
+              ) : (
+                // Caso contrário, se a ação existir, mostra o botão
+                action && (
+                  <button
+                    type="button"
+                    onClick={action}
+                    className="hover:text-gray-400 transition-colors"
+                    title={actionTooltip || 'Ação'}
+                  >
+                    {actionIcon || (
+                      <ArrowsCounterClockwise
+                        size={20}
+                        color="#fff"
+                        className="hover:opacity-75 p-0 m-0"
+                      />
+                    )}
+                  </button>
+                )
               )}
-            </button>
+            </div>
           )}
         </div>
 

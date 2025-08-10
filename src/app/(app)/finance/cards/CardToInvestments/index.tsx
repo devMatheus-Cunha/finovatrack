@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react'
 import { Card, Charts } from '@/components'
 import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
-import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { blueHexShades } from '@/utils/colors'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments/types'
 
 interface IDisplayStat {
   label: string
@@ -304,14 +304,15 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
 interface ICardToInvestmentsProps {
   investimentsData: IInvestimentsData | undefined
   isLoadingInvestimentsData: boolean
+  isLoadingIcon?: boolean
   refetchInvestimentsData: () => void
-  isLoadingAllPies: boolean
 }
 
 const CardToInvestments = ({
   investimentsData,
   isLoadingInvestimentsData,
-  refetchInvestimentsData
+  refetchInvestimentsData,
+  isLoadingIcon
 }: ICardToInvestmentsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
@@ -324,12 +325,11 @@ const CardToInvestments = ({
 
   const TABS = ['Visão Geral', 'Rendimentos', 'Projeções']
 
-  console.log(isLoadingInvestimentsData)
-
   return (
     <Card
       title="Painel de Controle - Trading 212"
       isLoading={isLoadingInvestimentsData}
+      isLoadingIcon={isLoadingIcon}
       hasData={!!investimentsData}
       className="w-full lg:max-w-4xl flex flex-col"
       action={refetchInvestimentsData}

@@ -8,7 +8,7 @@ export async function getQuatationRateFromAPI(
   }
 ) {
   const myHeaders = new Headers()
-  myHeaders.append('apikey', process.env.NEXT_PUBLIC_API_KEY_EXCHANGE || '')
+  myHeaders.append('apikey', process.env.API_KEY_EXCHANGE || '')
 
   const requestOptions = {
     method: 'GET',

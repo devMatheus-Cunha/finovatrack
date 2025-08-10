@@ -1,8 +1,8 @@
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
 
 export const GOAL_TARGET = 42000
-export const GOAL_DEADLINE = { year: 2026, month: 11 } // December 2026 (0-indexed)
-export const GOAL_INTEREST_RATE = 1.5
+export const GOAL_DEADLINE = { year: 2026, month: 11 }
+export const GOAL_INTEREST_RATE = 2
 
 export function calcularValorGuardadoMes(
   financialPlanningYear?: IFinancialPlanningProps[],
@@ -11,7 +11,7 @@ export function calcularValorGuardadoMes(
   if (!financialPlanningYear || financialPlanningYear.length === 0) return 0
   const hoje = new Date()
   const anoAtual = hoje.getFullYear()
-  const mesAtual = hoje.getMonth() // 0-indexed
+  const mesAtual = hoje.getMonth()
   const anoAlvo = goalDeadline.year
   const mesAlvo = goalDeadline.month
 

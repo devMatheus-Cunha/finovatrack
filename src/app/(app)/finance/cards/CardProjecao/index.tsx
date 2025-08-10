@@ -4,8 +4,8 @@ import { ProjectionSummary } from './parts/ProjectionInputs'
 import { SummaryTable } from './parts/SummaryTable'
 import { Card } from '@/components'
 import { IFinancialPlanningProps } from '@/services/finance/getFinancialPlanningYear'
-import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { GOAL_INTEREST_RATE } from '../utils'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments/types'
 
 export default function LongTermProjectionCard({
   financialPlanningYear,

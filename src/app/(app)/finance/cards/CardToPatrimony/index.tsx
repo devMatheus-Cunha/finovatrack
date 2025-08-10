@@ -1,9 +1,9 @@
 import { useFetchFinancialPlaningYear } from '@/hooks/finance'
-import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments'
 import { Card } from '@/components'
 import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { blueShades } from '@/utils/colors'
+import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments/types'
 
 interface CardToPatrimonyProps {
   isLoadingInvestimentsData: boolean

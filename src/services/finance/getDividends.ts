@@ -44,7 +44,7 @@ export const getDividendData = async (
 }
 
 export async function fetchDividends(limit: string): Promise<IDividendProps[]> {
-  const apiKey = process.env.NEXT_PUBLIC_KEY_API_TRANDING_212
+  const apiKey = process.env.API_TRANDING_212
   if (!apiKey) {
     throw new Error('Missing API key')
   }

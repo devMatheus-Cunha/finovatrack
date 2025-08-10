@@ -23,7 +23,8 @@ const Finance = () => {
   const {
     investimentsData,
     isLoadingInvestimentsData,
-    refetchInvestimentsData
+    refetchInvestimentsData,
+    isUpdatingInvestments
   } = useFetchInvestiments()
 
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
@@ -65,8 +66,8 @@ const Finance = () => {
           <CardToInvestments
             investimentsData={investimentsData}
             isLoadingInvestimentsData={isLoadingInvestimentsData}
-            isLoadingAllPies={isLoadingInvestimentsData}
             refetchInvestimentsData={refetchInvestimentsData}
+            isLoadingIcon={isUpdatingInvestments}
           />
         </div>
       </div>
