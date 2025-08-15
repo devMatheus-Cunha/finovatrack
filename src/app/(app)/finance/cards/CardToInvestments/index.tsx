@@ -20,46 +20,17 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
     return {
       chartData: [],
       totalNaCorretora: 0,
-      statsByTab: { 'Visão Geral': [], Rendimentos: [], Projeções: [] }
+      statsByTab: { Rendimentos: [], Projeções: [], Metas: [] } // --- ALTERADO ---
     }
   }
 
-  const { patrimonio, composicaoPortfolio, rendimentos, projecoes } =
+  // --- ALTERADO ---: Desestruturando 'metas'
+  const { patrimonio, composicaoPortfolio, rendimentos, projecoes, metas } =
     investimentsData
 
   const iconMap: { [key: string]: React.ReactNode } = {
-    'Total na Corretora': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-      </svg>
-    ),
-    'Valor Investido': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
-      </svg>
-    ),
-    'Dinheiro Disponível': (
+    // --- ADICIONADO ---: Ícones para as novas metas
+    'Meta de Dividendos': (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -72,10 +43,45 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         strokeLinejoin="round"
       >
         <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
       </svg>
     ),
+    'Meta de Juros': (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
+      </svg>
+    ),
+    'Rendimento Total (Anual)': (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+    ),
+
+    // Ícones existentes...
     'Lucro Total': (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +97,7 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
       </svg>
     ),
-    Valorização: (
+    'Valorização Invesitimentos': (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -138,7 +144,7 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         <path d="M21 7L7 21" />
       </svg>
     ),
-    'Projeção Juros (Anual)': (
+    'Juros (Anual)': (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -156,25 +162,7 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
         <line x1="3" y1="10" x2="21" y2="10"></line>
       </svg>
     ),
-    'Projeção Dividendos (Anual)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-    ),
-    'Projeção Juros (Diária)': (
+    'Juros (Mensal)': (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -188,6 +176,42 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
       >
         <path d="M8 7V3h8v4H8z" />
         <path d="M8 7v14h8V7H8zM4 14h16" />
+      </svg>
+    ),
+    'Dividendos (Anual)': (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    ),
+    'Dividendos (Mensal)': (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
       </svg>
     )
   }
@@ -215,37 +239,18 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
     }
   ]
 
-  // Objeto agora com 3 chaves, uma para cada aba.
   const statsByTab: { [key: string]: IDisplayStat[] } = {
-    'Visão Geral': [
-      {
-        label: 'Total na Corretora',
-        value: patrimonio?.totalNaCorretora || 0,
-        icon: iconMap['Total na Corretora']
-      },
-      {
-        label: 'Valor Investido',
-        value: composicaoPortfolio?.totalInvestidoComValorizacao || 0,
-        icon: iconMap['Valor Investido'],
-        subValue: `Custo: ${formatCurrencyMoney(composicaoPortfolio?.valorInvestido || 0)}`
-      },
-      {
-        label: 'Dinheiro Disponível',
-        value: composicaoPortfolio?.valorNaoInvestido || 0,
-        icon: iconMap['Dinheiro Disponível']
-      },
+    Rendimentos: [
       {
         label: 'Lucro Total',
         value: rendimentos?.lucroTotal || 0,
         icon: iconMap['Lucro Total'],
         percentage: rendimentos?.porcentagemLucroTotal || 0
-      }
-    ],
-    Rendimentos: [
+      },
       {
-        label: 'Valorização',
+        label: 'Valorização Invesitimentos',
         value: rendimentos?.detalhes?.valorizacaoInvestimentos?.valor || 0,
-        icon: iconMap['Valorização'],
+        icon: iconMap['Valorização Invesitimentos'],
         percentage:
           rendimentos?.detalhes?.valorizacaoInvestimentos?.porcentagem || 0
       },
@@ -268,28 +273,46 @@ const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
     ],
     Projeções: [
       {
-        label: 'Projeção Juros (Anual)',
+        label: 'Rendimento Total (Anual)',
+        value: projecoes?.rendimentoTotalAnual || 0, // --- ALTERADO ---
+        icon: iconMap['Rendimento Total (Anual)'],
+        subValue: 'Juros + Dividendos'
+      },
+      {
+        label: 'Juros (Anual)', // --- ALTERADO (consistência) ---
         value: projecoes?.jurosSobreCaixa?.projecaoAnual || 0,
-        icon: iconMap['Projeção Juros (Anual)']
+        icon: iconMap['Juros (Anual)']
       },
       {
-        label: 'Projeção Juros (Diária)',
-        value: projecoes?.jurosSobreCaixa?.projecaoDiaria || 0,
-        icon: iconMap['Projeção Juros (Diária)'],
-        subValue: 'Estimativa'
+        label: 'Juros (Mensal)', // --- ALTERADO (consistência) ---
+        value: projecoes?.jurosSobreCaixa?.projecaoMensal || 0,
+        icon: iconMap['Juros (Mensal)']
       },
       {
-        label: 'Projeção Dividendos (Anual)',
+        label: 'Dividendos (Anual)', // --- ALTERADO (consistência) ---
         value: projecoes?.dividendos?.projecaoAnualEstimada || 0,
-        icon: iconMap['Projeção Dividendos (Anual)'],
+        icon: iconMap['Dividendos (Anual)'],
         subValue: `Yield Projetado: ${projecoes?.dividendos?.yieldProjetado.toFixed(2)}%`
       },
-      // --- ADICIONADO ---
       {
-        label: 'Projeção Dividendos (Mensal)',
+        label: 'Dividendos (Mensal)', // --- ALTERADO (consistência) ---
         value: projecoes?.dividendos?.projecaoMensalEstimada || 0,
-        icon: iconMap['Projeção Dividendos (Anual)'], // Reutilizando ícone
-        subValue: 'Estimativa'
+        icon: iconMap['Dividendos (Mensal)']
+      }
+    ],
+    // --- ADICIONADO ---: Nova aba de Metas
+    Metas: [
+      {
+        label: `Meta de Dividendos (€${metas?.dividendos?.objetivoMensal || 10}/mês)`,
+        value: metas?.dividendos?.valorInvestidoNecessario || 0,
+        icon: iconMap['Meta de Dividendos'],
+        subValue: 'Total investido necessário'
+      },
+      {
+        label: `Meta de Juros (€${metas?.juros?.objetivoMensal || 40}/mês)`,
+        value: metas?.juros?.valorNaoInvestidoNecessario || 0,
+        icon: iconMap['Meta de Juros'],
+        subValue: 'Dinheiro em caixa necessário'
       }
     ]
   }
@@ -316,14 +339,15 @@ const CardToInvestments = ({
 }: ICardToInvestmentsProps) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
-  const [activeTab, setActiveTab] = useState('Visão Geral')
+  const [activeTab, setActiveTab] = useState('Rendimentos')
 
   const { chartData, totalNaCorretora, statsByTab } = useMemo(
     () => createDisplayData(investimentsData),
     [investimentsData]
   )
 
-  const TABS = ['Visão Geral', 'Rendimentos', 'Projeções']
+  // --- ALTERADO ---: Adicionando a nova aba
+  const TABS = ['Rendimentos', 'Projeções', 'Metas']
 
   return (
     <Card

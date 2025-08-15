@@ -37,7 +37,7 @@ export interface TransactionListProps {
 }
 
 // ============================================================================
-// == INTERFACE PRINCIPAL DOS DADOS PROCESSADOS (Sem alterações) ==
+// == INTERFACE PRINCIPAL DOS DADOS PROCESSADOS (ATUALIZADA) ==
 // ============================================================================
 export interface IInvestimentsData {
   patrimonio: {
@@ -76,17 +76,29 @@ export interface IInvestimentsData {
     }
   }
   projecoes: {
+    // --- ADICIONADO ---
+    rendimentoTotalAnual: number
     jurosSobreCaixa: {
       projecaoDiaria: number
       projecaoMensal: number
       projecaoAnual: number
     }
-    // A tipagem abaixo foi atualizada para corresponder aos novos dados
     dividendos: {
       projecaoAnualEstimada: number
-      projecaoMensalEstimada: number // Adicionado
-      projecaoDiariaEstimada: number // Adicionado
-      yieldProjetado: number // Adicionado
+      projecaoMensalEstimada: number
+      projecaoDiariaEstimada: number
+      yieldProjetado: number
+    }
+  }
+  // --- ADICIONADO ---: Nova seção de Metas
+  metas: {
+    dividendos: {
+      objetivoMensal: number
+      valorInvestidoNecessario: number
+    }
+    juros: {
+      objetivoMensal: number
+      valorNaoInvestidoNecessario: number
     }
   }
   dadosBrutos: {

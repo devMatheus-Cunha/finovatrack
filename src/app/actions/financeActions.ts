@@ -148,14 +148,30 @@ function processInvestmentData(
       diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
   }
   const projecaoJurosFimDeAno = totalJurosRecebidos + ganhosFuturosDeJuros
+  const taxaAnualAtual = hoje < dataMudancaTaxa ? taxaAtual : taxaFutura
   const projecaoDiariaDeJurosAtual =
-    valorNaoInvestido *
-    ((hoje < dataMudancaTaxa ? taxaAtual : taxaFutura) / 100 / 365)
+    valorNaoInvestido * (taxaAnualAtual / 100 / 365)
+  const projecaoMensalDeJuros = projecaoDiariaDeJurosAtual * 30
 
   const yieldProjetado = 2.92 / 100
   const projecaoAnualDividendos = valorInvestido * yieldProjetado
   const projecaoMensalDividendos = projecaoAnualDividendos / 12
   const projecaoDiariaDividendos = projecaoAnualDividendos / 365
+
+  // --- ADICIONADO ---: Cálculo do Rendimento Total Anual
+  const projecaoRendimentoTotalAnual =
+    projecaoJurosFimDeAno + projecaoAnualDividendos
+
+  // --- ADICIONADO ---: Cálculos para as Metas
+  const metaDividendosMensal = 10 // Objetivo: €10 por mês
+  const metaDividendosAnual = metaDividendosMensal * 12
+  const valorNecessarioParaMetaDividendos =
+    yieldProjetado > 0 ? metaDividendosAnual / yieldProjetado : 0
+
+  const metaJurosMensal = 40 // Objetivo: €40 por mês
+  const taxaAnualDecimal = taxaAnualAtual / 100
+  const valorNecessarioParaMetaJuros =
+    taxaAnualDecimal > 0 ? metaJurosMensal / (taxaAnualDecimal / 12) : 0
 
   const finalData: IInvestimentsData = {
     patrimonio: {
@@ -177,7 +193,7 @@ function processInvestmentData(
       detalhes: {
         jurosSobreCaixa: {
           totalRecebido: parseFloat(totalJurosRecebidos.toFixed(2)),
-          taxaAnual: hoje < dataMudancaTaxa ? taxaAtual : taxaFutura,
+          taxaAnual: taxaAnualAtual,
           rendimentoHistoricoPercentual: parseFloat(
             porcJurosSobreCaixaLivre.toFixed(2)
           )
@@ -197,16 +213,33 @@ function processInvestmentData(
       }
     },
     projecoes: {
+      // --- ADICIONADO ---
+      rendimentoTotalAnual: parseFloat(projecaoRendimentoTotalAnual.toFixed(2)),
       jurosSobreCaixa: {
         projecaoDiaria: parseFloat(projecaoDiariaDeJurosAtual.toFixed(4)),
         projecaoAnual: parseFloat(projecaoJurosFimDeAno.toFixed(2)),
-        projecaoMensal: parseFloat((projecaoDiariaDeJurosAtual * 30).toFixed(2))
+        projecaoMensal: parseFloat(projecaoMensalDeJuros.toFixed(2))
       },
       dividendos: {
         projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2)),
         projecaoMensalEstimada: parseFloat(projecaoMensalDividendos.toFixed(2)),
         projecaoDiariaEstimada: parseFloat(projecaoDiariaDividendos.toFixed(2)),
         yieldProjetado: parseFloat((yieldProjetado * 100).toFixed(2))
+      }
+    },
+    // --- ADICIONADO ---: Nova seção de Metas
+    metas: {
+      dividendos: {
+        objetivoMensal: metaDividendosMensal,
+        valorInvestidoNecessario: parseFloat(
+          valorNecessarioParaMetaDividendos.toFixed(2)
+        )
+      },
+      juros: {
+        objetivoMensal: metaJurosMensal,
+        valorNaoInvestidoNecessario: parseFloat(
+          valorNecessarioParaMetaJuros.toFixed(2)
+        )
       }
     },
     dadosBrutos: {
