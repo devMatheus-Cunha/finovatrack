@@ -57,5 +57,8 @@
     "tailwindcss": "^3.4.13",
     "typescript": "^5"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "packageManager": "yarn@4.0.2"
 }
