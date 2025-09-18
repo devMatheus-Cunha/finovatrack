@@ -24,7 +24,7 @@ export function useShoppingItems(filters?: any) {
     queryKey: ['shoppingItems', filters, userId],
     queryFn: fetchItems,
     enabled: !!userId,
-    placeholderData: (previous) => previous 
+    placeholderData: (previous) => previous
   })
 
   const addItemMutation = useMutation<IItem, Error, IFormData>({
@@ -62,6 +62,7 @@ export function useShoppingItems(filters?: any) {
   const deleteItemMutation = useMutation<void, Error, string>({
     mutationFn: async (id: string) => {
       if (!userId) throw new Error('Usuário não autenticado')
+      console.log('Deleting item with id:', id)
       await deleteShoppingItem(userId, id)
     },
     onSuccess: () => {

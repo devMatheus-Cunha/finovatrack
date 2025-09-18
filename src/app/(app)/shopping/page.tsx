@@ -70,7 +70,6 @@ export default function ShoppingPage() {
     }
   }
 
-  // Handler para deletar item
   const { deleteItem: deleteItemMutation, isDeletingItem } =
     useShoppingItems(filters)
 
@@ -132,14 +131,10 @@ export default function ShoppingPage() {
           onAddItem={openAddModal}
           onEditItem={openEditModal}
           onViewItem={openViewModal}
-          onDeleteItem={
-            editingItem
-              ? () => {
-                  closeItemModal()
-                  handleDeleteItem(editingItem)
-                }
-              : () => {}
-          }
+          onDeleteItem={() => {
+            closeItemModal()
+            handleDeleteItem(editingItem)
+          }}
           viewMode
         />
       </div>
@@ -148,8 +143,6 @@ export default function ShoppingPage() {
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         loading={isDeletingItem}
-        title="Confirmar exclusão"
-        description={`Tem certeza que deseja deletar o item "${itemToDelete?.properties?.Nome?.title?.[0]?.plain_text ?? ''}"? Esta ação não pode ser desfeita.`}
       />
       {/* Modal de adição/edição/visualização */}
       <ItemFormModal
