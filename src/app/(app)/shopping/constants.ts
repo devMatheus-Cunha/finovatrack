@@ -255,6 +255,7 @@ export const ROOM_OPTIONS = [
  { value: 'Quarto', label: 'Quarto' },
  { value: 'Cozinha', label: 'Cozinha' },
  { value: 'Banheiro', label: 'Banheiro' },
+ { value: 'Cafeteria', label: 'Cafeteria' },
  { value: 'Lavanderia', label: 'Lavanderia' },
  { value: 'Escritório', label: 'Escritório' },
  { value: 'Copa', label: 'Copa' },
