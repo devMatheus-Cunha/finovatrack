@@ -12,7 +12,6 @@ export function useShoppingItems(filters?: any) {
 
   const fetchItems = async (): Promise<IItem[]> => {
     if (!userId) return []
-    // Se filtros forem passados, usa-os, senão busca todos
     return await fetchShoppingItems(userId, filters)
   }
 

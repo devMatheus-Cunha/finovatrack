@@ -110,3 +110,15 @@ export function countUniqueItems(items: IItem[], includeBought: boolean) {
     (item) => includeBought || !item.properties.Comprado.checkbox
   ).length
 }
+
+export function calculateTotalSpentValue(items: IItem[]) {
+  return items
+    .filter((item) => item.properties.Comprado.checkbox)
+    .reduce(
+      (acc, item) =>
+        acc +
+        (item.properties.Preco.number || 0) *
+          (item.properties.Quantidade?.number || 1),
+      0
+    )
+}

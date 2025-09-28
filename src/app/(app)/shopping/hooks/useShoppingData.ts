@@ -3,7 +3,8 @@ import { IItem } from '../types'
 import { FilterState } from './useShoppingFilters'
 import {
   calculateTotalValue,
-  countUniqueItems
+  countUniqueItems,
+  calculateTotalSpentValue
 } from '@/services/shopping/fetch'
 
 export function useShoppingData(items: IItem[], filters: FilterState) {
@@ -67,10 +68,13 @@ export function useShoppingData(items: IItem[], filters: FilterState) {
     return calculateTotalValue(filteredItems, includeBoughtInCalculations)
   }, [filteredItems, includeBoughtInCalculations])
 
+  const totalSpentValue = useMemo(() => {
+    return calculateTotalSpentValue(filteredItems)
+  }, [filteredItems])
+
   const itemsByRoom = useMemo(() => {
     const grouped: { [key: string]: { items: IItem[]; totalValue: number } } =
       {}
-
     filteredItems.forEach((item) => {
       const roomName = item.properties.Comodo.select.name
       if (!grouped[roomName]) {
@@ -84,7 +88,6 @@ export function useShoppingData(items: IItem[], filters: FilterState) {
       grouped[roomName].totalValue +=
         priceToUse * (item.properties.Quantidade?.number || 1)
     })
-
     return grouped
   }, [filteredItems])
 
@@ -94,6 +97,7 @@ export function useShoppingData(items: IItem[], filters: FilterState) {
     filteredItems,
     totalUniqueItems,
     totalOverallValue,
+    totalSpentValue,
     itemsByRoom
   }
 }

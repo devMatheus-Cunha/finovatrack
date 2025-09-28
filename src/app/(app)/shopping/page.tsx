@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 
-// Hooks organizados
 import {
   useShoppingItems,
   useShoppingFilters,
@@ -9,7 +8,6 @@ import {
   useShoppingModals
 } from './hooks'
 
-// Componentes organizados
 import {
   StatsOverview,
   Filters,
@@ -20,7 +18,6 @@ import {
 } from './components'
 
 export default function ShoppingPage() {
-  // Custom hooks para separar responsabilidades
   const {
     filters,
     setSelectedRoom,
@@ -34,10 +31,8 @@ export default function ShoppingPage() {
   } = useShoppingFilters()
   const { items, error, addItem, editItem } = useShoppingItems(filters)
 
-  const { totalUniqueItems, totalOverallValue, itemsByRoom } = useShoppingData(
-    items,
-    filters
-  )
+  const { totalUniqueItems, totalOverallValue, totalSpentValue, itemsByRoom } =
+    useShoppingData(items, filters)
 
   const {
     isModalOpen,
@@ -106,7 +101,7 @@ export default function ShoppingPage() {
           <StatsOverview
             totalUniqueItems={totalUniqueItems}
             totalOverallValue={totalOverallValue}
-            includeBoughtInCalculations={filters.includeBoughtInCalculations}
+            totalSpentValue={totalSpentValue}
           />
         </div>
         <div className="w-full h-full flex">
