@@ -57,7 +57,6 @@ export default function ShoppingPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<any>(null)
 
-  // Handlers para submissão de forms
   const handleAddItemSubmit = (formData: any) => {
     addItem(formData)
     closeItemModal()
@@ -74,11 +73,13 @@ export default function ShoppingPage() {
     useShoppingItems(filters)
 
   const handleDeleteItem = (item: any) => {
+    console.log(item)
     closeItemModal()
     setItemToDelete(item)
     setDeleteModalOpen(true)
   }
   const handleConfirmDelete = () => {
+    console.log(itemToDelete)
     if (itemToDelete) {
       deleteItemMutation(itemToDelete.id)
       setDeleteModalOpen(false)
@@ -90,7 +91,6 @@ export default function ShoppingPage() {
     setItemToDelete(null)
   }
 
-  // Estados de loading e error
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-400 text-2xl">
@@ -101,7 +101,6 @@ export default function ShoppingPage() {
 
   return (
     <div className="p-2 lg:p-0 min-h-screen flex flex-col gap-4">
-      {/* Estatísticas gerais + Filtros lado a lado */}
       <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">
         <div className="w-full lg:w-[70%] h-full flex">
           <StatsOverview
@@ -124,18 +123,16 @@ export default function ShoppingPage() {
           />
         </div>
       </div>
-      {/* Lista de itens */}
       <div className="relative min-h-[200px]">
         <ItemsList
           itemsByRoom={itemsByRoom}
           onAddItem={openAddModal}
           onEditItem={openEditModal}
           onViewItem={openViewModal}
-          onDeleteItem={() => {
+          onDeleteItem={(item) => {
+            handleDeleteItem(item)
             closeItemModal()
-            handleDeleteItem(editingItem)
           }}
-          viewMode
         />
       </div>
       <ConfirmDeleteModal
@@ -144,7 +141,6 @@ export default function ShoppingPage() {
         onConfirm={handleConfirmDelete}
         loading={isDeletingItem}
       />
-      {/* Modal de adição/edição/visualização */}
       <ItemFormModal
         isOpen={isModalOpen}
         onClose={closeItemModal}
@@ -156,7 +152,6 @@ export default function ShoppingPage() {
         onDelete={() => handleDeleteItem(editingItem)}
         isDeleting={isDeletingItem}
       />
-      {/* Modal de histórico de preços */}
       {priceHistoryData && (
         <PriceHistoryModal
           isOpen={isPriceHistoryModalOpen}

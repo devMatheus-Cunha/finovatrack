@@ -12,7 +12,6 @@ interface ItemsListProps {
   onEditItem: (item: IItem) => void
   onViewItem: (item: IItem) => void
   onDeleteItem: (item: IItem) => void
-  viewMode?: boolean
 }
 
 export function ItemsList({
@@ -20,8 +19,7 @@ export function ItemsList({
   onAddItem,
   onEditItem,
   onViewItem,
-  onDeleteItem,
-  viewMode = false
+  onDeleteItem
 }: ItemsListProps) {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
@@ -79,7 +77,6 @@ export function ItemsList({
                         onEdit={onEditItem}
                         onView={onViewItem}
                         onDelete={onDeleteItem}
-                        viewMode={viewMode}
                       />
                     </li>
                   ))}
