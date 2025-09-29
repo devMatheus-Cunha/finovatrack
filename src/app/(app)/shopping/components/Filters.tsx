@@ -46,7 +46,7 @@ export function Filters({
   } = filters
 
   return (
-    <section className="bg-gray-700 shadow-lg w-full rounded-xl p-6">
+    <section className="bg-gray-700 shadow-lg w-full rounded-xl p-6 min-h-[255px]">
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
         <h2 className="text-2xl font-semibold text-gray-100 flex items-center mb-2 md:mb-0">
           <SlidersHorizontal className="w-5 h-5 text-gray-400 mr-2" />
