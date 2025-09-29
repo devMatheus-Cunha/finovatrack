@@ -43,7 +43,7 @@ export function StatsOverview({
 
   // Formata os novos valores para exibição
   const formattedBudget = formatCurrencyMoney(
-    investmentBudget,
+    investmentBudget - totalSpentValue,
     userData?.primary_currency,
     isVisibilityData
   )
