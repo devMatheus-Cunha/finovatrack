@@ -1,7 +1,6 @@
 import { Modal } from '@/components/common/Modal'
 
 import InfoCardContent from '../modals/infoCardContent'
-import ContentAddEntryModal from './addEntryModal'
 import ExpenseModalContent from './expenseModalContent'
 import ConfirmSaveReportModal from './confirmSaveReportModal'
 import ContentTotalEntrys from './totalEntrysModal'
@@ -46,19 +45,6 @@ export const ModalsControl = ({
           initialData={expensesData}
           onCancel={controlModals.controlModalSaveReport.onClose}
           onSubmit={({ data, period }: any) => onSaveReport({ data, period })}
-        />
-      </Modal>
-
-      <Modal
-        isOpen={controlModals.controlModalAddEntry.isOpen}
-        onClose={controlModals.controlModalAddEntry.onClose}
-        isCentered
-        size="xl"
-        title="Adicione uma Entrada"
-      >
-        <ContentAddEntryModal
-          handleOpenModal={controlModals.controlModalAddEntry.onClose}
-          onSubmit={onAddEntrys}
         />
       </Modal>
 

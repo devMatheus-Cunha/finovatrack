@@ -1,14 +1,15 @@
 'use client'
 
-import { Coins, HandCoins, FolderOpen, Plus } from '@phosphor-icons/react'
+import { Coins, FolderOpen, Plus } from '@phosphor-icons/react'
 import { DropdownFilter, ShowAndHide, Button } from '@/components'
 import { useState } from 'react'
 import { IHandleControlModalExpenseFunction } from '@/app/(app)/control/hooks/useControlModal'
 import { optionsFilterCategory } from '@/app/(app)/control/utils'
 
+import { AddEntry } from '@/features/entry/add-entry/ui/AddEntry'
+
 interface IHeaderDataTableToControl {
   filter: string
-  onOpenAddEntry: () => void
   onOpenSaveReport: () => void
   handleControlModalExpense: IHandleControlModalExpenseFunction
   onFilter: (filter: any) => void
@@ -17,7 +18,6 @@ interface IHeaderDataTableToControl {
 function HeaderDataTableToControl({
   filter,
   onFilter,
-  onOpenAddEntry,
   onOpenSaveReport,
   handleControlModalExpense
 }: IHeaderDataTableToControl) {
@@ -28,11 +28,6 @@ function HeaderDataTableToControl({
       label: 'Add Gastos',
       icon: Coins,
       onClick: () => handleControlModalExpense('add')
-    },
-    {
-      label: 'Add Entrada',
-      icon: HandCoins,
-      onClick: onOpenAddEntry
     },
     {
       label: 'Salvar Relatório',
@@ -54,6 +49,7 @@ function HeaderDataTableToControl({
             {button.label}
           </Button>
         ))}
+        <AddEntry />
 
         <ShowAndHide displayLg="none" displayBase="initial">
           <div className="relative">
