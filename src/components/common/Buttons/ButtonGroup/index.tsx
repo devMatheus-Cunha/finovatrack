@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react'
 
 interface ButtonOption {
-  onClick: () => void
+  onClick?: () => void
   content: ReactNode
 }
 

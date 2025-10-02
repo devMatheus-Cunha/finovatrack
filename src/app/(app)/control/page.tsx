@@ -9,7 +9,6 @@ import {
 import {
   useAddExpense,
   useFetchExpensesData,
-  useDeletedExpense,
   useUpdatedExpense,
   useClearExpenses
 } from '@/hooks/expenses'
@@ -41,7 +40,6 @@ export default function Control() {
     isLoadingExpensesData,
     getTotals
   } = useFetchExpensesData()
-  const { deletedExpense } = useDeletedExpense()
   const { updatedExpense } = useUpdatedExpense()
   const { clearExpensesData } = useClearExpenses()
 
@@ -105,13 +103,6 @@ export default function Control() {
     controlModalAddEntry.onClose()
   }
 
-  const onDelete = async () => {
-    deletedExpense(configModalExpense.selectedData)
-    setFilter('')
-    handleControlModalExpense('cancel')
-    controlModalDeleteExpenses.onClose()
-  }
-
   const onFilter = (value: any) => {
     setFilter(value)
   }
@@ -154,7 +145,6 @@ export default function Control() {
           onFilter={onFilter}
           onOpenAddEntry={controlModalAddEntry.onOpen}
           onOpenSaveReport={controlModalSaveReport.onOpen}
-          onOpenDeleteExpenses={controlModalDeleteExpenses.onOpen}
           handleControlModalExpense={handleControlModalExpense}
         />
 
@@ -175,7 +165,6 @@ export default function Control() {
         clearExpensesData={clearExpensesData}
         isLoadingAddExpense={isLoadingAddExpense}
         onAddExpense={onAddExpense}
-        onDelete={onDelete}
         onAddEntrys={onAddEntrys}
         onSaveReport={onSaveReport}
         entrysData={entrysData}

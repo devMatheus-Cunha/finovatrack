@@ -4,7 +4,6 @@ import InfoCardContent from '../modals/infoCardContent'
 import ContentAddEntryModal from './addEntryModal'
 import ExpenseModalContent from './expenseModalContent'
 import ConfirmSaveReportModal from './confirmSaveReportModal'
-import DeleteModalContent from './deleteModal'
 import ContentTotalEntrys from './totalEntrysModal'
 import { validateTextToModal } from '@/app/(app)/control/utils'
 
@@ -12,10 +11,8 @@ export const ModalsControl = ({
   controlModals,
   configModalExpense,
   expensesData,
-  clearExpensesData,
   isLoadingAddExpense,
   onAddExpense,
-  onDelete,
   onAddEntrys,
   onSaveReport,
   entrysData,
@@ -36,23 +33,6 @@ export const ModalsControl = ({
           handleOpenModal={controlModals.handleControlModalExpense}
           onSubmit={onAddExpense}
           isLoadingAddExpense={isLoadingAddExpense}
-          onDelete={onDelete}
-        />
-      </Modal>
-
-      <Modal
-        isOpen={controlModals.controlModalDeleteExpenses.isOpen}
-        onClose={controlModals.controlModalDeleteExpenses.onClose}
-        isCentered
-        size="md"
-      >
-        <DeleteModalContent
-          onCancel={controlModals.controlModalDeleteExpenses.onClose}
-          onSubmit={
-            configModalExpense?.type === 'deleteAllExpenses'
-              ? clearExpensesData
-              : onDelete
-          }
         />
       </Modal>
 

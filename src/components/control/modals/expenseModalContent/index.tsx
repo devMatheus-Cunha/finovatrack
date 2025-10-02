@@ -4,12 +4,11 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Input, InputTypeMoney, Select, Button } from '@/components'
+import { Input, InputTypeMoney, Select } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatToCustomFormat } from '@/utils/formatNumber'
 
-import { Trash } from '@phosphor-icons/react'
 import { categoryOptions, paymentsOptions } from './utilts'
 import { useUserData } from '@/hooks/globalStates'
 import {
@@ -34,15 +33,12 @@ interface IExpenseModalContent {
   isLoadingAddExpense: boolean
   initialData: ExpenseData | undefined
   typeModal: ITypeModalExpense
-  onDelete: () => void
 }
 
 const ExpenseModalContent = ({
   onSubmit,
-  handleOpenModal,
   initialData,
-  typeModal,
-  onDelete
+  typeModal
 }: IExpenseModalContent) => {
   const { userData } = useUserData()
   const {
@@ -67,10 +63,6 @@ const ExpenseModalContent = ({
         : undefined,
     resolver: zodResolver(schema)
   })
-
-  const handleActionsModal = (type: 'cancel' | 'delete') => {
-    if (type === 'cancel') handleOpenModal('cancel')
-  }
 
   const onFormSubmit = (data: any) => {
     const selectedCategory = categoryOptions.find(
@@ -179,29 +171,6 @@ const ExpenseModalContent = ({
             errors={errors.value?.message}
           />
         </div>
-      </div>
-      <div className="px-0 py-6 flex justify-end gap-3">
-        {typeModal === 'edit' && (
-          <Button
-            type="button"
-            onClick={onDelete}
-            variant="ghost"
-            className="text-red-500 hover:text-red-700"
-            leftIcon={<Trash size={20} />}
-          >
-            Deletar
-          </Button>
-        )}
-        <Button
-          onClick={() => handleActionsModal('cancel')}
-          type="button"
-          variant="cancel"
-        >
-          Cancelar
-        </Button>
-        <Button type="submit" variant="confirm">
-          {typeModal === 'add' ? 'Adicionar' : 'Editar'}
-        </Button>
       </div>
     </form>
   )
