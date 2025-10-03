@@ -38,7 +38,7 @@ export function StatsOverview({
 
   // --- Lógica Adicionada ---
   const investmentBudget = 4800 // Valor fixo para investir
-  const difference = investmentBudget - totalOverallValue
+  const difference = investmentBudget - totalSpentValue - totalOverallValue
   const isWithinBudget = difference >= 0
 
   // Formata os novos valores para exibição
@@ -118,43 +118,43 @@ export function StatsOverview({
       </div>
 
       {/* --- Nova Seção Adicionada --- */}
-     <div className="border-t border-gray-700 mt-6 pt-6 w-full flex flex-col sm:flex-row justify-center sm:justify-around items-center space-y-4 sm:space-y-0">
-          {/* Valor do Orçamento */}
-          <div className="flex flex-col items-center text-center">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Wallet className="w-4 h-4" />
-              <span>Valor para investir</span>
-            </div>
-            <p className="text-xl font-semibold text-gray-200">
-              {formattedBudget}
-            </p>
+      <div className="border-t border-gray-700 mt-6 pt-6 w-full flex flex-col sm:flex-row justify-center sm:justify-around items-center space-y-4 sm:space-y-0">
+        {/* Valor do Orçamento */}
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <Wallet className="w-4 h-4" />
+            <span>Valor para investir</span>
           </div>
-
-          {/* Diferença (Sobra ou Falta) */}
-          <div className="flex flex-col items-center text-center">
-            {isWithinBudget ? (
-              <>
-                <div className="flex items-center gap-2 text-sm text-green-400">
-                  <ArrowUpCircle className="w-4 h-4" />
-                  <span>Sobra no orçamento</span>
-                </div>
-                <p className="text-2xl font-bold text-green-300">
-                  {formattedDifference}
-                </p>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center gap-2 text-sm text-red-400">
-                  <ArrowDownCircle className="w-4 h-4" />
-                  <span>Falta no orçamento</span>
-                </div>
-                <p className="text-2xl font-bold text-red-300">
-                  {formattedDifference}
-                </p>
-              </>
-            )}
-          </div>
+          <p className="text-xl font-semibold text-gray-200">
+            {formattedBudget}
+          </p>
         </div>
+
+        {/* Diferença (Sobra ou Falta) */}
+        <div className="flex flex-col items-center text-center">
+          {isWithinBudget ? (
+            <>
+              <div className="flex items-center gap-2 text-sm text-green-400">
+                <ArrowUpCircle className="w-4 h-4" />
+                <span>Sobra no orçamento</span>
+              </div>
+              <p className="text-2xl font-bold text-green-300">
+                {formattedDifference}
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 text-sm text-red-400">
+                <ArrowDownCircle className="w-4 h-4" />
+                <span>Falta no orçamento</span>
+              </div>
+              <p className="text-2xl font-bold text-red-300">
+                {formattedDifference}
+              </p>
+            </>
+          )}
+        </div>
+      </div>
       {/* --- Fim da Nova Seção --- */}
     </Card>
   )
