@@ -143,7 +143,6 @@ export default function Control() {
         <HeaderDataTableToControl
           filter={filter}
           onFilter={onFilter}
-          onOpenAddEntry={controlModalAddEntry.onOpen}
           onOpenSaveReport={controlModalSaveReport.onOpen}
           handleControlModalExpense={handleControlModalExpense}
         />

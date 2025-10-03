@@ -12,7 +12,6 @@ export const ModalsControl = ({
   expensesData,
   isLoadingAddExpense,
   onAddExpense,
-  onAddEntrys,
   onSaveReport,
   entrysData,
   deletedEntry
