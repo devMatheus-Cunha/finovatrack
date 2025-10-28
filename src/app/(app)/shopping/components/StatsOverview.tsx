@@ -17,7 +17,6 @@ interface StatsOverviewProps {
   totalSpentValue: number
 }
 
-// Interface não precisa de alteração
 interface StatConfig {
   key: string
   icon: React.ReactNode
@@ -36,23 +35,20 @@ export function StatsOverview({
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  // --- Lógica Adicionada ---
-  const investmentBudget = 4800 // Valor fixo para investir
+  const investmentBudget = 4800
   const difference = investmentBudget - totalSpentValue - totalOverallValue
   const isWithinBudget = difference >= 0
 
-  // Formata os novos valores para exibição
   const formattedBudget = formatCurrencyMoney(
     investmentBudget - totalSpentValue,
     userData?.primary_currency,
     isVisibilityData
   )
   const formattedDifference = formatCurrencyMoney(
-    Math.abs(difference), // Usamos o valor absoluto para exibir sempre um número positivo
+    Math.abs(difference),
     userData?.primary_currency,
     isVisibilityData
   )
-  // --- Fim da Lógica Adicionada ---
 
   const statsConfig: StatConfig[] = [
     {
@@ -155,7 +151,6 @@ export function StatsOverview({
           )}
         </div>
       </div>
-      {/* --- Fim da Nova Seção --- */}
     </Card>
   )
 }

@@ -1,10 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
 import { ExpenseData } from '@/entities/expense/model/types'
 import useCustomDisclosure from '@/shared/hooks/useCustomDisclosure'
-import useDeletedExpense from '@/hooks/expenses/useDeletedExpense'
 import { useExpenseFilter } from '@/features/expense/filter-expenses/model/useExpenseFilter'
+import useDeletedExpense from '@/entities/expense/model/useDeletedExpense'
 
 export const useDeleteExpenseModal = () => {
   const { isOpen, onOpen, onClose } = useCustomDisclosure()
@@ -12,7 +11,7 @@ export const useDeleteExpenseModal = () => {
     null
   )
 
-  const { deletedExpense } = useDeletedExpense()
+  const { deletedExpense, isDeleting } = useDeletedExpense()
   const { clearFilter } = useExpenseFilter()
 
   const handleOpenModal = (expense: ExpenseData) => {
@@ -25,17 +24,17 @@ export const useDeleteExpenseModal = () => {
     onClose()
   }
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (expense: ExpenseData) => deletedExpense(expense),
-    onSuccess: () => {
+  const handleDelete = async () => {
+    if (!selectedExpense) return
+
+    try {
+      await deletedExpense(selectedExpense)
+
       clearFilter()
       handleCloseModal()
+    } catch (error) {
+      console.error('Falha ao deletar despesa', error)
     }
-  })
-
-  const handleDelete = () => {
-    if (!selectedExpense) return
-    mutate(selectedExpense)
   }
 
   return {
@@ -43,6 +42,6 @@ export const useDeleteExpenseModal = () => {
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
     confirmDeletion: handleDelete,
-    isDeleting: isPending
+    isDeleting: isDeleting
   }
 }

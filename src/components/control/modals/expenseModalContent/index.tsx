@@ -4,7 +4,7 @@ import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Input, InputTypeMoney, Select } from '@/components'
+import { Button, Input, InputTypeMoney, Select } from '@/components'
 import { optionsLabelCurrencyKeyAndValue } from '@/utils/configCurrency'
 import { ExpenseData } from '@/services/expenses/getExpenses'
 import { formatToCustomFormat } from '@/utils/formatNumber'
@@ -15,6 +15,7 @@ import {
   IHandleControlModalExpenseFunction,
   ITypeModalExpense
 } from '@/app/(app)/control/hooks/useControlModal'
+import { Trash } from 'lucide-react'
 
 const schema = z.object({
   description: z.string({ required_error: 'Campo obrigatorio' }),
@@ -38,7 +39,8 @@ interface IExpenseModalContent {
 const ExpenseModalContent = ({
   onSubmit,
   initialData,
-  typeModal
+  typeModal,
+  handleOpenModal
 }: IExpenseModalContent) => {
   const { userData } = useUserData()
   const {
@@ -170,6 +172,18 @@ const ExpenseModalContent = ({
             placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[watch()?.typeMoney || userData.primary_currency]} 10.00`}
             errors={errors.value?.message}
           />
+        </div>
+        <div className="px-0 py-6 flex justify-end gap-3">
+          <Button
+            onClick={() => handleOpenModal('cancel')}
+            type="button"
+            variant="cancel"
+          >
+            Cancelar
+          </Button>
+          <Button type="submit" variant="confirm">
+            {typeModal === 'add' ? 'Adicionar' : 'Editar'}
+          </Button>
         </div>
       </div>
     </form>
