@@ -15,7 +15,6 @@ import {
   IHandleControlModalExpenseFunction,
   ITypeModalExpense
 } from '@/app/(app)/control/hooks/useControlModal'
-import { Trash } from 'lucide-react'
 
 const schema = z.object({
   description: z.string({ required_error: 'Campo obrigatorio' }),
