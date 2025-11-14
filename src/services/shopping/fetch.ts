@@ -8,7 +8,7 @@ const SHOPPING_COLLECTION = 'shoppingItems'
 export interface ShoppingItemFilters {
   room?: string
   category?: string
-  boughtStatus?: 'Todos' | 'Comprado' | 'Nao Comprado'
+  boughtStatus?: 'Todos' | 'Comprado' | 'Nao Comprado' | 'Compra Antecipada'
   priorities?: string[]
   orderByField?: 'price' | 'name'
   orderDirection?: 'asc' | 'desc'
@@ -57,6 +57,8 @@ export async function fetchShoppingItems(
           Quantidade: { number: data.quantity },
           Preco: { number: data.price },
           Comprado: { checkbox: data.bought },
+          // Suporte ao novo campo `earlyPurchase` (pode existir em documentos novos ou antigos)
+          earlyPurchase: data.earlyPurchase || false,
           links: data.links || [],
           productInfo: data.productInfo,
           priority: data.priority
@@ -76,11 +78,21 @@ export async function fetchShoppingItems(
     )
   }
   if (filters.boughtStatus && filters.boughtStatus !== 'Todos') {
-    items = items.filter((item) =>
-      filters.boughtStatus === 'Comprado'
-        ? item.properties.Comprado.checkbox
-        : !item.properties.Comprado.checkbox
-    )
+    items = items.filter((item) => {
+      if (filters.boughtStatus === 'Comprado') {
+        return item.properties.Comprado.checkbox
+      }
+      if (filters.boughtStatus === 'Nao Comprado') {
+        // Não comprado = não está marcado como comprado e não é compra antecipada
+        return (
+          !item.properties.Comprado.checkbox && !item.properties.earlyPurchase
+        )
+      }
+      if (filters.boughtStatus === 'Compra Antecipada') {
+        return !!item.properties.earlyPurchase
+      }
+      return true
+    })
   }
   if (filters.priorities && filters.priorities.length > 0) {
     items = items.filter(
@@ -93,9 +105,20 @@ export async function fetchShoppingItems(
   return items
 }
 
-export function calculateTotalValue(items: IItem[], includeBought: boolean) {
+export function calculateTotalValue(
+  items: IItem[],
+  includeBought: boolean,
+  includeEarlyPurchase: boolean
+) {
   return items
-    .filter((item) => includeBought || !item.properties.Comprado.checkbox)
+    .filter((item) => {
+      // Se já comprou
+      if (item.properties.Comprado.checkbox) return includeBought
+      // Se é compra antecipada
+      if (item.properties.earlyPurchase) return includeEarlyPurchase
+      // Caso padrão: item não comprado e não antecipado - incluir
+      return true
+    })
     .reduce(
       (acc, item) =>
         acc +
@@ -105,10 +128,16 @@ export function calculateTotalValue(items: IItem[], includeBought: boolean) {
     )
 }
 
-export function countUniqueItems(items: IItem[], includeBought: boolean) {
-  return items.filter(
-    (item) => includeBought || !item.properties.Comprado.checkbox
-  ).length
+export function countUniqueItems(
+  items: IItem[],
+  includeBought: boolean,
+  includeEarlyPurchase: boolean
+) {
+  return items.filter((item) => {
+    if (item.properties.Comprado.checkbox) return includeBought
+    if (item.properties.earlyPurchase) return includeEarlyPurchase
+    return true
+  }).length
 }
 
 export function calculateTotalSpentValue(items: IItem[]) {

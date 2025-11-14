@@ -6,6 +6,7 @@ export interface FilterState {
   selectedBoughtStatus: string
   selectedPriorities: string[]
   includeBoughtInCalculations: boolean
+  includeEarlyPurchaseInCalculations: boolean
   orderByField: 'price' | 'name'
   orderDirection: 'asc' | 'desc'
 }
@@ -15,9 +16,16 @@ export function useShoppingFilters() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas')
   const [selectedBoughtStatus, setSelectedBoughtStatus] =
     useState<string>('Todos')
-  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([])
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([
+    'Alto',
+    'Médio'
+  ])
   const [includeBoughtInCalculations, setIncludeBoughtInCalculations] =
     useState<boolean>(false)
+  const [
+    includeEarlyPurchaseInCalculations,
+    setIncludeEarlyPurchaseInCalculations
+  ] = useState<boolean>(false)
   const [orderByField, setOrderByField] = useState<'price' | 'name'>('price')
   const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('desc')
 
@@ -27,6 +35,7 @@ export function useShoppingFilters() {
     setSelectedBoughtStatus('Todos')
     setSelectedPriorities([])
     setIncludeBoughtInCalculations(false)
+    setIncludeEarlyPurchaseInCalculations(false)
     setOrderByField('price')
     setOrderDirection('desc')
   }, [])
@@ -45,6 +54,7 @@ export function useShoppingFilters() {
     selectedBoughtStatus,
     selectedPriorities,
     includeBoughtInCalculations,
+    includeEarlyPurchaseInCalculations,
     orderByField,
     orderDirection
   }
@@ -59,6 +69,7 @@ export function useShoppingFilters() {
     setOrderByField,
     setOrderDirection,
     handleResetFilters,
-    handlePriorityFilterChange
+    handlePriorityFilterChange,
+    setIncludeEarlyPurchaseInCalculations
   }
 }

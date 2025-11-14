@@ -15,6 +15,10 @@ interface StatsOverviewProps {
   totalUniqueItems: number
   totalOverallValue: number
   totalSpentValue: number
+  earlyTotal?: number
+  includeEarlyPurchase?: boolean
+  boughtTotal?: number
+  baseOverallValue?: number
 }
 
 interface StatConfig {
@@ -30,17 +34,29 @@ interface StatConfig {
 export function StatsOverview({
   totalUniqueItems,
   totalOverallValue,
-  totalSpentValue
+  totalSpentValue,
+  earlyTotal,
+  includeEarlyPurchase,
+  boughtTotal,
+  baseOverallValue
 }: StatsOverviewProps) {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
   const investmentBudget = 4800
-  const difference = investmentBudget - totalSpentValue - totalOverallValue
+  // Se o usuário optou por incluir compras antecipadas nos cálculos, ADICIONA o earlyTotal ao valor para investir
+  const effectiveEarlyTotal = includeEarlyPurchase ? earlyTotal || 0 : 0
+  const effectiveBoughtTotal = boughtTotal || 0
+  // A sobra do orçamento deve considerar apenas o que já foi comprado (boughtTotal)
+  // e o que está reservado na lista (baseOverallValue). Itens antecipados NÃO afetam a sobra
+  // pois quando inclusos, aumentam tanto o gasto quanto o orçamento na mesma proporção
+  const effectiveBaseOverall = baseOverallValue || 0
+  const difference =
+    investmentBudget - effectiveBoughtTotal - effectiveBaseOverall
   const isWithinBudget = difference >= 0
 
   const formattedBudget = formatCurrencyMoney(
-    investmentBudget - totalSpentValue,
+    investmentBudget + effectiveEarlyTotal - effectiveBoughtTotal,
     userData?.primary_currency,
     isVisibilityData
   )

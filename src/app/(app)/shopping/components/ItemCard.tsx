@@ -35,6 +35,8 @@ export function ItemCard({ item, onEdit, onView, onDelete }: ItemCardProps) {
         {item.properties.Nome.title[0]?.plain_text}
       </p>
 
+      {/* Status: Comprado / Compra Antecipada / Não Comprado (mesmo nível) */}
+
       {item.properties.productInfo && (
         <p className="col-span-2 text-[0.87rem] text-gray-300 flex items-start">
           <Info className="inline-block w-3 h-5 mr-1 text-gray-400 flex-shrink-0  align-middle" />
@@ -87,6 +89,13 @@ export function ItemCard({ item, onEdit, onView, onDelete }: ItemCardProps) {
             <CheckCircle className="inline-block w-4 h-4 mr-1 text-green-400 align-middle" />
             <span className="text-green-500 font-medium align-middle">
               Comprado
+            </span>
+          </>
+        ) : item.properties.earlyPurchase ? (
+          <>
+            <Flag className="inline-block w-4 h-4 mr-1 text-green-500 align-middle" />
+            <span className="text-green-500 font-medium align-middle">
+              Compra Antecipada
             </span>
           </>
         ) : (

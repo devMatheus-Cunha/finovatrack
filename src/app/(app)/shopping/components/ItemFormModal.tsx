@@ -72,6 +72,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
       quantity: 1,
       price: 0,
       bought: false,
+      earlyPurchase: false,
       links: [],
       productInfo: '',
       priority: ''
@@ -87,6 +88,8 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
         quantity: initialData.properties.Quantidade?.number || 1,
         price: initialData.properties.Preco?.number || 0,
         bought: initialData.properties.Comprado?.checkbox || false,
+        // earlyPurchase pode estar presente diretamente em properties (normalizado) ou no documento plano
+        earlyPurchase: (initialData.properties as any).earlyPurchase ?? false,
         links: initialData.properties.links || [],
         productInfo: initialData.properties.productInfo || '',
         priority: initialData.properties.priority || ''
@@ -266,6 +269,13 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
                 <>
                   <CheckCircle className="inline-block w-4 h-4 mr-1 text-green-400" />
                   <span className="text-green-500 font-medium">Comprado</span>
+                </>
+              ) : initialData?.properties.earlyPurchase ? (
+                <>
+                  <Flag className="inline-block w-4 h-4 mr-1 text-green-500" />
+                  <span className="text-green-500 font-medium">
+                    Compra Antecipada
+                  </span>
                 </>
               ) : (
                 <>
@@ -519,7 +529,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
                 </span>
               )}
             </div>
-            <div className="sm:col-span-2 flex items-center">
+            <div className="sm:col-span-2 flex items-center gap-2">
               <Controller
                 name="bought"
                 control={control}
@@ -531,6 +541,20 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
                       field.onChange(e.target.checked)
                     }
                     label="Item Comprado"
+                  />
+                )}
+              />
+              <Controller
+                name="earlyPurchase"
+                control={control}
+                render={({ field }) => (
+                  <CustomCheckbox
+                    id="earlyPurchase"
+                    checked={field.value}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      field.onChange(e.target.checked)
+                    }
+                    label="Compra Antecipada"
                   />
                 )}
               />

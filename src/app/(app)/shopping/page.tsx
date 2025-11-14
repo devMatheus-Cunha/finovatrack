@@ -24,6 +24,7 @@ export default function ShoppingPage() {
     setSelectedCategory,
     setSelectedBoughtStatus,
     setIncludeBoughtInCalculations,
+    setIncludeEarlyPurchaseInCalculations,
     setOrderByField,
     setOrderDirection,
     handleResetFilters,
@@ -31,8 +32,15 @@ export default function ShoppingPage() {
   } = useShoppingFilters()
   const { items, error, addItem, editItem } = useShoppingItems(filters)
 
-  const { totalUniqueItems, totalOverallValue, totalSpentValue, itemsByRoom } =
-    useShoppingData(items, filters)
+  const {
+    totalUniqueItems,
+    totalOverallValue,
+    totalSpentValue,
+    earlyTotal,
+    boughtTotal,
+    baseOverallValue,
+    itemsByRoom
+  } = useShoppingData(items, filters)
 
   const {
     isModalOpen,
@@ -102,6 +110,10 @@ export default function ShoppingPage() {
             totalUniqueItems={totalUniqueItems}
             totalOverallValue={totalOverallValue}
             totalSpentValue={totalSpentValue}
+            earlyTotal={earlyTotal}
+            boughtTotal={boughtTotal}
+            baseOverallValue={baseOverallValue}
+            includeEarlyPurchase={filters.includeEarlyPurchaseInCalculations}
           />
         </div>
         <div className="w-full h-full flex">
@@ -111,6 +123,7 @@ export default function ShoppingPage() {
             onCategoryChange={setSelectedCategory}
             onBoughtStatusChange={setSelectedBoughtStatus}
             onIncludeBoughtChange={setIncludeBoughtInCalculations}
+            onIncludeEarlyPurchaseChange={setIncludeEarlyPurchaseInCalculations}
             onPriorityChange={handlePriorityFilterChange}
             onResetFilters={handleResetFilters}
             onOrderByFieldChange={setOrderByField}

@@ -18,6 +18,7 @@ interface FiltersProps {
   onCategoryChange: (category: string) => void
   onBoughtStatusChange: (status: string) => void
   onIncludeBoughtChange: (include: boolean) => void
+  onIncludeEarlyPurchaseChange: (include: boolean) => void
   onPriorityChange: (priority: string) => void
   onResetFilters: () => void
   onOrderByFieldChange: (field: 'price' | 'name') => void
@@ -30,6 +31,7 @@ export function Filters({
   onCategoryChange,
   onBoughtStatusChange,
   onIncludeBoughtChange,
+  onIncludeEarlyPurchaseChange,
   onPriorityChange,
   onResetFilters,
   onOrderByFieldChange,
@@ -128,6 +130,7 @@ export function Filters({
             <option value="Todos">Todos</option>
             <option value="Nao Comprado">Não Comprado</option>
             <option value="Comprado">Comprado</option>
+            <option value="Compra Antecipada">Compra Antecipada</option>
           </select>
         </div>
       </div>
@@ -151,15 +154,33 @@ export function Filters({
               />
             ))}
           </div>
-          <div className="flex items-center mt-2">
-            <CustomCheckbox
-              id="includeBoughtInCalculations"
-              checked={includeBoughtInCalculations}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onIncludeBoughtChange(e.target.checked)
-              }
-              label="Incluir itens comprados nos cálculos de valor"
-            />
+          <div className="mt-3">
+            <label className="text-sm font-medium text-gray-200 mb-1 flex items-center">
+              <CheckCircle className="inline-block w-4 h-4 mr-1 text-gray-400" />
+              Incluir Valores
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-3 mt-2">
+            <div>
+              <CustomCheckbox
+                id="includeBoughtInCalculations"
+                checked={includeBoughtInCalculations}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onIncludeBoughtChange(e.target.checked)
+                }
+                label="Comprados"
+              />
+            </div>
+            <div>
+              <CustomCheckbox
+                id="includeEarlyPurchaseInCalculations"
+                checked={(filters as any).includeEarlyPurchaseInCalculations}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onIncludeEarlyPurchaseChange(e.target.checked)
+                }
+                label="Antecipados"
+              />
+            </div>
           </div>
         </div>
         <div className="flex flex-col w-full sm:w-auto">
