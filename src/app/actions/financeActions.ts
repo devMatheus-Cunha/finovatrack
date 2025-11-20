@@ -1,12 +1,116 @@
 'use server'
 
+/* ============================================================================
+   TIPOS
+============================================================================ */
+
+export interface InvestmentDataPropsApi {
+  blocked: number
+  free: number
+  invested: number
+  pieCash: number
+  ppl: number
+  result: number
+  total: number
+}
+
+export interface IGetAllPies {
+  id: number
+  cash: number
+  dividendDetails: {
+    gained: number
+    reinvested: number
+    inCash: number
+  }
+  result: {
+    priceAvgInvestedValue: number
+    priceAvgResult: number
+    priceAvgResultCoef: number
+    priceAvgValue: number
+  }
+  progress: number
+  status: null
+}
+
+export interface TransactionListProps {
+  type: string
+  amount: number
+  reference?: string
+  dateTime: string
+}
+
+export interface IInvestimentsData {
+  patrimonio: {
+    total: number
+    reservaExterna: number
+    totalNaCorretora: number
+  }
+  composicaoPortfolio: {
+    valorInvestido: number
+    valorNaoInvestido: number
+    valorizacaoAtual: number
+    totalInvestidoComValorizacao: number
+  }
+  rendimentos: {
+    lucroTotal: number
+    porcentagemLucroTotal: number
+    detalhes: {
+      jurosSobreCaixa: {
+        totalRecebido: number
+        taxaAnual: number
+        rendimentoHistoricoPercentual: number
+      }
+      valorizacaoInvestimentos: {
+        valor: number
+        porcentagem: number
+      }
+      dividendos: {
+        totalRecebido: number
+        totalRecebidoUltimos12Meses: number
+        yieldAnualizado: number
+        distribuicaoPorAtivo: Array<{
+          ticker: string
+          valor: number
+        }>
+      }
+    }
+  }
+  projecoes: {
+    rendimentoTotalAnual: number
+    jurosSobreCaixa: {
+      projecaoDiaria: number
+      projecaoMensal: number
+      projecaoAnual: number
+    }
+    dividendos: {
+      projecaoAnualEstimada: number
+      projecaoMensalEstimada: number
+      projecaoDiariaEstimada: number
+      yieldProjetado: number
+    }
+  }
+  metas: {
+    dividendos: {
+      objetivoMensal: number
+      valorInvestidoNecessario: number
+    }
+    juros: {
+      objetivoMensal: number
+      valorNaoInvestidoNecessario: number
+    }
+  }
+  dadosBrutos: {
+    transacoesRecentes: TransactionListProps[]
+    historicoDividendos: any[]
+  }
+}
+
 import { revalidatePath } from 'next/cache'
 import { adminDb } from '@/services/firebaseAdmin'
-import {
-  IInvestimentsData,
-  InvestmentDataPropsApi,
-  TransactionListProps
-} from '@/hooks/finance/useFetchInvestiments/types'
+
+/* ============================================================================
+   HELPERS
+============================================================================ */
 
 interface DividendPageResponse {
   items: any[]
@@ -19,161 +123,212 @@ function diffInDays(date1: Date, date2: Date): number {
   return diffDays > 0 ? diffDays : 1
 }
 
-async function fetchExternalData(apiKey: string) {
-  const headers = { Authorization: apiKey }
-  const fetchOptions = { method: 'GET', headers, next: { revalidate: 0 } }
+/* ============================================================================
+   FETCH DIVIDENDOS (ROBUSTO)
+============================================================================ */
 
-  const [investmentsResponse, transactionListResponse] = await Promise.all([
-    fetch(
-      `https://live.trading212.com/api/v0/equity/account/cash`,
-      fetchOptions
-    ),
-    fetch(
-      `https://live.trading212.com/api/v0/history/transactions?limit=50`,
-      fetchOptions
-    )
-  ])
+async function fetchAllDividends(
+  baseUrl: string,
+  fetchOptions: RequestInit
+): Promise<any[]> {
+  let cursor: string | null = null
+  const todos: any[] = []
+  const visited = new Set<string>()
 
-  if (!investmentsResponse.ok || !transactionListResponse.ok) {
-    throw new Error('Falha na requisição à API da Trading212')
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const url = cursor ? `${baseUrl}&cursor=${cursor}` : baseUrl
+
+    const res = await fetch(url, fetchOptions)
+    if (!res.ok) break
+
+    const data = (await res.json()) as DividendPageResponse
+    todos.push(...data.items)
+
+    if (!data.nextPagePath) break
+
+    try {
+      const temp = new URL(`https://dummy.com${data.nextPagePath}`)
+      const next = temp.searchParams.get('cursor')
+
+      if (!next) break
+      if (visited.has(next)) break
+
+      visited.add(next)
+      cursor = next
+    } catch {
+      break
+    }
   }
 
-  const apiInvestmentsData =
-    (await investmentsResponse.json()) as InvestmentDataPropsApi
-  const transactionListData = (await transactionListResponse.json())
-    .items as TransactionListProps[]
-
-  const allDividends: any[] = []
-  let nextCursor: string | null = null
-
-  do {
-    const dividendUrl: string = `https://live.trading212.com/api/v0/history/dividends?limit=50${nextCursor ? `&cursor=${nextCursor}` : ''}`
-
-    const dividendResponse: Response = await fetch(dividendUrl, fetchOptions)
-    if (!dividendResponse.ok) break
-
-    const dividendPage = (await dividendResponse.json()) as DividendPageResponse
-
-    allDividends.push(...dividendPage.items)
-    nextCursor = dividendPage.nextPagePath?.split('cursor=')[1] || null
-  } while (nextCursor)
-
-  return { apiInvestmentsData, transactionListData, allDividends }
+  console.log('TOTAL DIVIDENDOS FETCHED:', todos.length)
+  return todos
 }
 
-function processInvestmentData(
-  rawData: {
-    apiInvestmentsData: InvestmentDataPropsApi
-    transactionListData: TransactionListProps[]
-    allDividends: any[]
-  },
-  previousData: IInvestimentsData | undefined,
-  reserve?: number
-): IInvestimentsData {
-  const { apiInvestmentsData, transactionListData, allDividends } = rawData
+/* ============================================================================
+   FORMATAR DIVIDENDOS (CORRETO)
+============================================================================ */
 
-  const totalPortfolio = apiInvestmentsData?.total || 0
-  const valorInvestido = apiInvestmentsData?.invested || 0
-  const valorNaoInvestido = apiInvestmentsData?.free || 0
-  const valorizacaoInvestimentos = apiInvestmentsData?.ppl || 0
-  const totalDividendos = allDividends.reduce((sum, div) => sum + div.amount, 0)
+function formatarDividendos(allDividends: any[], valorInvestido: number) {
+  const normalizados = allDividends.map((d) => ({
+    ...d,
+    amountReal: Number(d.amount ?? d.netAmount ?? d.grossAmount ?? 0)
+  }))
 
-  const jurosAnteriores =
-    previousData?.rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido || 0
-
-  const transacoesAnterioresRefs = new Set(
-    previousData?.dadosBrutos?.transacoesRecentes.map((t) => t.reference) || []
-  )
-  const novasTransacoes = transactionListData.filter(
-    (t) => !transacoesAnterioresRefs.has(t.reference)
-  )
-  const novasTransacoesDeJuros = novasTransacoes.filter(
-    (t) => t.type === 'Interest' || (t.type === 'DEPOSIT' && t.amount < 2)
-  )
-  const totalJurosRecebidos = novasTransacoesDeJuros.reduce(
-    (soma, transacao) => soma + transacao.amount,
-    jurosAnteriores
-  )
+  const totalGeral = normalizados.reduce((sum, d) => sum + d.amountReal, 0)
 
   const umAnoAtras = new Date()
   umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1)
 
-  const dividendosUltimos12Meses = allDividends.filter(
-    (div) => new Date(div.paidOn) >= umAnoAtras
-  )
-  const totalDividendosLTM = dividendosUltimos12Meses.reduce(
-    (sum, div) => sum + div.amount,
-    0
-  )
-  const yieldAnualizadoLTM = valorInvestido
-    ? (totalDividendosLTM / valorInvestido) * 100
-    : 0
+  const ltm = normalizados.filter((d) => new Date(d.paidOn) >= umAnoAtras)
 
-  const distribuicaoPorAtivoMap = allDividends.reduce((acc, div) => {
-    acc[div.ticker] = (acc[div.ticker] || 0) + div.amount
-    return acc
-  }, {})
-  const distribuicaoPorAtivo = Object.entries(distribuicaoPorAtivoMap)
+  const totalLTM = ltm.reduce((s, d) => s + d.amountReal, 0)
+
+  const yieldAnualizado = valorInvestido ? (totalLTM / valorInvestido) * 100 : 0
+
+  const distribuicao = Object.entries(
+    normalizados.reduce((acc: Record<string, number>, d) => {
+      acc[d.ticker] = (acc[d.ticker] || 0) + d.amountReal
+      return acc
+    }, {})
+  )
     .map(([ticker, valor]) => ({
       ticker,
-      valor: parseFloat((valor as number).toFixed(2))
+      valor: Number(valor.toFixed(2))
     }))
     .sort((a, b) => b.valor - a.valor)
+    .slice(0, 10)
 
-  const lucroTotal =
-    valorizacaoInvestimentos + totalDividendos + totalJurosRecebidos
-
-  const porcLucroTotal = totalPortfolio
-    ? (lucroTotal / totalPortfolio) * 100
-    : 0
-  const porcValorizacaoSobreInvestido = valorInvestido
-    ? (valorizacaoInvestimentos / valorInvestido) * 100
-    : 0
-  const porcJurosSobreCaixaLivre = valorNaoInvestido
-    ? (totalJurosRecebidos / valorNaoInvestido) * 100
-    : 0
-
-  const hoje = new Date()
-  const fimDoAno = new Date(hoje.getFullYear(), 11, 31)
-  const taxaAtual = 2.37
-  const taxaFutura = 2.2
-  const dataMudancaTaxa = new Date(hoje.getFullYear(), 5, 16)
-
-  let ganhosFuturosDeJuros = 0
-  if (hoje < dataMudancaTaxa) {
-    // Lógica futura aqui
-  } else {
-    const diasRestantes = diffInDays(hoje, fimDoAno)
-    ganhosFuturosDeJuros =
-      diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
+  return {
+    totalGeral: Number(totalGeral.toFixed(2)),
+    totalLTM: Number(totalLTM.toFixed(2)),
+    yieldAnualizado: Number(yieldAnualizado.toFixed(2)),
+    distribuicao,
+    quantidade: allDividends.length
   }
-  const projecaoJurosFimDeAno = totalJurosRecebidos + ganhosFuturosDeJuros
-  const taxaAnualAtual = hoje < dataMudancaTaxa ? taxaAtual : taxaFutura
-  const projecaoDiariaDeJurosAtual =
-    valorNaoInvestido * (taxaAnualAtual / 100 / 365)
-  const projecaoMensalDeJuros = projecaoDiariaDeJurosAtual * 30
+}
 
-  const yieldProjetado = 2.92 / 100
-  const projecaoAnualDividendos = valorInvestido * yieldProjetado
-  const projecaoMensalDividendos = projecaoAnualDividendos / 12
-  const projecaoDiariaDividendos = projecaoAnualDividendos / 365
+/* ============================================================================
+   FETCH EXTERNAL
+============================================================================ */
 
-  // --- ADICIONADO ---: Cálculo do Rendimento Total Anual
-  const projecaoRendimentoTotalAnual =
-    projecaoJurosFimDeAno + projecaoAnualDividendos
+async function fetchExternalData(apiKey: string, apiSecret: string) {
+  const base64Credentials = Buffer.from(`${apiKey}:${apiSecret}`).toString(
+    'base64'
+  )
 
-  // --- ADICIONADO ---: Cálculos para as Metas
-  const metaDividendosMensal = 10 // Objetivo: €10 por mês
-  const metaDividendosAnual = metaDividendosMensal * 12
-  const valorNecessarioParaMetaDividendos =
-    yieldProjetado > 0 ? metaDividendosAnual / yieldProjetado : 0
+  const fetchOptions: RequestInit = {
+    method: 'GET',
+    headers: { Authorization: `Basic ${base64Credentials}` },
+    next: { revalidate: 0 }
+  }
 
-  const metaJurosMensal = 40 // Objetivo: €40 por mês
-  const taxaAnualDecimal = taxaAnualAtual / 100
-  const valorNecessarioParaMetaJuros =
-    taxaAnualDecimal > 0 ? metaJurosMensal / (taxaAnualDecimal / 12) : 0
+  const CASH = 'https://live.trading212.com/api/v0/equity/account/cash'
+  const TRANS =
+    'https://live.trading212.com/api/v0/history/transactions?limit=50'
+  const DIVS = 'https://live.trading212.com/api/v0/history/dividends?limit=50'
 
-  const finalData: IInvestimentsData = {
+  const [cashRes, transRes] = await Promise.all([
+    fetch(CASH, fetchOptions),
+    fetch(TRANS, fetchOptions)
+  ])
+
+  if (!cashRes.ok || !transRes.ok)
+    throw new Error('Falha ao buscar dados da Trading212')
+
+  const apiInvestmentsData = (await cashRes.json()) as InvestmentDataPropsApi
+  const transactionListData = (await transRes.json())
+    .items as TransactionListProps[]
+
+  const allDividends = await fetchAllDividends(DIVS, fetchOptions)
+
+  return { apiInvestmentsData, transactionListData, allDividends }
+}
+
+/* ============================================================================
+   PROCESS DATA
+============================================================================ */
+
+function processInvestmentData(
+  raw: {
+    apiInvestmentsData: InvestmentDataPropsApi
+    transactionListData: TransactionListProps[]
+    allDividends: any[]
+  },
+  previous: IInvestimentsData | undefined,
+  reserve?: number
+): IInvestimentsData {
+  const { apiInvestmentsData, transactionListData, allDividends } = raw
+
+  const valorInvestido = apiInvestmentsData.invested
+  const valorNaoInvestido = apiInvestmentsData.free
+  const totalPortfolio = apiInvestmentsData.total
+  const valorizacao = apiInvestmentsData.ppl
+
+  /* --- JUROS INCREMENTAIS (correto) --- */
+  const jurosAntigos =
+    previous?.rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido || 0
+
+  const refsAntigas = new Set(
+    previous?.dadosBrutos?.transacoesRecentes.map((t) => t.reference) || []
+  )
+
+  const novasTransacoes = transactionListData.filter(
+    (t) => !refsAntigas.has(t.reference)
+  )
+
+  const novasDeJuros = novasTransacoes.filter(
+    (t) => t.type === 'Interest' || (t.type === 'DEPOSIT' && t.amount < 2)
+  )
+
+  const totalJuros = novasDeJuros.reduce((s, t) => s + t.amount, jurosAntigos)
+
+  /* --- DIVIDENDOS (sempre full rebuild) --- */
+  const dividendos = formatarDividendos(allDividends, valorInvestido)
+
+  /* --- PROJEÇÕES --- */
+  const hoje = new Date()
+  const fimAno = new Date(hoje.getFullYear(), 11, 31)
+
+  const taxaFutura = 2.2
+  const yieldProj = 2.92 / 100
+
+  const diasRestantes = diffInDays(hoje, fimAno)
+
+  const ganhosFuturos =
+    diasRestantes * (valorNaoInvestido * (taxaFutura / 100 / 365))
+
+  const projJurosAnual = totalJuros + ganhosFuturos
+
+  const projJurosDiario = valorNaoInvestido * (taxaFutura / 100 / 365)
+  const projJurosMensal = projJurosDiario * 30
+
+  const projDividendoAnual = valorInvestido * yieldProj
+  const projDivMensal = projDividendoAnual / 12
+  const projDivDiario = projDividendoAnual / 365
+
+  /* --- METAS --- */
+  const metaDividendos = 10
+  const metaJuros = 40
+
+  const metas = {
+    dividendos: {
+      objetivoMensal: metaDividendos,
+      valorInvestidoNecessario: (metaDividendos * 12) / yieldProj
+    },
+    juros: {
+      objetivoMensal: metaJuros,
+      valorNaoInvestidoNecessario: metaJuros / (taxaFutura / 100 / 12)
+    }
+  }
+
+  /* --- LUCRO TOTAL --- */
+  const lucroTotal = valorizacao + dividendos.totalGeral + totalJuros
+
+  const porcentagemLucro =
+    totalPortfolio > 0 ? (lucroTotal / totalPortfolio) * 100 : 0
+
+  return {
     patrimonio: {
       total: parseFloat((totalPortfolio + (reserve || 0)).toFixed(2)),
       reservaExterna: reserve || 0,
@@ -182,85 +337,74 @@ function processInvestmentData(
     composicaoPortfolio: {
       valorInvestido: parseFloat(valorInvestido.toFixed(2)),
       valorNaoInvestido: parseFloat(valorNaoInvestido.toFixed(2)),
-      valorizacaoAtual: parseFloat(valorizacaoInvestimentos.toFixed(2)),
+      valorizacaoAtual: parseFloat(valorizacao.toFixed(2)),
       totalInvestidoComValorizacao: parseFloat(
-        (valorInvestido + valorizacaoInvestimentos).toFixed(2)
+        (valorInvestido + valorizacao).toFixed(2)
       )
     },
     rendimentos: {
       lucroTotal: parseFloat(lucroTotal.toFixed(2)),
-      porcentagemLucroTotal: parseFloat(porcLucroTotal.toFixed(2)),
+      porcentagemLucroTotal: parseFloat(porcentagemLucro.toFixed(2)),
       detalhes: {
         jurosSobreCaixa: {
-          totalRecebido: parseFloat(totalJurosRecebidos.toFixed(2)),
-          taxaAnual: taxaAnualAtual,
-          rendimentoHistoricoPercentual: parseFloat(
-            porcJurosSobreCaixaLivre.toFixed(2)
-          )
+          totalRecebido: parseFloat(totalJuros.toFixed(2)),
+          taxaAnual: taxaFutura,
+          rendimentoHistoricoPercentual:
+            valorNaoInvestido > 0
+              ? parseFloat(((totalJuros / valorNaoInvestido) * 100).toFixed(2))
+              : 0
         },
         valorizacaoInvestimentos: {
-          valor: parseFloat(valorizacaoInvestimentos.toFixed(2)),
-          porcentagem: parseFloat(porcValorizacaoSobreInvestido.toFixed(2))
+          valor: parseFloat(valorizacao.toFixed(2)),
+          porcentagem:
+            valorInvestido > 0
+              ? parseFloat(((valorizacao / valorInvestido) * 100).toFixed(2))
+              : 0
         },
         dividendos: {
-          totalRecebido: parseFloat(totalDividendos.toFixed(2)),
-          totalRecebidoUltimos12Meses: parseFloat(
-            totalDividendosLTM.toFixed(2)
-          ),
-          yieldAnualizado: parseFloat(yieldAnualizadoLTM.toFixed(2)),
-          distribuicaoPorAtivo: distribuicaoPorAtivo.slice(0, 10)
+          totalRecebido: dividendos.totalGeral,
+          totalRecebidoUltimos12Meses: dividendos.totalLTM,
+          yieldAnualizado: dividendos.yieldAnualizado,
+          distribuicaoPorAtivo: dividendos.distribuicao
         }
       }
     },
     projecoes: {
-      // --- ADICIONADO ---
-      rendimentoTotalAnual: parseFloat(projecaoRendimentoTotalAnual.toFixed(2)),
+      rendimentoTotalAnual: parseFloat(
+        (projJurosAnual + projDividendoAnual).toFixed(2)
+      ),
       jurosSobreCaixa: {
-        projecaoDiaria: parseFloat(projecaoDiariaDeJurosAtual.toFixed(4)),
-        projecaoAnual: parseFloat(projecaoJurosFimDeAno.toFixed(2)),
-        projecaoMensal: parseFloat(projecaoMensalDeJuros.toFixed(2))
+        projecaoDiaria: parseFloat(projJurosDiario.toFixed(4)),
+        projecaoMensal: parseFloat(projJurosMensal.toFixed(2)),
+        projecaoAnual: parseFloat(projJurosAnual.toFixed(2))
       },
       dividendos: {
-        projecaoAnualEstimada: parseFloat(projecaoAnualDividendos.toFixed(2)),
-        projecaoMensalEstimada: parseFloat(projecaoMensalDividendos.toFixed(2)),
-        projecaoDiariaEstimada: parseFloat(projecaoDiariaDividendos.toFixed(2)),
-        yieldProjetado: parseFloat((yieldProjetado * 100).toFixed(2))
+        projecaoAnualEstimada: parseFloat(projDividendoAnual.toFixed(2)),
+        projecaoMensalEstimada: parseFloat(projDivMensal.toFixed(2)),
+        projecaoDiariaEstimada: parseFloat(projDivDiario.toFixed(2)),
+        yieldProjetado: 2.92
       }
     },
-    // --- ADICIONADO ---: Nova seção de Metas
-    metas: {
-      dividendos: {
-        objetivoMensal: metaDividendosMensal,
-        valorInvestidoNecessario: parseFloat(
-          valorNecessarioParaMetaDividendos.toFixed(2)
-        )
-      },
-      juros: {
-        objetivoMensal: metaJurosMensal,
-        valorNaoInvestidoNecessario: parseFloat(
-          valorNecessarioParaMetaJuros.toFixed(2)
-        )
-      }
-    },
+    metas,
     dadosBrutos: {
       transacoesRecentes: transactionListData,
       historicoDividendos: allDividends
     }
   }
-
-  return finalData
 }
+
+/* ============================================================================
+   UPDATE + SAVE
+============================================================================ */
 
 export async function updateAndRevalidateInvestments(
   userId: string,
   reserve?: number
 ) {
-  console.log(`[Server Action] Iniciando para o usuário: ${userId}`)
-
   const apiKey = process.env.API_TRANDING_212
-  if (!apiKey) {
-    throw new Error('Chave da API não encontrada no servidor.')
-  }
+  const secretKey = process.env.SECREAT_TRANDING_212
+
+  if (!apiKey || !secretKey) throw new Error('Chave da API não encontrada.')
 
   try {
     const docRef = adminDb
@@ -268,26 +412,23 @@ export async function updateAndRevalidateInvestments(
       .doc(userId)
       .collection('finance')
       .doc('investiments')
+
     const docSnap = await docRef.get()
+
     const previousData = docSnap.exists
       ? (docSnap.data() as IInvestimentsData)
       : undefined
 
-    const rawData = await fetchExternalData(apiKey)
-
+    const rawData = await fetchExternalData(apiKey, secretKey)
     const finalData = processInvestmentData(rawData, previousData, reserve)
 
     await docRef.set(finalData, { merge: true })
-    console.log('[Server Action] Dados salvos no Firebase com sucesso.')
 
     revalidatePath('/finance')
-    console.log('[Server Action] Cache da rota /finance invalidado.')
 
     return { success: true, message: 'Investimentos atualizados com sucesso.' }
-  } catch (error) {
-    console.error('[Server Action] Erro ao processar dados:', error)
-    throw new Error(
-      'Falha ao atualizar os investimentos. Tente novamente mais tarde.'
-    )
+  } catch (err) {
+    console.error(err)
+    throw new Error('Falha ao atualizar investimentos.')
   }
 }
