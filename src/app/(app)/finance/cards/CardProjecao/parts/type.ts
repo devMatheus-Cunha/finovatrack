@@ -2,7 +2,9 @@ export interface FinancialPlanningItem {
   year: string
   monthlyContributions: string
   receivables: string
-  deduction: string
+  downPayment?: string
+  homePurchases?: string
+  otherDeductions?: string
 }
 
 export interface ProjectionDataPoint {

@@ -36,7 +36,9 @@ const CardToFinanceYaer = ({
     reserve: '',
     monthlyContributions: '',
     receivables: '',
-    deduction: '',
+    downPayment: '',
+    homePurchases: '',
+    otherDeductions: '',
     periodContributions: ''
   })
 
@@ -55,7 +57,9 @@ const CardToFinanceYaer = ({
         values.monthlyContributions
       ),
       receivables: formatToJavaScriptNumber(values.receivables),
-      deduction: formatToJavaScriptNumber(values.deduction)
+      downPayment: formatToJavaScriptNumber(values.downPayment ?? ''),
+      homePurchases: formatToJavaScriptNumber(values.homePurchases ?? ''),
+      otherDeductions: formatToJavaScriptNumber(values.otherDeductions ?? '')
     })
     onCloseModal()
   }
@@ -79,7 +83,9 @@ const CardToFinanceYaer = ({
           Number(dataAtual.monthlyContributions) *
             Number(dataAtual.periodContributions) +
           Number(dataAtual.receivables) -
-          Number(dataAtual.deduction)
+          ((Number(dataAtual.downPayment) || 0) +
+            (Number(dataAtual.homePurchases) || 0) +
+            (Number(dataAtual.otherDeductions) || 0))
 
         data[i + 1].totoalReserveLastYear = String(total)
       }

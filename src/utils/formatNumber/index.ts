@@ -63,7 +63,9 @@ export function currentAndPreviousYearValidity(
 }
 interface AnnualAdjustment {
   receivables: number
-  deduction: number
+  downPayment?: number
+  homePurchases?: number
+  otherDeductions?: number
 }
 
 interface YearProjection {
@@ -113,7 +115,10 @@ export const calculateCompoundInterestProjection = ({
     const monthlyContribution = getMonthlyContribution(i)
     const annualAdjustment = getAnnualAdjustment(i)
     const netAdjustment =
-      annualAdjustment.receivables - annualAdjustment.deduction
+      (annualAdjustment.receivables || 0) -
+      ((annualAdjustment.downPayment || 0) +
+        (annualAdjustment.homePurchases || 0) +
+        (annualAdjustment.otherDeductions || 0))
 
     // Para o primeiro ano (i === 0), calcula apenas os meses restantes. Para os outros, 12 meses.
     const monthsInThisYear = i === 0 ? 12 - currentMonth : 12

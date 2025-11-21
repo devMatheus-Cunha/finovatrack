@@ -6,7 +6,9 @@ export interface IFinancialPlanningProps {
   reserve: string
   monthlyContributions: string
   receivables: string
-  deduction: string
+  downPayment?: string
+  homePurchases?: string
+  otherDeductions?: string
   periodContributions: string
   totoalReserveLastYear?: string
 }
@@ -99,7 +101,9 @@ export const calculateProjection = (
       Number(applicablePlan?.monthlyContributions) || 0
     const annualAdjustment =
       (Number(applicablePlan?.receivables) || 0) -
-      (Number(applicablePlan?.deduction) || 0)
+      ((Number(applicablePlan?.downPayment) || 0) +
+        (Number(applicablePlan?.homePurchases) || 0) +
+        (Number(applicablePlan?.otherDeductions) || 0))
 
     // Define o número de aportes a fazer neste ano específico
     const numberOfPeriods = Number(applicablePlan?.periodContributions) || 0

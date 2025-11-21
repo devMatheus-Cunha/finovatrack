@@ -16,7 +16,9 @@ const schemaContributions = z.object({
   reserve: z.string({ required_error: 'Campo Obrigatorio' }),
   monthlyContributions: z.string({ required_error: 'Campo Obrigatorio' }),
   receivables: z.string({ required_error: 'Campo Obrigatorio' }),
-  deduction: z.string({ required_error: 'Campo Obrigatorio' }),
+  downPayment: z.string().optional(),
+  homePurchases: z.string().optional(),
+  otherDeductions: z.string().optional(),
   periodContributions: z.string({ required_error: 'Campo Obrigatorio' })
 })
 
@@ -51,7 +53,11 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
       monthlyContributions: formatToCustomFormat(
         Number(initialValues?.monthlyContributions)
       ),
-      deduction: formatToCustomFormat(Number(initialValues?.deduction))
+      downPayment: formatToCustomFormat(Number(initialValues?.downPayment)),
+      homePurchases: formatToCustomFormat(Number(initialValues?.homePurchases)),
+      otherDeductions: formatToCustomFormat(
+        Number(initialValues?.otherDeductions)
+      )
     },
     resolver: zodResolver(schemaContributions)
   })
@@ -112,11 +118,24 @@ const ContentModalFinanceYear: React.FC<ModalProps> = ({
           />
           <InputTypeMoney
             control={control}
-            required
-            name="deduction"
-            label={`Dedução (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            name="downPayment"
+            label={`Entrada do imóvel (${optionsLabelCurrencyKeyAndValue[currency]})`}
             placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
-            errors={errors?.deduction?.message}
+            errors={errors?.downPayment?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            name="homePurchases"
+            label={`Compras para a casa (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.homePurchases?.message}
+          />
+          <InputTypeMoney
+            control={control}
+            name="otherDeductions"
+            label={`Outras deduções (${optionsLabelCurrencyKeyAndValue[currency]})`}
+            placeholder={`Ex: ${optionsLabelCurrencyKeyAndValue[currency]} 10.00`}
+            errors={errors?.otherDeductions?.message}
           />
         </div>
       </div>

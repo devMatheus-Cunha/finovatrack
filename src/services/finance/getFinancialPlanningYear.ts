@@ -8,7 +8,9 @@ export interface IFinancialPlanningProps {
   reserve: string
   monthlyContributions: string
   receivables: string
-  deduction: string
+  downPayment?: string
+  homePurchases?: string
+  otherDeductions?: string
   periodContributions: string
   totoalReserveLastYear?: string
 }

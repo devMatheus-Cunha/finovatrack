@@ -42,7 +42,9 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
     Number(reserveAmount) +
     yearContributions +
     Number(data.receivables) -
-    Number(data.deduction)
+    (Number(data.downPayment) || 0) -
+    (Number(data.homePurchases) || 0) -
+    (Number(data.otherDeductions) || 0)
 
   return (
     <div className="flex flex-wrap items-center gap-5">
@@ -108,21 +110,31 @@ const AccordionPanel: React.FC<AccordionPanelProps> = ({
           )}
         </p>
       </div>
-      {/* <div className="w-max">
-        <h3 className="text-sm font-semibold">Total Contrib</h3>
+      <div className="w-max">
+        <h3 className="text-sm font-semibold">Entrada Imóvel</h3>
         <p className="text-md">
           {formatCurrencyMoney(
-            totalFixedAndExtraContribution || 0,
+            Number(data.downPayment || 0),
             userData?.primary_currency,
             isVisibilityData
           )}
         </p>
-      </div> */}
+      </div>
       <div className="w-max">
-        <h3 className="text-sm font-semibold">Dedução</h3>
+        <h3 className="text-sm font-semibold">Compras Casa</h3>
         <p className="text-md">
           {formatCurrencyMoney(
-            Number(data.deduction),
+            Number(data.homePurchases || 0),
+            userData?.primary_currency,
+            isVisibilityData
+          )}
+        </p>
+      </div>
+      <div className="w-max">
+        <h3 className="text-sm font-semibold">Outras Deduções</h3>
+        <p className="text-md">
+          {formatCurrencyMoney(
+            Number(data.otherDeductions || 0),
             userData?.primary_currency,
             isVisibilityData
           )}

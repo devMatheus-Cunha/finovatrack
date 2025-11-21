@@ -1,6 +1,6 @@
 // Dados fakes para financialPlanningYear
 
-import { IFinancialPlanningProps } from "./getFinancialPlanningYear";
+import { IFinancialPlanningProps } from './getFinancialPlanningYear'
 
 export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
   {
@@ -10,9 +10,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '150',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '5',
@@ -21,9 +23,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '200',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '6',
@@ -32,9 +36,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '250',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '7',
@@ -43,9 +49,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '300',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '8',
@@ -54,9 +62,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '350',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '9',
@@ -65,9 +75,11 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '400',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   },
   {
     id: '10',
@@ -76,8 +88,10 @@ export const fakeFinancialPlanningYear: IFinancialPlanningProps[] = [
     reserve: '450',
     monthlyContributions: '500',
     receivables: '0',
-    deduction: '0',
+    downPayment: '0',
+    homePurchases: '0',
+    otherDeductions: '0',
     periodContributions: '12',
-    totoalReserveLastYear: '',
+    totoalReserveLastYear: ''
   }
 ]
