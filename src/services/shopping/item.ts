@@ -23,14 +23,37 @@ export async function addShoppingItem(
       ? [{ price: link.price, date: getFormattedTodayDate() }]
       : []
   }))
+
+  const sanitize = (value: any): any => {
+    if (Array.isArray(value)) {
+      return value.map((v) => sanitize(v))
+    }
+    if (value && typeof value === 'object') {
+      const out: any = {}
+      Object.keys(value).forEach((k) => {
+        const v = value[k]
+        if (v !== undefined) {
+          out[k] = sanitize(v)
+        }
+      })
+      return out
+    }
+    return value
+  }
+
+  const payload = {
+    ...data,
+    links,
+    earlyPurchase: (data as any).earlyPurchase ?? false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }
+
+  const cleanPayload = sanitize(payload)
+
   const docRef = await addDoc(
     collection(db, 'users', userId, SHOPPING_COLLECTION),
-    {
-      ...data,
-      links,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    }
+    cleanPayload
   )
   const docSnap = await getDoc(docRef)
   return { id: docRef.id, ...docSnap.data() } as IItem
@@ -85,11 +108,32 @@ export async function editShoppingItem(
       historicoPrecos: finalHistory
     }
   })
-  await updateDoc(itemRef, {
+  // sanitize update payload to avoid sending `undefined` values to Firestore
+  const sanitize = (value: any): any => {
+    if (Array.isArray(value)) {
+      return value.map((v) => sanitize(v))
+    }
+    if (value && typeof value === 'object') {
+      const out: any = {}
+      Object.keys(value).forEach((k) => {
+        const v = value[k]
+        if (v !== undefined) {
+          out[k] = sanitize(v)
+        }
+      })
+      return out
+    }
+    return value
+  }
+
+  const updatePayload = sanitize({
     ...data,
     links: updatedLinks,
+    // keep updatedAt timestamp
     updatedAt: serverTimestamp()
   })
+
+  await updateDoc(itemRef, updatePayload)
   const updatedSnap = await getDoc(itemRef)
   return { id, ...updatedSnap.data() } as IItem
 }
