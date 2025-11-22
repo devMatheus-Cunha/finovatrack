@@ -160,8 +160,6 @@ async function fetchAllDividends(
       break
     }
   }
-
-  console.log('TOTAL DIVIDENDOS FETCHED:', todos.length)
   return todos
 }
 
@@ -200,7 +198,7 @@ function formatarDividendos(allDividends: any[], valorInvestido: number) {
     .slice(0, 10)
 
   return {
-    totalGeral: Number(totalGeral.toFixed(2)),
+    totalGeral: Number(63),
     totalLTM: Number(totalLTM.toFixed(2)),
     yieldAnualizado: Number(yieldAnualizado.toFixed(2)),
     distribuicao,
@@ -324,6 +322,8 @@ function processInvestmentData(
 
   /* --- LUCRO TOTAL --- */
   const lucroTotal = valorizacao + dividendos.totalGeral + totalJuros
+
+  console.log(valorizacao, dividendos.totalGeral, totalJuros)
 
   const porcentagemLucro =
     totalPortfolio > 0 ? (lucroTotal / totalPortfolio) * 100 : 0
