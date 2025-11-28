@@ -43,7 +43,7 @@ export function StatsOverview({
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  const investmentBudget = 5300
+  const investmentBudget = 5400
   // Se o usuário optou por incluir compras antecipadas nos cálculos, ADICIONA o earlyTotal ao valor para investir
   const effectiveEarlyTotal = includeEarlyPurchase ? earlyTotal || 0 : 0
   const effectiveBoughtTotal = boughtTotal || 0
