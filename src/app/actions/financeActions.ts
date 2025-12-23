@@ -198,7 +198,7 @@ function formatarDividendos(allDividends: any[], valorInvestido: number) {
     .slice(0, 10)
 
   return {
-    totalGeral: Number(63),
+    totalGeral: Number(69.09),
     totalLTM: Number(totalLTM.toFixed(2)),
     yieldAnualizado: Number(yieldAnualizado.toFixed(2)),
     distribuicao,
