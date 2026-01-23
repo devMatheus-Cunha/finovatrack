@@ -55,7 +55,7 @@ export async function getReportsToYear(
     0
   )
 
-  const totalExpensesForAverage = totalExpenses - 1000
+  const totalExpensesForAverage = totalExpenses
   const categoryTotals: Record<string, number> = {}
   const subcategoryTotals: Record<string, Record<string, number>> = {}
 
