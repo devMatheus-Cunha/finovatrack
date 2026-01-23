@@ -15,7 +15,7 @@ export function useShoppingFilters() {
   const [selectedRoom, setSelectedRoom] = useState<string>('Todos')
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas')
   const [selectedBoughtStatus, setSelectedBoughtStatus] =
-    useState<string>('Não Comprado')
+    useState<string>('Nao Comprado')
   const [selectedPriorities, setSelectedPriorities] = useState<string[]>([
     'Alto',
     'Médio'
