@@ -1,5 +1,19 @@
-import React from 'react'
-import { Home, PlusCircle } from 'lucide-react'
+import React, { useState } from 'react'
+import {
+  Home,
+  PlusCircle,
+  LayoutGrid,
+  List as ListIcon,
+  CheckCircle,
+  Flag,
+  CircleDashed,
+  Sliders,
+  Wind,
+  Coffee,
+  Bed,
+  Sofa,
+  UtensilsCrossed
+} from 'lucide-react'
 import { IItem } from '../types'
 import { ItemCard } from './ItemCard'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
@@ -14,6 +28,20 @@ interface ItemsListProps {
   onDeleteItem: (item: IItem) => void
 }
 
+const getRoomIcon = (roomName: string) => {
+  const lowerRoom = roomName.toLowerCase()
+  if (lowerRoom.includes('banheiro')) return <Wind className="w-5 h-5" />
+  if (lowerRoom.includes('cozinha') || lowerRoom.includes('cafeteria'))
+    return <Coffee className="w-5 h-5" />
+  if (lowerRoom.includes('quarto') || lowerRoom.includes('bedroom'))
+    return <Bed className="w-5 h-5" />
+  if (lowerRoom.includes('sala') || lowerRoom.includes('living'))
+    return <Sofa className="w-5 h-5" />
+  if (lowerRoom.includes('cozinha'))
+    return <UtensilsCrossed className="w-5 h-5" />
+  return <Home className="w-5 h-5" />
+}
+
 export function ItemsList({
   itemsByRoom,
   onAddItem,
@@ -23,67 +51,273 @@ export function ItemsList({
 }: ItemsListProps) {
   const { userData } = useUserData()
   const { isVisibilityData } = useIsVisibilityDatas()
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null)
+
+  const totalValue = Object.values(itemsByRoom).reduce(
+    (sum, room) => sum + room.totalValue,
+    0
+  )
+  const roomNames = Object.keys(itemsByRoom).sort()
+
+  const visibleRooms =
+    selectedRoom === null
+      ? roomNames
+      : [selectedRoom].filter((r) => itemsByRoom[r])
 
   return (
-    <section className="bg-gray-700 shadow-lg rounded-xl p-6">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-        <h2 className="text-2xl font-semibold text-gray-100 flex items-center mb-2 md:mb-0">
-          <Home className="w-5 h-5 text-gray-400 mr-2" />
-          Itens por Cômodo
-        </h2>
-        <button
-          onClick={onAddItem}
-          className="bg-blue-600 text-white py-2 px-4 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out flex items-center justify-center"
-        >
-          <PlusCircle className="w-5 h-5 mr-2" />
-          Adicionar Novo Item
-        </button>
-      </div>
+    <div className="space-y-6">
+      {/* Main Header Card */}
+      <section className="bg-gray-700 shadow-lg rounded-2xl border border-gray-600/50 p-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3 text-gray-100">
+              <Home className="text-blue-400" size={28} />
+              Itens por Cômodo
+            </h1>
+            <p className="text-gray-400 text-sm mt-2">
+              Gerencie seu inventário de forma inteligente
+            </p>
+          </div>
+          <button
+            onClick={onAddItem}
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors px-5 py-2.5 rounded-xl font-medium shadow-lg shadow-blue-600/20"
+          >
+            <PlusCircle size={20} />
+            Adicionar Novo Item
+          </button>
+        </div>
+      </section>
+      {Object.keys(itemsByRoom).length > 0 && (
+        <div className="flex items-center justify-between gap-4 px-2 py-3">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+            <button
+              onClick={() => setSelectedRoom(null)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-xs transition-all whitespace-nowrap flex-shrink-0 ${
+                selectedRoom === null
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
+              }`}
+            >
+              <Sliders className="w-4 h-4" />
+              Todos
+              <span
+                className={`ml-1 px-1.5 py-0.5 rounded text-xs font-bold ${
+                  selectedRoom === null ? 'bg-white/20' : 'bg-gray-600'
+                }`}
+              >
+                {roomNames.reduce(
+                  (sum, room) => sum + itemsByRoom[room].items.length,
+                  0
+                )}
+              </span>
+            </button>
+            {roomNames.map((roomName) => (
+              <button
+                key={roomName}
+                onClick={() => setSelectedRoom(roomName)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-xs transition-all whitespace-nowrap flex-shrink-0 ${
+                  selectedRoom === roomName
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
+                }`}
+              >
+                {getRoomIcon(roomName)}
+                {roomName}
+                <span
+                  className={`ml-1 px-1.5 py-0.5 rounded text-xs font-bold ${
+                    selectedRoom === roomName ? 'bg-white/20' : 'bg-gray-600'
+                  }`}
+                >
+                  {itemsByRoom[roomName].items.length}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* View Mode Controls */}
+          <div className="flex items-center bg-gray-700/50 p-1 rounded-lg border border-gray-600 flex-shrink-0">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-md transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-400 hover:text-gray-200'
+              }`}
+              title="Visualização em Grid"
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-md transition-all ${
+                viewMode === 'list'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-400 hover:text-gray-200'
+              }`}
+              title="Visualização em Lista"
+            >
+              <ListIcon size={18} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {Object.keys(itemsByRoom).length === 0 && (
-        <p className="text-gray-400 text-center py-4">
+        <p className="text-gray-400 text-center py-8">
           Nenhum item encontrado com os filtros selecionados.
         </p>
       )}
 
-      {Object.keys(itemsByRoom)
-        .sort()
-        .map(
+      {/* Room Sections - Each with its own Card */}
+      <div className="space-y-6">
+        {visibleRooms.map(
           (roomName) =>
             itemsByRoom[roomName].items.length > 0 && (
-              <div
+              <section
                 key={roomName}
-                className="mb-8 p-4 bg-gray-800/50 rounded-lg shadow-sm"
+                className="bg-gray-700 shadow-lg rounded-2xl border border-gray-600/50 overflow-hidden"
               >
-                <h3 className="text-xl font-bold text-blue-400 mb-3 flex items-center">
-                  <Home className="w-5 h-5 mr-2" />
-                  {roomName} ({itemsByRoom[roomName].items.length} itens)
-                </h3>
-                <p className="text-md font-semibold text-gray-200 mb-3">
-                  Valor Estimado do Cômodo:{' '}
-                  <span className="text-blue-300">
-                    {formatCurrencyMoney(
-                      itemsByRoom[roomName].totalValue,
-                      userData?.primary_currency,
-                      isVisibilityData
-                    )}
-                  </span>
-                </p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-                  {itemsByRoom[roomName].items.map((item) => (
-                    <li className="flex w-full" key={item.id}>
+                {/* Room Header */}
+                <div className="flex justify-between p-6 border-b border-gray-500">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
+                          <Home size={24} />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-100">
+                            {roomName}{' '}
+                            <span className="text-blue-400 text-sm font-normal">
+                              ({itemsByRoom[roomName].items.length} itens)
+                            </span>
+                          </h2>
+                          <div className="flex flex-col gap-2 mt-2">
+                            <div className="flex items-center gap-3">
+                              <span className="text-xs text-gray-300 italic">
+                                Valor Estimado:{' '}
+                                {formatCurrencyMoney(
+                                  itemsByRoom[roomName].totalValue,
+                                  userData?.primary_currency,
+                                  isVisibilityData
+                                )}
+                              </span>
+                              <div className="w-32 h-2 bg-gray-600 rounded-full overflow-hidden">
+                                <div
+                                  className="h-full bg-blue-600 transition-all duration-300"
+                                  style={{
+                                    width:
+                                      totalValue > 0
+                                        ? `${(itemsByRoom[roomName].totalValue / totalValue) * 100}%`
+                                        : '0%'
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4 text-xs text-gray-300">
+                              <span>
+                                Itens Concluídos:{' '}
+                                {
+                                  itemsByRoom[roomName].items.filter(
+                                    (i) =>
+                                      i.properties.Comprado.checkbox ||
+                                      i.properties.earlyPurchase
+                                  ).length
+                                }
+                                /{itemsByRoom[roomName].items.length}
+                              </span>
+                              <span>
+                                Restante:{' '}
+                                {formatCurrencyMoney(
+                                  itemsByRoom[roomName].items
+                                    .filter(
+                                      (i) =>
+                                        !i.properties.Comprado.checkbox &&
+                                        !i.properties.earlyPurchase
+                                    )
+                                    .reduce(
+                                      (sum, i) =>
+                                        sum +
+                                        (i.properties.Preco?.number || 0) *
+                                          (i.properties.Quantidade?.number ||
+                                            1),
+                                      0
+                                    ),
+                                  userData?.primary_currency,
+                                  isVisibilityData
+                                )}
+                              </span>
+                              <span>
+                                Gasto:{' '}
+                                {formatCurrencyMoney(
+                                  itemsByRoom[roomName].items
+                                    .filter(
+                                      (i) =>
+                                        i.properties.Comprado.checkbox || // Mantém apenas o que está marcado
+                                        i.properties.earlyPurchase // E o que foi compra antecipada
+                                    )
+                                    .reduce(
+                                      (sum, i) =>
+                                        sum +
+                                        (i.properties.Preco?.number || 0) *
+                                          (i.properties.Quantidade?.number ||
+                                            1),
+                                      0
+                                    ),
+                                  userData?.primary_currency,
+                                  isVisibilityData
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-4 text-xs text-gray-300">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle className="w-4 h-4 text-green-400" />{' '}
+                      Comprado
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Flag className="w-4 h-4 text-green-500" /> Compra
+                      Antecipada
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CircleDashed className="w-4 h-4 text-yellow-400" /> Não
+                      Comprado
+                    </div>
+                  </div>
+                </div>
+
+                {/* Items Container */}
+                <div className="p-6">
+                  <div
+                    className={
+                      viewMode === 'grid'
+                        ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'
+                        : 'flex flex-col gap-2'
+                    }
+                  >
+                    {itemsByRoom[roomName].items.map((item) => (
                       <ItemCard
+                        key={item.id}
                         item={item}
                         onEdit={onEditItem}
                         onView={onViewItem}
                         onDelete={onDeleteItem}
+                        viewMode={viewMode}
                       />
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Room Footer Info */}
+              </section>
             )
         )}
-    </section>
+      </div>
+    </div>
   )
 }
