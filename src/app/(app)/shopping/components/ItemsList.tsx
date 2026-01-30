@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import {
   Home,
   PlusCircle,
-  LayoutGrid,
-  List as ListIcon,
   CheckCircle,
   Flag,
   CircleDashed,
