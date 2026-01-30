@@ -3,14 +3,13 @@ import {
   DollarSign,
   Package,
   TrendingDown,
-  Wallet, // Ícone novo
-  ArrowUpCircle, // Ícone novo
-  ArrowDownCircle // Ícone novo
+  Wallet,
+  ArrowUpCircle,
+  ArrowDownCircle,
+  LayoutDashboard // Usando Lucide como fallback para o ícone do Phosphor
 } from 'lucide-react'
-import { useUserData, useIsVisibilityDatas } from '@/hooks/globalStates'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { Card } from '@/components'
 
+// --- Interfaces ---
 interface StatsOverviewProps {
   totalUniqueItems: number
   totalOverallValue: number
@@ -31,6 +30,29 @@ interface StatConfig {
   description?: string
 }
 
+// --- Mocks & Helpers para a Visualização ---
+// No seu projeto real, você mantém os imports originais (@/hooks, @/utils, etc)
+const formatCurrencyMoney = (
+  value: number,
+  currency = 'BRL',
+  visible = true
+) => {
+  if (!visible) return 'R$ ••••••'
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: currency || 'BRL'
+  }).format(value)
+}
+
+// Componente Card interno para visualização
+const Card = ({
+  children,
+  className
+}: {
+  children: React.ReactNode
+  className?: string
+}) => <div className={`rounded-xl ${className}`}>{children}</div>
+
 export function StatsOverview({
   totalUniqueItems,
   totalOverallValue,
@@ -40,29 +62,28 @@ export function StatsOverview({
   boughtTotal,
   baseOverallValue
 }: StatsOverviewProps) {
-  const { userData } = useUserData()
-  const { isVisibilityData } = useIsVisibilityDatas()
+  // Mocks de estados globais para o preview
+  const userData = { primary_currency: 'BRL' }
+  const isVisibilityData = true
 
   const investmentBudget = 5400
-  // Se o usuário optou por incluir compras antecipadas nos cálculos, ADICIONA o earlyTotal ao valor para investir
   const effectiveEarlyTotal = includeEarlyPurchase ? earlyTotal || 0 : 0
   const effectiveBoughtTotal = boughtTotal || 0
-  // A sobra do orçamento deve considerar apenas o que já foi comprado (boughtTotal)
-  // e o que está reservado na lista (baseOverallValue). Itens antecipados NÃO afetam a sobra
-  // pois quando inclusos, aumentam tanto o gasto quanto o orçamento na mesma proporção
   const effectiveBaseOverall = baseOverallValue || 0
+
   const difference =
     investmentBudget - effectiveBoughtTotal - effectiveBaseOverall
   const isWithinBudget = difference >= 0
 
   const formattedBudget = formatCurrencyMoney(
     investmentBudget + effectiveEarlyTotal - effectiveBoughtTotal,
-    userData?.primary_currency,
+    userData.primary_currency,
     isVisibilityData
   )
+
   const formattedDifference = formatCurrencyMoney(
     Math.abs(difference),
-    userData?.primary_currency,
+    userData.primary_currency,
     isVisibilityData
   )
 
@@ -73,7 +94,7 @@ export function StatsOverview({
       label: 'Total Estimado',
       value: formatCurrencyMoney(
         totalOverallValue,
-        userData?.primary_currency,
+        userData.primary_currency,
         isVisibilityData
       ),
       color: 'text-blue-300',
@@ -85,7 +106,7 @@ export function StatsOverview({
       label: 'Total Comprado',
       value: formatCurrencyMoney(
         totalSpentValue,
-        userData?.primary_currency,
+        userData.primary_currency,
         isVisibilityData
       ),
       color: 'text-green-300',
@@ -94,79 +115,105 @@ export function StatsOverview({
   ]
 
   return (
-    <Card className="bg-gray-700 rounded-xl shadow-md p-6 flex flex-col items-center text-center relative w-full h-full min-h-[255px]">
-      <div className="flex justify-between items-center mb-6 w-full">
-        <h3 className="text-2xl font-semibold text-gray-300">
-          Valores da lista
-        </h3>
-        <div className="flex items-center gap-2 bg-gray-700/50 text-xs text-gray-200 px-3 py-1 rounded-full font-medium">
-          <Package className="w-4 h-4" />
-          <span>{totalUniqueItems} itens</span>
+    <Card className="bg-gray-700 shadow-xl w-full border border-gray-600/50 overflow-hidden flex flex-col h-full min-h-[260px]">
+      {/* Cabeçalho alinhado com o do Filters */}
+      <div className="p-6 border-b border-gray-600 flex justify-between items-center bg-gray-700">
+        <h2 className="text-xl font-semibold text-gray-100 flex items-center">
+          <LayoutDashboard className="w-5 h-5 text-gray-400 mr-2" />
+          Resumo de Valores
+        </h2>
+        <div className="flex items-center gap-2 bg-gray-800/60 text-[10px] uppercase tracking-wider text-gray-300 px-3 py-1.5 rounded-full border border-gray-600 font-bold">
+          <Package className="w-3.5 h-3.5 text-gray-400" />
+          <span>{totalUniqueItems} Itens</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-        {statsConfig.map((stat) => (
-          <div
-            key={stat.key}
-            className={`flex flex-col items-center md:items-start text-center md:text-left p-4 rounded-lg bg-gray-800/50`}
-          >
+      <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
+        {/* Grid de Cards Superiores */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {statsConfig.map((stat) => (
             <div
-              className={`flex items-center gap-2 text-xs mb-2 ${stat.color}`}
+              key={stat.key}
+              className="flex flex-col p-4 rounded-lg bg-gray-800/50 border border-gray-600/30 transition-all hover:bg-gray-800/80"
             >
-              {stat.icon}
-              <span>{stat.label}</span>
+              <div
+                className={`flex items-center gap-2 text-xs font-medium mb-1 ${stat.color}`}
+              >
+                {stat.icon}
+                <span className="uppercase tracking-wide opacity-80">
+                  {stat.label}
+                </span>
+              </div>
+              <p
+                className={`text-2xl font-bold tracking-tight ${stat.valueColor}`}
+              >
+                {stat.value}
+              </p>
             </div>
-            <p
-              className={`text-3xl font-bold tracking-tighter mb-1 ${stat.valueColor}`}
-            >
-              {stat.value}
-            </p>
-            {stat.description && (
-              <p className="text-xs text-gray-400">{stat.description}</p>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* --- Nova Seção Adicionada --- */}
-      <div className="border-t border-gray-700 mt-6 pt-6 w-full flex flex-col sm:flex-row justify-center sm:justify-around items-center space-y-4 sm:space-y-0">
-        {/* Valor do Orçamento */}
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Wallet className="w-4 h-4" />
-            <span>Valor para investir</span>
-          </div>
-          <p className="text-xl font-semibold text-gray-200">
-            {formattedBudget}
-          </p>
+          ))}
         </div>
 
-        {/* Diferença (Sobra ou Falta) */}
-        <div className="flex flex-col items-center text-center">
-          {isWithinBudget ? (
-            <>
-              <div className="flex items-center gap-2 text-sm text-green-400">
-                <ArrowUpCircle className="w-4 h-4" />
-                <span>Sobra no orçamento</span>
-              </div>
-              <p className="text-2xl font-bold text-green-300">
+        {/* Rodapé de Orçamento */}
+        <div className="pt-6 border-t border-gray-600/50 flex flex-col sm:flex-row justify-between items-center gap-6">
+          {/* Valor para investir */}
+          <div className="flex items-center gap-4">
+            <div className="p-2.5 bg-gray-800/50 rounded-lg border border-gray-600/30 text-gray-400">
+              <Wallet className="w-5 h-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Disponível
+              </span>
+              <p className="text-lg font-bold text-gray-100 tracking-tight">
+                {formattedBudget}
+              </p>
+            </div>
+          </div>
+
+          {/* Status do Orçamento */}
+          <div
+            className={`flex items-center gap-4 px-4 py-2 rounded-xl border ${isWithinBudget ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}
+          >
+            <div className={`flex flex-col items-end`}>
+              <span
+                className={`text-[10px] font-bold uppercase tracking-widest ${isWithinBudget ? 'text-green-400' : 'text-red-400'}`}
+              >
+                {isWithinBudget ? 'Sobra Atual' : 'Déficit'}
+              </span>
+              <p
+                className={`text-xl font-black tracking-tighter ${isWithinBudget ? 'text-green-400' : 'text-red-400'}`}
+              >
                 {formattedDifference}
               </p>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center gap-2 text-sm text-red-400">
-                <ArrowDownCircle className="w-4 h-4" />
-                <span>Falta no orçamento</span>
-              </div>
-              <p className="text-2xl font-bold text-red-300">
-                {formattedDifference}
-              </p>
-            </>
-          )}
+            </div>
+            <div className={isWithinBudget ? 'text-green-500' : 'text-red-500'}>
+              {isWithinBudget ? (
+                <ArrowUpCircle className="w-6 h-6" />
+              ) : (
+                <ArrowDownCircle className="w-6 h-6" />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </Card>
+  )
+}
+
+// Componente de exportação padrão para o Preview do Canvas
+export default function App() {
+  return (
+    <div className="p-8 bg-gray-900 min-h-screen">
+      <div className="max-w-4xl mx-auto">
+        <StatsOverview
+          totalUniqueItems={12}
+          totalOverallValue={4500.5}
+          totalSpentValue={1200.0}
+          boughtTotal={1200}
+          baseOverallValue={3300.5}
+          includeEarlyPurchase={false}
+        />
+      </div>
+    </div>
   )
 }

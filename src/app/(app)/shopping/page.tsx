@@ -104,8 +104,8 @@ export default function ShoppingPage() {
 
   return (
     <div className="p-2 lg:p-0 min-h-screen flex flex-col gap-4">
-      <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">
-        <div className="w-full lg:w-[70%] h-full flex">
+      <div className="flex flex-col lg:flex-row gap-4 items-stretch w-full">
+        <div className="flex-1 lg:min-w-[45%]">
           <StatsOverview
             totalUniqueItems={totalUniqueItems}
             totalOverallValue={totalOverallValue}
@@ -116,20 +116,18 @@ export default function ShoppingPage() {
             includeEarlyPurchase={filters.includeEarlyPurchaseInCalculations}
           />
         </div>
-        <div className="w-full h-full flex">
-          <Filters
-            filters={filters}
-            onRoomChange={setSelectedRoom}
-            onCategoryChange={setSelectedCategory}
-            onBoughtStatusChange={setSelectedBoughtStatus}
-            onIncludeBoughtChange={setIncludeBoughtInCalculations}
-            onIncludeEarlyPurchaseChange={setIncludeEarlyPurchaseInCalculations}
-            onPriorityChange={handlePriorityFilterChange}
-            onResetFilters={handleResetFilters}
-            onOrderByFieldChange={setOrderByField}
-            onOrderDirectionChange={setOrderDirection}
-          />
-        </div>
+        <Filters
+          filters={filters}
+          onRoomChange={setSelectedRoom}
+          onCategoryChange={setSelectedCategory}
+          onBoughtStatusChange={setSelectedBoughtStatus}
+          onIncludeBoughtChange={setIncludeBoughtInCalculations}
+          onIncludeEarlyPurchaseChange={setIncludeEarlyPurchaseInCalculations}
+          onPriorityChange={handlePriorityFilterChange}
+          onResetFilters={handleResetFilters}
+          onOrderByFieldChange={setOrderByField}
+          onOrderDirectionChange={setOrderDirection}
+        />
       </div>
       <div className="relative min-h-[200px]">
         <ItemsList
