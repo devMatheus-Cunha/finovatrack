@@ -71,7 +71,7 @@ export function ItemsList({
       <section className="bg-gray-700 shadow-lg rounded-2xl border border-gray-600/50 p-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3 text-gray-100">
+            <h1 className="text-2xl font-bold flex items-center gap-3 text-gray-100">
               <Home className="text-blue-400" size={28} />
               Itens por Cômodo
             </h1>
@@ -101,17 +101,17 @@ export function ItemsList({
               }}
             >
               <button
-                onClick={() => onRoomChange(null)}
+                onClick={() => setSelectedRoom(null)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
                   selectedRoom === null
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-600/40'
+                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600 border border-gray-600/40'
                 }`}
               >
                 <Sliders className="w-3.5 h-3.5" />
                 Todos
                 <span
-                  className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === null ? 'bg-white/20' : 'bg-gray-700'}`}
+                  className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === null ? 'bg-white/20' : 'bg-gray-600'}`}
                 >
                   {roomNames.reduce(
                     (sum, room) => sum + itemsByRoom[room].items.length,
@@ -123,17 +123,17 @@ export function ItemsList({
               {roomNames.map((roomName) => (
                 <button
                   key={roomName}
-                  onClick={() => onRoomChange(roomName)}
+                  onClick={() => setSelectedRoom(roomName)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
                     selectedRoom === roomName
                       ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-600/40'
+                      : 'bg-gray-700 text-gray-400 hover:bg-gray-600 border border-gray-600/40'
                   }`}
                 >
-                  <Home className="w-3.5 h-3.5" />
+                  {getRoomIcon(roomName)}
                   {roomName}
                   <span
-                    className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === roomName ? 'bg-white/20' : 'bg-gray-700'}`}
+                    className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === roomName ? 'bg-white/20' : 'bg-gray-600'}`}
                   >
                     {itemsByRoom[roomName].items.length}
                   </span>
