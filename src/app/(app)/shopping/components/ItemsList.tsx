@@ -89,76 +89,57 @@ export function ItemsList({
         </div>
       </section>
       {Object.keys(itemsByRoom).length > 0 && (
-        <div className="flex items-center justify-between gap-4 px-2 py-3">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            <button
-              onClick={() => setSelectedRoom(null)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-xs transition-all whitespace-nowrap flex-shrink-0 ${
-                selectedRoom === null
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
-              }`}
+        <div className="flex items-center justify-between gap-4 px-1 py-1">
+          {/* Scroll de Cômodos com Fade e Scrollbar Discreta */}
+          <div className="relative flex-1 overflow-hidden group">
+            <div
+              className="flex gap-2 overflow-x-auto pb-2 scroll-smooth
+                         scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent
+                         [scrollbar-width:thin] [scrollbar-color:#4b5563_transparent]"
+              style={{
+                msOverflowStyle: 'none'
+              }}
             >
-              <Sliders className="w-4 h-4" />
-              Todos
-              <span
-                className={`ml-1 px-1.5 py-0.5 rounded text-xs font-bold ${
-                  selectedRoom === null ? 'bg-white/20' : 'bg-gray-600'
-                }`}
-              >
-                {roomNames.reduce(
-                  (sum, room) => sum + itemsByRoom[room].items.length,
-                  0
-                )}
-              </span>
-            </button>
-            {roomNames.map((roomName) => (
               <button
-                key={roomName}
-                onClick={() => setSelectedRoom(roomName)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-xs transition-all whitespace-nowrap flex-shrink-0 ${
-                  selectedRoom === roomName
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600'
+                onClick={() => onRoomChange(null)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
+                  selectedRoom === null
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-600/40'
                 }`}
               >
-                {getRoomIcon(roomName)}
-                {roomName}
+                <Sliders className="w-3.5 h-3.5" />
+                Todos
                 <span
-                  className={`ml-1 px-1.5 py-0.5 rounded text-xs font-bold ${
-                    selectedRoom === roomName ? 'bg-white/20' : 'bg-gray-600'
-                  }`}
+                  className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === null ? 'bg-white/20' : 'bg-gray-700'}`}
                 >
-                  {itemsByRoom[roomName].items.length}
+                  {roomNames.reduce(
+                    (sum, room) => sum + itemsByRoom[room].items.length,
+                    0
+                  )}
                 </span>
               </button>
-            ))}
-          </div>
 
-          {/* View Mode Controls */}
-          <div className="flex items-center bg-gray-700/50 p-1 rounded-lg border border-gray-600 flex-shrink-0">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-all ${
-                viewMode === 'grid'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-400 hover:text-gray-200'
-              }`}
-              title="Visualização em Grid"
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-all ${
-                viewMode === 'list'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-400 hover:text-gray-200'
-              }`}
-              title="Visualização em Lista"
-            >
-              <ListIcon size={18} />
-            </button>
+              {roomNames.map((roomName) => (
+                <button
+                  key={roomName}
+                  onClick={() => onRoomChange(roomName)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
+                    selectedRoom === roomName
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-600/40'
+                  }`}
+                >
+                  <Home className="w-3.5 h-3.5" />
+                  {roomName}
+                  <span
+                    className={`ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-black ${selectedRoom === roomName ? 'bg-white/20' : 'bg-gray-700'}`}
+                  >
+                    {itemsByRoom[roomName].items.length}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
