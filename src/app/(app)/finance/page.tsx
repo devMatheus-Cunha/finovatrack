@@ -16,6 +16,7 @@ import {
   CardToGoals,
   CardToInvestments
 } from './cards'
+import { IReportToYearData } from '@/services/reports/getReportsToYear'
 
 const Finance: React.FC = () => {
   const [expandedYear, setExpandedYear] = useState<number | null>(
@@ -66,10 +67,9 @@ const Finance: React.FC = () => {
     <div className="min-h-screen text-[#e2e8f0]">
       <div className="mx-auto space-y-2">
         <CardHeaderSummary
-          p={investimentsData?.patrimonio}
-          comp={investimentsData?.composicaoPortfolio}
-          report={reportDataToYear}
-          financialPlanningYear={financialPlanningYear}
+          investimentsData={investimentsData || ({} as IInvestimentsData)}
+          report={reportDataToYear || ({} as IReportToYearData)}
+          financialPlanningYear={financialPlanningYear || []}
         />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
           <div className="lg:col-span-8 space-y-2">
