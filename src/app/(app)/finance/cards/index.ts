@@ -1,7 +1,4 @@
-export { default as CardToDividends } from './CardToDividends'
 export { default as CardToFinanceYaer } from './CardToFinanceYaer'
 export { default as CardToGoals } from './CardToGoals'
 export { default as CardToInvestments } from './CardToInvestments'
-export { default as CardToPatrimony } from './CardToPatrimony'
-export { default as CardToEmergencyReserveMonths } from './CardToEmergencyReserveMonths'
-export { default as CardProjecao } from './CardProjecao'
+export { default as CardHeaderSummary } from './CardHeaderSummary'

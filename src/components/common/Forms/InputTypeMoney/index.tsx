@@ -8,7 +8,7 @@ interface InputTypeMoneyProps<T extends FieldValues>
   extends NumericFormatProps {
   control: Control<T>
   name: Path<T>
-  placeholder: string
+  placeholder?: string
   label: string
   errors?: string
   required?: boolean

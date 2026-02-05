@@ -1,436 +1,299 @@
-import React, { useMemo, useState } from 'react'
-import { Card, Charts } from '@/components'
-import { PieChartCircleData } from '@/components/common/Charts/PieChartCircle'
-import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
-import { blueHexShades } from '@/utils/colors'
+import { IInvestimentsData } from '@/app/actions/financeActions'
+import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
-import { IInvestimentsData } from '@/hooks/finance/useFetchInvestiments/types'
+import { CircleNotch, ArrowsCounterClockwise } from '@phosphor-icons/react'
+import {
+  DollarSign,
+  TrendingUp,
+  Briefcase,
+  ArrowUpRight,
+  Calendar,
+  Wallet
+} from 'lucide-react'
+import { useState } from 'react'
 
-interface IDisplayStat {
-  label: string
-  value: number
+const InfoCard = ({
+  icon,
+  label,
+  value,
+  sub,
+  highlight,
+  percent
+}: {
   icon: React.ReactNode
-  percentage?: number
-  subValue?: string
-  unit?: '%' | 'currency'
-}
-
-const createDisplayData = (investimentsData: IInvestimentsData | undefined) => {
-  if (!investimentsData) {
-    return {
-      chartData: [],
-      totalNaCorretora: 0,
-      statsByTab: { Rendimentos: [], Projeções: [], Metas: [] } // --- ALTERADO ---
-    }
-  }
-
-  // --- ALTERADO ---: Desestruturando 'metas'
-  const { patrimonio, composicaoPortfolio, rendimentos, projecoes, metas } =
-    investimentsData
-
-  const iconMap: { [key: string]: React.ReactNode } = {
-    // --- ADICIONADO ---: Ícones para as novas metas
-    'Meta de Dividendos': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10"></circle>
-        <circle cx="12" cy="12" r="6"></circle>
-        <circle cx="12" cy="12" r="2"></circle>
-      </svg>
-    ),
-    'Meta de Juros': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10"></circle>
-        <circle cx="12" cy="12" r="6"></circle>
-        <circle cx="12" cy="12" r="2"></circle>
-      </svg>
-    ),
-    'Rendimento Total (Anual)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-        <polyline points="17 6 23 6 23 12"></polyline>
-      </svg>
-    ),
-
-    // Ícones existentes...
-    'Lucro Total': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-      </svg>
-    ),
-    'Valorização Invesitimentos': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <line x1="12" y1="20" x2="12" y2="4"></line>
-        <polyline points="18 10 12 4 6 10"></polyline>
-      </svg>
-    ),
-    Dividendos: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-      </svg>
-    ),
-    Juros: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M7 7h10v10" />
-        <path d="M21 7L7 21" />
-      </svg>
-    ),
-    'Juros (Anual)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-    ),
-    'Juros (Mensal)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M8 7V3h8v4H8z" />
-        <path d="M8 7v14h8V7H8zM4 14h16" />
-      </svg>
-    ),
-    'Dividendos (Anual)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-    ),
-    'Dividendos (Mensal)': (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-    )
-  }
-
-  const chartData: PieChartCircleData[] = [
-    {
-      label: 'Disponível',
-      value: composicaoPortfolio?.valorNaoInvestido || 0,
-      color: blueHexShades.blue600
-    },
-    {
-      label: 'Aplicado',
-      value: composicaoPortfolio?.totalInvestidoComValorizacao || 0,
-      color: blueHexShades.blue500
-    },
-    {
-      label: 'Juros',
-      value: rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido || 0,
-      color: blueHexShades.blue400
-    },
-    {
-      label: 'Dividendos',
-      value: rendimentos?.detalhes?.dividendos?.totalRecebido || 0,
-      color: blueHexShades.blue300
-    }
-  ]
-
-  const statsByTab: { [key: string]: IDisplayStat[] } = {
-    Rendimentos: [
-      {
-        label: 'Lucro Total',
-        value: rendimentos?.lucroTotal || 0,
-        icon: iconMap['Lucro Total'],
-        percentage: rendimentos?.porcentagemLucroTotal || 0
-      },
-      {
-        label: 'Valorização Invesitimentos',
-        value: rendimentos?.detalhes?.valorizacaoInvestimentos?.valor || 0,
-        icon: iconMap['Valorização Invesitimentos'],
-        percentage:
-          rendimentos?.detalhes?.valorizacaoInvestimentos?.porcentagem || 0
-      },
-      {
-        label: 'Dividendos',
-        value: rendimentos?.detalhes?.dividendos?.totalRecebido || 0,
-        icon: iconMap['Dividendos'],
-        percentage: rendimentos.detalhes.dividendos.yieldAnualizado || 0,
-        subValue: `Yield Atual: ${projecoes?.dividendos?.yieldProjetado.toFixed(2)}%`
-      },
-      {
-        label: 'Juros',
-        value: rendimentos?.detalhes?.jurosSobreCaixa?.totalRecebido || 0,
-        icon: iconMap['Juros'],
-        percentage:
-          rendimentos.detalhes.jurosSobreCaixa.rendimentoHistoricoPercentual ||
-          0,
-        subValue: `Taxa Atual: ${rendimentos?.detalhes?.jurosSobreCaixa?.taxaAnual || 0}%`
-      }
-    ],
-    Projeções: [
-      {
-        label: 'Rendimento Total (Anual)',
-        value: projecoes?.rendimentoTotalAnual || 0, // --- ALTERADO ---
-        icon: iconMap['Rendimento Total (Anual)'],
-        subValue: 'Juros + Dividendos'
-      },
-      {
-        label: 'Juros (Anual)', // --- ALTERADO (consistência) ---
-        value: projecoes?.jurosSobreCaixa?.projecaoAnual || 0,
-        icon: iconMap['Juros (Anual)']
-      },
-      {
-        label: 'Juros (Mensal)', // --- ALTERADO (consistência) ---
-        value: projecoes?.jurosSobreCaixa?.projecaoMensal || 0,
-        icon: iconMap['Juros (Mensal)']
-      },
-      {
-        label: 'Dividendos (Anual)', // --- ALTERADO (consistência) ---
-        value: projecoes?.dividendos?.projecaoAnualEstimada || 0,
-        icon: iconMap['Dividendos (Anual)'],
-        subValue: `Yield Projetado: ${projecoes?.dividendos?.yieldProjetado.toFixed(2)}%`
-      },
-      {
-        label: 'Dividendos (Mensal)', // --- ALTERADO (consistência) ---
-        value: projecoes?.dividendos?.projecaoMensalEstimada || 0,
-        icon: iconMap['Dividendos (Mensal)']
-      }
-    ],
-    // --- ADICIONADO ---: Nova aba de Metas
-    Metas: [
-      {
-        label: `Meta de Dividendos (€${metas?.dividendos?.objetivoMensal || 10}/mês)`,
-        value: metas?.dividendos?.valorInvestidoNecessario || 0,
-        icon: iconMap['Meta de Dividendos'],
-        subValue: 'Total investido necessário'
-      },
-      {
-        label: `Meta de Juros (€${metas?.juros?.objetivoMensal || 40}/mês)`,
-        value: metas?.juros?.valorNaoInvestidoNecessario || 0,
-        icon: iconMap['Meta de Juros'],
-        subValue: 'Dinheiro em caixa necessário'
-      }
-    ]
-  }
-
-  return {
-    chartData,
-    totalNaCorretora: patrimonio?.totalNaCorretora || 0,
-    statsByTab
-  }
-}
-
-interface ICardToInvestmentsProps {
-  investimentsData: IInvestimentsData | undefined
-  isLoadingInvestimentsData: boolean
-  isLoadingIcon?: boolean
-  refetchInvestimentsData: () => void
+  label: string
+  value: any
+  sub?: string
+  highlight?: boolean
+  percent?: number
+}) => {
+  const { isVisibilityData } = useIsVisibilityDatas()
+  return (
+    <div
+      className={`p-3 rounded border ${
+        highlight
+          ? 'bg-blue-600/10 border-blue-500/30'
+          : 'bg-gray-700 border-gray-800'
+      }`}
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className={highlight ? 'text-blue-400' : 'text-blue-500'}>
+          {icon}
+        </span>
+        <span className="text-[9px] text-gray-400 font-black uppercase">
+          {label}
+        </span>
+      </div>
+      <div className="flex justify-between items-end">
+        <div>
+          <p
+            className={`text-sm font-bold ${
+              highlight ? 'text-blue-400' : 'text-white'
+            }`}
+          >
+            {formatCurrencyMoney(value, 'EUR', isVisibilityData)}
+          </p>
+          {sub && (
+            <p className="text-[8px] text-gray-400 font-bold uppercase">
+              {sub}
+            </p>
+          )}
+        </div>
+        {percent !== undefined && (
+          <span className="text-[9px] text-green-500 font-bold">
+            +{percent}%
+          </span>
+        )}
+      </div>
+    </div>
+  )
 }
 
 const CardToInvestments = ({
   investimentsData,
   isLoadingInvestimentsData,
-  refetchInvestimentsData,
-  isLoadingIcon
-}: ICardToInvestmentsProps) => {
+  refetchInvestimentsData
+}: {
+  investimentsData: IInvestimentsData
+  isLoadingInvestimentsData: boolean
+  refetchInvestimentsData: () => void
+}) => {
+  const [activeTab, setActiveTab] = useState<string>('Rendimentos')
   const { isVisibilityData } = useIsVisibilityDatas()
-  const { userData } = useUserData()
-  const [activeTab, setActiveTab] = useState('Rendimentos')
-
-  const { chartData, totalNaCorretora, statsByTab } = useMemo(
-    () => createDisplayData(investimentsData),
-    [investimentsData]
-  )
-
-  // --- ALTERADO ---: Adicionando a nova aba
-  const TABS = ['Rendimentos', 'Projeções', 'Metas']
+  const rend = investimentsData?.rendimentos
+  const proj = investimentsData?.projecoes
+  const metas = investimentsData?.metas
+  const tabs = ['Rendimentos', 'Projeções', 'Metas']
 
   return (
-    <Card
-      title="Painel de Controle - Trading 212"
-      isLoading={isLoadingInvestimentsData}
-      isLoadingIcon={isLoadingIcon}
-      hasData={!!investimentsData}
-      className="w-full lg:max-w-4xl flex flex-col"
-      action={refetchInvestimentsData}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-[280px,1fr] gap-6 mt-4 h-full lg:h-[490px]">
-        <div className="flex flex-col items-center justify-center bg-gray-800/50 p-4 rounded-xl h-full">
-          <Charts.PieChartCircle
-            data={chartData}
-            total={totalNaCorretora}
-            currency={userData.primary_currency}
-            isVisibilityData={isVisibilityData}
-            showTooltip
-            showDescription
-          />
+    <div className="bg-gray-700 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
+      {/* HEADER DO PAINEL */}
+      <div className="px-4 py-3  bg-gray-700/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex gap-3 items-center">
+          <h3 className="text-xs font-black uppercase tracking-widest text-gray-400">
+            Trading 212 - Painel Detalhado
+          </h3>
+          {isLoadingInvestimentsData ? (
+            <CircleNotch size={18} className="text-blue-500 animate-spin" />
+          ) : (
+            <button
+              type="button"
+              onClick={refetchInvestimentsData}
+              className="text-gray-400 hover:text-white transition-colors"
+              title="Atualizar Dados"
+            >
+              <ArrowsCounterClockwise size={18} />
+            </button>
+          )}
         </div>
 
-        <div className="flex flex-col bg-gray-800/50 p-4 md:p-6 rounded-xl">
-          <div className="flex w-full bg-gray-900/50 p-1 rounded-lg mb-4">
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`w-full py-2 text-xs lg:text-sm font-semibold rounded-md transition-colors duration-200 focus:outline-none ${
-                  activeTab === tab
-                    ? 'bg-blue-600 text-white shadow'
-                    : 'text-gray-400 hover:bg-gray-700/50'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex-grow flex flex-col divide-y divide-gray-700/80">
-            {(statsByTab[activeTab] || []).map((item) => (
-              <div
-                key={item.label}
-                className="grid grid-cols-[auto,1fr] items-center py-3.5 px-1 gap-4"
-              >
-                <div className="text-blue-400 flex-shrink-0">{item.icon}</div>
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex flex-col">
-                    <span className="text-sm md:text-base text-gray-200">
-                      {item.label}
-                    </span>
-                    {item.subValue && (
-                      <span className="text-xs lg:text-sm text-gray-400 mt-0.5">
-                        {item.subValue}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-base md:text-lg font-semibold text-white">
-                      {item.unit === '%'
-                        ? `${item.value?.toFixed(2) || '0.00'}%`
-                        : formatCurrencyMoney(
-                            item.value,
-                            userData.primary_currency,
-                            isVisibilityData
-                          )}
-                    </span>
-                    {item.percentage !== undefined && (
-                      <span
-                        className={`text-xs md:text-sm font-bold ${item.percentage > 0 ? 'text-green-500' : 'text-red-500'}`}
-                      >
-                        {item.percentage > 0 ? '▲' : '▼'}{' '}
-                        {item.percentage.toFixed(2)}%
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* NAVEGAÇÃO ENTRE ABAS */}
+        <div className="flex gap-1 bg-black/20 p-1 rounded-lg border border-white/5">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-md transition-all ${
+                activeTab === tab
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
-    </Card>
+
+      <div className="px-5 pb-5 space-y-8">
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-gray-800"></div>
+            <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
+              Visão Geral dos Investimentos
+            </p>
+            <div className="h-px flex-1 bg-gray-800"></div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <InfoCard
+              label="Total"
+              value={investimentsData?.patrimonio?.totalNaCorretora}
+              icon={<Wallet size={14} />}
+            />
+            <InfoCard
+              label="Disponível"
+              value={investimentsData?.composicaoPortfolio?.valorNaoInvestido}
+              icon={<DollarSign size={14} />}
+            />
+            <InfoCard
+              label="Aplicado"
+              value={
+                investimentsData?.composicaoPortfolio
+                  ?.totalInvestidoComValorizacao
+              }
+              icon={<TrendingUp size={14} />}
+              highlight
+            />
+            <InfoCard
+              label="Juros"
+              value={rend?.detalhes?.jurosSobreCaixa?.totalRecebido}
+              icon={<Briefcase size={14} />}
+            />
+            <div className="col-span-2 md:col-span-1">
+              <InfoCard
+                label="Dividendos"
+                value={rend?.detalhes?.dividendos?.totalRecebido}
+                icon={<ArrowUpRight size={14} />}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* CONTEÚDO DINÂMICO (ABAS) */}
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+          <div className="flex items-center gap-2 mb-4">
+            <p className="text-[10px] text-blue-500/70 font-black uppercase tracking-widest">
+              Dados de {activeTab}
+            </p>
+            <div className="h-px flex-1 bg-gray-800/50"></div>
+          </div>
+
+          {activeTab === 'Rendimentos' && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <InfoCard
+                label="Lucro Total"
+                value={rend?.lucroTotal}
+                percent={rend?.porcentagemLucroTotal}
+                icon={<DollarSign size={14} />}
+              />
+              <InfoCard
+                label="Valorização"
+                value={rend?.detalhes?.valorizacaoInvestimentos?.valor}
+                percent={rend?.detalhes?.valorizacaoInvestimentos?.porcentagem}
+                icon={<TrendingUp size={14} />}
+              />
+              <InfoCard
+                label="Dividendos"
+                value={rend?.detalhes?.dividendos?.totalRecebido}
+                sub={`Yield: ${rend?.detalhes?.dividendos?.yieldAnualizado}%`}
+                icon={<Briefcase size={14} />}
+              />
+              <InfoCard
+                label="Juros Acum."
+                value={rend?.detalhes?.jurosSobreCaixa?.totalRecebido}
+                sub={`Taxa: ${rend?.detalhes?.jurosSobreCaixa?.taxaAnual}%`}
+                icon={<ArrowUpRight size={14} />}
+              />
+            </div>
+          )}
+
+          {activeTab === 'Projeções' && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <InfoCard
+                label="Juros Est. (Mês)"
+                value={proj?.jurosSobreCaixa?.projecaoMensal}
+                icon={<Calendar size={14} />}
+              />
+              <InfoCard
+                label="Dividendos (Mês)"
+                value={proj?.dividendos?.projecaoMensalEstimada}
+                icon={<Briefcase size={14} />}
+              />
+              <InfoCard
+                label="Total Passivo"
+                value={
+                  (proj?.jurosSobreCaixa?.projecaoMensal || 0) +
+                  (proj?.dividendos?.projecaoMensalEstimada || 0)
+                }
+                icon={<Wallet size={14} />}
+                highlight
+              />
+            </div>
+          )}
+
+          {activeTab === 'Metas' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-800/40 p-4 rounded-lg border border-gray-800 flex justify-between items-center group hover:border-blue-500/30 transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-gray-400 uppercase font-black text-[9px] tracking-widest mb-1">
+                    Alvo Dividendos
+                  </span>
+                  <span className="text-white font-bold text-sm">
+                    {formatCurrencyMoney(
+                      metas?.dividendos?.objetivoMensal,
+                      'EUR',
+                      isVisibilityData
+                    )}
+                    /mês
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-gray-500 uppercase font-black text-[9px] block mb-1">
+                    Capital Necessário
+                  </span>
+                  <span className="text-blue-400 font-black text-sm">
+                    {formatCurrencyMoney(
+                      metas?.dividendos?.valorInvestidoNecessario,
+                      'EUR',
+                      isVisibilityData
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-gray-800/40 p-4 rounded-lg border border-gray-800 flex justify-between items-center group hover:border-blue-500/30 transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-gray-400 uppercase font-black text-[9px] tracking-widest mb-1">
+                    Alvo Juros
+                  </span>
+                  <span className="text-white font-bold text-sm">
+                    {formatCurrencyMoney(
+                      metas?.juros?.objetivoMensal,
+                      'EUR',
+                      isVisibilityData
+                    )}
+                    /mês
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-gray-500 uppercase font-black text-[9px] block mb-1">
+                    Capital Necessário
+                  </span>
+                  <span className="text-blue-400 font-black text-sm">
+                    {formatCurrencyMoney(
+                      metas?.juros?.valorNaoInvestidoNecessario,
+                      'EUR',
+                      isVisibilityData
+                    )}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
   )
 }
 

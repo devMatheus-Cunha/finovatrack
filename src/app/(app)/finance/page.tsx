@@ -1,92 +1,103 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
+import { RefreshCcw } from 'lucide-react'
 import {
   useFetchInvestiments,
-  useFetchFinancialPlaningYear
+  useFetchFinancialPlaningYear,
+  useUpdateFinancialPlaningYear
 } from '@/hooks/finance'
+import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
+import { formatToJavaScriptNumber } from '@/utils/formatNumber'
+import { IInvestimentsData } from '@/app/actions/financeActions'
 import {
+  CardHeaderSummary,
   CardToFinanceYaer,
   CardToGoals,
-  CardToInvestments,
-  CardToPatrimony,
-  CardToEmergencyReserveMonths,
-  CardProjecao
+  CardToInvestments
 } from './cards'
-import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 
-const Finance = () => {
-  const currentYear = new Date().getFullYear().toString()
-  const { reportDataToYear, isLoading: isLoadingReportDataToYear } =
-    useFetchReportsToYearData(currentYear)
+const Finance: React.FC = () => {
+  const [expandedYear, setExpandedYear] = useState<number | null>(
+    new Date().getFullYear()
+  )
+  const [showFullHistory, setShowFullHistory] = useState<boolean>(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
 
+  const currentYear = new Date().getFullYear()
   const {
     investimentsData,
     isLoadingInvestimentsData,
-    refetchInvestimentsData,
-    isUpdatingInvestments
+    isFetching,
+    refetchInvestimentsData
   } = useFetchInvestiments()
-
   const { financialPlanningYear, isLoadingFinancialPlanningYear } =
     useFetchFinancialPlaningYear()
+  const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
+  const { reportDataToYear } = useFetchReportsToYearData(currentYear.toString())
+
+  const handleSave = (id: string, values: any) => {
+    updateFinancialPlaningYear({
+      ...values,
+      id,
+      year: financialPlanningYear?.find((f: any) => f.id === id)?.year,
+      reserve: formatToJavaScriptNumber(values.reserve),
+      investments: formatToJavaScriptNumber(values.investments),
+      monthlyContributions: formatToJavaScriptNumber(
+        values.monthlyContributions
+      ),
+      receivables: formatToJavaScriptNumber(values.receivables),
+      downPayment: formatToJavaScriptNumber(values.downPayment || '0'),
+      homePurchases: formatToJavaScriptNumber(values.homePurchases || '0'),
+      otherDeductions: formatToJavaScriptNumber(values.otherDeductions || '0')
+    })
+    setEditingId(null)
+  }
+
+  if (isLoadingInvestimentsData || isLoadingFinancialPlanningYear) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <RefreshCcw className="text-blue-500 animate-spin" size={32} />
+      </div>
+    )
+  }
 
   return (
-    <div className="flex flex-col gap-2 h-[95vh] w-full px-2 lg:px-0 ">
-      <div className="flex flex-col lg:flex-row gap-2">
-        <div className="w-full lg:w-[55%] flex flex-col gap-2">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <div className="w-full sm:w-[65%]">
-              <CardToPatrimony
-                isLoadingInvestimentsData={isLoadingInvestimentsData}
-                investments={investimentsData}
-              />
-            </div>
-            <div className="w-full sm:w-[35%]">
-              <CardToEmergencyReserveMonths
-                isLoading={
-                  isLoadingInvestimentsData || isLoadingReportDataToYear
-                }
-                valorReservaEmergencia={
-                  investimentsData?.patrimonio?.reservaExterna
-                }
-                mediaGastoMensalTotal={reportDataToYear?.mediaExpenses}
-              />
-            </div>
-          </div>
-
-          <div className="hidden lg:block">
+    <div className="min-h-screen text-[#e2e8f0]">
+      <div className="mx-auto space-y-2">
+        <CardHeaderSummary
+          p={investimentsData?.patrimonio}
+          comp={investimentsData?.composicaoPortfolio}
+          report={reportDataToYear}
+          financialPlanningYear={financialPlanningYear}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+          <div className="lg:col-span-8 space-y-2">
             <CardToFinanceYaer
+              data={financialPlanningYear}
+              currentYear={currentYear}
+              showFullHistory={showFullHistory}
+              setShowFullHistory={setShowFullHistory}
+              expandedYear={expandedYear}
+              setExpandedYear={setExpandedYear}
+              editingId={editingId}
+              startEditing={setEditingId}
+              cancelEditing={() => setEditingId(null)}
+              handleSave={handleSave}
+            />
+            <CardToInvestments
+              investimentsData={investimentsData || ({} as IInvestimentsData)}
+              refetchInvestimentsData={refetchInvestimentsData}
+              isLoadingInvestimentsData={isFetching}
+            />
+          </div>
+          <div className="lg:col-span-4">
+            <CardToGoals
+              investimentsData={investimentsData}
               financialPlanningYear={financialPlanningYear}
-              isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
             />
           </div>
         </div>
-
-        <div className="flex w-full lg:w-[55%] gap-2 flex-col md:flex-row lg:flex-col xl:flex-row">
-          <CardToInvestments
-            investimentsData={investimentsData}
-            isLoadingInvestimentsData={isLoadingInvestimentsData}
-            refetchInvestimentsData={refetchInvestimentsData}
-            isLoadingIcon={isUpdatingInvestments}
-          />
-        </div>
-      </div>
-      <div className="flex w-full gap-2 flex-col md:flex-row lg:flex-col xl:flex-row">
-        <CardProjecao
-          financialPlanningYear={financialPlanningYear}
-          investimentsData={investimentsData}
-          isLoadingInvestimentsData={isLoadingInvestimentsData}
-        />
-        <CardToGoals
-          investimentsData={investimentsData}
-          financialPlanningYear={financialPlanningYear}
-        />
-      </div>
-      <div className="block lg:hidden">
-        <CardToFinanceYaer
-          financialPlanningYear={financialPlanningYear}
-          isLoadingInvestimentsData={isLoadingFinancialPlanningYear}
-        />
       </div>
     </div>
   )

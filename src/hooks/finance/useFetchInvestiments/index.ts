@@ -23,7 +23,7 @@ export const useFetchInvestiments = () => {
     queryFn: () => getInvestmentData(userData.id!),
     enabled: !!userData.id,
     staleTime: 1000 * 60 * 5,
-    refetchInterval: 1000 * 60 * 5
+    placeholderData: (previous) => previous
   })
 
   const { mutate: refetchInvestimentsData, isPending: isUpdatingInvestments } =

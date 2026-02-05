@@ -173,7 +173,7 @@ function formatarDividendos(allDividends: any[], valorInvestido: number) {
     amountReal: Number(d.amount ?? d.netAmount ?? d.grossAmount ?? 0)
   }))
 
-  // const totalGeral = normalizados.reduce((sum, d) => sum + d.amountReal, 0)
+  const totalGeral = normalizados.reduce((sum, d) => sum + d.amountReal, 0)
 
   const umAnoAtras = new Date()
   umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1)
@@ -198,7 +198,7 @@ function formatarDividendos(allDividends: any[], valorInvestido: number) {
     .slice(0, 10)
 
   return {
-    totalGeral: Number(69.09),
+    totalGeral: Number(totalGeral.toFixed(2)),
     totalLTM: Number(totalLTM.toFixed(2)),
     yieldAnualizado: Number(yieldAnualizado.toFixed(2)),
     distribuicao,

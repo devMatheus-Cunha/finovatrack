@@ -90,7 +90,6 @@ export interface IInvestimentsData {
       yieldProjetado: number
     }
   }
-  // --- ADICIONADO ---: Nova seção de Metas
   metas: {
     dividendos: {
       objetivoMensal: number
