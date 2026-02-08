@@ -1,15 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { RefreshCcw } from 'lucide-react'
 import {
   useFetchInvestiments,
   useFetchFinancialPlaningYear,
-  useUpdateFinancialPlaningYear
+  useUpdateFinancialPlaningYear,
+  useGoals
 } from '@/hooks/finance'
 import useFetchReportsToYearData from '@/hooks/reports/useFetchReportsToYearData'
 import { formatToJavaScriptNumber } from '@/utils/formatNumber'
 import { IInvestimentsData } from '@/app/actions/financeActions'
+import { calculateProjection } from '@/utils/calculateFinancialProjection'
 import {
   CardHeaderSummary,
   CardToFinanceYaer,
@@ -17,6 +19,7 @@ import {
   CardToInvestments
 } from './cards'
 import { IReportToYearData } from '@/services/reports/getReportsToYear'
+import { GOAL_DEADLINE, GOAL_INTEREST_RATE } from './cards/utils'
 
 const Finance: React.FC = () => {
   const [expandedYear, setExpandedYear] = useState<number | null>(
@@ -36,6 +39,32 @@ const Finance: React.FC = () => {
     useFetchFinancialPlaningYear()
   const { updateFinancialPlaningYear } = useUpdateFinancialPlaningYear()
   const { reportDataToYear } = useFetchReportsToYearData(currentYear.toString())
+  const { goal } = useGoals()
+
+  const projectionSettings = useMemo(() => {
+    const principal = investimentsData?.resumoConta?.totalGeral ?? 0
+    const deadline = goal?.meta_year || GOAL_DEADLINE
+
+    const rendaPassivaMensal =
+      (investimentsData?.planejamento?.projecoes?.juros?.mensal || 0) +
+      (investimentsData?.planejamento?.projecoes?.dividendos?.mensal || 0)
+
+    const yieldAnual =
+      principal > 0 ? (rendaPassivaMensal / principal) * 12 * 100 : 0
+
+    return {
+      principal,
+      deadline,
+      rate: Math.max(GOAL_INTEREST_RATE, yieldAnual)
+    }
+  }, [investimentsData, goal])
+
+  const projectionResults = calculateProjection({
+    principal: projectionSettings.principal,
+    annualRate: projectionSettings.rate,
+    goalDate: projectionSettings.deadline,
+    financialPlanningYear: financialPlanningYear || []
+  })
 
   const handleSave = (id: string, values: any) => {
     updateFinancialPlaningYear({
@@ -70,6 +99,7 @@ const Finance: React.FC = () => {
           investimentsData={investimentsData || ({} as IInvestimentsData)}
           report={reportDataToYear || ({} as IReportToYearData)}
           financialPlanningYear={financialPlanningYear || []}
+          projectionResults={projectionResults}
         />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
           <div className="lg:col-span-8 space-y-2">
@@ -95,6 +125,7 @@ const Finance: React.FC = () => {
             <CardToGoals
               investimentsData={investimentsData}
               financialPlanningYear={financialPlanningYear}
+              projectionResults={projectionResults}
             />
           </div>
         </div>

@@ -1,4 +1,3 @@
-// SUA TIPAGEM EXISTENTE
 export interface IFinancialPlanningProps {
   id: string
   year: string
@@ -13,13 +12,12 @@ export interface IFinancialPlanningProps {
   totoalReserveLastYear?: string
 }
 
-// Interfaces para a função
 interface ProjectionParams {
   principal: number
   annualRate: number
   financialPlanningYear?: IFinancialPlanningProps[]
   durationInYears?: number
-  goalDate?: { year: number; month: number } // mês é 1-12
+  goalDate?: { year: number; month: number }
 }
 
 interface YearProjection {
@@ -36,10 +34,6 @@ interface YearProjection {
   monthsRemaining?: number
 }
 
-/**
- * Calcula a projeção financeira com um motor de cálculo unificado e preciso
- * para 'durationInYears' e 'goalDate'.
- */
 export const calculateProjection = (
   params: ProjectionParams
 ): YearProjection[] => {
@@ -50,116 +44,87 @@ export const calculateProjection = (
     durationInYears,
     goalDate
   } = params
-  // --- SETUP INICIAL ---
+
   const results: YearProjection[] = []
-  const rateAsDecimal = annualRate / 100
-  const monthlyRate = rateAsDecimal / 12
+  const monthlyRate = annualRate / 100 / 12
   const today = new Date()
+
   let futureValue = principal
   let cumulativeContributions = 0
+  let totalInterestAccumulated = 0
   let lastApplicablePlan: IFinancialPlanningProps | undefined = undefined
 
-  // 1. DETERMINA OS LIMITES DA PROJEÇÃO
-  let loopDuration: number
-  let totalContributionsCount = 0
+  const startYear = today.getFullYear()
+  const startMonth = today.getMonth()
+  const endYear = goalDate?.year || startYear + (durationInYears || 1)
+  const loopDuration = endYear - startYear + 1
 
-  if (goalDate) {
-    const startYear = today.getFullYear()
-    const endYear = goalDate.year
-    loopDuration = endYear - startYear + 1
-
-    // CALCULA O TOTAL DE APORTES CORRETAMENTE (ex: 7 + 12 = 19)
-    let fallbackPlan: IFinancialPlanningProps | undefined = undefined
-    for (let year = startYear; year <= endYear; year++) {
-      const plan = financialPlanningYear.find((p) => Number(p.year) === year)
-      if (plan) fallbackPlan = plan
-      const planToUse = plan || fallbackPlan
-
-      if (year === endYear) {
-        totalContributionsCount += goalDate.month + 1
-      } else {
-        totalContributionsCount += Number(planToUse?.periodContributions) || 0
-      }
-    }
-  } else if (durationInYears) {
-    loopDuration = durationInYears
-  } else {
-    throw new Error('Você deve fornecer ou "durationInYears" ou "goalDate".')
-  }
-
-  // --- MOTOR DE CÁLCULO UNIFICADO ---
   for (let i = 0; i < loopDuration; i++) {
-    const calendarYear = today.getFullYear() + i
-
+    const calendarYear = startYear + i
     const currentPlan = financialPlanningYear.find(
       (p) => Number(p.year) === calendarYear
     )
     if (currentPlan) lastApplicablePlan = currentPlan
-    const applicablePlan = lastApplicablePlan
 
     const monthlyContribution =
-      Number(applicablePlan?.monthlyContributions) || 0
+      Number(lastApplicablePlan?.monthlyContributions) || 0
     const annualAdjustment =
-      (Number(applicablePlan?.receivables) || 0) -
-      ((Number(applicablePlan?.downPayment) || 0) +
-        (Number(applicablePlan?.homePurchases) || 0) +
-        (Number(applicablePlan?.otherDeductions) || 0))
+      (Number(lastApplicablePlan?.receivables) || 0) -
+      ((Number(lastApplicablePlan?.downPayment) || 0) +
+        (Number(lastApplicablePlan?.homePurchases) || 0) +
+        (Number(lastApplicablePlan?.otherDeductions) || 0))
 
-    // Define o número de aportes a fazer neste ano específico
-    const numberOfPeriods = Number(applicablePlan?.periodContributions) || 0
-
-    // Define os limites de meses para o ano atual do laço
-    const startMonth = i === 0 ? today.getMonth() : 0
-    const endMonth =
+    const numberOfPeriods = Number(lastApplicablePlan?.periodContributions) || 0
+    const currentYearEndMonth =
       goalDate && calendarYear === goalDate.year ? goalDate.month : 11
+    const currentYearStartMonth = i === 0 ? startMonth : 0
 
     let contributionsMadeThisYear = 0
-    for (let month = startMonth; month <= endMonth; month++) {
+
+    for (
+      let month = currentYearStartMonth;
+      month <= currentYearEndMonth;
+      month++
+    ) {
+      // 1. Cálculo de Juros sobre o montante acumulado (Juros sobre Juros Mensal)
+      const interestOfMonth = futureValue * monthlyRate
+      totalInterestAccumulated += interestOfMonth
+
+      // 2. Cálculo de Aporte
       let contributionThisMonth = 0
-
-      // A lógica de aporte que já funcionava, aplicada a ambos os cenários
       if (contributionsMadeThisYear < numberOfPeriods) {
-        contributionThisMonth += monthlyContribution
-      }
-      if (month === 11) {
-        // Dezembro
-        contributionThisMonth += annualAdjustment
-      }
-
-      const interestOfTheMonth = futureValue * monthlyRate
-      futureValue += interestOfTheMonth + contributionThisMonth
-
-      if (contributionsMadeThisYear < numberOfPeriods) {
+        contributionThisMonth = monthlyContribution
         cumulativeContributions += monthlyContribution
+        contributionsMadeThisYear++
       }
+
+      // 3. Ajuste Anual em Dezembro
       if (month === 11) {
+        contributionThisMonth += annualAdjustment
         cumulativeContributions += annualAdjustment
       }
-      contributionsMadeThisYear++
+
+      // 4. Atualização do Montante Final
+      futureValue += interestOfMonth + contributionThisMonth
     }
 
-    const totalInvested = principal + cumulativeContributions
-    const interestGenerated = futureValue - totalInvested
-
-    const projectionResult: YearProjection = {
+    results.push({
       year: i + 1,
       calendarYear,
       endValue: futureValue,
-      totalInvested,
-      interestGenerated,
+      totalInvested: principal + cumulativeContributions,
+      interestGenerated: totalInterestAccumulated,
       contributionDetails: {
         monthly: monthlyContribution,
         annualAdjustment: annualAdjustment,
         periods: contributionsMadeThisYear
       }
-    }
+    })
+  }
 
-    // Adiciona a contagem correta de aportes totais apenas no último ano
-    if (goalDate && calendarYear === goalDate.year) {
-      projectionResult.monthsRemaining = totalContributionsCount
-    }
-
-    results.push(projectionResult)
+  if (results.length > 0 && goalDate) {
+    const totalMonths = (goalDate.year - startYear) * 12 + goalDate.month
+    results[results.length - 1].monthsRemaining = Math.max(0, totalMonths)
   }
 
   return results

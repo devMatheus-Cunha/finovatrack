@@ -1,53 +1,42 @@
 import { IInvestimentsData } from '@/app/actions/financeActions'
 import { useIsVisibilityDatas } from '@/hooks/globalStates'
 import { IReportToYearData } from '@/services/reports/getReportsToYear'
-import {
-  calculateProjection,
-  IFinancialPlanningProps
-} from '@/utils/calculateFinancialProjection'
+import { IFinancialPlanningProps } from '@/utils/calculateFinancialProjection'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import { Target } from 'lucide-react'
-import { GOAL_DEADLINE, GOAL_INTEREST_RATE } from '../utils'
-import { useGoals } from '@/hooks/finance'
 
 const CardHeaderSummary = ({
   investimentsData,
   report,
-  financialPlanningYear
+  financialPlanningYear,
+  projectionResults
 }: {
   investimentsData: IInvestimentsData
   report: IReportToYearData
   financialPlanningYear: IFinancialPlanningProps[]
+  projectionResults: any[]
 }) => {
   const { isVisibilityData } = useIsVisibilityDatas()
-  const { goal } = useGoals()
 
   const valorAtual = investimentsData?.resumoConta?.totalGeral ?? 0
-  const goalDeadline = goal?.meta_year || GOAL_DEADLINE
-
-  const projectionResults = calculateProjection({
-    principal: valorAtual,
-    annualRate: GOAL_INTEREST_RATE,
-    goalDate: goalDeadline,
-    financialPlanningYear: financialPlanningYear || []
-  })
-  const currentYear = financialPlanningYear?.find(
+  const currentYearPlan = financialPlanningYear?.find(
     (i: IFinancialPlanningProps) => i.year === '2026'
   )
+
   const finalProjection =
     projectionResults.length > 0
       ? projectionResults[projectionResults.length - 1]
       : null
+
   const previsao =
     (finalProjection?.endValue ?? valorAtual) +
-    (Number(currentYear?.receivables) || 0) -
-    (Number(currentYear?.downPayment) || 0) -
-    (Number(currentYear?.homePurchases) || 0) -
-    (Number(currentYear?.otherDeductions) || 0)
+    (Number(currentYearPlan?.receivables) || 0) -
+    (Number(currentYearPlan?.downPayment) || 0) -
+    (Number(currentYearPlan?.homePurchases) || 0) -
+    (Number(currentYearPlan?.otherDeductions) || 0)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-      {/* Card 1: Patrimônio */}
       <div className="md:col-span-2 bg-gray-700 p-4 rounded-lg border border-gray-800 flex items-center justify-between">
         <div>
           <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
@@ -68,7 +57,7 @@ const CardHeaderSummary = ({
             </p>
             <p className="text-xs font-bold text-blue-400">
               {formatCurrencyMoney(
-                investimentsData?.resumoConta?.corretora?.valorInvestido,
+                investimentsData?.resumoConta?.corretora?.caixaLivre,
                 'EUR',
                 isVisibilityData
               )}
@@ -101,7 +90,6 @@ const CardHeaderSummary = ({
         </div>
       </div>
 
-      {/* Card 2: Reserva / Meses */}
       <div className="bg-gray-700 p-4 rounded-lg border border-gray-800 flex items-center justify-between">
         <div>
           <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
@@ -133,7 +121,6 @@ const CardHeaderSummary = ({
         </div>
       </div>
 
-      {/* Card 3: Previsão Meta */}
       <div className="bg-gray-700 p-4 rounded-lg border border-gray-800 flex items-center justify-between border-l-4 border-l-green-600">
         <div>
           <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">

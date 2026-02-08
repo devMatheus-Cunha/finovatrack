@@ -18,25 +18,19 @@ import {
   useCustomDisclosure
 } from '@/hooks/globalStates'
 import { useGoals, useSaveGoal } from '@/hooks/finance'
-import {
-  calculateProjection,
-  IFinancialPlanningProps
-} from '@/utils/calculateFinancialProjection'
-import {
-  GOAL_DEADLINE,
-  GOAL_TARGET,
-  GOAL_INTEREST_RATE,
-  calcularValorGuardadoMes
-} from '../utils'
+import { IFinancialPlanningProps } from '@/utils/calculateFinancialProjection'
+import { GOAL_DEADLINE, GOAL_TARGET, calcularValorGuardadoMes } from '../utils'
 import GoalsModal from './GoalsModal'
 import { IInvestimentsData } from '@/app/actions/financeActions'
 
 const CardToGoals = ({
   investimentsData,
-  financialPlanningYear
+  financialPlanningYear,
+  projectionResults
 }: {
   investimentsData: IInvestimentsData | undefined
   financialPlanningYear: IFinancialPlanningProps[] | undefined
+  projectionResults: any[]
 }) => {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
@@ -56,22 +50,15 @@ const CardToGoals = ({
 
   const currency = userData.primary_currency
 
-  // --- LÓGICA DE CÁLCULOS ATUALIZADA ---
   const valorAtual = investimentsData?.resumoConta?.totalGeral ?? 0
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
   const targetValue = goal?.meta_value_to_year || GOAL_TARGET
-
-  const projectionResults = calculateProjection({
-    principal: valorAtual,
-    annualRate: GOAL_INTEREST_RATE,
-    goalDate: goalDeadline,
-    financialPlanningYear: financialPlanningYear || []
-  })
 
   const finalProjection =
     projectionResults.length > 0
       ? projectionResults[projectionResults.length - 1]
       : null
+
   const previsao = finalProjection?.endValue ?? valorAtual
   const totalJuros = finalProjection?.interestGenerated ?? 0
   const diferenca = previsao - targetValue
@@ -99,7 +86,8 @@ const CardToGoals = ({
 
   return (
     <div className="space-y-2">
-      {/* CARD PRINCIPAL DE METAS */}
+      {/* O JSX permanece exatamente o mesmo que você já tem,
+          apenas usando as variáveis extraídas de projectionResults */}
       <div className="bg-gray-700 p-5 rounded-lg border border-gray-800 shadow-xl">
         <div className="flex justify-between items-center mb-6">
           <div className="flex flex-col">
@@ -214,7 +202,7 @@ const CardToGoals = ({
         </div>
       </div>
 
-      {/* CARD 2: META DOS INVESTIMENTOS */}
+      {/* O Card 2 de Estratégia e Modais continuam exatamente iguais ao seu código original */}
       <div className="bg-gray-700 p-5 rounded-lg border border-gray-800 shadow-xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-all duration-700 rotate-12 group-hover:rotate-0">
           <TrendingUp size={130} />
