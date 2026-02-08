@@ -22,7 +22,7 @@ const CardHeaderSummary = ({
   const { isVisibilityData } = useIsVisibilityDatas()
   const { goal } = useGoals()
 
-  const valorAtual = investimentsData?.patrimonio?.total ?? 0
+  const valorAtual = investimentsData?.resumoConta?.totalGeral ?? 0
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
 
   const projectionResults = calculateProjection({
@@ -51,11 +51,11 @@ const CardHeaderSummary = ({
       <div className="md:col-span-2 bg-gray-700 p-4 rounded-lg border border-gray-800 flex items-center justify-between">
         <div>
           <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
-            Património Total
+            Património Total{' '}
           </p>
           <h2 className="text-2xl font-bold text-white">
             {formatCurrencyMoney(
-              investimentsData?.patrimonio?.total,
+              investimentsData?.resumoConta?.totalGeral,
               'EUR',
               isVisibilityData
             )}
@@ -68,7 +68,7 @@ const CardHeaderSummary = ({
             </p>
             <p className="text-xs font-bold text-blue-400">
               {formatCurrencyMoney(
-                investimentsData?.composicaoPortfolio?.valorNaoInvestido,
+                investimentsData?.resumoConta?.corretora?.valorInvestido,
                 'EUR',
                 isVisibilityData
               )}
@@ -80,8 +80,7 @@ const CardHeaderSummary = ({
             </p>
             <p className="text-xs font-bold text-indigo-400">
               {formatCurrencyMoney(
-                investimentsData?.composicaoPortfolio
-                  ?.totalInvestidoComValorizacao,
+                investimentsData?.resumoConta?.corretora?.valorDeMercado,
                 'EUR',
                 isVisibilityData
               )}
@@ -93,7 +92,7 @@ const CardHeaderSummary = ({
             </p>
             <p className="text-xs font-bold text-blue-400">
               {formatCurrencyMoney(
-                investimentsData?.patrimonio?.reservaExterna,
+                investimentsData?.resumoConta?.reservaExterna,
                 'EUR',
                 isVisibilityData
               )}
@@ -110,9 +109,9 @@ const CardHeaderSummary = ({
           </p>
           <h2 className="text-xl font-bold">
             {report?.mediaExpenses &&
-            investimentsData?.patrimonio?.reservaExterna
+            investimentsData?.resumoConta?.reservaExterna
               ? (
-                  investimentsData.patrimonio.reservaExterna /
+                  investimentsData.resumoConta.reservaExterna /
                   report.mediaExpenses
                 ).toFixed(1)
               : '0.0'}{' '}

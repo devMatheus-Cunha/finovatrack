@@ -43,7 +43,6 @@ const CardToGoals = ({
   const { goal } = useGoals()
   const { mutateGoal } = useSaveGoal()
 
-  // Modais separados para cada card
   const {
     isOpen: isOpenGoal,
     onOpen: onOpenGoal,
@@ -57,8 +56,8 @@ const CardToGoals = ({
 
   const currency = userData.primary_currency
 
-  // --- LÓGICA DE CÁLCULOS ---
-  const valorAtual = investimentsData?.patrimonio?.total ?? 0
+  // --- LÓGICA DE CÁLCULOS ATUALIZADA ---
+  const valorAtual = investimentsData?.resumoConta?.totalGeral ?? 0
   const goalDeadline = goal?.meta_year || GOAL_DEADLINE
   const targetValue = goal?.meta_value_to_year || GOAL_TARGET
 
@@ -215,7 +214,7 @@ const CardToGoals = ({
         </div>
       </div>
 
-      {/* CARD 2: META DOS INVESTIMENTOS (GRAY-700) */}
+      {/* CARD 2: META DOS INVESTIMENTOS */}
       <div className="bg-gray-700 p-5 rounded-lg border border-gray-800 shadow-xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-15 transition-all duration-700 rotate-12 group-hover:rotate-0">
           <TrendingUp size={130} />
@@ -240,24 +239,23 @@ const CardToGoals = ({
           <div className="space-y-4 pt-2">
             {[
               {
-                label: 'Renda Fixa',
+                label: 'Caixa Corretora',
                 icon: <Landmark size={12} />,
                 current:
-                  investimentsData?.composicaoPortfolio?.valorNaoInvestido || 0,
+                  investimentsData?.resumoConta?.corretora?.caixaLivre || 0,
                 target: goal?.meta_renda_fixa || 1
               },
               {
                 label: 'Ações/ETFs',
                 icon: <TrendingUp size={12} />,
                 current:
-                  investimentsData?.composicaoPortfolio
-                    ?.totalInvestidoComValorizacao || 0,
+                  investimentsData?.resumoConta?.corretora?.valorDeMercado || 0,
                 target: goal?.meta_investimentos || 1
               },
               {
-                label: 'Reserva',
+                label: 'Reserva Externa',
                 icon: <Wallet size={12} />,
-                current: investimentsData?.patrimonio?.reservaExterna || 0,
+                current: investimentsData?.resumoConta?.reservaExterna || 0,
                 target: goal?.meta_reserva || 1
               }
             ].map((item, idx) => {
@@ -314,10 +312,10 @@ const CardToGoals = ({
                 </p>
                 <p className="text-[13px] font-black text-green-500">
                   {formatCurrencyMoney(
-                    (investimentsData?.projecoes?.jurosSobreCaixa
-                      ?.projecaoMensal || 0) +
-                      (investimentsData?.projecoes?.dividendos
-                        ?.projecaoMensalEstimada || 0),
+                    (investimentsData?.planejamento?.projecoes?.juros?.mensal ||
+                      0) +
+                      (investimentsData?.planejamento?.projecoes?.dividendos
+                        ?.mensal || 0),
                     currency,
                     isVisibilityData
                   )}
@@ -325,14 +323,11 @@ const CardToGoals = ({
               </div>
               <div className="bg-gray-800/50 p-2.5 rounded-lg border border-gray-600/20 text-right">
                 <p className="text-[8px] text-gray-300 font-bold uppercase mb-1">
-                  Total Anual
+                  Total Anual Est.
                 </p>
                 <p className="text-[13px] font-black text-green-500">
                   {formatCurrencyMoney(
-                    (investimentsData?.projecoes?.jurosSobreCaixa
-                      ?.projecaoAnual || 0) +
-                      (investimentsData?.projecoes?.dividendos
-                        ?.projecaoAnualEstimada || 0),
+                    investimentsData?.planejamento?.rendaAnualEstimada || 0,
                     currency,
                     isVisibilityData
                   )}
@@ -343,7 +338,6 @@ const CardToGoals = ({
         </div>
       </div>
 
-      {/* MODAL 1: SOMENTE DADOS DE MUDANÇA */}
       <Modal
         isOpen={isOpenGoal}
         onClose={onCloseGoal}
@@ -356,11 +350,10 @@ const CardToGoals = ({
           onSubmit={handleSubmitGoal}
           initialValues={goal}
           currency={currency}
-          mode="mudanca" // Prop para filtrar campos no modal
+          mode="mudanca"
         />
       </Modal>
 
-      {/* MODAL 2: SOMENTE ESTRATÉGIA TÉCNICA */}
       <Modal
         isOpen={isOpenStrategy}
         onClose={onCloseStrategy}
@@ -373,7 +366,7 @@ const CardToGoals = ({
           onSubmit={handleSubmitGoal}
           initialValues={goal}
           currency={currency}
-          mode="estrategia" // Prop para filtrar campos no modal
+          mode="estrategia"
         />
       </Modal>
     </div>

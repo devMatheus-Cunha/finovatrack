@@ -61,7 +61,7 @@ const InfoCard = ({
         </div>
         {percent !== undefined && (
           <span className="text-[9px] text-green-500 font-bold">
-            +{percent}%
+            {percent > 0 ? `+${percent.toFixed(2)}%` : `${percent.toFixed(2)}%`}
           </span>
         )}
       </div>
@@ -80,15 +80,18 @@ const CardToInvestments = ({
 }) => {
   const [activeTab, setActiveTab] = useState<string>('Rendimentos')
   const { isVisibilityData } = useIsVisibilityDatas()
-  const rend = investimentsData?.rendimentos
-  const proj = investimentsData?.projecoes
-  const metas = investimentsData?.metas
+
+  // MAPEAMENTO DA NOVA ESTRUTURA
+  const rend = investimentsData?.performance
+  const proj = investimentsData?.planejamento?.projecoes
+  const metas = investimentsData?.planejamento?.metas
+
   const tabs = ['Rendimentos', 'Projeções', 'Metas']
 
   return (
     <div className="bg-gray-700 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
       {/* HEADER DO PAINEL */}
-      <div className="px-4 py-3  bg-gray-700/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="px-4 py-3 bg-gray-700/80 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex gap-3 items-center">
           <h3 className="text-xs font-black uppercase tracking-widest text-gray-400">
             Trading 212 - Painel Detalhado
@@ -138,32 +141,29 @@ const CardToInvestments = ({
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <InfoCard
               label="Total"
-              value={investimentsData?.patrimonio?.totalNaCorretora}
+              value={investimentsData?.resumoConta?.totalGeral}
               icon={<Wallet size={14} />}
             />
             <InfoCard
               label="Disponível"
-              value={investimentsData?.composicaoPortfolio?.valorNaoInvestido}
+              value={investimentsData?.resumoConta?.corretora?.caixaLivre}
               icon={<DollarSign size={14} />}
             />
             <InfoCard
               label="Aplicado"
-              value={
-                investimentsData?.composicaoPortfolio
-                  ?.totalInvestidoComValorizacao
-              }
+              value={investimentsData?.resumoConta?.corretora?.valorDeMercado}
               icon={<TrendingUp size={14} />}
               highlight
             />
             <InfoCard
               label="Juros"
-              value={rend?.detalhes?.jurosSobreCaixa?.totalRecebido}
+              value={rend?.detalhes?.jurosCaixa?.recebidoTotal}
               icon={<Briefcase size={14} />}
             />
             <div className="col-span-2 md:col-span-1">
               <InfoCard
                 label="Dividendos"
-                value={rend?.detalhes?.dividendos?.totalRecebido}
+                value={rend?.detalhes?.dividendos?.recebidoTotal}
                 icon={<ArrowUpRight size={14} />}
               />
             </div>
@@ -183,26 +183,26 @@ const CardToInvestments = ({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <InfoCard
                 label="Lucro Total"
-                value={rend?.lucroTotal}
-                percent={rend?.porcentagemLucroTotal}
+                value={rend?.lucroTotalGeral}
+                percent={rend?.porcentagemGeral}
                 icon={<DollarSign size={14} />}
               />
               <InfoCard
                 label="Valorização"
-                value={rend?.detalhes?.valorizacaoInvestimentos?.valor}
-                percent={rend?.detalhes?.valorizacaoInvestimentos?.porcentagem}
+                value={rend?.detalhes?.valorizacao?.valor}
+                percent={rend?.detalhes?.valorizacao?.porcentagem}
                 icon={<TrendingUp size={14} />}
               />
               <InfoCard
                 label="Dividendos"
-                value={rend?.detalhes?.dividendos?.totalRecebido}
-                sub={`Yield: ${rend?.detalhes?.dividendos?.yieldAnualizado}%`}
+                value={rend?.detalhes?.dividendos?.recebidoTotal}
+                sub={`Yield: ${rend?.detalhes?.dividendos?.yieldAtual?.toFixed(2) || 0}%`}
                 icon={<Briefcase size={14} />}
               />
               <InfoCard
                 label="Juros Acum."
-                value={rend?.detalhes?.jurosSobreCaixa?.totalRecebido}
-                sub={`Taxa: ${rend?.detalhes?.jurosSobreCaixa?.taxaAnual}%`}
+                value={rend?.detalhes?.jurosCaixa?.recebidoTotal}
+                sub={`Taxa: ${rend?.detalhes?.jurosCaixa?.taxaAtual?.toFixed(2) || 0}%`}
                 icon={<ArrowUpRight size={14} />}
               />
             </div>
@@ -212,19 +212,18 @@ const CardToInvestments = ({
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <InfoCard
                 label="Juros Est. (Mês)"
-                value={proj?.jurosSobreCaixa?.projecaoMensal}
+                value={proj?.juros?.mensal}
                 icon={<Calendar size={14} />}
               />
               <InfoCard
                 label="Dividendos (Mês)"
-                value={proj?.dividendos?.projecaoMensalEstimada}
+                value={proj?.dividendos?.mensal}
                 icon={<Briefcase size={14} />}
               />
               <InfoCard
                 label="Total Passivo"
                 value={
-                  (proj?.jurosSobreCaixa?.projecaoMensal || 0) +
-                  (proj?.dividendos?.projecaoMensalEstimada || 0)
+                  (proj?.juros?.mensal || 0) + (proj?.dividendos?.mensal || 0)
                 }
                 icon={<Wallet size={14} />}
                 highlight
@@ -234,6 +233,7 @@ const CardToInvestments = ({
 
           {activeTab === 'Metas' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* META DIVIDENDOS */}
               <div className="bg-gray-800/40 p-4 rounded-lg border border-gray-800 flex justify-between items-center group hover:border-blue-500/30 transition-colors">
                 <div className="flex flex-col">
                   <span className="text-gray-400 uppercase font-black text-[9px] tracking-widest mb-1">
@@ -241,20 +241,23 @@ const CardToInvestments = ({
                   </span>
                   <span className="text-white font-bold text-sm">
                     {formatCurrencyMoney(
-                      metas?.dividendos?.objetivoMensal,
+                      metas?.objetivos?.dividendosMensal,
                       'EUR',
                       isVisibilityData
                     )}
                     /mês
                   </span>
+                  <span className="text-[10px] text-green-500 font-bold mt-1">
+                    {metas?.progressoDividendos}% atingido
+                  </span>
                 </div>
                 <div className="text-right">
                   <span className="text-gray-500 uppercase font-black text-[9px] block mb-1">
-                    Capital Necessário
+                    Status Atual (Média)
                   </span>
                   <span className="text-blue-400 font-black text-sm">
                     {formatCurrencyMoney(
-                      metas?.dividendos?.valorInvestidoNecessario,
+                      (rend?.detalhes?.dividendos?.recebido12Meses || 0) / 12,
                       'EUR',
                       isVisibilityData
                     )}
@@ -262,6 +265,7 @@ const CardToInvestments = ({
                 </div>
               </div>
 
+              {/* META JUROS */}
               <div className="bg-gray-800/40 p-4 rounded-lg border border-gray-800 flex justify-between items-center group hover:border-blue-500/30 transition-colors">
                 <div className="flex flex-col">
                   <span className="text-gray-400 uppercase font-black text-[9px] tracking-widest mb-1">
@@ -269,20 +273,23 @@ const CardToInvestments = ({
                   </span>
                   <span className="text-white font-bold text-sm">
                     {formatCurrencyMoney(
-                      metas?.juros?.objetivoMensal,
+                      metas?.objetivos?.jurosMensal,
                       'EUR',
                       isVisibilityData
                     )}
                     /mês
                   </span>
+                  <span className="text-[10px] text-green-500 font-bold mt-1">
+                    {metas?.progressoJuros}% atingido
+                  </span>
                 </div>
                 <div className="text-right">
                   <span className="text-gray-500 uppercase font-black text-[9px] block mb-1">
-                    Capital Necessário
+                    Projeção Atual
                   </span>
                   <span className="text-blue-400 font-black text-sm">
                     {formatCurrencyMoney(
-                      metas?.juros?.valorNaoInvestidoNecessario,
+                      proj?.juros?.mensal,
                       'EUR',
                       isVisibilityData
                     )}

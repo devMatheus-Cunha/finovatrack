@@ -2,8 +2,10 @@ import { useUserData } from '@/hooks/globalStates'
 import { getInvestmentData } from '@/services/finance/getInvestiments'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFetchFinancialPlaningYear } from '@/hooks/finance/useFetchFinancialPlaningYear'
-import { updateAndRevalidateInvestments } from '@/app/actions/financeActions'
-import { IInvestimentsData } from './types'
+import {
+  IInvestimentsData,
+  updateAndRevalidateInvestments
+} from '@/app/actions/financeActions'
 
 export const useFetchInvestiments = () => {
   const { userData } = useUserData()
