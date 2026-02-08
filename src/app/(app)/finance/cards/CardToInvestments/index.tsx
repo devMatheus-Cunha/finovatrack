@@ -81,7 +81,6 @@ const CardToInvestments = ({
   const [activeTab, setActiveTab] = useState<string>('Rendimentos')
   const { isVisibilityData } = useIsVisibilityDatas()
 
-  // MAPEAMENTO DA NOVA ESTRUTURA
   const rend = investimentsData?.performance
   const proj = investimentsData?.planejamento?.projecoes
   const metas = investimentsData?.planejamento?.metas
@@ -90,7 +89,6 @@ const CardToInvestments = ({
 
   return (
     <div className="bg-gray-700 rounded-lg border border-gray-800 overflow-hidden shadow-2xl">
-      {/* HEADER DO PAINEL */}
       <div className="px-4 py-3 bg-gray-700/80 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex gap-3 items-center">
           <h3 className="text-xs font-black uppercase tracking-widest text-gray-400">
@@ -110,7 +108,6 @@ const CardToInvestments = ({
           )}
         </div>
 
-        {/* NAVEGAÇÃO ENTRE ABAS */}
         <div className="flex gap-1 bg-black/20 p-1 rounded-lg border border-white/5">
           {tabs.map((tab) => (
             <button
@@ -141,7 +138,7 @@ const CardToInvestments = ({
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <InfoCard
               label="Total"
-              value={investimentsData?.resumoConta?.totalGeral}
+              value={investimentsData?.resumoConta.corretora.saldoTotal}
               icon={<Wallet size={14} />}
             />
             <InfoCard
