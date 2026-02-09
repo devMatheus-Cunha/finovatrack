@@ -1,13 +1,14 @@
 import React from 'react'
 import {
   DollarSign,
-  Package,
   TrendingDown,
   Wallet,
   ArrowUpCircle,
   ArrowDownCircle,
-  LayoutDashboard // Usando Lucide como fallback para o ícone do Phosphor
+  LayoutDashboard
 } from 'lucide-react'
+import { formatCurrencyMoney } from '@/utils/formatNumber'
+import { useIsVisibilityDatas, useUserData } from '@/hooks/globalStates'
 
 // --- Interfaces ---
 interface StatsOverviewProps {
@@ -30,21 +31,6 @@ interface StatConfig {
   description?: string
 }
 
-// --- Mocks & Helpers para a Visualização ---
-// No seu projeto real, você mantém os imports originais (@/hooks, @/utils, etc)
-const formatCurrencyMoney = (
-  value: number,
-  currency = 'BRL',
-  visible = true
-) => {
-  if (!visible) return 'R$ ••••••'
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: currency || 'BRL'
-  }).format(value)
-}
-
-// Componente Card interno para visualização
 const Card = ({
   children,
   className
@@ -54,7 +40,6 @@ const Card = ({
 }) => <div className={`rounded-xl ${className}`}>{children}</div>
 
 export function StatsOverview({
-  totalUniqueItems,
   totalOverallValue,
   totalSpentValue,
   earlyTotal,
@@ -62,10 +47,8 @@ export function StatsOverview({
   boughtTotal,
   baseOverallValue
 }: StatsOverviewProps) {
-  // Mocks de estados globais para o preview
-  const userData = { primary_currency: 'BRL' }
-  const isVisibilityData = true
-
+  const { isVisibilityData } = useIsVisibilityDatas()
+  const { userData } = useUserData()
   const investmentBudget = 5400
   const effectiveEarlyTotal = includeEarlyPurchase ? earlyTotal || 0 : 0
   const effectiveBoughtTotal = boughtTotal || 0
@@ -116,16 +99,11 @@ export function StatsOverview({
 
   return (
     <Card className="bg-gray-700 shadow-xl w-full border border-gray-600/50 overflow-hidden flex flex-col h-full min-h-[260px]">
-      {/* Cabeçalho alinhado com o do Filters */}
       <div className="p-6 border-b border-gray-600 flex justify-between items-center bg-gray-700">
         <h2 className="text-xl font-semibold text-gray-100 flex items-center">
           <LayoutDashboard className="w-5 h-5 text-gray-400 mr-2" />
           Resumo de Valores
         </h2>
-        <div className="flex items-center gap-2 bg-gray-800/60 text-[10px] uppercase tracking-wider text-gray-300 px-3 py-1.5 rounded-full border border-gray-600 font-bold">
-          <Package className="w-3.5 h-3.5 text-gray-400" />
-          <span>{totalUniqueItems} Itens</span>
-        </div>
       </div>
 
       <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
