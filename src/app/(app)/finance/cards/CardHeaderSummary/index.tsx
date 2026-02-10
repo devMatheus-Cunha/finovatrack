@@ -99,7 +99,7 @@ const CardHeaderSummary = ({
             {report?.mediaExpenses &&
             investimentsData?.resumoConta?.reservaExterna
               ? (
-                  investimentsData.resumoConta.reservaExterna /
+                  investimentsData.resumoConta?.reservaExterna /
                   report.mediaExpenses
                 ).toFixed(1)
               : '0.0'}{' '}
