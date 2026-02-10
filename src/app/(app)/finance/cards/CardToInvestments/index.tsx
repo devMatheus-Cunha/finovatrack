@@ -138,7 +138,7 @@ const CardToInvestments = ({
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <InfoCard
               label="Total"
-              value={investimentsData?.resumoConta.corretora.saldoTotal}
+              value={investimentsData?.resumoConta?.corretora?.saldoTotal}
               icon={<Wallet size={14} />}
             />
             <InfoCard
