@@ -4,14 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { adminDb } from '@/services/firebaseAdmin'
 
 /* ============================================================================
-    1. INTERFACES
+    1. INTERFACES (ATUALIZADAS)
 ============================================================================ */
-
-interface ApiResponseWrapper<T> {
-  items: T[]
-  nextPagePath: string | null
-}
-
 export interface IAccountSummaryApi {
   totalValue: number
   cash: { availableToTrade: number; inPies: number }
@@ -29,12 +23,17 @@ interface ITransactionApi {
   dateTime: string
 }
 
+// Interface ajustada conforme o retorno real da sua API
 interface IDividendApi {
   ticker: string
+  instrument: {
+    name: string
+    ticker: string
+  }
   amount: number
-  netAmount: number
-  tax: number
+  amountInEuro: number
   paidOn: string
+  type: string
 }
 
 export interface IPositionApi {
@@ -134,8 +133,9 @@ async function fetchAllFromApi<T>(
   while (url) {
     const res: Response = await fetch(url, fetchOptions)
     if (!res.ok) break
-    const data: ApiResponseWrapper<T> = await res.json()
-    if (data.items) allItems = [...allItems, ...data.items]
+    const data: any = await res.json()
+    const items = data.items || (Array.isArray(data) ? data : [])
+    allItems = [...allItems, ...items]
     url = data.nextPagePath
       ? `https://live.trading212.com/api/v0/equity${data.nextPagePath}`
       : null
@@ -164,46 +164,39 @@ function processData(
   reserve: number = 0
 ): IInvestimentsData {
   const { summary, transactions, positions, metadata, dividends } = raw
-
   const corteJuros = new Date(baseConfig.corteJuros)
   const corteDividendos = new Date(baseConfig.corteDividendos)
 
   let novaDataCorteJuros = corteJuros
   let novaDataCorteDividendos = corteDividendos
 
-  // --- JUROS (Soma com precisão e filtro de depósitos manuais) ---
+  // --- JUROS (Filtro de Depósito > 100€) ---
   const novosJuros = transactions.reduce((acc, t) => {
     if (!t.dateTime) return acc
     const dataT = new Date(t.dateTime)
     const valor = Number(t.amount) || 0
-
     if (dataT.getTime() > corteJuros.getTime()) {
       const isInterestOrTax =
         t.type === 'INTEREST' || t.type === 'TAX_ON_INTEREST'
-      // Se for DEPOSIT, só aceita se for <= 100€ (característica de juros diários)
       const isSmallDeposit = t.type === 'DEPOSIT' && valor <= 100
-
       if (isInterestOrTax || isSmallDeposit) {
-        if (dataT.getTime() > novaDataCorteJuros.getTime()) {
+        if (dataT.getTime() > novaDataCorteJuros.getTime())
           novaDataCorteJuros = dataT
-        }
         return acc + valor
       }
     }
     return acc
   }, 0)
-
   const totalJurosFinal = Number((baseConfig.jurosBase + novosJuros).toFixed(2))
 
-  // --- DIVIDENDOS ---
+  // --- DIVIDENDOS (Ajustado para seu objeto real) ---
   const novosDivs = dividends.reduce((acc, d) => {
     const dataD = new Date(d.paidOn)
     if (dataD.getTime() > corteDividendos.getTime()) {
       if (dataD.getTime() > novaDataCorteDividendos.getTime())
         novaDataCorteDividendos = dataD
-      return (
-        acc + (Number(d.netAmount) || Number(d.amount) - Number(d.tax) || 0)
-      )
+      // Usando amountInEuro conforme seu retorno da API
+      return acc + (Number(d.amountInEuro) || Number(d.amount) || 0)
     }
     return acc
   }, 0)
@@ -211,14 +204,11 @@ function processData(
     (baseConfig.dividendosBase + novosDivs).toFixed(2)
   )
 
-  // --- PROJEÇÕES E JUROS ESTIMADOS (Filtro Aplicado Aqui) ---
-  // Filtramos as transações de juros válidas (ignorando depósitos de aporte > 100)
-  const transacoesJurosValidas = transactions.filter((t) => {
-    const v = Number(t.amount) || 0
-    return t.type === 'INTEREST' || (t.type === 'DEPOSIT' && v <= 100)
-  })
-
-  // Pegamos o valor do último juro diário real para projetar
+  // --- PROJEÇÕES ---
+  const transacoesJurosValidas = transactions.filter(
+    (t) =>
+      t.type === 'INTEREST' || (t.type === 'DEPOSIT' && Number(t.amount) <= 100)
+  )
   const ultimoJuroDiario = Number(transacoesJurosValidas[0]?.amount) || 0
   const jurosMensalProj = Number((ultimoJuroDiario * 31).toFixed(2))
 
@@ -350,7 +340,14 @@ function processData(
     },
     extrato: {
       transacoes: transactions.slice(0, 31),
-      dividendosHistorico: dividends.slice(0, 31)
+      dividendosHistorico: dividends
+        .map((d) => ({
+          ticker: d.instrument?.ticker || d.ticker,
+          nome: d.instrument?.name || d.ticker,
+          valor: (d.amountInEuro || d.amount).toFixed(2),
+          data: d.paidOn
+        }))
+        .slice(0, 31)
     }
   }
 }
@@ -388,8 +385,7 @@ export async function updateAndRevalidateInvestments(
       .doc('investiments')
       .get()
 
-    const currentData = investDoc.data()
-    const baseConfig = currentData?.referenciaBase || {
+    const baseConfig = investDoc.data()?.referenciaBase || {
       jurosBase: 592.83,
       dividendosBase: 78.87,
       corteJuros: '2026-02-06T02:04:08.384Z',
@@ -402,24 +398,29 @@ export async function updateAndRevalidateInvestments(
       fetch(`${BASE_URL}/metadata/instruments`, fetchOptions)
     ])
 
+    // Correção do erro de Metadata (Map is not a function)
+    const metaJson = await metaRes.json()
+    const metadataArray = Array.isArray(metaJson)
+      ? metaJson
+      : metaJson.items || []
+
     const [allTransactions, allDividends] = await Promise.all([
       fetchAllFromApi<ITransactionApi>(
-        '/history/transactions?limit=50', // Aumentei o limite para garantir pegar o último juro
+        '/history/transactions?limit=50',
         fetchOptions
       ),
       fetchAllFromApi<IDividendApi>('/history/dividends?limit=50', fetchOptions)
     ])
 
     const rawData = {
-      summary: (await summaryRes.json()) as IAccountSummaryApi,
-      positions: (await positionsRes.json()) as IPositionApi[],
-      metadata: (await metaRes.json()) as any[],
+      summary: await summaryRes.json(),
+      positions: await positionsRes.json(),
+      metadata: metadataArray,
       transactions: allTransactions,
       dividends: allDividends
     }
 
     const finalData = processData(rawData, baseConfig, reserve)
-
     await adminDb
       .collection('users')
       .doc(userId)
