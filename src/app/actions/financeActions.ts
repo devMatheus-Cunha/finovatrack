@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { adminDb } from '@/services/firebaseAdmin'
 
 /* ============================================================================
-    1. INTERFACES (RESTAURADAS)
+    1. INTERFACES
 ============================================================================ */
 
 interface ApiResponseWrapper<T> {
@@ -23,7 +23,7 @@ export interface IAccountSummaryApi {
 }
 
 interface ITransactionApi {
-  type: 'INTEREST' | 'TAX_ON_INTEREST' | 'DIVIDEND' | string
+  type: 'INTEREST' | 'TAX_ON_INTEREST' | 'DIVIDEND' | 'DEPOSIT' | string
   amount: number
   reference: string
   dateTime: string
@@ -171,28 +171,31 @@ function processData(
   let novaDataCorteJuros = corteJuros
   let novaDataCorteDividendos = corteDividendos
 
-  // --- JUROS (Soma com precisão de milissegundos para evitar duplicidade) ---
+  // --- JUROS (Soma com precisão e filtro de depósitos manuais) ---
   const novosJuros = transactions.reduce((acc, t) => {
     if (!t.dateTime) return acc
     const dataT = new Date(t.dateTime)
+    const valor = Number(t.amount) || 0
 
-    // Comparação estrita por tempo para evitar somar o mesmo juro após ajuste manual
     if (dataT.getTime() > corteJuros.getTime()) {
-      if (
-        t.type === 'INTEREST' ||
-        t.type === 'TAX_ON_INTEREST' ||
-        t.type === 'DEPOSIT'
-      ) {
-        if (dataT.getTime() > novaDataCorteJuros.getTime())
+      const isInterestOrTax =
+        t.type === 'INTEREST' || t.type === 'TAX_ON_INTEREST'
+      // Se for DEPOSIT, só aceita se for <= 100€ (característica de juros diários)
+      const isSmallDeposit = t.type === 'DEPOSIT' && valor <= 100
+
+      if (isInterestOrTax || isSmallDeposit) {
+        if (dataT.getTime() > novaDataCorteJuros.getTime()) {
           novaDataCorteJuros = dataT
-        return acc + (Number(t.amount) || 0)
+        }
+        return acc + valor
       }
     }
     return acc
   }, 0)
+
   const totalJurosFinal = Number((baseConfig.jurosBase + novosJuros).toFixed(2))
 
-  // --- DIVIDENDOS (Acúmulo Total) ---
+  // --- DIVIDENDOS ---
   const novosDivs = dividends.reduce((acc, d) => {
     const dataD = new Date(d.paidOn)
     if (dataD.getTime() > corteDividendos.getTime()) {
@@ -208,10 +211,14 @@ function processData(
     (baseConfig.dividendosBase + novosDivs).toFixed(2)
   )
 
-  // --- PROJEÇÕES ---
-  const transacoesJurosValidas = transactions.filter(
-    (t) => t.type === 'INTEREST' || t.type === 'DEPOSIT'
-  )
+  // --- PROJEÇÕES E JUROS ESTIMADOS (Filtro Aplicado Aqui) ---
+  // Filtramos as transações de juros válidas (ignorando depósitos de aporte > 100)
+  const transacoesJurosValidas = transactions.filter((t) => {
+    const v = Number(t.amount) || 0
+    return t.type === 'INTEREST' || (t.type === 'DEPOSIT' && v <= 100)
+  })
+
+  // Pegamos o valor do último juro diário real para projetar
   const ultimoJuroDiario = Number(transacoesJurosValidas[0]?.amount) || 0
   const jurosMensalProj = Number((ultimoJuroDiario * 31).toFixed(2))
 
@@ -304,9 +311,11 @@ function processData(
         valorizacao: {
           valor: summary.investments.unrealizedProfitLoss,
           porcentagem:
-            (summary.investments.unrealizedProfitLoss /
-              summary.investments.totalCost) *
-            100
+            summary.investments.totalCost > 0
+              ? (summary.investments.unrealizedProfitLoss /
+                  summary.investments.totalCost) *
+                100
+              : 0
         },
         dividendos: {
           recebidoTotal: totalDivsGeralFinal,
@@ -378,6 +387,7 @@ export async function updateAndRevalidateInvestments(
       .collection('finance')
       .doc('investiments')
       .get()
+
     const currentData = investDoc.data()
     const baseConfig = currentData?.referenciaBase || {
       jurosBase: 592.83,
@@ -394,10 +404,10 @@ export async function updateAndRevalidateInvestments(
 
     const [allTransactions, allDividends] = await Promise.all([
       fetchAllFromApi<ITransactionApi>(
-        '/history/transactions?limit=31',
+        '/history/transactions?limit=50', // Aumentei o limite para garantir pegar o último juro
         fetchOptions
       ),
-      fetchAllFromApi<IDividendApi>('/history/dividends?limit=31', fetchOptions)
+      fetchAllFromApi<IDividendApi>('/history/dividends?limit=50', fetchOptions)
     ])
 
     const rawData = {
@@ -409,6 +419,7 @@ export async function updateAndRevalidateInvestments(
     }
 
     const finalData = processData(rawData, baseConfig, reserve)
+
     await adminDb
       .collection('users')
       .doc(userId)
