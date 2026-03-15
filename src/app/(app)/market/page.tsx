@@ -376,45 +376,58 @@ export default function App() {
           />
         </div>
 
-        <div className="flex gap-3 justify-between">
-          <div className="flex  max-w-[40%] flex-1  gap-2">
+        <div className="flex flex-col md:flex-row gap-3 justify-between items-start md:items-end">
+          {/* Container de Botões de Ação */}
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+            <Button
+              variant="default"
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex-1 md:flex-none justify-center"
+            >
+              <Plus size={18} className="md:mr-2" />
+              <span className="hidden md:inline">Adicionar Item</span>
+            </Button>
             <Button
               variant="default"
               onClick={clearAllBought}
+              className="flex-1 md:flex-none justify-center"
               isLoading={
                 mutatingItemId === BULK_MUTATION_ID &&
                 mutatingAction === 'update'
               }
             >
-              Desmarcar tudo
+              <CheckCircle2 size={18} className="md:mr-2" />
+              <span className="hidden md:inline">Desmarcar tudo</span>
             </Button>
-            <Button
+
+            {/* <Button
               variant="default"
-              leftIcon={<Plus size={18} />}
-              onClick={() => setIsAddModalOpen(true)}
-            >
-              Adicionar Item
-            </Button>
-            <Button
-              variant="default"
-              leftIcon={<ListPlus size={18} />}
               onClick={fillDefaultList}
+              className="flex-1 md:flex-none justify-center"
             >
-              Gerar Lista
-            </Button>
+              <ListPlus size={18} className="md:mr-2" />
+              <span className="hidden md:inline">Gerar Lista</span>
+            </Button> */}
           </div>
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="bg-gray-700 border border-gray-700 rounded-lg px-3 py-2 text-sm"
-          >
-            <option value="Todos">Todas as Categorias</option>
-            {MARKET_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+
+          {/* Filtro de Categorias */}
+          <div className="w-full md:w-64">
+            <label className="block md:hidden text-[10px] uppercase text-gray-400 mb-1 ml-1 font-bold">
+              Filtrar Categoria
+            </label>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500 outline-none h-10"
+            >
+              <option value="Todos">Todas as Categorias</option>
+              {MARKET_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {aiSuggestion && (
