@@ -18,6 +18,7 @@ import { useLogout } from '@/hooks/entrys/useDeletedEntry/auth'
 
 import SideMenuMobile from './SideMenuMobile'
 import SideMenuDesktop from './SideMenuDesktop'
+import { HomeIcon } from 'lucide-react'
 
 export const SideMenu = () => {
   const { isVisibilityData, handleToggleVisibilityData } =
@@ -68,8 +69,16 @@ export const SideMenu = () => {
       label: 'Compras',
       route: 'shopping',
       disabled: false,
-      icon: <ShoppingCart size={21} />,
+      icon: <HomeIcon size={21} />,
       action: () => router.push(`/shopping`)
+    },
+    {
+      id: 'market',
+      label: 'Mercado',
+      route: 'market',
+      disabled: false,
+      icon: <ShoppingCart size={21} />,
+      action: () => router.push(`/market`)
     },
     {
       id: 'myProfile',
