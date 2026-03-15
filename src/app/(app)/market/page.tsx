@@ -12,8 +12,7 @@ import {
   PiggyBank,
   Receipt,
   TrendingUp,
-  Wallet,
-  ListPlus
+  Wallet
 } from 'lucide-react'
 import { Button, Card, Modal, Input, InfoCardMoney } from '@/components'
 import ButtonGroup from '@/components/common/Buttons/ButtonGroup'
@@ -26,7 +25,7 @@ import { useUpdateMarketItem } from '@/hooks/market/useUpdateMarketItem'
 import { useDeleteMarketItem } from '@/hooks/market/useDeleteMarketItem'
 import { formatCurrencyMoney } from '@/utils/formatNumber'
 import useIsVisibilityDatas from '@/hooks/globalStates/useIsVisibilityDatas'
-import { DEFAULT_SHOPPING_LIST } from '@/utils/mock'
+// import { DEFAULT_SHOPPING_LIST } from '@/utils/mock'
 
 const MARKET_CATEGORIES = [
   'Mercearia e Despensa',
@@ -70,19 +69,19 @@ export default function App() {
 
   const { expensesData } = useFetchExpensesData()
 
-  const fillDefaultList = useCallback(async () => {
-    const existingNames = new Set(marketItems.map((i) => i.name.toLowerCase()))
-    const toAdd = DEFAULT_SHOPPING_LIST.filter(
-      (item) => !existingNames.has(item.name.toLowerCase())
-    )
-    if (toAdd.length === 0) return
-    for (const item of toAdd) {
-      await addItem({
-        ...item,
-        bought: false
-      })
-    }
-  }, [marketItems, addItem])
+  // const fillDefaultList = useCallback(async () => {
+  //   const existingNames = new Set(marketItems.map((i) => i.name.toLowerCase()))
+  //   const toAdd = DEFAULT_SHOPPING_LIST.filter(
+  //     (item) => !existingNames.has(item.name.toLowerCase())
+  //   )
+  //   if (toAdd.length === 0) return
+  //   for (const item of toAdd) {
+  //     await addItem({
+  //       ...item,
+  //       bought: false
+  //     })
+  //   }
+  // }, [marketItems, addItem])
 
   const marketBudget = useMemo(() => {
     const total = expensesData
