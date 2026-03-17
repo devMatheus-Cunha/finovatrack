@@ -6,7 +6,6 @@ import {
   Edit3,
   CheckCircle2,
   Circle,
-  Sparkles,
   Loader2,
   Banknote,
   PiggyBank,
@@ -14,7 +13,14 @@ import {
   TrendingUp,
   Wallet
 } from 'lucide-react'
-import { Button, Card, Modal, Input, InfoCardMoney } from '@/components'
+import {
+  Button,
+  Card,
+  Modal,
+  Input,
+  InfoCardMoney,
+  InputTypeMoney
+} from '@/components'
 import ButtonGroup from '@/components/common/Buttons/ButtonGroup'
 import Table, { TableColumn } from '@/components/common/Table'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -23,7 +29,11 @@ import { useFetchMarketItems } from '@/hooks/market/useFetchMarketItems'
 import { useAddMarketItem } from '@/hooks/market/useAddMarketItem'
 import { useUpdateMarketItem } from '@/hooks/market/useUpdateMarketItem'
 import { useDeleteMarketItem } from '@/hooks/market/useDeleteMarketItem'
-import { formatCurrencyMoney } from '@/utils/formatNumber'
+import {
+  formatCurrencyMoney,
+  formatToCustomFormat,
+  formatToJavaScriptNumber
+} from '@/utils/formatNumber'
 import useIsVisibilityDatas from '@/hooks/globalStates/useIsVisibilityDatas'
 // import { DEFAULT_SHOPPING_LIST } from '@/utils/mock'
 
@@ -44,8 +54,8 @@ export interface ShoppingItemType {
   name: string
   category: string
   measure?: string
-  lastPrice: number
-  currentPrice: number
+  lastPrice: string
+  currentPrice: string
   store: string
   bought: boolean
 }
@@ -112,9 +122,6 @@ export default function App() {
     setMutatingItemId(id)
     setMutatingAction(action)
   }
-
-  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null)
-
   const totals = useMemo<Totals>(() => {
     const estimated = marketItems.reduce(
       (acc, item) => acc + item.currentPrice,
@@ -170,6 +177,7 @@ export default function App() {
   const saveItem = async (
     itemData: Omit<ShoppingItemType, 'id' | 'bought'>
   ) => {
+    console.log({ itemData })
     const isEdit = Boolean(editingItem)
     const currentPrice = Number(itemData.currentPrice)
     const lastPriceOnSave = isEdit
@@ -187,7 +195,7 @@ export default function App() {
           ...editingItem,
           ...itemData,
           lastPrice:
-            currentPrice !== editingItem.currentPrice
+            Number(itemData.currentPrice) !== Number(editingItem.currentPrice)
               ? editingItem.currentPrice
               : editingItem.lastPrice,
           currentPrice
@@ -283,7 +291,7 @@ export default function App() {
         field: 'currentPrice',
         modifier: (_value, item: ShoppingItemType) => (
           <span className="font-bold">
-            {formatCurrencyMoney(item.currentPrice, 'EUR')}
+            {formatCurrencyMoney(Number(item.currentPrice), 'EUR')}
           </span>
         ),
         styles: () => ({ textAlign: 'right' })
@@ -295,12 +303,12 @@ export default function App() {
           <span className="font-mono text-gray-400">
             {formatCurrencyMoney(value, 'EUR')}
           </span>
-        ),
-        styles: () => ({ textAlign: 'right' })
+        )
       },
       {
         header: 'Loja',
-        field: 'store'
+        field: 'store',
+        modifier: (value: string) => value || '-'
       },
       {
         header: 'Ação',
@@ -376,8 +384,7 @@ export default function App() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-3 justify-between items-start md:items-end">
-          {/* Container de Botões de Ação */}
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-2 w-full md:w-auto">
             <Button
               variant="default"
               onClick={() => setIsAddModalOpen(true)}
@@ -428,26 +435,6 @@ export default function App() {
             </select>
           </div>
         </div>
-
-        {aiSuggestion && (
-          <div className="bg-indigo-600/20 border border-indigo-500/30 p-4 rounded-2xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Sparkles className="text-indigo-400 shrink-0" />
-              <p className="text-sm">
-                Sugestão Gemini:{' '}
-                <span className="font-semibold text-indigo-200">
-                  {aiSuggestion}
-                </span>
-              </p>
-            </div>
-            <button
-              onClick={() => setAiSuggestion(null)}
-              className="text-indigo-400 hover:text-white font-bold px-2"
-            >
-              ✕
-            </button>
-          </div>
-        )}
 
         <div className="lg:col-span-2 space-y-4">
           {isLoadingMarketItems ? (
@@ -505,26 +492,28 @@ function AddItemModal({
   isSaving = false
 }: ModalProps & { isOpen: boolean }) {
   type AddItemForm = Omit<ShoppingItemType, 'id' | 'bought'>
-
-  const { register, handleSubmit, reset, formState } = useForm<AddItemForm>({
-    defaultValues: editingItem
-      ? {
-          name: editingItem.name,
-          category: editingItem.category || '',
-          measure: editingItem.measure ?? '',
-          lastPrice: editingItem.lastPrice,
-          currentPrice: editingItem.currentPrice,
-          store: editingItem.store
-        }
-      : {
-          name: '',
-          category: '',
-          measure: '',
-          lastPrice: 0,
-          currentPrice: 0,
-          store: ''
-        }
-  })
+  const { register, handleSubmit, reset, formState, control } =
+    useForm<AddItemForm>({
+      defaultValues: editingItem
+        ? {
+            name: editingItem.name,
+            category: editingItem.category || '',
+            measure: editingItem.measure ?? '',
+            lastPrice:
+              formatToCustomFormat(Number(editingItem.lastPrice)) || '',
+            currentPrice:
+              formatToCustomFormat(Number(editingItem.currentPrice)) || '',
+            store: editingItem.store
+          }
+        : {
+            name: '',
+            category: '',
+            measure: '',
+            lastPrice: '',
+            currentPrice: '',
+            store: ''
+          }
+    })
 
   useEffect(() => {
     reset(
@@ -533,16 +522,18 @@ function AddItemModal({
             name: editingItem.name,
             category: editingItem.category || '',
             measure: editingItem.measure ?? '',
-            lastPrice: editingItem.lastPrice,
-            currentPrice: editingItem.currentPrice,
+            lastPrice: formatToCustomFormat(Number(editingItem.lastPrice)),
+            currentPrice: formatToCustomFormat(
+              Number(editingItem.currentPrice)
+            ),
             store: editingItem.store
           }
         : {
             name: '',
             category: '',
             measure: '',
-            lastPrice: 0,
-            currentPrice: 0,
+            lastPrice: '',
+            currentPrice: '',
             store: ''
           }
     )
@@ -551,8 +542,8 @@ function AddItemModal({
   const onSubmit: SubmitHandler<AddItemForm> = (data) => {
     onSave({
       ...data,
-      lastPrice: Number(data.lastPrice),
-      currentPrice: Number(data.currentPrice)
+      lastPrice: String(formatToJavaScriptNumber(String(data.lastPrice))),
+      currentPrice: String(formatToJavaScriptNumber(String(data.currentPrice)))
     })
   }
 
@@ -617,24 +608,22 @@ function AddItemModal({
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Preço Atual"
+            <InputTypeMoney
+              control={control}
               name="currentPrice"
-              type="number"
-              register={register}
-              required={false}
+              required
+              label="Preço Atual"
               errors={formState.errors.currentPrice?.message}
               className={inputClass}
             />
-            <Input
-              label="Último preço"
+            <InputTypeMoney
+              control={control}
               name="lastPrice"
-              type="number"
-              register={register}
-              disabled
+              required
+              label="Último Preço"
               errors={formState.errors.lastPrice?.message}
               className={inputClass}
-              placeholder="Automático"
+              disabled
             />
           </div>
         </div>
