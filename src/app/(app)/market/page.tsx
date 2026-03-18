@@ -46,7 +46,8 @@ const MARKET_CATEGORIES = [
   'Hortofrutícolas',
   'Bebidas',
   'Padaria',
-  'Frutaria e Legumes'
+  'Frutaria e Legumes',
+  'Suplementos e Saúde'
 ]
 
 export interface ShoppingItemType {
