@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 import {
   Button,
-  Card,
   Modal,
   Input,
   InfoCardMoney,
@@ -35,7 +34,6 @@ import {
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import useIsVisibilityDatas from '@/hooks/globalStates/useIsVisibilityDatas'
-// import { DEFAULT_SHOPPING_LIST } from '@/utils/mock'
 
 const MARKET_CATEGORIES = [
   'Mercearia e Despensa',
@@ -55,6 +53,7 @@ export interface ShoppingItemType {
   name: string
   category: string
   measure?: string
+  quantity: number
   lastPrice: string
   currentPrice: string
   store: string
@@ -79,20 +78,6 @@ export default function App() {
   const [filterCategory, setFilterCategory] = useState<string>('Todos')
 
   const { expensesData } = useFetchExpensesData()
-
-  // const fillDefaultList = useCallback(async () => {
-  //   const existingNames = new Set(marketItems.map((i) => i.name.toLowerCase()))
-  //   const toAdd = DEFAULT_SHOPPING_LIST.filter(
-  //     (item) => !existingNames.has(item.name.toLowerCase())
-  //   )
-  //   if (toAdd.length === 0) return
-  //   for (const item of toAdd) {
-  //     await addItem({
-  //       ...item,
-  //       bought: false
-  //     })
-  //   }
-  // }, [marketItems, addItem])
 
   const marketBudget = useMemo(() => {
     const total = expensesData
@@ -123,14 +108,20 @@ export default function App() {
     setMutatingItemId(id)
     setMutatingAction(action)
   }
+
   const totals = useMemo<Totals>(() => {
     const estimated = marketItems.reduce(
-      (acc, item) => acc + item.currentPrice,
+      (acc, item) =>
+        acc + Number(item.currentPrice) * (Number(item.quantity) || 1),
       0
     )
     const boughtTotal = marketItems
       .filter((i) => i.bought)
-      .reduce((acc, item) => acc + item.currentPrice, 0)
+      .reduce(
+        (acc, item) =>
+          acc + Number(item.currentPrice) * (Number(item.quantity) || 1),
+        0
+      )
     const remaining = marketBudget - estimated
     return { estimated, boughtTotal, remaining }
   }, [marketItems, marketBudget])
@@ -178,7 +169,6 @@ export default function App() {
   const saveItem = async (
     itemData: Omit<ShoppingItemType, 'id' | 'bought'>
   ) => {
-    console.log({ itemData })
     const isEdit = Boolean(editingItem)
     const currentPrice = Number(itemData.currentPrice)
     const lastPriceOnSave = isEdit
@@ -199,15 +189,17 @@ export default function App() {
             Number(itemData.currentPrice) !== Number(editingItem.currentPrice)
               ? editingItem.currentPrice
               : editingItem.lastPrice,
-          currentPrice
+          currentPrice: String(currentPrice),
+          quantity: Number(itemData.quantity)
         })
         setEditingItem(null)
       } else {
         await addItem({
           ...itemData,
           bought: false,
-          lastPrice: lastPriceOnSave,
-          currentPrice
+          lastPrice: String(lastPriceOnSave),
+          currentPrice: String(currentPrice),
+          quantity: Number(itemData.quantity)
         })
       }
     } finally {
@@ -253,7 +245,7 @@ export default function App() {
         modifier: (_value, item: ShoppingItemType) => {
           const isMutating = mutatingItemId === item.id
           return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 text-left">
               <button
                 onClick={() => toggleBought(item.id)}
                 className="text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -267,20 +259,20 @@ export default function App() {
                   <Circle size={20} />
                 )}
               </button>
-              <div className="flex flex-col">
-                <span
-                  className={`font-medium ${item.bought ? 'line-through opacity-50' : ''}`}
-                >
-                  {item.name}
-                </span>
-              </div>
+              <span
+                className={`font-medium ${item.bought ? 'line-through opacity-50' : ''}`}
+              >
+                {item.name}
+              </span>
             </div>
           )
         }
       },
       {
-        header: 'Categoria',
-        field: 'category'
+        header: 'Qtd',
+        field: 'quantity',
+        modifier: (value: number) => value || 1,
+        styles: () => ({ textAlign: 'center' })
       },
       {
         header: 'Medida',
@@ -290,9 +282,9 @@ export default function App() {
       {
         header: 'Preço',
         field: 'currentPrice',
-        modifier: (_value, item: ShoppingItemType) => (
+        modifier: (value: string) => (
           <span className="font-bold">
-            {formatCurrencyMoney(Number(item.currentPrice), 'EUR')}
+            {formatCurrencyMoney(Number(value), 'EUR')}
           </span>
         ),
         styles: () => ({ textAlign: 'right' })
@@ -304,24 +296,38 @@ export default function App() {
           <span className="font-mono text-gray-400">
             {formatCurrencyMoney(value, 'EUR')}
           </span>
-        )
+        ),
+        styles: () => ({ textAlign: 'right' })
+      },
+      {
+        header: 'Total',
+        field: 'id',
+        modifier: (_value, item: ShoppingItemType) => (
+          <span className="font-bold text-blue-400">
+            {formatCurrencyMoney(
+              Number(item.currentPrice) * (Number(item.quantity) || 1),
+              'EUR'
+            )}
+          </span>
+        ),
+        styles: () => ({ textAlign: 'right' })
       },
       {
         header: 'Loja',
         field: 'store',
         modifier: (value: string) => value || '-'
       },
+      { header: 'Categoria', field: 'category' },
       {
         header: 'Ação',
         field: 'id',
         modifier: (_value, item: ShoppingItemType) => {
           const isMutating = mutatingItemId === item.id
-          const disabled = isMutating
           return (
             <ButtonGroup
               buttonOptions={[
                 {
-                  onClick: disabled ? undefined : () => handleEdit(item),
+                  onClick: isMutating ? undefined : () => handleEdit(item),
                   content:
                     isMutating && mutatingAction === 'update' ? (
                       <Loader2 size={14} className="animate-spin" />
@@ -330,7 +336,7 @@ export default function App() {
                     )
                 },
                 {
-                  onClick: disabled ? undefined : () => deleteItem(item.id),
+                  onClick: isMutating ? undefined : () => deleteItem(item.id),
                   content:
                     isMutating && mutatingAction === 'delete' ? (
                       <Loader2 size={14} className="animate-spin" />
@@ -349,6 +355,7 @@ export default function App() {
   return (
     <div className="p-4">
       <div className="mx-auto space-y-4">
+        {/* Estrutura de Resumo Financeiro */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <InfoCardMoney
             title="Orçamento"
@@ -384,12 +391,13 @@ export default function App() {
           />
         </div>
 
-        <div className="flex flex-col md:flex-row gap-3 justify-between items-start md:items-end">
-          <div className="flex flex-col lg:flex-row items-center gap-2 w-full md:w-auto">
+        {/* Estrutura de Controles de Ação e Filtro */}
+        <div className="flex flex-col md:flex-row gap-3 justify-between items-stretch md:items-end">
+          <div className="flex items-center gap-2">
             <Button
               variant="default"
               onClick={() => setIsAddModalOpen(true)}
-              className="flex-1 md:flex-none justify-center"
+              className="flex-1 md:flex-none"
             >
               <Plus size={18} className="md:mr-2" />
               <span className="hidden md:inline">Adicionar Item</span>
@@ -397,7 +405,7 @@ export default function App() {
             <Button
               variant="default"
               onClick={clearAllBought}
-              className="flex-1 md:flex-none justify-center"
+              className="flex-1 md:flex-none"
               isLoading={
                 mutatingItemId === BULK_MUTATION_ID &&
                 mutatingAction === 'update'
@@ -406,26 +414,13 @@ export default function App() {
               <CheckCircle2 size={18} className="md:mr-2" />
               <span className="hidden md:inline">Desmarcar tudo</span>
             </Button>
-
-            {/* <Button
-              variant="default"
-              onClick={fillDefaultList}
-              className="flex-1 md:flex-none justify-center"
-            >
-              <ListPlus size={18} className="md:mr-2" />
-              <span className="hidden md:inline">Gerar Lista</span>
-            </Button> */}
           </div>
 
-          {/* Filtro de Categorias */}
           <div className="w-full md:w-64">
-            <label className="block md:hidden text-[10px] uppercase text-gray-400 mb-1 ml-1 font-bold">
-              Filtrar Categoria
-            </label>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500 outline-none h-10"
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white h-10"
             >
               <option value="Todos">Todas as Categorias</option>
               {MARKET_CATEGORIES.map((cat) => (
@@ -437,23 +432,19 @@ export default function App() {
           </div>
         </div>
 
-        <div className="lg:col-span-2 space-y-4">
+        <div className="bg-gray-700 h-[60vh] rounded-md overflow-hidden">
           {isLoadingMarketItems ? (
-            <Card className="flex items-center justify-center p-10">
-              <div className="flex items-center gap-2 text-gray-100">
-                <Loader2 className="animate-spin" />
-                <span>Carregando itens...</span>
-              </div>
-            </Card>
+            <div className="flex items-center justify-center h-full gap-2 text-gray-100">
+              <Loader2 className="animate-spin" />
+              <span>Carregando itens...</span>
+            </div>
           ) : (
-            <div className="bg-gray-700 h-[60vh] rounded-md overflow-hidden w-full">
-              <div className="overflow-x-auto h-full">
-                <Table
-                  columns={tableColumns}
-                  data={sortedItems}
-                  rowClassName={(row) => (row.bought ? 'opacity-40' : '')}
-                />
-              </div>
+            <div className="overflow-x-auto h-full">
+              <Table
+                columns={tableColumns}
+                data={sortedItems}
+                rowClassName={(row) => (row.bought ? 'opacity-40' : '')}
+              />
             </div>
           )}
         </div>
@@ -495,44 +486,30 @@ function AddItemModal({
   type AddItemForm = Omit<ShoppingItemType, 'id' | 'bought'>
   const { register, handleSubmit, reset, formState, control } =
     useForm<AddItemForm>({
-      defaultValues: editingItem
-        ? {
-            name: editingItem.name,
-            category: editingItem.category || '',
-            measure: editingItem.measure ?? '',
-            lastPrice:
-              formatToCustomFormat(Number(editingItem.lastPrice)) || '',
-            currentPrice:
-              formatToCustomFormat(Number(editingItem.currentPrice)) || '',
-            store: editingItem.store
-          }
-        : {
-            name: '',
-            category: '',
-            measure: '',
-            lastPrice: '',
-            currentPrice: '',
-            store: ''
-          }
+      defaultValues: editingItem || {
+        name: '',
+        category: '',
+        measure: '',
+        quantity: 1,
+        lastPrice: '',
+        currentPrice: '',
+        store: ''
+      }
     })
 
   useEffect(() => {
     reset(
       editingItem
         ? {
-            name: editingItem.name,
-            category: editingItem.category || '',
-            measure: editingItem.measure ?? '',
+            ...editingItem,
             lastPrice: formatToCustomFormat(Number(editingItem.lastPrice)),
-            currentPrice: formatToCustomFormat(
-              Number(editingItem.currentPrice)
-            ),
-            store: editingItem.store
+            currentPrice: formatToCustomFormat(Number(editingItem.currentPrice))
           }
         : {
             name: '',
             category: '',
             measure: '',
+            quantity: 1,
             lastPrice: '',
             currentPrice: '',
             store: ''
@@ -543,6 +520,7 @@ function AddItemModal({
   const onSubmit: SubmitHandler<AddItemForm> = (data) => {
     onSave({
       ...data,
+      quantity: Number(data.quantity),
       lastPrice: String(formatToJavaScriptNumber(String(data.lastPrice))),
       currentPrice: String(formatToJavaScriptNumber(String(data.currentPrice)))
     })
@@ -588,27 +566,26 @@ function AddItemModal({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex gap-3">
             <Input
               label="Medida"
               name="measure"
               register={register}
-              required={false}
-              errors={formState.errors.measure?.message}
               className={inputClass}
               placeholder="Ex: 1kg, 500g"
             />
             <Input
-              label="Loja"
-              name="store"
+              label="Quantidade"
+              name="quantity"
+              type="number"
               register={register}
-              required={false}
-              errors={formState.errors.store?.message}
+              required
+              errors={formState.errors.quantity?.message}
               className={inputClass}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex gap-3">
             <InputTypeMoney
               control={control}
               name="currentPrice"
@@ -620,24 +597,23 @@ function AddItemModal({
             <InputTypeMoney
               control={control}
               name="lastPrice"
-              required
               label="Último Preço"
-              errors={formState.errors.lastPrice?.message}
-              className={inputClass}
+              className={`${inputClass} opacity-60`}
               disabled
             />
           </div>
+          <Input
+            label="Loja"
+            name="store"
+            register={register}
+            className={inputClass}
+          />
         </div>
         <div className="px-0 py-6 flex justify-end gap-3">
           <Button variant="cancel" onClick={onClose} disabled={isSaving}>
             Cancelar
           </Button>
-          <Button
-            type="submit"
-            variant="confirm"
-            isLoading={isSaving}
-            loadingText={editingItem ? 'Atualizando...' : 'Salvando...'}
-          >
+          <Button type="submit" variant="confirm" isLoading={isSaving}>
             {editingItem ? 'Atualizar' : 'Salvar'}
           </Button>
         </div>

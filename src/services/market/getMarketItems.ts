@@ -4,7 +4,7 @@ import { db } from '../firebase'
 export interface MarketItemData {
   id: string
   name: string
-  qty: number
+  quantity: number
   measure?: string
   lastPrice: number
   currentPrice: number
