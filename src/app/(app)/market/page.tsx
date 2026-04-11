@@ -11,7 +11,8 @@ import {
   PiggyBank,
   Receipt,
   TrendingUp,
-  Wallet
+  Wallet,
+  Save // Adicionado
 } from 'lucide-react'
 import {
   Button,
@@ -34,6 +35,7 @@ import {
   formatToJavaScriptNumber
 } from '@/utils/formatNumber'
 import useIsVisibilityDatas from '@/hooks/globalStates/useIsVisibilityDatas'
+import { useSaveMarketHistory } from '@/hooks/market/useSaveMarketHistory'
 
 const MARKET_CATEGORIES = [
   'Mercearia e Despensa',
@@ -48,6 +50,17 @@ const MARKET_CATEGORIES = [
   'Suplementos e Saúde'
 ]
 
+const PORTUGAL_STORES = [
+  'Pingo Doce',
+  'Continente',
+  'Lidl',
+  'Intermarché',
+  'Mercadona',
+  'Auchan',
+  'Aldi',
+  'Outro'
+]
+
 export interface ShoppingItemType {
   id: string
   name: string
@@ -58,6 +71,8 @@ export interface ShoppingItemType {
   currentPrice: string
   store: string
   bought: boolean
+  recurrence: 'monthly' | 'fortnightly' // Adicionado
+  completedCycles: number // Adicionado
 }
 
 interface Totals {
@@ -76,7 +91,8 @@ export default function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
   const [editingItem, setEditingItem] = useState<ShoppingItemType | null>(null)
   const [filterCategory, setFilterCategory] = useState<string>('Todos')
-
+  const [filterStore, setFilterStore] = useState<string>('Todos')
+  const { saveHistory, isLoading: isSavingHistory } = useSaveMarketHistory()
   const { expensesData } = useFetchExpensesData()
 
   const marketBudget = useMemo(() => {
@@ -91,7 +107,7 @@ export default function App() {
         0
       )
 
-    return total
+    return total ? total : 320
   }, [expensesData])
 
   const [mutatingItemId, setMutatingItemId] = useState<string | undefined>(
@@ -109,41 +125,56 @@ export default function App() {
     setMutatingAction(action)
   }
 
-  const totals = useMemo<Totals>(() => {
-    const estimated = marketItems.reduce(
-      (acc, item) =>
-        acc + Number(item.currentPrice) * (Number(item.quantity) || 1),
-      0
-    )
-    const boughtTotal = marketItems
-      .filter((i) => i.bought)
-      .reduce(
-        (acc, item) =>
-          acc + Number(item.currentPrice) * (Number(item.quantity) || 1),
-        0
-      )
-    const remaining = marketBudget - estimated
-    return { estimated, boughtTotal, remaining }
-  }, [marketItems, marketBudget])
-
   const sortedItems = useMemo(() => {
     let filtered = [...marketItems]
     if (filterCategory !== 'Todos') {
       filtered = filtered.filter((item) => item.category === filterCategory)
     }
+    if (filterStore !== 'Todos') {
+      filtered = filtered.filter((item) => item.store === filterStore)
+    }
     return filtered.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
     )
-  }, [marketItems, filterCategory])
+  }, [marketItems, filterCategory, filterStore])
 
-  const toggleBought = useCallback(
+  const totals = useMemo<Totals>(() => {
+    const estimated = sortedItems.reduce((acc, item) => {
+      const mult = item.recurrence === 'fortnightly' ? 2 : 1
+      return (
+        acc + Number(item.currentPrice) * (Number(item.quantity) || 1) * mult
+      )
+    }, 0)
+
+    const boughtTotal = sortedItems.reduce((acc, item) => {
+      return (
+        acc +
+        Number(item.currentPrice) *
+          (Number(item.quantity) || 1) *
+          (item.completedCycles || 0)
+      )
+    }, 0)
+
+    const remaining = marketBudget - estimated
+    return { estimated, boughtTotal, remaining }
+  }, [sortedItems, marketBudget])
+
+  const toggleCycle = useCallback(
     async (id: string) => {
       const item = marketItems.find((i) => i.id === id)
       if (!item) return
 
+      const maxCycles = item.recurrence === 'fortnightly' ? 2 : 1
+      let nextCycles = (item.completedCycles || 0) + 1
+      if (nextCycles > maxCycles) nextCycles = 0
+
       setMutationState(id, 'update')
       try {
-        await updateMarketItem({ ...item, bought: !item.bought })
+        await updateMarketItem({
+          ...item,
+          completedCycles: nextCycles,
+          bought: nextCycles === maxCycles && nextCycles > 0
+        })
       } finally {
         setMutationState(undefined, undefined)
       }
@@ -171,9 +202,6 @@ export default function App() {
   ) => {
     const isEdit = Boolean(editingItem)
     const currentPrice = Number(itemData.currentPrice)
-    const lastPriceOnSave = isEdit
-      ? (editingItem?.currentPrice ?? currentPrice)
-      : currentPrice
 
     setMutationState(
       isEdit ? editingItem?.id : undefined,
@@ -197,7 +225,8 @@ export default function App() {
         await addItem({
           ...itemData,
           bought: false,
-          lastPrice: String(lastPriceOnSave),
+          completedCycles: 0,
+          lastPrice: String(currentPrice),
           currentPrice: String(currentPrice),
           quantity: Number(itemData.quantity)
         })
@@ -225,12 +254,27 @@ export default function App() {
     [setEditingItem, setIsAddModalOpen]
   )
 
+  const handleSaveHistory = async () => {
+    if (marketItems.length === 0) return
+
+    await saveHistory({
+      items: marketItems,
+      totals: {
+        budget: marketBudget,
+        estimated: totals.estimated,
+        boughtTotal: totals.boughtTotal,
+        remaining: totals.remaining,
+        status: totals.remaining < 0 ? 'OVER_BUDGET' : 'WITHIN_BUDGET'
+      }
+    })
+  }
+
   const clearAllBought = useCallback(async () => {
     setMutationState(BULK_MUTATION_ID, 'update')
     try {
-      const toClear = marketItems.filter((item) => item.bought)
+      const toClear = marketItems.filter((item) => item.completedCycles > 0)
       for (const item of toClear) {
-        await updateMarketItem({ ...item, bought: false })
+        await updateMarketItem({ ...item, completedCycles: 0, bought: false })
       }
     } finally {
       setMutationState(undefined, undefined)
@@ -242,12 +286,15 @@ export default function App() {
       {
         header: 'Item',
         field: 'name',
-        modifier: (_value, item: ShoppingItemType) => {
+        modifier: (_value: string, item: ShoppingItemType) => {
           const isMutating = mutatingItemId === item.id
+          const isPartiallyDone =
+            item.completedCycles > 0 &&
+            item.completedCycles < (item.recurrence === 'fortnightly' ? 2 : 1)
           return (
             <div className="flex items-center gap-3 text-left">
               <button
-                onClick={() => toggleBought(item.id)}
+                onClick={() => toggleCycle(item.id)}
                 className="text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isMutating}
               >
@@ -255,15 +302,24 @@ export default function App() {
                   <Loader2 size={18} className="animate-spin" />
                 ) : item.bought ? (
                   <CheckCircle2 size={20} className="text-green-500" />
+                ) : isPartiallyDone ? (
+                  <span className="w-5 h-5 rounded-full border-2 border-blue-500 text-[10px] flex items-center justify-center font-bold">
+                    1
+                  </span>
                 ) : (
                   <Circle size={20} />
                 )}
               </button>
-              <span
-                className={`font-medium ${item.bought ? 'line-through opacity-50' : ''}`}
-              >
-                {item.name}
-              </span>
+              <div className="flex flex-col">
+                <span
+                  className={`font-medium ${item.bought ? 'line-through opacity-50' : ''}`}
+                >
+                  {item.name}
+                </span>
+                <span className="text-[9px] uppercase font-bold text-blue-400">
+                  {item.recurrence === 'fortnightly' ? 'Quinzenal' : 'Mensal'}
+                </span>
+              </div>
             </div>
           )
         }
@@ -273,11 +329,6 @@ export default function App() {
         field: 'quantity',
         modifier: (value: number) => value || 1,
         styles: () => ({ textAlign: 'center' })
-      },
-      {
-        header: 'Medida',
-        field: 'measure',
-        modifier: (value: string) => value || '-'
       },
       {
         header: 'Preço',
@@ -290,22 +341,14 @@ export default function App() {
         styles: () => ({ textAlign: 'right' })
       },
       {
-        header: 'Último',
-        field: 'lastPrice',
-        modifier: (value: number) => (
-          <span className="font-mono text-gray-400">
-            {formatCurrencyMoney(value, 'EUR')}
-          </span>
-        ),
-        styles: () => ({ textAlign: 'right' })
-      },
-      {
-        header: 'Total',
+        header: 'Total Mês',
         field: 'id',
-        modifier: (_value, item: ShoppingItemType) => (
+        modifier: (_value: string, item: ShoppingItemType) => (
           <span className="font-bold text-blue-400">
             {formatCurrencyMoney(
-              Number(item.currentPrice) * (Number(item.quantity) || 1),
+              Number(item.currentPrice) *
+                (Number(item.quantity) || 1) *
+                (item.recurrence === 'fortnightly' ? 2 : 1),
               'EUR'
             )}
           </span>
@@ -313,7 +356,7 @@ export default function App() {
         styles: () => ({ textAlign: 'right' })
       },
       {
-        header: 'Loja',
+        header: 'Mercado',
         field: 'store',
         modifier: (value: string) => value || '-'
       },
@@ -321,7 +364,7 @@ export default function App() {
       {
         header: 'Ação',
         field: 'id',
-        modifier: (_value, item: ShoppingItemType) => {
+        modifier: (_value: string, item: ShoppingItemType) => {
           const isMutating = mutatingItemId === item.id
           return (
             <ButtonGroup
@@ -350,12 +393,11 @@ export default function App() {
         }
       }
     ]
-  }, [mutatingItemId, mutatingAction, toggleBought, deleteItem, handleEdit])
+  }, [mutatingItemId, mutatingAction, toggleCycle, deleteItem, handleEdit])
 
   return (
     <div className="p-4">
       <div className="mx-auto space-y-4">
-        {/* Estrutura de Resumo Financeiro */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <InfoCardMoney
             title="Orçamento"
@@ -391,41 +433,61 @@ export default function App() {
           />
         </div>
 
-        {/* Estrutura de Controles de Ação e Filtro */}
-        <div className="flex flex-col md:flex-row gap-3 justify-between items-stretch md:items-end">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+          <div className="flex flex-col w-full md:w-fit md:flex-row gap-2">
             <Button
               variant="default"
               onClick={() => setIsAddModalOpen(true)}
-              className="flex-1 md:flex-none"
+              className="whitespace-nowrap"
             >
-              <Plus size={18} className="md:mr-2" />
-              <span className="hidden md:inline">Adicionar Item</span>
+              <Plus size={18} className="mr-2" />
+              <span>Adicionar Item</span>
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleSaveHistory}
+              isLoading={isSavingHistory}
+              className="whitespace-nowrap bg-green-600 hover:bg-green-700"
+            >
+              <Save size={18} className="mr-2" />
+              <span>Salvar Compra</span>
             </Button>
             <Button
               variant="default"
               onClick={clearAllBought}
-              className="flex-1 md:flex-none"
+              className="whitespace-nowrap"
               isLoading={
                 mutatingItemId === BULK_MUTATION_ID &&
                 mutatingAction === 'update'
               }
             >
-              <CheckCircle2 size={18} className="md:mr-2" />
-              <span className="hidden md:inline">Desmarcar tudo</span>
+              <CheckCircle2 size={18} className="mr-2" />
+              <span>Desmarcar tudo</span>
             </Button>
           </div>
-
-          <div className="w-full md:w-64">
+          <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white h-10"
+              className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white h-10 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
             >
               <option value="Todos">Todas as Categorias</option>
               {MARKET_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={filterStore}
+              onChange={(e) => setFilterStore(e.target.value)}
+              className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white h-10 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
+            >
+              <option value="Todos">Todos os Mercados</option>
+              {PORTUGAL_STORES.map((store) => (
+                <option key={store} value={store}>
+                  {store}
                 </option>
               ))}
             </select>
@@ -493,7 +555,8 @@ function AddItemModal({
         quantity: 1,
         lastPrice: '',
         currentPrice: '',
-        store: ''
+        store: '',
+        recurrence: 'monthly'
       }
     })
 
@@ -512,7 +575,8 @@ function AddItemModal({
             quantity: 1,
             lastPrice: '',
             currentPrice: '',
-            store: ''
+            store: '',
+            recurrence: 'monthly'
           }
     )
   }, [editingItem, isOpen, reset])
@@ -542,28 +606,41 @@ function AddItemModal({
             placeholder="Nome do produto"
             register={register}
             required
-            errors={formState.errors.name?.message}
+            errors={formState.errors.name?.message as string}
             className={inputClass}
           />
 
-          <div className="flex flex-col gap-1">
-            <label className="text-gray-300 font-medium">Categoria</label>
-            <select
-              {...register('category', { required: 'Selecione uma categoria' })}
-              className={`${inputClass} w-full h-11 bg-transparent text-white`}
-            >
-              <option value="">Selecione uma categoria</option>
-              {MARKET_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            {formState.errors.category && (
-              <span className="text-red-400 text-xs mt-1">
-                {formState.errors.category.message}
-              </span>
-            )}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-gray-300 font-medium text-xs">
+                Frequência
+              </label>
+              <select
+                {...register('recurrence', { required: true })}
+                className={`${inputClass} w-full h-11 bg-transparent text-white`}
+              >
+                <option value="monthly">Mensal</option>
+                <option value="fortnightly">Quinzenal</option>
+              </select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-gray-300 font-medium text-xs">
+                Categoria
+              </label>
+              <select
+                {...register('category', {
+                  required: 'Selecione uma categoria'
+                })}
+                className={`${inputClass} w-full h-11 bg-transparent text-white`}
+              >
+                <option value="">Selecione...</option>
+                {MARKET_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex gap-3">
@@ -572,7 +649,7 @@ function AddItemModal({
               name="measure"
               register={register}
               className={inputClass}
-              placeholder="Ex: 1kg, 500g"
+              placeholder="Ex: 1kg"
             />
             <Input
               label="Quantidade"
@@ -580,7 +657,7 @@ function AddItemModal({
               type="number"
               register={register}
               required
-              errors={formState.errors.quantity?.message}
+              errors={formState.errors.quantity?.message as string}
               className={inputClass}
             />
           </div>
@@ -591,7 +668,7 @@ function AddItemModal({
               name="currentPrice"
               required
               label="Preço Atual"
-              errors={formState.errors.currentPrice?.message}
+              errors={formState.errors.currentPrice?.message as string}
               className={inputClass}
             />
             <InputTypeMoney
@@ -602,12 +679,21 @@ function AddItemModal({
               disabled
             />
           </div>
-          <Input
-            label="Loja"
-            name="store"
-            register={register}
-            className={inputClass}
-          />
+
+          <div className="flex flex-col gap-1">
+            <label className="text-gray-300 font-medium">Mercado</label>
+            <select
+              {...register('store')}
+              className={`${inputClass} w-full h-11 bg-transparent text-white`}
+            >
+              <option value="">Selecione uma mercado</option>
+              {PORTUGAL_STORES.map((store) => (
+                <option key={store} value={store}>
+                  {store}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="px-0 py-6 flex justify-end gap-3">
           <Button variant="cancel" onClick={onClose} disabled={isSaving}>

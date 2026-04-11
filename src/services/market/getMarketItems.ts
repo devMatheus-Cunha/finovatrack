@@ -11,6 +11,8 @@ export interface MarketItemData {
   store: string
   bought: boolean
   category: string
+  recurrence: string
+  completedCycles: number
 }
 
 export async function getMarketItems(userId: string) {
