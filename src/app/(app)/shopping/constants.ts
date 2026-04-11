@@ -19,5 +19,6 @@ export const CATEGORY_OPTIONS = [
   { value: 'Limpeza', label: 'Limpeza' },
   { value: 'Utensílios', label: 'Utensílios' },
   { value: 'Decoração', label: 'Decoração' },
-  { value: 'Organização', label: 'Organização' }
+  { value: 'Organização', label: 'Organização' },
+  { value: 'Ferramentas', label: 'Ferramentas' }
 ]
