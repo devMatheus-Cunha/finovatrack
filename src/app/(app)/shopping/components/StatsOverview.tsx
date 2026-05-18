@@ -49,7 +49,7 @@ export function StatsOverview({
 }: StatsOverviewProps) {
   const { isVisibilityData } = useIsVisibilityDatas()
   const { userData } = useUserData()
-  const investmentBudget = 5400
+  const investmentBudget = 5984
   const effectiveEarlyTotal = includeEarlyPurchase ? earlyTotal || 0 : 0
   const effectiveBoughtTotal = boughtTotal || 0
   const effectiveBaseOverall = baseOverallValue || 0
