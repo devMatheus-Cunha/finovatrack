@@ -17,6 +17,8 @@ interface ProjectionParams {
   financialPlanningYear?: IFinancialPlanningProps[]
   durationInYears?: number
   goalDate?: { year: number; month: number }
+  startDate?: Date
+  monthlyDividends?: number
 }
 
 interface YearProjection {
@@ -33,8 +35,13 @@ interface YearProjection {
   monthsRemaining?: number
 }
 
+const getDaysInMonth = (year: number, month: number) => {
+  return new Date(year, month + 1, 0).getDate()
+}
+
 /**
- * FUNÇÃO DE CÁLCULO POR MÉDIA MENSAL
+ * Calcula uma projeção usando taxa anual efetiva convertida para taxa diária
+ * e capitalização diária, com aportes mensais aplicados ao fim de cada mês.
  */
 export const calculateProjection = (
   params: ProjectionParams
@@ -44,37 +51,32 @@ export const calculateProjection = (
     annualRate,
     financialPlanningYear = [],
     durationInYears,
-    goalDate
+    goalDate,
+    startDate,
+    monthlyDividends = 0
   } = params
 
   const results: YearProjection[] = []
 
-  console.log(
-    principal,
-    annualRate,
-    financialPlanningYear,
-    durationInYears,
-    goalDate
-  )
+  const annualRateDecimal = annualRate > 0 ? annualRate / 100 : 0
+  const dailyRate =
+    annualRateDecimal > 0 ? (1 + annualRateDecimal) ** (1 / 365) - 1 : 0
 
-  // CALCULANDO A MÉDIA MENSAL:
-  // Se a taxa anual for 12%, a média mensal será 1% (0.01)
-  const monthlyMediaRate = annualRate / 100 / 12
+  const baseDate = startDate ? new Date(startDate) : new Date()
+  baseDate.setHours(0, 0, 0, 0)
 
-  const today = new Date()
-  const startYear = today.getFullYear()
-  const startMonth = today.getMonth() // Março = 2
+  const startYear = baseDate.getFullYear()
+  const startMonth = baseDate.getMonth()
+  const startDay = baseDate.getDate()
 
   let futureValue = principal
   let cumulativeContributions = 0
   let totalInterestAccumulated = 0
   let lastPlan: IFinancialPlanningProps | undefined = undefined
 
-  // --- BLOCO 1: DEFINIÇÃO DA DURAÇÃO ---
   const endYear = goalDate?.year || startYear + (durationInYears || 1)
   const loopDuration = endYear - startYear + 1
 
-  // --- BLOCO 2: LOOP ANUAL ---
   for (let i = 0; i < loopDuration; i++) {
     const calendarYear = startYear + i
     const currentPlan = financialPlanningYear.find(
@@ -91,25 +93,29 @@ export const calculateProjection = (
 
     const numberOfPeriods = Number(lastPlan?.periodContributions) || 0
 
-    // Início e fim do ano considerando o mês da meta
     const currentYearStartMonth = i === 0 ? startMonth : 0
     const currentYearEndMonth =
       goalDate && calendarYear === goalDate.year ? goalDate.month : 11
 
     let contributionsMadeThisYear = 0
 
-    // --- BLOCO 3: LOOP MENSAL (CÁLCULO SIMPLIFICADO) ---
     for (
       let month = currentYearStartMonth;
       month <= currentYearEndMonth;
       month++
     ) {
-      // 1. CÁLCULO DO RENDIMENTO PELA MÉDIA
-      // Aplica a média mensal sobre o montante que você já tem
-      const monthlyInterest = futureValue * monthlyMediaRate
-      totalInterestAccumulated += monthlyInterest
+      const daysInMonth = getDaysInMonth(calendarYear, month)
+      const isFirstMonthOfProjection = i === 0 && month === startMonth
+      const daysToProcess = isFirstMonthOfProjection
+        ? daysInMonth - startDay + 1
+        : daysInMonth
 
-      // 2. CÁLCULO DO APORTE
+      for (let dayIndex = 0; dayIndex < daysToProcess; dayIndex++) {
+        const dailyInterest = futureValue * dailyRate
+        futureValue += dailyInterest
+        totalInterestAccumulated += dailyInterest
+      }
+
       let contributionThisMonth = 0
       if (contributionsMadeThisYear < numberOfPeriods) {
         contributionThisMonth = monthlyContribution
@@ -117,18 +123,14 @@ export const calculateProjection = (
         contributionsMadeThisYear++
       }
 
-      // 3. AJUSTE ANUAL (DEZEMBRO)
       if (month === 11) {
         contributionThisMonth += annualAdjustment
         cumulativeContributions += annualAdjustment
       }
 
-      // 4. ATUALIZAÇÃO DO SALDO
-      // Adicionamos o rendimento e o aporte ao saldo total
-      futureValue += monthlyInterest + contributionThisMonth
+      futureValue += contributionThisMonth + monthlyDividends
     }
 
-    // --- BLOCO 4: REGISTRO DO ANO NO ARRAY ---
     results.push({
       year: i + 1,
       calendarYear,
@@ -143,11 +145,9 @@ export const calculateProjection = (
     })
   }
 
-  // --- BLOCO 5: CONTADOR DE MESES RESTANTES ---
   if (results.length > 0 && goalDate) {
     const diffMonths =
       (goalDate.year - startYear) * 12 + (goalDate.month - startMonth)
-    // Usamos +1 para garantir que Março a Junho conte 4 meses
     results[results.length - 1].monthsRemaining = Math.max(0, diffMonths + 1)
   }
 

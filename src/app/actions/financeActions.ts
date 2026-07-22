@@ -2,6 +2,11 @@
 
 import { revalidatePath } from 'next/cache'
 import { adminDb } from '@/services/firebaseAdmin'
+import {
+  calculateDailyInterestProjection,
+  calculateMonthlyInterestProjection,
+  DEFAULT_ANNUAL_INTEREST_RATE
+} from '@/services/finance/calculateInterestProjection'
 
 /* ============================================================================
     1. INTERFACES (ATUALIZADAS)
@@ -205,12 +210,16 @@ function processData(
   )
 
   // --- PROJEÇÕES ---
-  const transacoesJurosValidas = transactions.filter(
-    (t) =>
-      t.type === 'INTEREST' || (t.type === 'DEPOSIT' && Number(t.amount) <= 100)
+  const principalAtual = summary.investments.currentValue || 0
+  const taxaAnual = Number(process.env.NEXT_PUBLIC_INTEREST_RATE || DEFAULT_ANNUAL_INTEREST_RATE)
+  const ultimoJuroDiario = calculateDailyInterestProjection(
+    principalAtual,
+    taxaAnual
   )
-  const ultimoJuroDiario = Number(transacoesJurosValidas[0]?.amount) || 0
-  const jurosMensalProj = Number((ultimoJuroDiario * 31).toFixed(2))
+  const jurosMensalProj = calculateMonthlyInterestProjection(
+    principalAtual,
+    taxaAnual
+  )
 
   const yieldHistorico =
     summary.investments.currentValue > 0

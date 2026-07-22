@@ -45,17 +45,18 @@ const Finance: React.FC = () => {
     const principal = investimentsData?.resumoConta?.totalGeral ?? 0
     const deadline = goal?.meta_year || GOAL_DEADLINE
 
-    const rendaPassivaMensal =
-      (investimentsData?.planejamento?.projecoes?.juros?.mensal || 0) +
-      (investimentsData?.planejamento?.projecoes?.dividendos?.mensal || 0)
+    const jurosMensal = investimentsData?.planejamento?.projecoes?.juros?.mensal || 0
+    const dividendosMensal =
+      investimentsData?.planejamento?.projecoes?.dividendos?.mensal || 0
 
     const yieldAnual =
-      principal > 0 ? (rendaPassivaMensal / principal) * 12 * 100 : 0
+      principal > 0 ? (jurosMensal / principal) * 12 * 100 : 0
 
     return {
       principal,
       deadline,
-      rate: Math.max(GOAL_INTEREST_RATE, yieldAnual)
+      rate: Math.max(GOAL_INTEREST_RATE, yieldAnual),
+      monthlyDividends: dividendosMensal
     }
   }, [investimentsData, goal])
 
@@ -63,7 +64,8 @@ const Finance: React.FC = () => {
     principal: projectionSettings.principal,
     annualRate: projectionSettings.rate,
     goalDate: projectionSettings.deadline,
-    financialPlanningYear: financialPlanningYear || []
+    financialPlanningYear: financialPlanningYear || [],
+    monthlyDividends: projectionSettings.monthlyDividends || 0
   })
 
   const handleSave = (id: string, values: any) => {
